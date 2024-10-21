@@ -31,15 +31,21 @@ public:
 
 	void DiamondSquare();
 	void ApplyCelular(int _interations, sf::RenderWindow& window);
+	void FindLand(sf::RenderWindow& m_window);
+	void MapIsland(int _startIndex);
 private:
 	std::vector<Node*> nodeGrid;
+	std::vector<std::vector<Node*>> islandsGrid;
+
+	bool foundLand{ false };
+	int lastWaterIndex{ 0 };
 
 	int landCount=0, sandCount=0, waterCount=0;
 
 	int currentStartNode{ -1 };
 	int currentEndNode{ -1 };
 
-	int gridNodeSize = 20; //each tile is 20x 20
+	int gridNodeSize = 32; //each tile is 20x 20
 
 	sf::Clock timer;
 

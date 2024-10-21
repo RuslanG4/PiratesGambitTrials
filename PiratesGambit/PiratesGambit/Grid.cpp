@@ -221,6 +221,73 @@ void Grid::ApplyCelular(int _interations, sf::RenderWindow& m_window)
 			delete node;  // Free memory for deep-copied nodes
 		}
 	}
+	FindLand(m_window);
 }
+
+void Grid::FindLand(sf::RenderWindow& m_window)
+{
+	std::queue <Node*> nodeQueue;
+
+	nodeGrid[lastWaterIndex]->setMarked();
+
+	nodeQueue.push(nodeGrid[lastWaterIndex]);
+
+		// loop through the queue while there are nodes in it.
+	while (nodeQueue.size() != 0)
+	{
+		//nodeQueue.front()->drawableNode.setFillColor(sf::Color::Red);
+			// add all of the child nodes that have not been 
+			// marked into the queue
+		auto neighbours = nodeQueue.front()->getNeighbours();
+
+		for (auto neighbour : neighbours)
+		{
+			if (neighbour->getMarked() == false) {
+				neighbour->setMarked();
+				if (neighbour->isWall) {
+					lastWaterIndex = nodeQueue.front()->getID();
+					MapIsland(neighbour->getID());
+					break;
+					/*islandGrid.push_back(neighbour);
+					nodeQueue.push(neighbour);*/
+				}
+				nodeQueue.push(neighbour);
+			}
+		}
+		nodeQueue.pop();
+	}
+}
+void Grid::MapIsland(int _startIndex)
+{
+	std::vector<Node*> currentIsland;
+	std::queue <Node*> nodeQueue;
+	nodeQueue.push(nodeGrid[_startIndex]);
+
+	// loop through the queue while there are nodes in it.
+	while (nodeQueue.size() != 0)
+	{
+		//nodeQueue.front()->drawableNode.setFillColor(sf::Color::Green);
+			// add all of the child nodes that have not been 
+			// marked into the queue
+		nodeQueue.front()->drawableNode.setFillColor(sf::Color::Green);
+		auto neighbours = nodeQueue.front()->getNeighbours();
+
+		for (auto neighbour : neighbours)
+		{
+			if (neighbour->getMarked() == false) {
+				neighbour->setMarked();
+				if (neighbour->isWall) {
+					currentIsland.push_back(neighbour);
+					nodeQueue.push(neighbour);
+				}
+			}
+		}
+		nodeQueue.pop();
+	}
+
+	islandsGrid.push_back(currentIsland);
+}
+
+
 
 
