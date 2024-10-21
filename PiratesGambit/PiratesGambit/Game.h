@@ -20,9 +20,14 @@ private:
 
 	void processEvents();
 	void processKeys(sf::Event t_event);
+	void processKeyUp(sf::Event t_event);
 	void update(sf::Time t_deltaTime);
 	void render();
 	void initialise();
+
+	bool keyUp = true;
+
+	sf::RenderTexture windowCapture;
 
 	sf::Sprite m_appleSprite;
 	sf::Texture m_appleTexture;

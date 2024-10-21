@@ -13,6 +13,8 @@ Game::Game() :
 	myGrid = new Grid(55,font);
 
 	myGrid->ApplyCelular(8, m_window);
+
+	windowCapture.create(1600, 1080);
 }
 
 /// <summary>
@@ -64,6 +66,10 @@ void Game::processEvents()
 		{
 			processKeys(newEvent);
 		}
+		if(sf::Event::KeyReleased == newEvent.type)
+		{
+			processKeyUp(newEvent);
+		}
 	}
 }
 
@@ -74,7 +80,22 @@ void Game::processEvents()
 /// <param name="t_event">key press event</param>
 void Game::processKeys(sf::Event t_event)
 {
+	if(t_event.key.code == sf::Keyboard::S)
+	{
+		keyUp = false;
+	}
+}
 
+void Game::processKeyUp(sf::Event t_event)
+{
+	if(t_event.key.code == sf::Keyboard::S)
+	{
+		//sf::Texture texture;
+		//texture.create(m_window.getSize().x, m_window.getSize().y);  
+		//texture.update(m_window);  
+		sf::Image screenshot = windowCapture.getTexture().copyToImage();  
+		screenshot.saveToFile("ASSETS\\screenshot.png");  
+	}
 }
 
 /// <summary>
@@ -94,6 +115,11 @@ void Game::render()
 {
 	m_window.clear(sf::Color::Black);
 	myGrid->drawGrid(m_window);
+	for(auto node : myGrid->nodeGrid)
+	{
+		windowCapture.draw(node->drawableNode);
+	}
+	windowCapture.display();
 	m_window.display();
 }
 

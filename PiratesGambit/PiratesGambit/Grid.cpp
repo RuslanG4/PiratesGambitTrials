@@ -212,9 +212,9 @@ void Grid::ApplyCelular(int _interations, sf::RenderWindow& m_window)
 			nodeGrid[j]->isWall = tempGrid[j]->isWall;
 			nodeGrid[j]->drawableNode.setFillColor(tempGrid[j]->drawableNode.getFillColor());
 		}
-		drawGrid(m_window);
+	/*	drawGrid(m_window);
 		m_window.display();
-		wait();
+		wait();*/
 		// Clean up the temporary grid
 		for (auto node : tempGrid)
 		{

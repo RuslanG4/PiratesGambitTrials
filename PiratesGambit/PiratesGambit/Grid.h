@@ -33,8 +33,9 @@ public:
 	void ApplyCelular(int _interations, sf::RenderWindow& window);
 	void FindLand(sf::RenderWindow& m_window);
 	void MapIsland(int _startIndex);
-private:
+
 	std::vector<Node*> nodeGrid;
+private:
 	std::vector<std::vector<Node*>> islandsGrid;
 
 	bool foundLand{ false };
