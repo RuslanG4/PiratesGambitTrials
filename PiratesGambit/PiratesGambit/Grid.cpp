@@ -32,34 +32,11 @@ Grid::Grid(int density, sf::Font& _font)
 	}
 }
 
-void Grid::createGrid(sf::Font& _font)
-{
-	//int rows = SCREEN_HEIGHT / gridNodeSize;  //identifies the amount of rows
-	//int cols = SCREEN_WIDTH / gridNodeSize;  //identifies the amount of columns
-	//for (int i = 0; i < rows; i++)
-	//{
-	//	for (int j = 0; j < cols; j++)
-	//	{
-	//		nodeGrid.push_back(new Node( j * gridNodeSize, i * gridNodeSize, gridNodeSize, _font)); //pushes a new node with passable and x and y and gives id
-	//	}
-	//}
-	////Setup id's first
-	//int max = rows * cols;
-	//for (int i = 0; i < max; i++)
-	//{
-	//	nodeGrid[i]->setID(i);
-	//	addNeighbours(i);
-	//}
-};
-
 void Grid::drawGrid(sf::RenderWindow& _window)
 {
 	for(auto node : nodeGrid)
 	{
 		_window.draw(node->drawableNode);
-		if (node->drawn == false) {
-			_window.draw(node->nodeCostText);
-		}
 	}
 }
 
@@ -90,67 +67,43 @@ void Grid::addNeighbours(int _currentNodeId)
 	}
 }
 
-void Grid::collapse(sf::RenderWindow& window)
+void Grid::WaveFunctionCollapse(int _startNode, sf::RenderWindow& window)
 {
-	currentStartNode = 1270;
+	std::priority_queue < Node*, std::vector<Node*>> nodeQueue;
 
-	std::priority_queue < Node*, std::vector<Node*>, Compare> nodeQueue;
-
-	
-	nodeGrid[currentStartNode]->setMarked();
-	nodeGrid[currentStartNode]->m_possibleTiles = { NodeType::LAND };
-	nodeGrid[currentStartNode]->determineEntropy();
-
-	nodeQueue.push(nodeGrid[currentStartNode]);
-
-	int counter{ 0 };
+	Node* start = nodeGrid[_startNode];
+	start->m_possibleTiles = { TileType::LAND };
+	nodeQueue.push(start);
 
 	// loop through the queue while there are nodes in it.
 	while (nodeQueue.size() != 0)
 	{
 		Node* currentTop = nodeQueue.top();
 
+		nodeQueue.pop();
+
 		currentTop->determineTile();
-		nodeGrid[currentStartNode]->determineEntropy();
+		currentTop->setMarked();
+
 
 		drawGrid(window);
 		window.display();
 		wait();
 
-		NodeType collapsedTile = *currentTop->m_possibleTiles.begin();
-
-		nodeQueue.pop();
-
-		// add all of the child nodes that have not been 
-		// marked into the queue
 		auto neighbours = currentTop->getNeighbours();
 
 		for (auto neighbour : neighbours)
 		{
-			if (neighbour->getMarked() == false)
-			{
-				// mark the node and add it to the queue.
-				neighbour->setMarked();
-
-				std::unordered_set<NodeType> newPossibleTiles;
-
-				for (NodeType tile : neighbour->m_possibleTiles) {
-					if (std::find(nodeRules[collapsedTile].begin(), nodeRules[collapsedTile].end(), tile) != nodeRules[collapsedTile].end()) {
-						newPossibleTiles.insert(tile);
-					}
+			if (!neighbour->getMarked()) {
+				if (neighbour->m_possibleTiles.size() > 1 && neighbour->m_currentTileType != TileType::WATER) {
+					// Recalculate the possible tiles for neighbors based on new rules
+					neighbour->determineTile();
+					nodeQueue.push(neighbour);
 				}
-
-				neighbour->m_possibleTiles = newPossibleTiles;
-				neighbour->determineEntropy();
-				nodeQueue.push(neighbour);
 			}
 		}
 	}
 
-}
-
-void Grid::propogate(Node* _node)
-{
 }
 
 void Grid::wait()
@@ -165,11 +118,6 @@ void Grid::wait()
 			moveOn = !moveOn;
 		}
 	}
-}
-
-void Grid::DiamondSquare()
-{
-
 }
 
 void Grid::ApplyCelular(int _interations, sf::RenderWindow& m_window)
@@ -199,10 +147,12 @@ void Grid::ApplyCelular(int _interations, sf::RenderWindow& m_window)
 			if(wallCount > 4)
 			{
 				node->drawableNode.setFillColor(sf::Color::Yellow);
+				node->m_currentTileType = TileType::SAND;
 				node->isWall = true;
 			}else
 			{
 				node->drawableNode.setFillColor(sf::Color::Blue);
+				node->m_currentTileType = TileType::WATER;
 				node->isWall = false;
 			}
 		}
@@ -211,8 +161,9 @@ void Grid::ApplyCelular(int _interations, sf::RenderWindow& m_window)
 		{
 			nodeGrid[j]->isWall = tempGrid[j]->isWall;
 			nodeGrid[j]->drawableNode.setFillColor(tempGrid[j]->drawableNode.getFillColor());
+			nodeGrid[j]->m_currentTileType = tempGrid[j]->m_currentTileType;
 		}
-	/*	drawGrid(m_window);
+		/*drawGrid(m_window);
 		m_window.display();
 		wait();*/
 		// Clean up the temporary grid
@@ -226,38 +177,16 @@ void Grid::ApplyCelular(int _interations, sf::RenderWindow& m_window)
 
 void Grid::FindLand(sf::RenderWindow& m_window)
 {
-	std::queue <Node*> nodeQueue;
-
-	nodeGrid[lastWaterIndex]->setMarked();
-
-	nodeQueue.push(nodeGrid[lastWaterIndex]);
-
-		// loop through the queue while there are nodes in it.
-	while (nodeQueue.size() != 0)
+	for(auto node : nodeGrid)
 	{
-		//nodeQueue.front()->drawableNode.setFillColor(sf::Color::Red);
-			// add all of the child nodes that have not been 
-			// marked into the queue
-		auto neighbours = nodeQueue.front()->getNeighbours();
-
-		for (auto neighbour : neighbours)
+		if(node->getMarked() == false && node->isWall)
 		{
-			if (neighbour->getMarked() == false) {
-				neighbour->setMarked();
-				if (neighbour->isWall) {
-					lastWaterIndex = nodeQueue.front()->getID();
-					MapIsland(neighbour->getID());
-					break;
-					/*islandGrid.push_back(neighbour);
-					nodeQueue.push(neighbour);*/
-				}
-				nodeQueue.push(neighbour);
-			}
+			MapIsland(node->getID(),m_window);
 		}
-		nodeQueue.pop();
 	}
+	collapseIslands(m_window);
 }
-void Grid::MapIsland(int _startIndex)
+void Grid::MapIsland(int _startIndex, sf::RenderWindow & window)
 {
 	std::vector<Node*> currentIsland;
 	std::queue <Node*> nodeQueue;
@@ -269,7 +198,6 @@ void Grid::MapIsland(int _startIndex)
 		//nodeQueue.front()->drawableNode.setFillColor(sf::Color::Green);
 			// add all of the child nodes that have not been 
 			// marked into the queue
-		nodeQueue.front()->drawableNode.setFillColor(sf::Color::Green);
 		auto neighbours = nodeQueue.front()->getNeighbours();
 
 		for (auto neighbour : neighbours)
@@ -286,6 +214,19 @@ void Grid::MapIsland(int _startIndex)
 	}
 
 	islandsGrid.push_back(currentIsland);
+}
+
+void Grid::collapseIslands(sf::RenderWindow& window)
+{
+	for(auto island : islandsGrid)
+	{
+		for(auto node : island)
+		{
+			node->resetMarked();
+		}
+		int id = island.at(rand() % island.size())->getID();
+		WaveFunctionCollapse(id, window);
+	}
 }
 
 

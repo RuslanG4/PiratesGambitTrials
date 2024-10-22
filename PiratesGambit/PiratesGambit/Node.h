@@ -1,9 +1,10 @@
 #pragma once
 #include"Includes.h"
 
-enum NodeType
+enum TileType
 {
 	WATER,
+	EDGE_SAND,
 	SAND,
 	LAND,
 };
@@ -32,7 +33,7 @@ public:
 		//m_possibleTiles = { WATER, SAND, LAND};
 		//determineEntropy();
 
-		determineColor();
+		noiseColor();
 	};
 
 	void addNeighbour(Node* t_cellId) { m_neighbours.push_back(t_cellId); }
@@ -43,41 +44,27 @@ public:
 
 	void setMarked() { visited = !visited; };
 	bool getMarked() { return visited; };
+	void resetMarked() { visited = false; };
 
-	void updatePath(sf::Color _col);
-
-	void setType(NodeType _type);
 	void determineColor();
+	void noiseColor();
 
 	sf::RectangleShape drawableNode; //sfml render
 	sf::Text nodeCostText;
 
-	std::unordered_set<NodeType> m_possibleTiles;
-	int entropy;
+	std::unordered_set<TileType> m_possibleTiles{ TileType::LAND, TileType::WATER, TileType::SAND };;
 
-	void updateNodeTypes(std::vector<NodeType> _surroundingTypes);
-
-	void determineEntropy();
 	void determineTile();
 
-
-	bool drawn{ false };
-
-	int height = std::rand() % 8 + 1;
-
 	bool isWall{ false };
+
+	TileType m_currentTileType;
 
 private:
 	int m_id;
 	bool visited{ false };
 
 	std::vector<Node*> m_neighbours;
-
-	std::map<NodeType, double> tileWeights = {
-{ WATER, 0.6 }, // For example, water has a low chance
-{ SAND, 1.0 },  // Base weight for sand
-{ LAND, 2.00 }   // 60% more chance to get land
-	};
 
 	int gridX; //position x
 	int gridY; //position y
