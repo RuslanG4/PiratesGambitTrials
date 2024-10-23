@@ -10,9 +10,9 @@ Game::Game() :
 	m_window{ sf::VideoMode{ SCREEN_WIDTH, SCREEN_HEIGHT, 32U }, "SFML Game" }
 {
 	initialise();
-	myGrid = new Grid(55,font);
+	myGrid = new Grid(68,font);
 
-	myGrid->ApplyCelular(8, m_window);
+	myGrid->ApplyCellular(5, m_window);
 
 	windowCapture.create(1600, 1080);
 }

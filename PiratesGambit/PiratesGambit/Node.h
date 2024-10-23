@@ -1,75 +1,61 @@
 #pragma once
 #include"Includes.h"
+#include"TextureManager.h"
 
 enum TileType
 {
 	WATER,
-	EDGE_SAND,
 	SAND,
 	LAND,
+	GRASSY_LAND
 };
 
 class Node
 {
 public:
-	Node(int _gridX, int _gridY, int size, sf::Font& _font, bool _isWall) :
+	Node(int _gridX, int _gridY, int size, bool _isLand) :
 		gridX(_gridX),
 		gridY(_gridY),
-		font(_font),
-		isWall(_isWall)
+		isLand(_isLand)
 	{
-		nodeCostText.setFont(font);
-		nodeCostText.setFillColor(sf::Color::Black);
-		/*nodeCostText.setString(std::to_string(nodeRules.size()));*/
-		nodeCostText.setCharacterSize(12);
-
-		drawableNode.setSize(sf::Vector2f(size, size));
 		drawableNode.setPosition(sf::Vector2f(gridX, gridY));
-		drawableNode.setOutlineColor(sf::Color::Black);
-		drawableNode.setOutlineThickness(2.f);
-
-		nodeCostText.setPosition(sf::Vector2f(gridX, gridY));
-
-		//m_possibleTiles = { WATER, SAND, LAND};
-		//determineEntropy();
-
-		noiseColor();
+		drawableNode.setScale(size / 64.f, size / 64.f); //64x64 is size of texture
 	};
 
-	void addNeighbour(Node* t_cellId) { m_neighbours.push_back(t_cellId); }
-	std::vector<Node*> getNeighbours() { return m_neighbours; };
+	void addNeighbour(Node* t_cellId);
 
+	sf::Sprite drawableNode; //sfml render
+	std::unordered_set<TileType> m_possibleTiles{ TileType::LAND, TileType::WATER, TileType::SAND };
+
+	//Getters
+	int getID() const { return m_id; };
+	std::vector<Node*> getNeighbours() const { return m_neighbours; };
+	bool getMarked() const{ return visited; };
+	bool getIsLand() const { return isLand; };
+	TileType getTileType() const { return m_currentTileType; };
+
+	//Setters
 	void setID(int _id) { m_id = _id; };
-	int getID() { return m_id; };
-
 	void setMarked() { visited = !visited; };
-	bool getMarked() { return visited; };
+	void setLand(bool _land) { isLand = _land; };
+	void setTileType(TileType _type) { m_currentTileType = _type; };
+	void setTexture(const sf::Texture& _texture) { drawableNode.setTexture(_texture); };
+
+	//Resetters
 	void resetMarked() { visited = false; };
-
-	void determineColor();
-	void noiseColor();
-
-	sf::RectangleShape drawableNode; //sfml render
-	sf::Text nodeCostText;
-
-	std::unordered_set<TileType> m_possibleTiles{ TileType::LAND, TileType::WATER, TileType::SAND };;
-
-	void determineTile();
-
-	bool isWall{ false };
-
-	TileType m_currentTileType;
 
 private:
 	int m_id;
 	bool visited{ false };
+	bool isLand{ false };
 
-	std::vector<Node*> m_neighbours;
+	std::vector<Node*> m_neighbours;  
+	//							  0 3 5	
+	// structure of neighbours -> 1 X 6
+	//							  2 4 7
+	TileType m_currentTileType;
 
 	int gridX; //position x
 	int gridY; //position y
-
-	sf::Font& font;
-
 };
 

@@ -8,5 +8,6 @@
 #include<queue>
 #include<map>
 #include <unordered_set>
+#include <algorithm>
 #include"Constants.h"
 #include"Utility.h"

@@ -1,7 +1,10 @@
 #pragma once
 #include<SFML/Graphics.hpp>
 
-const char* const APPLE_SPRITE = "ASSETS\\IMAGES\\Apple.png";
+const char* const LAND_SPRITE = "ASSETS\\IMAGES\\landTile1.png";
+const char* const GRASSY_LAND_SPRITE = "ASSETS\\IMAGES\\landTile.png";
+const char* const SAND_SPRITE = "ASSETS\\IMAGES\\sandTile.png";
+const char* const WATER_SPRITE = "ASSETS\\IMAGES\\waterTile.png";
 
 const char* const FONT_PATH = "ASSETS\\FONTS\\ComicNeueSansID.ttf";
 
