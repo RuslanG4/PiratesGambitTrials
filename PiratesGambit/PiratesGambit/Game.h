@@ -5,6 +5,7 @@
 #include <iostream>
 #include"Constants.h"
 #include"Grid.h"
+#include"FullMap.h"
 
 class Game
 {
@@ -34,7 +35,8 @@ private:
 
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font font;
-	Grid* myGrid;
+
+	FullMap* myMap;
 };
 
 #endif // !GAME_HPP

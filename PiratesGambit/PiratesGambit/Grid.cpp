@@ -1,6 +1,28 @@
 #include "Grid.h"
 
-Grid::Grid(int density, sf::Font& _font)
+Grid::Grid()
+{
+	int rows = SCREEN_HEIGHT / gridNodeSize;  //identifies the amount of rows
+	int cols = SCREEN_WIDTH / gridNodeSize;  //identifies the amount of columns
+
+	nodeGrid.reserve(rows * cols); // reserve memory
+
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < cols; j++){
+			nodeGrid.push_back(new Node(j * gridNodeSize, i * gridNodeSize, gridNodeSize, false)); //pushes a new node with passable x, y, size and noise
+		}
+	}
+	//Setup id's first
+	int max = rows * cols;
+	for (int i = 0; i < max; i++)
+	{
+		nodeGrid[i]->setID(i);
+		addNeighbours(i);
+	}
+}
+
+Grid::Grid(int density, sf::Vector2f _startPoint)
 {
 	int rows = SCREEN_HEIGHT / gridNodeSize;  //identifies the amount of rows
 	int cols = SCREEN_WIDTH / gridNodeSize;  //identifies the amount of columns
@@ -14,11 +36,11 @@ Grid::Grid(int density, sf::Font& _font)
 			int random = std::rand() % 100;
 			if (random > density)
 			{
-				nodeGrid.push_back(new Node(j * gridNodeSize, i * gridNodeSize, gridNodeSize, false)); //pushes a new node with passable x, y, size and noise
+				nodeGrid.push_back(new Node(_startPoint.x + (j * gridNodeSize), _startPoint.y + (i * gridNodeSize), gridNodeSize, false)); //pushes a new node with passable x, y, size and noise
 			}
 			else
 			{
-				nodeGrid.push_back(new Node(j * gridNodeSize, i * gridNodeSize, gridNodeSize, true)); //pushes a new node with passable x, y, size and noise
+				nodeGrid.push_back(new Node(_startPoint.x + (j * gridNodeSize), _startPoint.y + (i * gridNodeSize), gridNodeSize, true)); //pushes a new node with passable x, y, size and noise
 			}
 			
 		}
@@ -36,7 +58,12 @@ void Grid::drawGrid(sf::RenderWindow& _window) const
 {
 	for(auto node : nodeGrid)
 	{
+		_window.draw(node->waterBackSprite);
 		_window.draw(node->drawableNode);
+		if(node->drawDebug)
+		{
+			_window.draw(node->debugShape);
+		}
 	}
 }
 
@@ -74,8 +101,7 @@ void Grid::WaveFunctionCollapse(const std::vector<Node*>& _currentIsland, sf::Re
 
 	Node* start = nodeGrid[id];
 	start->m_possibleTiles = { TileType::LAND };
-	DetermineTile(start);
-	determineTileTexture(start);
+
 	start->setMarked();
 	nodeQueue.push(start);
 
@@ -83,6 +109,8 @@ void Grid::WaveFunctionCollapse(const std::vector<Node*>& _currentIsland, sf::Re
 	while (!nodeQueue.empty())
 	{
 		Node* currentTop = nodeQueue.top();
+
+		determineTileTexture(currentTop);
 
 		nodeQueue.pop();
 
@@ -93,67 +121,37 @@ void Grid::WaveFunctionCollapse(const std::vector<Node*>& _currentIsland, sf::Re
 			if (!neighbour->getMarked()) {
 				if (neighbour->m_possibleTiles.size() > 1 && neighbour->getTileType() != TileType::WATER) {
 					// Recalculate the possible tiles for neighbors based on new rules
-					DetermineTile(neighbour);
-					determineTileTexture(neighbour);
 					neighbour->setMarked();
-					/*drawGrid(window);
-					window.display();
-					wait();*/
+					neighbour->drawDebug = false;
+
 					nodeQueue.push(neighbour);
+
 				}
 			}
 		}
-	}
 
+	}
 }
 
-void Grid::DetermineTile(Node* _currentNode) const
+//Checks sand tile texture rules
+int Grid::FollowsSandPatterns(const Node* _currentNode) const
 {
-	TileType chosenTileOptions = TileType::LAND;
-	bool hasWaterNeighbour{ false };
-	bool hasSandNeighbour{ false };
-
-	for (auto neighbour : _currentNode->getNeighbours())
+	for(int currentPattern = 0; currentPattern < sandCornerPatterns.size(); currentPattern++)
 	{
-		if (neighbour->getTileType() == TileType::WATER)
+		if (CheckPattern(_currentNode, sandCornerPatterns[currentPattern]))
 		{
-			hasWaterNeighbour = true;
-		}
-		else if (neighbour->getTileType() == TileType::SAND)
-		{
-			hasSandNeighbour = true;
+			return currentPattern;
 		}
 	}
-
-	if (hasWaterNeighbour) {
-		if (FollowsWaterPattern(_currentNode))
-		{
-			chosenTileOptions = { TileType::WATER };
-			_currentNode->setLand(false);
-		}
-		else {
-			chosenTileOptions = { TileType::SAND };
-		}
-	}
-	else if (hasSandNeighbour) {
-		int random = std::rand() % 100;
-		if (random > 70)
-		{
-			chosenTileOptions = { TileType::GRASSY_LAND };
-		}
-		else {
-			chosenTileOptions = { TileType::LAND };
-		}
-	}
-
-	_currentNode->setTileType(chosenTileOptions);
+	return -1;
 }
 
-bool Grid::FollowsWaterPattern(const Node* _currentNode) const
+//checks undesired tile rules
+bool Grid::filterUndesiredTiles(const Node* _currentNode) const
 {
-	for (const auto& pattern : waterReplacementPatterns)
+	for (const auto& pattern : undesiredTiles)
 	{
-		if (CheckPattern(_currentNode,pattern))
+		if (CheckPattern(_currentNode, pattern))
 		{
 			return true;
 		}
@@ -161,13 +159,14 @@ bool Grid::FollowsWaterPattern(const Node* _currentNode) const
 	return false;
 }
 
-bool Grid::CheckPattern(const Node* _currentNode, const std::vector<int>& _pattern) const
+//takes in patterns and corss checks neighbours to see if match
+bool Grid::CheckPattern(const Node* _currentNode, const std::vector<std::pair<int, bool>>& _pattern) const
 {
 	int patternCount = 0;
 	for (int i = 0; i < _pattern.size(); i++)
 	{
-		if (_pattern[i] < _currentNode->getNeighbours().size()) {
-			if (!_currentNode->getNeighbours()[_pattern[i]]->getIsLand())
+		if (_currentNode->getNeighbours().size() > 5) {
+			if (_currentNode->getNeighbours()[_pattern[i].first]->getIsLand() == _pattern[i].second)
 			{
 				patternCount++;
 				if (patternCount == _pattern.size())
@@ -181,21 +180,21 @@ bool Grid::CheckPattern(const Node* _currentNode, const std::vector<int>& _patte
 		}
 		else
 		{
-			return true;
+			return false;
 		}
 	}
-	return true;
+	return false;
 }
 
 //debug wait timer
-void Grid::wait()
+void Grid::wait(int time)
 {
 	int timer = 0;
 	bool moveOn = false;
 	while (!moveOn)
 	{
 		timer++;
-		if (timer > 1000000)
+		if (timer > time)
 		{
 			moveOn = !moveOn;
 		}
@@ -228,8 +227,8 @@ void Grid::ApplyCellular(int _interations, sf::RenderWindow& m_window)
 	
 			if(wallCount > 4)
 			{
-				node->drawableNode.setTexture(textureManager.getTexture("sandTile"));
-				node->setTileType(TileType::SAND);
+				node->drawableNode.setTexture(textureManager.getTexture("landTile"));
+				node->setTileType(TileType::LAND);
 				node->setLand(true);
 			}else
 			{
@@ -248,7 +247,7 @@ void Grid::ApplyCellular(int _interations, sf::RenderWindow& m_window)
 			//Uncomment for debug
 			/*drawGrid(m_window);
 			m_window.display();
-			wait();*/
+			wait(1);*/
 		}
 		
 		// Clean up the temporary grid
@@ -257,6 +256,7 @@ void Grid::ApplyCellular(int _interations, sf::RenderWindow& m_window)
 			delete node;  // Free memory for deep-copied nodes
 		}
 	}
+
 	FindLand(m_window);
 }
 
@@ -265,70 +265,215 @@ void Grid::FindLand(sf::RenderWindow& m_window)
 {
 	for(auto node : nodeGrid)
 	{
+		/*drawGrid(m_window);
+		m_window.display();
+		wait(1);*/
+		node->drawDebug = true;
 		if(node->getMarked() == false && node->getIsLand())
 		{
-			MapIsland(node->getID(),m_window);
+			MapIsland(node->getID(),false ,m_window);
 		}
 	}
-	collapseIslands(m_window);
+	for(auto node : nodeGrid)
+	{
+		node->resetMarked();
+	}
+	SaveIslandData(m_window);
+	for(auto island: islandsGrid)
+	{
+		collapseIsland(island, m_window);
+	}
 }
 
-void Grid::MapIsland(int _startIndex, sf::RenderWindow & window)
+void Grid::MapIsland(int _startIndex,bool saveIslandData, sf::RenderWindow & window)
 {
 	std::vector<Node*> currentIsland;
 	std::queue <Node*> nodeQueue;
+
 	nodeQueue.push(nodeGrid[_startIndex]);
+
+	nodeQueue.front()->setMarked();
+	nodeQueue.front()->debugShape.setFillColor(sf::Color(23,23,23,66));
+	nodeQueue.front()->drawDebug = true;
+
+	if (filterUndesiredTiles(nodeQueue.front()))
+	{
+		replaceUndesiredLand(nodeQueue.front());
+	}
+
+	currentIsland.push_back(nodeQueue.front());
 
 	// loop through the queue while there are nodes in it.
 	while (!nodeQueue.empty())
 	{
+		if (filterUndesiredTiles(nodeQueue.front()))
+		{
+			replaceUndesiredLand(nodeQueue.front());
+		}
+		if(nodeQueue.front()->getNeighbours().size() < 8)
+		{
+			removeWorldEdges(nodeQueue.front());
+		}
+		nodeQueue.front()->debugShape.setFillColor(sf::Color(123, 123, 123, 66));
+		/*drawGrid(window);
+		window.display();
+		wait(1);*/
 		auto neighbours = nodeQueue.front()->getNeighbours();
-
 		for (auto neighbour : neighbours)
 		{
 			if (neighbour->getMarked() == false) {
 				neighbour->setMarked();
 				if (neighbour->getIsLand()) {
+					
 					currentIsland.push_back(neighbour);
 					nodeQueue.push(neighbour);
+
+
+					neighbour->debugShape.setFillColor(sf::Color(23, 23, 23, 66));
+					neighbour->drawDebug = true;
+					/*drawGrid(window);
+					window.display();
+					wait(1);*/
 				}
 			}
 		}
+		
 		nodeQueue.pop();
+		
 	}
-	//add island to storage
-	islandsGrid.push_back(currentIsland);
-}
-
-void Grid::collapseIslands(sf::RenderWindow& window)
-{
-	for(auto island : islandsGrid)
+	if(saveIslandData)
 	{
-		for(auto node : island)
+		islandsGrid.push_back(currentIsland);
+	}
+	
+}
+
+//Saves islands to a node vector for future use
+void Grid::SaveIslandData(sf::RenderWindow& window)
+{
+	for (auto node : nodeGrid)
+	{
+		if (node->getMarked() == false && node->getIsLand())
 		{
-			node->resetMarked();
-		}
-		if (!island.empty()) {
-			WaveFunctionCollapse(island, window);
+			MapIsland(node->getID(),true, window);
 		}
 	}
 }
 
+//removes edge tiles so chunk edge is always water
+void Grid::removeWorldEdges(Node* _currentNode)
+{
+	_currentNode->setTileType(TileType::WATER);
+	_currentNode->setLand(false);
+	determineTileTexture(_currentNode);
+}
+
+//call to filter tiles
+void Grid::collapseIsland(std::vector<Node*>& _currentIsland, sf::RenderWindow& window)
+{
+	WaveFunctionCollapse(_currentIsland, window);
+	setTileTextures(_currentIsland);
+}
+
+//sets tiles based of wfc 
+void Grid::setTileTextures(std::vector<Node*>& _island)
+{
+	for (auto node : _island)
+	{
+		determineTileTexture(node);
+	}
+}
+
+//removes edge cases of single nodes sticking out, expands on them
+void Grid::replaceUndesiredLand(Node* _code)
+{
+	_code->setLand(true);
+	_code->setTileType(TileType::LAND);
+	_code->drawableNode.setTexture(textureManager.getTexture("landTile"));
+	for (auto neigh : _code->getNeighbours())
+	{
+		neigh->resetMarked();
+		neigh->setLand(true);
+		neigh->setTileType(TileType::LAND);
+		neigh->drawableNode.setTexture(textureManager.getTexture("landTile"));
+	}
+}
+
+//set texture 
 void Grid::determineTileTexture(Node* _node) const
 {
+	int random = std::rand() % 100;
 	switch (_node->getTileType())
 	{
 	case WATER:
 		_node->drawableNode.setTexture(textureManager.getTexture("waterTile"));
 		break;
-	case LAND:
-		_node->drawableNode.setTexture(textureManager.getTexture("landTile"));
-		break;
 	case GRASSY_LAND:
 		_node->drawableNode.setTexture(textureManager.getTexture("grassyLandTile"));
 		break;
-	case SAND:
-		_node->drawableNode.setTexture(textureManager.getTexture("sandTile"));
+	case LAND:
+		switch(FollowsSandPatterns(_node))
+		{
+		case -1:
+			if (random > 70)
+			{
+				_node->setTileType(TileType::GRASSY_LAND);
+				determineTileTexture(_node);
+			}
+			else {
+				_node->drawableNode.setTexture(textureManager.getTexture("landTile"));
+			}
+			
+			break;
+		case 0:
+			_node->setWaterTexture(textureManager.getTexture("waterTile"));
+			_node->drawableNode.setTexture(textureManager.getTexture("TLsandTile"));
+			break;
+		case 1:
+			_node->setWaterTexture(textureManager.getTexture("waterTile"));
+			_node->drawableNode.setTexture(textureManager.getTexture("TRsandTile"));
+			break;
+		case 2:
+			_node->setWaterTexture(textureManager.getTexture("waterTile"));
+			_node->drawableNode.setTexture(textureManager.getTexture("BRsandTile"));
+			break;
+		case 3:
+			_node->setWaterTexture(textureManager.getTexture("waterTile"));
+			_node->drawableNode.setTexture(textureManager.getTexture("BLsandTile"));
+			break;
+		case 4:
+			_node->setWaterTexture(textureManager.getTexture("waterTile"));
+			_node->drawableNode.setTexture(textureManager.getTexture("flatTop"));
+			break;
+		case 5:
+			_node->setWaterTexture(textureManager.getTexture("waterTile"));
+			_node->drawableNode.setTexture(textureManager.getTexture("flatBottom"));
+			break;
+		case 6:
+			_node->setWaterTexture(textureManager.getTexture("waterTile"));
+			_node->drawableNode.setTexture(textureManager.getTexture("flatRight"));
+			break;
+		case 7:
+			_node->setWaterTexture(textureManager.getTexture("waterTile"));
+			_node->drawableNode.setTexture(textureManager.getTexture("flatLeft"));
+			break;
+		case 8:
+			_node->setWaterTexture(textureManager.getTexture("waterTile"));
+			_node->drawableNode.setTexture(textureManager.getTexture("LLSANDTL"));
+			break;
+		case 9:
+			_node->setWaterTexture(textureManager.getTexture("waterTile"));
+			_node->drawableNode.setTexture(textureManager.getTexture("LLSANDBL"));
+			break;
+		case 10:
+			_node->setWaterTexture(textureManager.getTexture("waterTile"));
+			_node->drawableNode.setTexture(textureManager.getTexture("LLSANDTR"));
+			break;
+		case 11:
+			_node->setWaterTexture(textureManager.getTexture("waterTile"));
+			_node->drawableNode.setTexture(textureManager.getTexture("LLSANDBR"));
+			break;
+		}
 		break;
 	}
 }

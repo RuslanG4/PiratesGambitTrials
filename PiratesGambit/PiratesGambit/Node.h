@@ -5,7 +5,6 @@
 enum TileType
 {
 	WATER,
-	SAND,
 	LAND,
 	GRASSY_LAND
 };
@@ -20,12 +19,24 @@ public:
 	{
 		drawableNode.setPosition(sf::Vector2f(gridX, gridY));
 		drawableNode.setScale(size / 64.f, size / 64.f); //64x64 is size of texture
+
+		waterBackSprite.setPosition(sf::Vector2f(gridX, gridY));
+		waterBackSprite.setScale(size / 64.f, size / 64.f); //64x64 is size of texture
+
+		debugShape.setPosition(sf::Vector2f(gridX, gridY));
+		debugShape.setSize(sf::Vector2f(32, 32));
+		debugShape.setFillColor(sf::Color(123,123,123,46));
 	};
 
 	void addNeighbour(Node* t_cellId);
 
 	sf::Sprite drawableNode; //sfml render
-	std::unordered_set<TileType> m_possibleTiles{ TileType::LAND, TileType::WATER, TileType::SAND };
+	sf::Sprite waterBackSprite; //back texture of water
+
+	sf::RectangleShape debugShape;
+	bool drawDebug = false;
+
+	std::unordered_set<TileType> m_possibleTiles{ TileType::LAND, TileType::GRASSY_LAND,TileType::WATER};
 
 	//Getters
 	int getID() const { return m_id; };
@@ -40,6 +51,7 @@ public:
 	void setLand(bool _land) { isLand = _land; };
 	void setTileType(TileType _type) { m_currentTileType = _type; };
 	void setTexture(const sf::Texture& _texture) { drawableNode.setTexture(_texture); };
+	void setWaterTexture(const sf::Texture& _texture) { waterBackSprite.setTexture(_texture); };
 
 	//Resetters
 	void resetMarked() { visited = false; };

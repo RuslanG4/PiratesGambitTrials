@@ -7,14 +7,13 @@
 /// load and setup thne image
 /// </summary>
 Game::Game() :
-	m_window{ sf::VideoMode{ SCREEN_WIDTH, SCREEN_HEIGHT, 32U }, "SFML Game" }
+	m_window{ sf::VideoMode{ 1288,1024, 32U }, "SFML Game" }
 {
 	initialise();
-	myGrid = new Grid(68,font);
 
-	myGrid->ApplyCellular(5, m_window);
+	myMap = new FullMap(m_window);
 
-	windowCapture.create(1600, 1080);
+	//windowCapture.create(1600, 1080);
 }
 
 /// <summary>
@@ -24,6 +23,7 @@ Game::Game() :
 Game::~Game()
 {
 }
+
 
 
 /// <summary>
@@ -88,14 +88,14 @@ void Game::processKeys(sf::Event t_event)
 
 void Game::processKeyUp(sf::Event t_event)
 {
-	if(t_event.key.code == sf::Keyboard::S)
-	{
-		//sf::Texture texture;
-		//texture.create(m_window.getSize().x, m_window.getSize().y);  
-		//texture.update(m_window);  
-		sf::Image screenshot = windowCapture.getTexture().copyToImage();  
-		screenshot.saveToFile("ASSETS\\screenshot.png");  
-	}
+	//if(t_event.key.code == sf::Keyboard::S)
+	//{
+	//	//sf::Texture texture;
+	//	//texture.create(m_window.getSize().x, m_window.getSize().y);  
+	//	//texture.update(m_window);  
+	//	sf::Image screenshot = windowCapture.getTexture().copyToImage();  
+	//	screenshot.saveToFile("ASSETS\\screenshot.png");  
+	//}
 }
 
 /// <summary>
@@ -114,12 +114,16 @@ void Game::update(sf::Time t_deltaTime)
 void Game::render()
 {
 	m_window.clear(sf::Color::Black);
-	myGrid->drawGrid(m_window);
-	for(auto node : myGrid->nodeGrid)
-	{
-		windowCapture.draw(node->drawableNode);
-	}
-	windowCapture.display();
+	myMap->render(m_window);
+	//for(auto chunk : myMap->getChunks())
+	//{
+	//	for(auto node : chunk)
+	//	{
+	//		windowCapture.draw(node->drawableNode);
+	//	}
+	//	
+	//}
+	//windowCapture.display();
 	m_window.display();
 }
 
