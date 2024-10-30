@@ -19,6 +19,23 @@ const std::vector<std::vector<std::pair<int, bool>>> sandCornerPatterns
 	{{1,true},{3,true}, { 4, true }, {6, true}, {7, false }}, //landLocked BR
 };
 
+const std::vector<std::vector<std::pair<int, bool>>> landPatterns
+{
+{ {0, true}, {1, true},{2, true}, {3, true},{4, true}, {5, true},{6, true}, {7, true}},
+};
+
+const std::vector<std::vector<std::pair<int, bool>>> undesiredLandTiles
+{
+		{ {0, true}, {1, true},{2, false}, {3, true},{4, false}, {5, false},{6, true}, {7, true}},
+	{ {0, false}, {1, true},{2, true}, {3, true},{4, false}, {5, true},{6, true}, {7, false}},
+	{ {0, false}, {1, false},{2, true}, {3, true},{4, true}, {5, true},{6, true}, {7, false}},
+	{ {0, true}, {1, false},{2, false}, {3, true},{4, true}, {5, false},{6, true}, {7, true}},
+		{ {0, true}, {1, true},{2, false}, {3, false},{4, true}, {5, false},{6, true}, {7, true}},
+		{ {0, false}, {1, true},{2, true}, {3, false},{4, true}, {5, true},{6, true}, {7, false}},
+		{ {0, true}, {1, true},{2, false}, {3, true},{4, true}, {5, false},{6, false}, {7, true}},
+		{ {0, false}, {1, true},{2, true}, {3, true},{4, true}, {5, true},{6, false}, {7, false}},
+};
+
 const std::vector<std::vector<std::pair<int, bool>>> undesiredTiles
 {
 	 { {3, false}, {4, false}},
@@ -27,10 +44,13 @@ const std::vector<std::vector<std::pair<int, bool>>> undesiredTiles
 	{ {0, false}, {1, true},{2, true}, {3, true},{4, false}, {5, true},{6, true}, {7, false}},
 	{ {0, false}, {1, false},{2, true}, {3, true},{4, true}, {5, true},{6, true}, {7, false}},
 	{ {0, true}, {1, false},{2, false}, {3, true},{4, true}, {5, false},{6, true}, {7, true}},
-		{ {0, true}, {1, true},{2, false}, {3, false},{4, true}, {5, false},{6, true}, {7, true}},
-		{ {0, false}, {1, true},{2, true}, {3, false},{4, true}, {5, true},{6, true}, {7, false}},
-		{ {0, true}, {1, true},{2, false}, {3, true},{4, true}, {5, false},{6, false}, {7, true}},
-		{ {0, false}, {1, true},{2, true}, {3, true},{4, true}, {5, true},{6, false}, {7, false}},
-
+	{ {0, true}, {1, true},{2, false}, {3, false},{4, true}, {5, false},{6, true}, {7, true}},
+	{ {0, false}, {1, true},{2, true}, {3, false},{4, true}, {5, true},{6, true}, {7, false}},
+	{ {0, true}, {1, true},{2, false}, {3, true},{4, true}, {5, false},{6, false}, {7, true}},
+	{ {0, false}, {1, true},{2, true}, {3, true},{4, true}, {5, true},{6, false}, {7, false}},
+	{ {0, true}, {1, true},{2, true}, {3, true},{4, false}, {5, false},{6, true}, {7, true}},
+	{ {0, false}, {1, true},{2, true}, {3, true},{4, false}, {5, true},{6, true}, {7, true}},
+	{ {0, true}, {1, false},{2, true}, {3, true},{4, true}, {5, true},{6, true}, {7, false}},
+	{ {0, true}, {1, false},{2, true}, {3, true},{4, true}, {5, false},{6, true}, {7, true}},
 };
 

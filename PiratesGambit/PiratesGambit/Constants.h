@@ -27,5 +27,5 @@ const char* const FONT = "ASSETS\\FONTS\\edge.ttf";
 
 const sf::Color GRAY = sf::Color(21, 21, 21);
 
-const int SCREEN_WIDTH = 1025;
-const int SCREEN_HEIGHT = 1024;
+const int SCREEN_WIDTH = 1056;
+const int SCREEN_HEIGHT = 1056;

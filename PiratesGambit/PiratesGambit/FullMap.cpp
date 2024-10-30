@@ -13,21 +13,26 @@ FullMap::FullMap(sf::RenderWindow& window)
 	//			/*Grid* chunk = new Grid(70, sf::Vector2f(x * SCREEN_WIDTH, y * SCREEN_HEIGHT));
 	//			chunk->ApplyCellular(8, window);
 	//			chunks_.push_back(chunk);*/
-	//			Grid* chunk = new Grid(68, sf::Vector2f(x * SCREEN_WIDTH, y * SCREEN_HEIGHT));
-	//			chunk->ApplyCellular(8, window);
+	//			Grid* chunk = new Grid(64, sf::Vector2f(x * SCREEN_WIDTH, y * SCREEN_HEIGHT));
+	//			chunk->ApplyCellular(7, window);
 	//			chunks_.push_back(chunk);
 	//		}else
 	//		{
-	//			Grid* chunk = new Grid(45, sf::Vector2f(x * SCREEN_WIDTH, y * SCREEN_HEIGHT));
+	//			Grid* chunk = new Grid(49, sf::Vector2f(x * SCREEN_WIDTH, y * SCREEN_HEIGHT));
 	//			chunk->ApplyCellular(5, window);
 	//			chunks_.push_back(chunk);
 	//		}
 	//		
 	//	}
 	//}
-	Grid* chunk = new Grid(67, sf::Vector2f(0 * SCREEN_WIDTH, 0 * SCREEN_HEIGHT));
-	chunk->ApplyCellular(7, window);
+	Grid* chunk = new Grid(54, sf::Vector2f(0 * SCREEN_WIDTH, 0 * SCREEN_HEIGHT));
+	chunk->ApplyCellular(2, window);
 	chunks_.push_back(chunk);
+
+	//Grid* chunk = new Grid();
+	//chunk->DiamondSquare();
+	//chunks_.push_back(chunk);
+
 }
 
 void FullMap::render(sf::RenderWindow& window)

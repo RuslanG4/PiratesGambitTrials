@@ -24,18 +24,20 @@ public:
 	void SaveIslandData(sf::RenderWindow& window);
 	void removeWorldEdges(Node* _currentNode);
 
-	//WFC
-	void collapseIsland(std::vector<Node*>& _currentIsland, sf::RenderWindow& window);
-	void WaveFunctionCollapse(const std::vector<Node*>& _currentIsland, sf::RenderWindow& window);
-
 	//Tile rules
-	int FollowsSandPatterns(const Node* _currentNode) const;
+	void FilterTiles(Node* _currentNode);
+	int FollowsPatterns(const Node* _currentNode, const std::vector<std::vector<std::pair<int, bool>>> _pattern) const;
+	bool FilterWaterTiles(const Node* _currentNode)const;
 	bool filterUndesiredTiles(const Node* _currentNode) const;
 	bool CheckPattern(const Node* _currentNode, const std::vector<std::pair<int, bool>>& _pattern) const;
 
-	void setTileTextures(std::vector<Node*>& _island);
-	void replaceUndesiredLand(Node* _code);
+
+	void replaceUndesiredLand(Node* _node) const;
 	void determineTileTexture(Node* _node) const;
+
+	void determineSandTileType(Node* _node) const;
+	void determineLandTileType(Node* _node) const;
+	void determineWaterTileType(Node* _node) const;
 
 	std::vector<Node*> nodeGrid;
 private:

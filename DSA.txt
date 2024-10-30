@@ -1,0 +1,72 @@
+void Grid::DiamondSquare()
+{
+	/*nodeGrid[Index(0, 0)]->height = std::rand() % 4 +1;
+	nodeGrid[Index(0, SCREEN_HEIGHT / gridNodeSize - 1)]->height = std::rand() % 4 + 1;
+	nodeGrid[Index(SCREEN_HEIGHT / gridNodeSize - 1, 0)]->height = std::rand() % 4 + 1;
+	nodeGrid[Index(SCREEN_HEIGHT / gridNodeSize - 1, SCREEN_HEIGHT / gridNodeSize - 1)]->height = std::rand() % 4 + 1;*/
+	int step = SCREEN_HEIGHT / gridNodeSize - 1;
+	float roughness = 6;
+	while (step > 1) {
+		int halfStep = step / 2;
+
+		//diamond step
+		for (int y = halfStep; y < SCREEN_HEIGHT / gridNodeSize; y += step) {
+			for (int x = halfStep; x < SCREEN_HEIGHT / gridNodeSize; x += step) {
+				float avg = (nodeGrid[Index(x - halfStep, y - halfStep)]->height +
+					nodeGrid[Index(x - halfStep, y + halfStep)]->height +
+					nodeGrid[Index(x + halfStep, y - halfStep)]->height +
+					nodeGrid[Index(x + halfStep, y + halfStep)]->height) * 0.25f;
+				nodeGrid[Index(x, y)]->height = avg + randomFloat(-roughness,roughness);
+			}
+		}
+
+		//square step
+		for (int y = 0; y < SCREEN_HEIGHT / gridNodeSize; y += halfStep) {
+			for (int x = (y + halfStep) % step; x < SCREEN_HEIGHT / gridNodeSize; x += step) {
+				float avg = 0.0f;
+				int count = 0;
+
+				if (x >= halfStep) { avg += nodeGrid[Index(x - halfStep, y)]->height; count++; }
+				if (x + halfStep < SCREEN_HEIGHT / gridNodeSize) { avg += nodeGrid[Index(x + halfStep, y)]->height; count++; }
+				if (y >= halfStep) { avg += nodeGrid[Index(x, y - halfStep)]->height; count++; }
+				if (y + halfStep < SCREEN_HEIGHT / gridNodeSize) { avg += nodeGrid[Index(x, y + halfStep)]->height; count++; }
+
+				nodeGrid[Index(x, y)]->height = avg / count + randomFloat(-roughness, roughness);
+			}
+		}
+		step /= 2;
+		roughness *= 0.5f; //reduce roughness for finer details
+	}
+
+	for(auto node : nodeGrid)
+	{
+		std::cout << node->height << "\n";
+		if (node->height > 3)
+		{
+			node->drawableNode.setTexture(textureManager.getTexture("landTile"));
+			node->setTileType(TileType::LAND);
+			node->setLand(true);
+		}
+		else
+		{
+			node->drawableNode.setTexture(textureManager.getTexture("waterTile"));
+			node->setTileType(TileType::WATER);
+			node->setLand(false);
+		}
+	}
+	sf::RenderWindow t;
+	ApplyCellular(1, t);
+}
+
+int Grid::Index(int x, int y)
+{
+	return ((y) * (SCREEN_HEIGHT / gridNodeSize) + x);
+}
+
+float Grid::randomFloat(float min, float max)
+{
+	static std::random_device rd;                              // Seed source
+	static std::default_random_engine generator(rd());         // Seed engine once
+	std::uniform_real_distribution<float> distribution(min, max);
+	return distribution(generator);
+}
