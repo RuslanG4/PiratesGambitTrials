@@ -7,11 +7,13 @@
 /// load and setup thne image
 /// </summary>
 Game::Game() :
-	m_window{ sf::VideoMode{ 1288,1024, 32U }, "SFML Game" }
+	m_window{ sf::VideoMode{ SCREEN_WIDTH,SCREEN_HEIGHT, 32U }, "SFML Game" }
 {
 	initialise();
 
-	myMap = new FullMap(m_window);
+	myMap = new FullMap(m_window, textureManager);
+
+	myPlayer.setSprite(textureManager.getTexture("PLAYER"));
 
 	//windowCapture.create(1600, 1080);
 }
@@ -104,8 +106,7 @@ void Game::processKeyUp(sf::Event t_event)
 /// <param name="t_deltaTime">time interval per frame</param>
 void Game::update(sf::Time t_deltaTime)
 {
-	//myGrid->collapse(m_window);
-	
+	myPlayer.update(t_deltaTime.asMilliseconds());
 }
 
 /// <summary>
@@ -113,6 +114,7 @@ void Game::update(sf::Time t_deltaTime)
 /// </summary>
 void Game::render()
 {
+	m_window.setView(myPlayer.getPlayerCamera());
 	m_window.clear(sf::Color::Black);
 	myMap->render(m_window);
 	//for(auto chunk : myMap->getChunks())
@@ -124,6 +126,7 @@ void Game::render()
 	//	
 	//}
 	//windowCapture.display();
+	myPlayer.render(m_window);
 	m_window.display();
 }
 

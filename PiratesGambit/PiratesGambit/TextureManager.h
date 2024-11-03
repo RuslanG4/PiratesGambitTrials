@@ -6,25 +6,6 @@ class TextureManager {
 public:
     static TextureManager& getInstance() {
         static TextureManager instance;
-        instance.loadTexture("landTile", LAND_SPRITE);
-        instance.loadTexture("grassyLandTile", GRASSY_LAND_SPRITE);
-        //sand corners
-        instance.loadTexture("TRsandTile", SAND_TR);
-        instance.loadTexture("TLsandTile", SAND_TL);
-        instance.loadTexture("BRsandTile", SAND_BR);
-        instance.loadTexture("BLsandTile", SAND_BL);
-        //snad flats
-        instance.loadTexture("flatTop", SAND_FT);
-        instance.loadTexture("flatBottom", SAND_FB);
-        instance.loadTexture("flatLeft", SAND_FL);
-        instance.loadTexture("flatRight", SAND_FR);
-        //sand land locked corners
-        instance.loadTexture("LLSANDTR", TR_LANDLOCK);
-        instance.loadTexture("LLSANDTL", TL_LANDLOCK);
-        instance.loadTexture("LLSANDBR", BR_LANDLOCK);
-        instance.loadTexture("LLSANDBL", BL_LANDLOCK);
-        ///
-        instance.loadTexture("waterTile", WATER_SPRITE);
         return instance;
     }
 
@@ -45,7 +26,33 @@ public:
     void operator=(TextureManager const&) = delete;
 
 private:
-    TextureManager() {}
+    TextureManager()
+    {
+        loadTexture("landTile", LAND_SPRITE);
+        loadTexture("grassyLandTile", GRASSY_LAND_SPRITE);
+        loadTexture("sandTile", SAND_SPRITE);
+        //sand corners
+        loadTexture("TRsandTile", SAND_TR);
+        loadTexture("TLsandTile", SAND_TL);
+        loadTexture("BRsandTile", SAND_BR);
+        loadTexture("BLsandTile", SAND_BL);
+        //snad flats
+        loadTexture("flatTop", SAND_FT);
+        loadTexture("flatBottom", SAND_FB);
+        loadTexture("flatLeft", SAND_FL);
+        loadTexture("flatRight", SAND_FR);
+        //sand land locked corners
+        loadTexture("LLSANDTR", TR_LANDLOCK);
+        loadTexture("LLSANDTL", TL_LANDLOCK);
+        loadTexture("LLSANDBR", BR_LANDLOCK);
+        loadTexture("LLSANDBL", BL_LANDLOCK);
+        ///
+        loadTexture("waterTile", WATER_SPRITE);
+        //SHIPS
+        loadTexture("PLAYER", PLAYER);
+        loadTexture("PLAYER_DAMAGED", PLAYER_DAMAGED);
+        loadTexture("PLAYER_PLASTERED", PLAYER_PLASTERED);
+    }
 
     std::map<std::string, sf::Texture> textures;
 };

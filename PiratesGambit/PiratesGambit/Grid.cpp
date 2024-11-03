@@ -1,6 +1,6 @@
 #include "Grid.h"
 
-Grid::Grid()
+Grid::Grid(TextureManager& instance) : textureManager(instance)
 {
 	int rows = SCREEN_HEIGHT / gridNodeSize;  //identifies the amount of rows
 	int cols = SCREEN_WIDTH / gridNodeSize;  //identifies the amount of columns
@@ -22,10 +22,12 @@ Grid::Grid()
 	}
 }
 
-Grid::Grid(int density, sf::Vector2f _startPoint)
+Grid::Grid(int density, sf::Vector2f _startPoint, int max_width, int max_height, TextureManager& instance) : textureManager(instance)
 {
-	int rows = SCREEN_HEIGHT / gridNodeSize;  //identifies the amount of rows
-	int cols = SCREEN_WIDTH / gridNodeSize;  //identifies the amount of columns
+	mapWidth = max_width;
+	mapHeight = max_height;
+	int rows = mapHeight / gridNodeSize;  //identifies the amount of rows
+	int cols = mapWidth / gridNodeSize;  //identifies the amount of columns
 
 	nodeGrid.reserve(rows * cols); // reserve memory
 
@@ -60,17 +62,17 @@ void Grid::drawGrid(sf::RenderWindow& _window) const
 	{
 		_window.draw(node->waterBackSprite);
 		_window.draw(node->drawableNode);
-		if(node->drawDebug)
+		/*if(node->drawDebug)
 		{
 			_window.draw(node->debugShape);
-		}
+		}*/
 	}
 }
 
 void Grid::addNeighbours(int _currentNodeId) const
 {
-	const int MAX_ROWS = (SCREEN_HEIGHT / gridNodeSize);
-	const int MAX_COLS = (SCREEN_WIDTH / gridNodeSize);
+	const int MAX_ROWS = (mapHeight / gridNodeSize);
+	const int MAX_COLS = (mapWidth / gridNodeSize);
 
 	int row = _currentNodeId / MAX_COLS;
 	int col = _currentNodeId % MAX_COLS;
@@ -237,7 +239,7 @@ void Grid::ApplyCellular(int _interations, sf::RenderWindow& m_window)
 			nodeGrid[j]->setTileType(tempGrid[j]->getTileType());
 
 			//Uncomment for debug
-			/*drawGrid(m_window);
+	/*		drawGrid(m_window);
 			m_window.display();
 			wait(1);*/
 		}
@@ -297,9 +299,9 @@ void Grid::MapIsland(int _startIndex,bool saveIslandData, sf::RenderWindow & win
 		FilterTiles(nodeQueue.front());
 
 		nodeQueue.front()->debugShape.setFillColor(sf::Color(123, 123, 123, 66));
-		drawGrid(window);
+	/*	drawGrid(window);
 		window.display();
-		wait(100);
+		wait(100);*/
 
 
 		auto neighbours = nodeQueue.front()->getNeighbours();
@@ -317,9 +319,9 @@ void Grid::MapIsland(int _startIndex,bool saveIslandData, sf::RenderWindow & win
 						neighbour->debugShape.setFillColor(sf::Color(23, 23, 23, 66));
 						neighbour->drawDebug = true;
 					}
-					drawGrid(window);
+			/*		drawGrid(window);
 					window.display();
-					wait(100);
+					wait(100);*/
 				}
 			}
 		}
@@ -383,6 +385,9 @@ void Grid::determineTileTexture(Node* _node) const
 		break;
 	case GRASSY_LAND:
 		_node->drawableNode.setTexture(textureManager.getTexture("grassyLandTile"));
+		break;
+	case DEFAULT_SAND:
+		_node->drawableNode.setTexture(textureManager.getTexture("sandTile"));
 		break;
 	case DEFAULT_LAND:
 		_node->drawableNode.setTexture(textureManager.getTexture("landTile"));

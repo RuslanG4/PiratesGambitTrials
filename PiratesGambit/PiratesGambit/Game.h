@@ -6,6 +6,7 @@
 #include"Constants.h"
 #include"Grid.h"
 #include"FullMap.h"
+#include "Player.h"
 
 class Game
 {
@@ -30,13 +31,16 @@ private:
 
 	sf::RenderTexture windowCapture;
 
+	TextureManager& textureManager = TextureManager::getInstance();
+
 	sf::Sprite m_appleSprite;
 	sf::Texture m_appleTexture;
 
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font font;
-
+	
 	FullMap* myMap;
+	Player myPlayer;
 };
 
 #endif // !GAME_HPP

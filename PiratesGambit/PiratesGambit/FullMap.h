@@ -4,7 +4,7 @@
 class FullMap
 {
 public:
-	FullMap(sf::RenderWindow & window);
+	FullMap(sf::RenderWindow & window, TextureManager& instance);
 	~FullMap();
 
 	void update();

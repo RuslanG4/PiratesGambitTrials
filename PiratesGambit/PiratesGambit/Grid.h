@@ -7,8 +7,8 @@
 class Grid
 {
 public:
-	Grid();
-	Grid(int density, sf::Vector2f _startPoint);
+	Grid(TextureManager& instance);
+	Grid(int density, sf::Vector2f _startPoint, int max_width, int max_height, TextureManager& instance);
 	void drawGrid(sf::RenderWindow& _window) const;
 	void addNeighbours(int _currentNodeId) const ;
 
@@ -41,10 +41,13 @@ public:
 
 	std::vector<Node*> nodeGrid;
 private:
-	TextureManager& textureManager = TextureManager::getInstance();
+	TextureManager& textureManager;
 
 	std::vector<std::vector<Node*>> islandsGrid;
 
 	int gridNodeSize = 32; //each tile is 32x 32
+
+	int mapWidth;
+	int mapHeight;
 };
 
