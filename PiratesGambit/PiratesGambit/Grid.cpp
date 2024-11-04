@@ -1,59 +1,26 @@
 #include "Grid.h"
 
-Grid::Grid(TextureManager& instance) : textureManager(instance)
+Grid::Grid(int density, TextureManager& instance, std::vector<Node*>& gridNodes_) : textureManager(instance), nodeGrid(gridNodes_)
 {
-	int rows = SCREEN_HEIGHT / gridNodeSize;  //identifies the amount of rows
-	int cols = SCREEN_WIDTH / gridNodeSize;  //identifies the amount of columns
-
-	nodeGrid.reserve(rows * cols); // reserve memory
-
-	for (int i = 0; i < rows; i++)
+	for (Node* node : nodeGrid)
 	{
-		for (int j = 0; j < cols; j++){
-			nodeGrid.push_back(new Node(j * gridNodeSize, i * gridNodeSize, gridNodeSize, false)); //pushes a new node with passable x, y, size and noise
-		}
-	}
-	//Setup id's first
-	int max = rows * cols;
-	for (int i = 0; i < max; i++)
-	{
-		nodeGrid[i]->setID(i);
-		addNeighbours(i);
-	}
-}
-
-Grid::Grid(int density, sf::Vector2f _startPoint, int max_width, int max_height, TextureManager& instance) : textureManager(instance)
-{
-	mapWidth = max_width;
-	mapHeight = max_height;
-	int rows = mapHeight / gridNodeSize;  //identifies the amount of rows
-	int cols = mapWidth / gridNodeSize;  //identifies the amount of columns
-
-	nodeGrid.reserve(rows * cols); // reserve memory
-
-	for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < cols; j++)
+		int random = std::rand() % 100;
+		if (random > density)
 		{
-			int random = std::rand() % 100;
-			if (random > density)
-			{
-				nodeGrid.push_back(new Node(_startPoint.x + (j * gridNodeSize), _startPoint.y + (i * gridNodeSize), gridNodeSize, false)); //pushes a new node with passable x, y, size and noise
-			}
-			else
-			{
-				nodeGrid.push_back(new Node(_startPoint.x + (j * gridNodeSize), _startPoint.y + (i * gridNodeSize), gridNodeSize, true)); //pushes a new node with passable x, y, size and noise
-			}
-			
+			node->setLand(false);
+		}
+		else
+		{
+			node->setLand(true);
 		}
 	}
-	//Setup id's first
-	int max = rows * cols;
-	for (int i = 0; i < max; i++)
-	{
-		nodeGrid[i]->setID(i);
-		addNeighbours(i);
-	}
+	chunkStartX = nodeGrid[0]->getPosition().x;
+	chunkEndX = nodeGrid[nodeGrid.size() - 1]->getPosition().x + (nodeGrid[0]->getSize());
+
+	chunkStartY = nodeGrid[0]->getPosition().y;
+	chunkEndY = nodeGrid[nodeGrid.size() - 1]->getPosition().y + (nodeGrid[0]->getSize());
+
+	int x = 9;
 }
 
 void Grid::drawGrid(sf::RenderWindow& _window) const
@@ -62,37 +29,10 @@ void Grid::drawGrid(sf::RenderWindow& _window) const
 	{
 		_window.draw(node->waterBackSprite);
 		_window.draw(node->drawableNode);
-		/*if(node->drawDebug)
-		{
-			_window.draw(node->debugShape);
-		}*/
-	}
-}
-
-void Grid::addNeighbours(int _currentNodeId) const
-{
-	const int MAX_ROWS = (mapHeight / gridNodeSize);
-	const int MAX_COLS = (mapWidth / gridNodeSize);
-
-	int row = _currentNodeId / MAX_COLS;
-	int col = _currentNodeId % MAX_COLS;
-	int neighbourIndex = -1;
-
-	//This neighbour algoritihim prioritises vertical/hjorizontal then diagonal
-	std::array<int, 8> directionOrder
-	{
-		0,1,2,3,5,6,7,8 //exclude 4 since that is our cell
-	};
-	for (auto& direction : directionOrder) {
-
-		int n_row = row + ((direction % 3) - 1); // Neighbor row
-		int n_col = col + ((direction / 3) - 1); // Neighbor column
-
-		// Check the bounds:
-		if (n_row >= 0 && n_row < MAX_ROWS && n_col >= 0 && n_col < MAX_COLS) {          
-			neighbourIndex = n_row * MAX_COLS + n_col;                                    
-			nodeGrid[_currentNodeId]->addNeighbour(nodeGrid[neighbourIndex]);  
-		}
+		//if(node->drawDebug)
+		//{
+		//	_window.draw(node->debugShape);
+		//}
 	}
 }
 
@@ -239,14 +179,14 @@ void Grid::ApplyCellular(int _interations, sf::RenderWindow& m_window)
 			nodeGrid[j]->setTileType(tempGrid[j]->getTileType());
 
 			//Uncomment for debug
-	/*		drawGrid(m_window);
+		/*	drawGrid(m_window);
 			m_window.display();
 			wait(1);*/
 		}
-		
 		// Clean up the temporary grid
-		for (auto node : tempGrid)
+		for (Node* node : tempGrid)
 		{
+			
 			delete node;  // Free memory for deep-copied nodes
 		}
 	}
@@ -265,7 +205,7 @@ void Grid::FindLand(sf::RenderWindow& m_window)
 		//node->drawDebug = true;
 		if(node->getMarked() == false && node->getIsLand())
 		{
-			MapIsland(node->getID(),false ,m_window);
+			MapIsland(node->getChunkId(),false ,m_window);
 		}
 	}
 	for(auto node : nodeGrid)
@@ -273,10 +213,6 @@ void Grid::FindLand(sf::RenderWindow& m_window)
 		node->resetMarked();
 	}
 	SaveIslandData(m_window);
-	for(auto island : islandsGrid)
-	{
-		std::cout << island.size() << "\n";
-	}
 }
 
 ///Kind of WFC but not really
@@ -299,9 +235,9 @@ void Grid::MapIsland(int _startIndex,bool saveIslandData, sf::RenderWindow & win
 		FilterTiles(nodeQueue.front());
 
 		nodeQueue.front()->debugShape.setFillColor(sf::Color(123, 123, 123, 66));
-	/*	drawGrid(window);
-		window.display();
-		wait(100);*/
+		//drawGrid(window);
+		//window.display();
+		//wait(1);
 
 
 		auto neighbours = nodeQueue.front()->getNeighbours();
@@ -319,9 +255,9 @@ void Grid::MapIsland(int _startIndex,bool saveIslandData, sf::RenderWindow & win
 						neighbour->debugShape.setFillColor(sf::Color(23, 23, 23, 66));
 						neighbour->drawDebug = true;
 					}
-			/*		drawGrid(window);
-					window.display();
-					wait(100);*/
+					//drawGrid(window);
+					//window.display();
+					//wait(1);
 				}
 			}
 		}
@@ -343,7 +279,7 @@ void Grid::SaveIslandData(sf::RenderWindow& window)
 	{
 		if (node->getMarked() == false && node->getIsLand())
 		{
-			MapIsland(node->getID(),true, window);
+			MapIsland(node->getChunkId(),true, window);
 		}
 	}
 }

@@ -7,10 +7,15 @@
 class Grid
 {
 public:
-	Grid(TextureManager& instance);
-	Grid(int density, sf::Vector2f _startPoint, int max_width, int max_height, TextureManager& instance);
+	Grid(int density, TextureManager& instance, std::vector<Node*>& gridNodes_);
 	void drawGrid(sf::RenderWindow& _window) const;
-	void addNeighbours(int _currentNodeId) const ;
+
+	void setChunkID(int id_) { chunkID = id_; };
+	int getChunkID() const { return chunkID; };
+	sf::Vector2f getMinVector() const { return sf::Vector2f(chunkStartX, chunkStartY); };
+	sf::Vector2f getMaxVector() const { return sf::Vector2f(chunkEndX, chunkEndY); };
+
+
 
 	//Debug wait
 	void wait(int time);
@@ -45,9 +50,9 @@ private:
 
 	std::vector<std::vector<Node*>> islandsGrid;
 
-	int gridNodeSize = 32; //each tile is 32x 32
+	int chunkID;
 
-	int mapWidth;
-	int mapHeight;
+	int chunkStartX, chunkStartY;
+	int chunkEndX, chunkEndY;
 };
 

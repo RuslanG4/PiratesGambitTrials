@@ -32,3 +32,8 @@ float Utility::dotProduct(sf::Vector2f v1, sf::Vector2f v2)
 {
 	return (v1.x * v2.x) + (v1.y * v2.y);
 }
+
+bool Utility::collision(sf::Vector2f v1, sf::Vector2f v2Min, sf::Vector2f v2Max)
+{
+	return v1.x > v2Min.x && v1.x < v2Max.x && v1.y > v2Min.y && v1.y < v2Max.y;
+}

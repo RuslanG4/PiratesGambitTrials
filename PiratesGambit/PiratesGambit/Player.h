@@ -24,9 +24,12 @@ public:
 	void decreaseRotation();
 
 	void setSprite(const sf::Texture& texture) { body.setTexture(texture); };
+	void setCurrentChunkID(int id_) { currentChunkId = id_; };
 
 	sf::Vector2f getVelocity() { return vel; };
-	sf::View getPlayerCamera() const { return playerCamera; }; 
+	sf::View getPlayerCamera() const { return playerCamera; };
+	sf::Vector2f getPosition() const { return body.getPosition(); };
+	int getCurrentChunkID() const { return currentChunkId; };
 private:
 	sf::Sprite body;
 
@@ -41,5 +44,7 @@ private:
 
 	const double MAX_REVERSE_SPEED = -30; //for movement
 	const double MAX_FORWARD_SPEED = 30;
+
+	int currentChunkId;
 
 };

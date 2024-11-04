@@ -36,3 +36,6 @@ constexpr int SCREEN_HEIGHT = 1080;
 
 constexpr int CAMERA_WIDTH= 1920 / 2;
 constexpr int CAMERA_HEIGHT = 1080 / 2;
+
+constexpr int CHUNK_NODE_ROWS = 24;
+constexpr int CHUNK_NODE_COLS = 24;

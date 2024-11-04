@@ -11,7 +11,7 @@ Game::Game() :
 {
 	initialise();
 
-	myMap = new FullMap(m_window, textureManager);
+	myMap = new FullMap(m_window, textureManager, 2,3); //keep 1x1, 2x2
 
 	myPlayer.setSprite(textureManager.getTexture("PLAYER"));
 
@@ -107,6 +107,20 @@ void Game::processKeyUp(sf::Event t_event)
 void Game::update(sf::Time t_deltaTime)
 {
 	myPlayer.update(t_deltaTime.asMilliseconds());
+	for(auto chunk : myMap->getChunks())
+	{
+		if(collision(myPlayer.getPosition(), chunk->getMinVector(), chunk->getMaxVector()))
+		{
+			myPlayer.setCurrentChunkID(chunk->getChunkID());
+		}
+	}
+	for(auto node : myMap->getChunks()[myPlayer.getCurrentChunkID()]->nodeGrid)
+	{
+		if(collision(myPlayer.getPosition(),node->getPosition(), sf::Vector2f(node->getPosition().x + node->getSize(), node->getPosition().y + node->getSize())))
+		{
+			std::cout << "Current Node : " << node->getChunkId()<< "\n";
+		}
+	}
 }
 
 /// <summary>
@@ -114,7 +128,7 @@ void Game::update(sf::Time t_deltaTime)
 /// </summary>
 void Game::render()
 {
-	m_window.setView(myPlayer.getPlayerCamera());
+	//m_window.setView(myPlayer.getPlayerCamera());
 	m_window.clear(sf::Color::Black);
 	myMap->render(m_window);
 	//for(auto chunk : myMap->getChunks())
@@ -137,3 +151,9 @@ void Game::initialise()
 		std::cout << "error loading font";
 	}
 }
+
+bool Game::collision(sf::Vector2f v1, sf::Vector2f v2Min, sf::Vector2f v2Max)
+{
+	return v1.x > v2Min.x && v1.x < v2Max.x && v1.y > v2Min.y && v1.y < v2Max.y;
+}
+

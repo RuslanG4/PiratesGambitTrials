@@ -20,5 +20,7 @@ namespace Utility
 	};
 
 	float dotProduct(sf::Vector2f v1, sf::Vector2f v2);
+
+	bool collision(sf::Vector2f v1, sf::Vector2f v2Min, sf::Vector2f v2Max);
 };
 

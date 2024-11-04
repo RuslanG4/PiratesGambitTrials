@@ -5,10 +5,11 @@
 class Node
 {
 public:
-	Node(int _gridX, int _gridY, int size, bool _isLand) :
+	Node(int _gridX, int _gridY, int size_, bool _isLand) :
 		gridX(_gridX),
 		gridY(_gridY),
-		isLand(_isLand)
+		isLand(_isLand),
+		size(size_)
 	{
 		drawableNode.setPosition(sf::Vector2f(gridX, gridY));
 		drawableNode.setScale(size / 64.f, size / 64.f); //64x64 is size of texture
@@ -30,10 +31,13 @@ public:
 	bool drawDebug = false;
 
 	//Getters
+	int getChunkId() { return m_chunkId; };
 	int getID() const { return m_id; };
 	std::vector<Node*> getNeighbours() const { return m_neighbours; };
 	bool getMarked() const{ return visited; };
 	bool getIsLand() const { return isLand; };
+	int getSize() const { return size; };
+	sf::Vector2f getPosition() const { return sf::Vector2f(gridX, gridY); };
 
 	//Tiles
 	TileType getTileType() const { return m_currentTileType; };
@@ -41,6 +45,7 @@ public:
 
 	//Setters
 	void setID(int _id) { m_id = _id; };
+	void setChunkID(int _id) { m_chunkId = _id; };
 	void setMarked() { visited = !visited; };
 	void setLand(bool _land) { isLand = _land; };
 	void setTileType(TileType _type) { m_currentTileType = _type; };
@@ -54,6 +59,9 @@ public:
 
 private:
 	int m_id;
+	int m_chunkId;
+
+	int size;
 	bool visited{ false };
 	bool isLand{ false };
 
