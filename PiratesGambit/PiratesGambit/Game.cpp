@@ -118,7 +118,8 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		if(collision(myPlayer.getPosition(),node->getPosition(), sf::Vector2f(node->getPosition().x + node->getSize(), node->getPosition().y + node->getSize())))
 		{
-			std::cout << "Current Node : " << node->getChunkId()<< "\n";
+			//std::cout << "Current Node : " << node->getChunkId()<< "\n";
+			myMap->getChunks()[myPlayer.getCurrentChunkID()]->searchLocalArea(node, 25);
 		}
 	}
 }

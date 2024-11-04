@@ -15,7 +15,8 @@ public:
 	sf::Vector2f getMinVector() const { return sf::Vector2f(chunkStartX, chunkStartY); };
 	sf::Vector2f getMaxVector() const { return sf::Vector2f(chunkEndX, chunkEndY); };
 
-
+	//Surrounding Nodes for updating
+	void searchLocalArea(Node*& _startNode, int iterations_);
 
 	//Debug wait
 	void wait(int time);
@@ -28,6 +29,7 @@ public:
 	void MapIsland(int _startIndex, bool saveIslandData, sf::RenderWindow& window);
 	void SaveIslandData(sf::RenderWindow& window);
 	void removeWorldEdges(Node* _currentNode);
+	void UnMarkNodes();
 
 	//Tile rules
 	void FilterTiles(Node* _currentNode);

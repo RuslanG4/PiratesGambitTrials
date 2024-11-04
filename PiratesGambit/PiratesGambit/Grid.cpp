@@ -29,6 +29,7 @@ void Grid::drawGrid(sf::RenderWindow& _window) const
 	{
 		_window.draw(node->waterBackSprite);
 		_window.draw(node->drawableNode);
+		_window.draw(node->debugShape);
 		//if(node->drawDebug)
 		//{
 		//	_window.draw(node->debugShape);
@@ -117,6 +118,36 @@ bool Grid::CheckPattern(const Node* _currentNode, const std::vector<std::pair<in
 		}
 	}
 	return false;
+}
+
+void Grid::searchLocalArea(Node*& _startNode, int iterations_)
+{
+	UnMarkNodes();
+
+	std::queue <Node*> nodeQueue;
+	int currentIteration = 0;
+	nodeQueue.push(_startNode);
+	nodeQueue.front()->setMarked();
+
+	//nodeQueue.front()->debugShape.setFillColor(sf::Color(23,23,23,66));
+	//nodeQueue.front()->drawDebug = true;
+
+	// loop through the queue while there are nodes in it.
+	while (!nodeQueue.empty() && currentIteration< iterations_)
+	{
+		nodeQueue.front()->debugShape.setFillColor(sf::Color(223, 123, 123, 66));
+		currentIteration++;
+		auto neighbours = nodeQueue.front()->getNeighbours();
+		for (auto neighbour : neighbours)
+		{
+			if (neighbour->getMarked() == false)
+			{
+				neighbour->setMarked();
+				nodeQueue.push(neighbour);
+			}
+		}
+		nodeQueue.pop();
+	}
 }
 
 //debug wait timer
@@ -208,10 +239,7 @@ void Grid::FindLand(sf::RenderWindow& m_window)
 			MapIsland(node->getChunkId(),false ,m_window);
 		}
 	}
-	for(auto node : nodeGrid)
-	{
-		node->resetMarked();
-	}
+	UnMarkNodes();
 	SaveIslandData(m_window);
 }
 
@@ -291,6 +319,15 @@ void Grid::removeWorldEdges(Node* _currentNode)
 	_currentNode->setTileType(DEFAULT_WATER);
 	_currentNode->setLand(false);
 	determineTileTexture(_currentNode);
+}
+
+void Grid::UnMarkNodes()
+{
+	for (auto node : nodeGrid)
+	{
+		node->resetMarked();
+		node->debugShape.setFillColor(sf::Color::Transparent);
+	}
 }
 
 //removes edge cases of single nodes sticking out, expands on them
