@@ -4,10 +4,10 @@
 class FullMap
 {
 public:
-	FullMap(sf::RenderWindow & window, TextureManager& instance, const int& chunksRowAmount_, const int& chunksColAmount_);
+	FullMap(sf::RenderWindow & window, TextureManager& instance, const int& mapSize_);
 	~FullMap();
 
-	void initMap(const int& chunkWidth_, const int& chunkHidth_);
+	void initMap(const int& mapSize_);
 	void initChunks(TextureManager& instance, sf::RenderWindow& window);
 	void addNodesToVector(std::vector<Node*>& _vec, int _chunkX, int _chunkY);
 
@@ -21,7 +21,7 @@ public:
 private:
 	std::vector<Grid*> chunks_;
 
-	int chunksRowAmount, chunksColAmount;
+	int mapSize;
 
 	std::vector<Node*> fullMapGrid;
 

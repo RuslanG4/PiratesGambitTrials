@@ -8,6 +8,10 @@ class Grid
 {
 public:
 	Grid(int density, TextureManager& instance, std::vector<Node*>& gridNodes_);
+	~Grid()
+	{
+		delete this;
+	};
 	void drawGrid(sf::RenderWindow& _window) const;
 
 	void setChunkID(int id_) { chunkID = id_; };

@@ -11,7 +11,7 @@ Game::Game() :
 {
 	initialise();
 
-	myMap = new FullMap(m_window, textureManager, 2,3); //keep 1x1, 2x2
+	myMap = new FullMap(m_window, textureManager, 1); //keep 1x1, 2x2
 
 	myPlayer.setSprite(textureManager.getTexture("PLAYER"));
 
@@ -120,18 +120,9 @@ void Game::update(sf::Time t_deltaTime)
 		{
 			if(currentNode != node)
 			{
-				for (auto node : updateArea)
-				{
-					if (node != nullptr) {
-						node->drawDebug = false;
-					}
-				}
-				updateArea.clear();
 				currentNode = node;
 				searchLocalArea(currentNode, 1);
 			}
-			//std::cout << "Current Node : " << node->getChunkId()<< "\n";
-			
 		}
 	}
 
@@ -146,21 +137,6 @@ void Game::render()
 	//m_window.setView(myPlayer.getPlayerCamera());
 	m_window.clear(sf::Color::Black);
 	myMap->render(m_window);
-	/*for (auto node : updateArea)
-	{
-		if (node != nullptr) {
-			m_window.draw(node->debugShape);
-		}
-	}*/
-//	std::cout << updateArea.size() << "\n";
-	//for(auto chunk : myMap->getChunks())
-	//{
-	//	for(auto node : chunk)
-	//	{
-	//		windowCapture.draw(node->drawableNode);
-	//	}
-	//	
-	//}
 	//windowCapture.display();
 	myPlayer.render(m_window);
 	m_window.display();
@@ -179,20 +155,44 @@ bool Game::collision(sf::Vector2f v1, sf::Vector2f v2Min, sf::Vector2f v2Max)
 	return v1.x > v2Min.x && v1.x < v2Max.x && v1.y > v2Min.y && v1.y < v2Max.y;
 }
 
-void Game::searchLocalArea(Node*& _startNode, int depth_)
+void Game::searchLocalArea(Node*& _startNode, int depth)
 {
-	for (int dx = -depth_; dx <= depth_; ++dx) {
-		for (int dy = -depth_; dy <= depth_; ++dy) {
-			if (dx == 0 && dy == 0) continue; 
-			int neighborX = _startNode->getID() % (CHUNK_NODE_ROWS * 3) + dx;
-			int neighborY = _startNode->getID() / (CHUNK_NODE_COLS* 2) + dy;
-
-			int neighborChunkID = neighborY * (CHUNK_NODE_ROWS * 3) + neighborX;
-			Node* neighbourNode = myMap->getFullMap()[neighborChunkID];
-			neighbourNode->debugShape.setFillColor(sf::Color(185, 145, 145, 170));
-			neighbourNode->drawDebug = true;
-			updateArea.push_back(neighbourNode);
+	for (Node* node : updateArea) {
+		if (node != nullptr) {
+			node->debugShape.setFillColor(sf::Color::Transparent);
 		}
+	}
+	updateArea.clear();
+
+	int iterations = (1 + 2 * depth) * (1 + 2 * depth);
+	int iterCount = 1;
+
+	std::queue <Node*> nodeQueue;
+
+	nodeQueue.push(_startNode);
+	nodeQueue.front()->updating = true;
+	updateArea.push_back(_startNode);
+	nodeQueue.front()->debugShape.setFillColor(sf::Color(123, 123, 123, 180));
+
+	while (iterCount < iterations)
+	{
+
+		auto neighbours = nodeQueue.front()->getNeighbours();
+		for (auto neighbour : neighbours)
+		{
+			if (neighbour->updating == false && iterCount < iterations)
+			{
+				neighbour->updating = true;
+				neighbour->debugShape.setFillColor(sf::Color(123, 123, 123, 180));
+				iterCount++;
+				updateArea.push_back(neighbour);
+				nodeQueue.push(neighbour);
+			}
+		}
+		nodeQueue.pop();
+	}
+	for (Node* node : updateArea) {
+		node->updating = false;
 	}
 }
 
