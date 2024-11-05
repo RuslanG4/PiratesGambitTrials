@@ -55,7 +55,7 @@ public:
 	//Resetters
 	void resetMarked() { visited = false; };
 
-	int height = std::rand() % 8 + 1;
+	bool updating{ false };
 
 private:
 	int m_id;
@@ -64,6 +64,8 @@ private:
 	int size;
 	bool visited{ false };
 	bool isLand{ false };
+
+	
 
 	std::vector<Node*> m_neighbours;  
 	//							  0 3 5	

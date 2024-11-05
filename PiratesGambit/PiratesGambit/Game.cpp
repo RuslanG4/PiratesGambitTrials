@@ -118,10 +118,24 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		if(collision(myPlayer.getPosition(),node->getPosition(), sf::Vector2f(node->getPosition().x + node->getSize(), node->getPosition().y + node->getSize())))
 		{
+			if(currentNode != node)
+			{
+				for (auto node : updateArea)
+				{
+					if (node != nullptr) {
+						node->drawDebug = false;
+					}
+				}
+				updateArea.clear();
+				currentNode = node;
+				searchLocalArea(currentNode, 1);
+			}
 			//std::cout << "Current Node : " << node->getChunkId()<< "\n";
-			myMap->getChunks()[myPlayer.getCurrentChunkID()]->searchLocalArea(node, 25);
+			
 		}
 	}
+
+	
 }
 
 /// <summary>
@@ -132,6 +146,13 @@ void Game::render()
 	//m_window.setView(myPlayer.getPlayerCamera());
 	m_window.clear(sf::Color::Black);
 	myMap->render(m_window);
+	/*for (auto node : updateArea)
+	{
+		if (node != nullptr) {
+			m_window.draw(node->debugShape);
+		}
+	}*/
+//	std::cout << updateArea.size() << "\n";
 	//for(auto chunk : myMap->getChunks())
 	//{
 	//	for(auto node : chunk)
@@ -156,5 +177,22 @@ void Game::initialise()
 bool Game::collision(sf::Vector2f v1, sf::Vector2f v2Min, sf::Vector2f v2Max)
 {
 	return v1.x > v2Min.x && v1.x < v2Max.x && v1.y > v2Min.y && v1.y < v2Max.y;
+}
+
+void Game::searchLocalArea(Node*& _startNode, int depth_)
+{
+	for (int dx = -depth_; dx <= depth_; ++dx) {
+		for (int dy = -depth_; dy <= depth_; ++dy) {
+			if (dx == 0 && dy == 0) continue; 
+			int neighborX = _startNode->getID() % (CHUNK_NODE_ROWS * 3) + dx;
+			int neighborY = _startNode->getID() / (CHUNK_NODE_COLS* 2) + dy;
+
+			int neighborChunkID = neighborY * (CHUNK_NODE_ROWS * 3) + neighborX;
+			Node* neighbourNode = myMap->getFullMap()[neighborChunkID];
+			neighbourNode->debugShape.setFillColor(sf::Color(185, 145, 145, 170));
+			neighbourNode->drawDebug = true;
+			updateArea.push_back(neighbourNode);
+		}
+	}
 }
 

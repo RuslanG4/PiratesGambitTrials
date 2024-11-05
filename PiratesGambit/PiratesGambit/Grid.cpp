@@ -29,11 +29,11 @@ void Grid::drawGrid(sf::RenderWindow& _window) const
 	{
 		_window.draw(node->waterBackSprite);
 		_window.draw(node->drawableNode);
-		_window.draw(node->debugShape);
-		//if(node->drawDebug)
-		//{
-		//	_window.draw(node->debugShape);
-		//}
+		//_window.draw(node->debugShape);
+		if(node->drawDebug)
+		{
+			_window.draw(node->debugShape);
+		}
 	}
 }
 
@@ -128,9 +128,6 @@ void Grid::searchLocalArea(Node*& _startNode, int iterations_)
 	int currentIteration = 0;
 	nodeQueue.push(_startNode);
 	nodeQueue.front()->setMarked();
-
-	//nodeQueue.front()->debugShape.setFillColor(sf::Color(23,23,23,66));
-	//nodeQueue.front()->drawDebug = true;
 
 	// loop through the queue while there are nodes in it.
 	while (!nodeQueue.empty() && currentIteration< iterations_)

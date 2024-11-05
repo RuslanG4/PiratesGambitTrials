@@ -29,6 +29,8 @@ private:
 
 	bool collision(sf::Vector2f v1, sf::Vector2f v2Min, sf::Vector2f v2Max);
 
+	void searchLocalArea(Node*& _startNode, int iterations_);
+
 	bool keyUp = true;
 
 	sf::RenderTexture windowCapture;
@@ -40,6 +42,10 @@ private:
 
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font font;
+
+	std::vector<Node*> updateArea{nullptr};
+
+	Node* currentNode;
 	
 	FullMap* myMap;
 	Player myPlayer;
