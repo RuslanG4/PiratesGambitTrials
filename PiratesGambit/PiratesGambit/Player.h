@@ -42,8 +42,8 @@ private:
 	sf::Vector2f newpos;
 	sf::Vector2f m_previousPosition;
 
-	const double MAX_REVERSE_SPEED = -300; //for movement
-	const double MAX_FORWARD_SPEED = 300;
+	const double MAX_REVERSE_SPEED = -40; //for movement
+	const double MAX_FORWARD_SPEED = 40;
 
 	int currentChunkId;
 

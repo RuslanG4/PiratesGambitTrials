@@ -90,14 +90,14 @@ void Game::processKeys(sf::Event t_event)
 
 void Game::processKeyUp(sf::Event t_event)
 {
-	if(t_event.key.code == sf::Keyboard::S)
-	{
-		//sf::Texture texture;
-	/*	texture.create(CHUNK_NODE_ROWS * 5 * 24, CHUNK_NODE_COLS * 5 * 24);
-		texture.update(m_window);  */
-		sf::Image screenshot = windowCapture.getTexture().copyToImage();  
-		screenshot.saveToFile("ASSETS\\screenshot.png");  
-	}
+	//if(t_event.key.code == sf::Keyboard::S)
+	//{
+	//	//sf::Texture texture;
+	///*	texture.create(CHUNK_NODE_ROWS * 5 * 24, CHUNK_NODE_COLS * 5 * 24);
+	//	texture.update(m_window);  */
+	//	sf::Image screenshot = windowCapture.getTexture().copyToImage();  
+	//	screenshot.saveToFile("ASSETS\\screenshot.png");  
+	//}
 }
 
 /// <summary>
@@ -134,31 +134,51 @@ void Game::update(sf::Time t_deltaTime)
 /// </summary>
 void Game::render()
 {
-	//m_window.setView(myPlayer.getPlayerCamera());
+	sf::FloatRect viewBounds(myPlayer.getPlayerCamera().getCenter() - myPlayer.getPlayerCamera().getSize() / 2.0f, myPlayer.getPlayerCamera().getSize());
+
+	int minX = std::max(0, static_cast<int>(viewBounds.left / 24));
+	int maxX = std::min(24 * 3 - 1, static_cast<int>((viewBounds.left + viewBounds.width) / 24));
+	int minY = std::max(0, static_cast<int>(viewBounds.top / 24));
+	int maxY = std::min(24 * 3 - 1, static_cast<int>((viewBounds.top + viewBounds.height) / 24));
+
+
+
+	m_window.setView(myPlayer.getPlayerCamera());
 	m_window.clear(sf::Color::Black);
-	if (!windowTexture)
-	{
-	for(auto chunk : myMap->getChunks())
+	
+	/*for(auto chunk : myMap->getChunks())
 	{
 		for(auto node: chunk->nodeGrid)
 		{
 			if (node->waterBackSprite && node->drawableNode) {
 				windowCapture.draw(*(node->waterBackSprite));
 				windowCapture.draw(*(node->drawableNode));
+
+				m_window.draw(*(node->waterBackSprite));
+				m_window.draw(*(node->drawableNode));
 			}
 		}
+	}*/
+
+	for (int y = minY; y <= maxY; ++y) {
+		for (int x = minX; x <= maxX; ++x) {
+			int index = y * (24 * 3) + x;
+
+			Node* node = myMap->getFullMap()[index];
+
+			m_window.draw(*(node->waterBackSprite));
+			m_window.draw(*(node->drawableNode));
+		}
 	}
-		windowCapture.display();
-		saveTexture();
-	}
-	m_window.draw(wholeMap);
+
+	//m_window.draw(wholeMap);
 	for(auto node : updateArea)
 	{
 		if (node != nullptr) {
 			m_window.draw(node->debugShape);
 		}
 	}
-	/*myMap->getChunks()[myPlayer.getCurrentChunkID()]->drawGrid(m_window);*/
+	//myMap->getChunks()[myPlayer.getCurrentChunkID()]->drawGrid(m_window);
 
 	myPlayer.render(m_window);
 	m_window.display();
