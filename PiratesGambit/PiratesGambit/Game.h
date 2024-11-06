@@ -31,7 +31,11 @@ private:
 
 	void searchLocalArea(Node*& _startNode, int iterations_);
 
+	void saveTexture();
+
 	bool keyUp = true;
+	bool windowTexture{ false };
+	sf::Sprite wholeMap;
 
 	sf::RenderTexture windowCapture;
 

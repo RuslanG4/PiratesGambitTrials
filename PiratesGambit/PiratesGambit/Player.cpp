@@ -30,7 +30,7 @@ void Player::update(double dt)
 	playerCamera.setCenter(body.getPosition());
 }
 
-void Player::render(sf::RenderWindow& window)
+void Player::render(sf::RenderWindow& window) const
 {
 	window.draw(body);
 }

@@ -1,43 +1,28 @@
 #include "Grid.h"
 
-Grid::Grid(int density, TextureManager& instance, std::vector<Node*>& gridNodes_) : textureManager(instance), nodeGrid(gridNodes_)
+Grid::Grid(TextureManager& instance,const std::vector<Node*>& gridNodes_) : nodeGrid(gridNodes_), textureManager(instance)
 {
-	for (Node* node : nodeGrid)
-	{
-		int random = std::rand() % 100;
-		if (random > density)
-		{
-			node->setLand(false);
-		}
-		else
-		{
-			node->setLand(true);
-		}
-	}
 	chunkStartX = nodeGrid[0]->getPosition().x;
 	chunkEndX = nodeGrid[nodeGrid.size() - 1]->getPosition().x + (nodeGrid[0]->getSize());
 
 	chunkStartY = nodeGrid[0]->getPosition().y;
 	chunkEndY = nodeGrid[nodeGrid.size() - 1]->getPosition().y + (nodeGrid[0]->getSize());
-
-	int x = 9;
 }
 
 void Grid::drawGrid(sf::RenderWindow& _window) const
 {
 	for(auto node : nodeGrid)
 	{
-		_window.draw(node->waterBackSprite);
-		_window.draw(node->drawableNode);
-		//_window.draw(node->debugShape);
-		if(node->drawDebug)
+		if(node->waterBackSprite && node->drawableNode)
 		{
-			_window.draw(node->debugShape);
+			_window.draw(*(node->waterBackSprite));
+			_window.draw(*(node->drawableNode));
 		}
+		_window.draw(node->debugShape);
 	}
 }
 
-void Grid::FilterTiles(Node* _currentNode)
+void Grid::FilterTiles(Node* _currentNode) const
 {
 	if (filterUndesiredTiles(_currentNode))
 	{
@@ -47,18 +32,6 @@ void Grid::FilterTiles(Node* _currentNode)
 	{
 		removeWorldEdges(_currentNode);
 	}
-	//
-	//switch(_currentNode->getParentTileType())
-	//{
-	//case WATER:
-	//	break;
-	//case LAND:
-	//	determineLandTileType(_currentNode);
-	//	break;
-	//case SAND:
-	//	determineSandTileType(_currentNode);
-	//	break;
-	//}
 	determineLandTileType(_currentNode);
 	determineSandTileType(_currentNode);
 	determineWaterTileType(_currentNode);
@@ -66,7 +39,7 @@ void Grid::FilterTiles(Node* _currentNode)
 }
 
 //Checks sand tile texture rules
-int Grid::FollowsPatterns(const Node* _currentNode, const std::vector<std::vector<std::pair<int, bool>>> _pattern) const
+int Grid::FollowsPatterns(const Node* _currentNode, const std::vector<std::vector<std::pair<int, bool>>>& _pattern) const
 {
 	for(int currentPattern = 0; currentPattern < _pattern.size(); currentPattern++)
 	{
@@ -188,12 +161,12 @@ void Grid::ApplyCellular(int _interations, sf::RenderWindow& m_window)
 	
 			if(landCount > 4)
 			{
-				node->drawableNode.setTexture(textureManager.getTexture("landTile"));
+				node->drawableNode->setTexture(textureManager.getTexture("landTile"));
 				node->setParentTileType(LAND);
 				node->setLand(true);
 			}else
 			{
-				node->drawableNode.setTexture(textureManager.getTexture("waterTile"));
+				node->drawableNode->setTexture(textureManager.getTexture("waterTile"));
 				node->setParentTileType(WATER);
 				node->setTileType(DEFAULT_WATER);
 				node->setLand(false);
@@ -203,7 +176,7 @@ void Grid::ApplyCellular(int _interations, sf::RenderWindow& m_window)
 		for (size_t j = 0; j < nodeGrid.size(); j++)
 		{
 			nodeGrid[j]->setLand(tempGrid[j]->getIsLand());
-			nodeGrid[j]->drawableNode.setTexture(*tempGrid[j]->drawableNode.getTexture());
+			nodeGrid[j]->drawableNode->setTexture(*tempGrid[j]->drawableNode->getTexture());
 			nodeGrid[j]->setTileType(tempGrid[j]->getTileType());
 
 			//Uncomment for debug
@@ -214,7 +187,6 @@ void Grid::ApplyCellular(int _interations, sf::RenderWindow& m_window)
 		// Clean up the temporary grid
 		for (Node* node : tempGrid)
 		{
-			
 			delete node;  // Free memory for deep-copied nodes
 		}
 	}
@@ -230,7 +202,8 @@ void Grid::FindLand(sf::RenderWindow& m_window)
 		//drawGrid(m_window);
 		//m_window.display();
 		//wait(1);
-		//node->drawDebug = true;
+		//node->debugShape.setFillColor(sf::Color(123, 123, 123, 123));
+
 		if(node->getMarked() == false && node->getIsLand())
 		{
 			MapIsland(node->getChunkId(),false ,m_window);
@@ -259,7 +232,7 @@ void Grid::MapIsland(int _startIndex,bool saveIslandData, sf::RenderWindow & win
 	{
 		FilterTiles(nodeQueue.front());
 
-		nodeQueue.front()->debugShape.setFillColor(sf::Color(123, 123, 123, 66));
+		//nodeQueue.front()->debugShape.setFillColor(sf::Color(123, 123, 123, 66));
 		//drawGrid(window);
 		//window.display();
 		//wait(1);
@@ -276,13 +249,13 @@ void Grid::MapIsland(int _startIndex,bool saveIslandData, sf::RenderWindow & win
 					currentIsland.push_back(neighbour);
 					nodeQueue.push(neighbour);
 					FilterTiles(neighbour);
-					if (saveIslandData) {
+
+					/*if (saveIslandData) {
 						neighbour->debugShape.setFillColor(sf::Color(23, 23, 23, 66));
-						neighbour->drawDebug = true;
 					}
-					//drawGrid(window);
-					//window.display();
-					//wait(1);
+					drawGrid(window);
+					window.display();
+					wait(1);*/
 				}
 			}
 		}
@@ -310,7 +283,7 @@ void Grid::SaveIslandData(sf::RenderWindow& window)
 }
 
 //removes edge tiles so chunk edge is always water
-void Grid::removeWorldEdges(Node* _currentNode)
+void Grid::removeWorldEdges(Node* _currentNode) const
 {
 	_currentNode->setParentTileType(WATER);
 	_currentNode->setTileType(DEFAULT_WATER);
@@ -351,75 +324,75 @@ void Grid::determineTileTexture(Node* _node) const
 	switch (_node->getTileType())
 	{
 	case DEFAULT_WATER:
-		_node->drawableNode.setTexture(textureManager.getTexture("waterTile"));
+		_node->drawableNode->setTexture(textureManager.getTexture("waterTile"));
 		break;
 	case GRASSY_LAND:
-		_node->drawableNode.setTexture(textureManager.getTexture("grassyLandTile"));
+		_node->drawableNode->setTexture(textureManager.getTexture("grassyLandTile"));
 		break;
 	case DEFAULT_SAND:
-		_node->drawableNode.setTexture(textureManager.getTexture("sandTile"));
+		_node->drawableNode->setTexture(textureManager.getTexture("sandTile"));
 		break;
 	case DEFAULT_LAND:
-		_node->drawableNode.setTexture(textureManager.getTexture("landTile"));
+		_node->drawableNode->setTexture(textureManager.getTexture("landTile"));
 		break;
 	case TR_SAND:
 		_node->setWaterTexture(textureManager.getTexture("waterTile"));
-		_node->drawableNode.setTexture(textureManager.getTexture("TRsandTile"));
+		_node->drawableNode->setTexture(textureManager.getTexture("TRsandTile"));
 		break;
 
 	case TL_SAND:
 		_node->setWaterTexture(textureManager.getTexture("waterTile"));
-		_node->drawableNode.setTexture(textureManager.getTexture("TLsandTile"));
+		_node->drawableNode->setTexture(textureManager.getTexture("TLsandTile"));
 		break;
 
 	case BR_SAND:
 		_node->setWaterTexture(textureManager.getTexture("waterTile"));
-		_node->drawableNode.setTexture(textureManager.getTexture("BRsandTile"));
+		_node->drawableNode->setTexture(textureManager.getTexture("BRsandTile"));
 		break;
 
 	case BL_SAND:
 		_node->setWaterTexture(textureManager.getTexture("waterTile"));
-		_node->drawableNode.setTexture(textureManager.getTexture("BLsandTile"));
+		_node->drawableNode->setTexture(textureManager.getTexture("BLsandTile"));
 		break;
 
 	case FT_SAND:
 		_node->setWaterTexture(textureManager.getTexture("waterTile"));
-		_node->drawableNode.setTexture(textureManager.getTexture("flatTop"));
+		_node->drawableNode->setTexture(textureManager.getTexture("flatTop"));
 		break;
 
 	case FB_SAND:
 		_node->setWaterTexture(textureManager.getTexture("waterTile"));
-		_node->drawableNode.setTexture(textureManager.getTexture("flatBottom"));
+		_node->drawableNode->setTexture(textureManager.getTexture("flatBottom"));
 		break;
 
 	case FR_SAND:
 		_node->setWaterTexture(textureManager.getTexture("waterTile"));
-		_node->drawableNode.setTexture(textureManager.getTexture("flatRight"));
+		_node->drawableNode->setTexture(textureManager.getTexture("flatRight"));
 		break;
 
 	case FL_SAND:
 		_node->setWaterTexture(textureManager.getTexture("waterTile"));
-		_node->drawableNode.setTexture(textureManager.getTexture("flatLeft"));
+		_node->drawableNode->setTexture(textureManager.getTexture("flatLeft"));
 		break;
 
 	case TR_LL_SAND:
 		_node->setWaterTexture(textureManager.getTexture("waterTile"));
-		_node->drawableNode.setTexture(textureManager.getTexture("LLSANDTR"));
+		_node->drawableNode->setTexture(textureManager.getTexture("LLSANDTR"));
 		break;
 
 	case TL_LL_SAND:
 		_node->setWaterTexture(textureManager.getTexture("waterTile"));
-		_node->drawableNode.setTexture(textureManager.getTexture("LLSANDTL"));
+		_node->drawableNode->setTexture(textureManager.getTexture("LLSANDTL"));
 		break;
 
 	case BR_LL_SAND:
 		_node->setWaterTexture(textureManager.getTexture("waterTile"));
-		_node->drawableNode.setTexture(textureManager.getTexture("LLSANDBR"));
+		_node->drawableNode->setTexture(textureManager.getTexture("LLSANDBR"));
 		break;
 
 	case BL_LL_SAND:
 		_node->setWaterTexture(textureManager.getTexture("waterTile"));
-		_node->drawableNode.setTexture(textureManager.getTexture("LLSANDBL"));
+		_node->drawableNode->setTexture(textureManager.getTexture("LLSANDBL"));
 		break;
 
 	default:
@@ -505,6 +478,15 @@ void Grid::determineWaterTileType(Node* _node) const
 	if(!_node->getIsLand())
 	{
 		_node->setTileType(DEFAULT_WATER);
+	}
+}
+
+void Grid::deleteSprites() const
+{
+	for(auto node : nodeGrid)
+	{
+		node->waterBackSprite.reset();
+		node->drawableNode.reset();
 	}
 }
 

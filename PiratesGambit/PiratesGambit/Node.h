@@ -5,39 +5,58 @@
 class Node
 {
 public:
+	//copy constructor
+	Node(const Node& other) :
+		gridX(other.gridX),
+		gridY(other.gridY),
+		isLand(other.isLand),
+		size(other.size),
+		m_neighbours(other.getNeighbours())
+	{
+		if (other.drawableNode) {
+			drawableNode = std::make_shared<sf::Sprite>(*other.drawableNode);
+		}
+
+		if (other.waterBackSprite) {
+			waterBackSprite = std::make_shared<sf::Sprite>(*other.waterBackSprite);
+		}
+	}
+	//
 	Node(int _gridX, int _gridY, int size_, bool _isLand) :
 		gridX(_gridX),
 		gridY(_gridY),
 		isLand(_isLand),
 		size(size_)
 	{
-		drawableNode.setPosition(sf::Vector2f(gridX, gridY));
-		drawableNode.setScale(size / 64.f, size / 64.f); //64x64 is size of texture
+		drawableNode = std::make_shared<sf::Sprite>();
+		waterBackSprite = std::make_shared<sf::Sprite>();
 
-		waterBackSprite.setPosition(sf::Vector2f(gridX, gridY));
-		waterBackSprite.setScale(size / 64.f, size / 64.f); //64x64 is size of texture
+		drawableNode->setPosition(sf::Vector2f(gridX, gridY));
+		drawableNode->setScale(size / 64.f, size / 64.f); //64x64 is size of texture
+
+		waterBackSprite->setPosition(sf::Vector2f(gridX, gridY));
+		waterBackSprite->setScale(size / 64.f, size / 64.f); //64x64 is size of texture
 
 		debugShape.setPosition(sf::Vector2f(gridX, gridY));
-		debugShape.setSize(sf::Vector2f(32, 32));
+		debugShape.setSize(sf::Vector2f(size, size));
 		debugShape.setFillColor(sf::Color(123,123,123,46));
 	};
 
 	void addNeighbour(Node* t_cellId);
 
-	sf::Sprite drawableNode; //sfml render
-	sf::Sprite waterBackSprite; //back texture of water
+	std::shared_ptr<sf::Sprite> drawableNode; //sfml render
+	std::shared_ptr<sf::Sprite> waterBackSprite; //back texture of water
 
 	sf::RectangleShape debugShape;
-	bool drawDebug = false;
 
 	//Getters
-	int getChunkId() { return m_chunkId; };
+	int getChunkId() const { return m_chunkId; };
 	int getID() const { return m_id; };
 	std::vector<Node*> getNeighbours() const { return m_neighbours; };
 	bool getMarked() const{ return visited; };
 	bool getIsLand() const { return isLand; };
 	int getSize() const { return size; };
-	sf::Vector2f getPosition() const { return sf::Vector2f(gridX, gridY); };
+	sf::Vector2f getPosition() const { return { static_cast<float>(gridX), static_cast<float>(gridY)}; }
 
 	//Tiles
 	TileType getTileType() const { return m_currentTileType; };
@@ -50,7 +69,7 @@ public:
 	void setLand(bool _land) { isLand = _land; };
 	void setTileType(TileType _type) { m_currentTileType = _type; };
 	void setParentTileType(ParentTileType _type) { m_currentParentTileType = _type; };
-	void setWaterTexture(const sf::Texture& _texture) { waterBackSprite.setTexture(_texture); };
+	void setWaterTexture(const sf::Texture& _texture) const { waterBackSprite->setTexture(_texture); };
 
 	//Resetters
 	void resetMarked() { visited = false; };

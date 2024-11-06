@@ -13,7 +13,7 @@ public:
 	void initCamera();
 
 	void update(double dt);
-	void render(sf::RenderWindow& window);
+	void render(sf::RenderWindow& window) const;
 
 	void handleKeyInput();
 	void move(double dt);
@@ -26,7 +26,7 @@ public:
 	void setSprite(const sf::Texture& texture) { body.setTexture(texture); };
 	void setCurrentChunkID(int id_) { currentChunkId = id_; };
 
-	sf::Vector2f getVelocity() { return vel; };
+	sf::Vector2f getVelocity() const { return vel; };
 	sf::View getPlayerCamera() const { return playerCamera; };
 	sf::Vector2f getPosition() const { return body.getPosition(); };
 	int getCurrentChunkID() const { return currentChunkId; };
@@ -42,8 +42,8 @@ private:
 	sf::Vector2f newpos;
 	sf::Vector2f m_previousPosition;
 
-	const double MAX_REVERSE_SPEED = -30; //for movement
-	const double MAX_FORWARD_SPEED = 30;
+	const double MAX_REVERSE_SPEED = -300; //for movement
+	const double MAX_FORWARD_SPEED = 300;
 
 	int currentChunkId;
 

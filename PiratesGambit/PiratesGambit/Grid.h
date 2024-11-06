@@ -7,17 +7,17 @@
 class Grid
 {
 public:
-	Grid(int density, TextureManager& instance, std::vector<Node*>& gridNodes_);
+	Grid(TextureManager& instance, const std::vector<Node*>& gridNodes_);
 	~Grid()
 	{
 		delete this;
-	};
+	}
 	void drawGrid(sf::RenderWindow& _window) const;
 
-	void setChunkID(int id_) { chunkID = id_; };
-	int getChunkID() const { return chunkID; };
-	sf::Vector2f getMinVector() const { return sf::Vector2f(chunkStartX, chunkStartY); };
-	sf::Vector2f getMaxVector() const { return sf::Vector2f(chunkEndX, chunkEndY); };
+	void setChunkID(int id_) { chunkID = id_; }
+	int getChunkID() const { return chunkID; }
+	sf::Vector2f getMinVector() const { return { static_cast<float>(chunkStartX), static_cast<float>(chunkStartY) }; }
+	sf::Vector2f getMaxVector() const { return { static_cast<float>(chunkEndX),static_cast<float>(chunkEndY) }; }
 
 	//Surrounding Nodes for updating
 	void searchLocalArea(Node*& _startNode, int iterations_);
@@ -32,12 +32,12 @@ public:
 	void FindLand(sf::RenderWindow& m_window);
 	void MapIsland(int _startIndex, bool saveIslandData, sf::RenderWindow& window);
 	void SaveIslandData(sf::RenderWindow& window);
-	void removeWorldEdges(Node* _currentNode);
+	void removeWorldEdges(Node* _currentNode) const;
 	void UnMarkNodes();
 
 	//Tile rules
-	void FilterTiles(Node* _currentNode);
-	int FollowsPatterns(const Node* _currentNode, const std::vector<std::vector<std::pair<int, bool>>> _pattern) const;
+	void FilterTiles(Node* _currentNode) const;
+	int FollowsPatterns(const Node* _currentNode, const std::vector<std::vector<std::pair<int, bool>>>& _pattern) const;
 	bool FilterWaterTiles(const Node* _currentNode)const;
 	bool filterUndesiredTiles(const Node* _currentNode) const;
 	bool CheckPattern(const Node* _currentNode, const std::vector<std::pair<int, bool>>& _pattern) const;
@@ -51,6 +51,9 @@ public:
 	void determineWaterTileType(Node* _node) const;
 
 	std::vector<Node*> nodeGrid;
+
+	//clear memory
+	void deleteSprites() const;
 private:
 	TextureManager& textureManager;
 

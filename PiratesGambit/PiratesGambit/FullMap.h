@@ -9,17 +9,22 @@ public:
 
 	void initMap(const int& mapSize_);
 	void initChunks(TextureManager& instance, sf::RenderWindow& window);
-	void addNodesToVector(std::vector<Node*>& _vec, int _chunkX, int _chunkY);
+	std::vector<Node*> populateChunk(int _chunkX, int _chunkY, int _density) const;
 
 	void addNeighbours(int _currentNodeId) const;
 
-	void update();
-	void render(sf::RenderWindow& window);
+	void render(sf::RenderWindow& window) const;
 
 	std::vector<Grid*> getChunks() { return chunks_; };
 	std::vector<Node*> getFullMap() { return fullMapGrid; };
+
+	static void configureNode(Node* _node, int _density);
 private:
 	std::vector<Grid*> chunks_;
+
+	sf::Sprite fullMapSprite;
+	sf::Texture fullMapTexture;
+	
 
 	int mapSize;
 

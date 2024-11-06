@@ -18,7 +18,7 @@ void FullMap::initMap(const int& mapSize_)
 	{
 		for (int x = 0; x < cols; x++)
 		{
-			fullMapGrid.push_back(new Node(x * CHUNK_NODE_COLS, y * CHUNK_NODE_ROWS, nodeSize, false));
+			fullMapGrid.push_back(new Node(x * nodeSize, y * nodeSize, nodeSize, false));
 		}
 	}
 	//Setup id's first
@@ -37,27 +37,32 @@ void FullMap::initChunks(TextureManager& instance, sf::RenderWindow& window)
 		for (int chunkX = 0; chunkX < mapSize; chunkX++)
 		{
 			int chunkIndex = chunkY * mapSize + chunkX;
-			std::vector<Node*> chunkNodes;
-			addNodesToVector(chunkNodes, chunkX, chunkY);
-			Grid* chunk = new Grid(70, instance, chunkNodes);
-			chunk->ApplyCellular(7, window);
+
+			std::vector<Node*> chunkNodes = populateChunk(chunkX, chunkY, 60);
+			Grid* chunk = new Grid(instance, chunkNodes);
+			chunk->ApplyCellular(2, window);
 			chunk->setChunkID(chunkIndex);
 			chunks_.push_back(chunk);
 		}
 	}
 }
 ///Splits larger grid into chunks and assigns those a chunk ID
-void FullMap::addNodesToVector(std::vector<Node*>& _vec, int _chunkX, int _chunkY)
+std::vector<Node*> FullMap::populateChunk(int _chunkX, int _chunkY, int _density) const 
 {
+	std::vector<Node*> chunkNodes;
 	int newId = 0;
 	for (int y = 0; y < CHUNK_NODE_COLS; y++) {
 		for (int x = 0; x < CHUNK_NODE_ROWS; x++) {
 			int nodePos = (_chunkX * CHUNK_NODE_COLS + y) * (mapSize * CHUNK_NODE_ROWS) + (_chunkY * CHUNK_NODE_ROWS + x);
-			_vec.push_back(fullMapGrid[nodePos]);
+
+			configureNode(fullMapGrid[nodePos], _density);
+
+			chunkNodes.push_back(fullMapGrid[nodePos]);
 			fullMapGrid[nodePos]->setChunkID(newId);
 			newId++;
 		}
 	}
+	return chunkNodes;
 }
 
 void FullMap::addNeighbours(int _currentNodeId) const
@@ -87,10 +92,25 @@ void FullMap::addNeighbours(int _currentNodeId) const
 	}
 }
 
-void FullMap::render(sf::RenderWindow& window)
+void FullMap::render(sf::RenderWindow& window) const
 {
-	for(auto chunk : chunks_)
+	for (auto chunk : chunks_)
 	{
 		chunk->drawGrid(window);
 	}
 }
+
+void FullMap::configureNode(Node* _node, int _density)
+{
+	int random = std::rand() % 100;
+	if (random > _density)
+	{
+		_node->setLand(false);
+	}
+	else
+	{
+		_node->setLand(true);
+	}
+}
+
+

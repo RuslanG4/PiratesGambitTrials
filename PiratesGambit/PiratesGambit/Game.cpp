@@ -11,11 +11,11 @@ Game::Game() :
 {
 	initialise();
 
-	myMap = new FullMap(m_window, textureManager, 1); //keep 1x1, 2x2
+	myMap = new FullMap(m_window, textureManager, 3); //keep 1x1, 2x2
 
 	myPlayer.setSprite(textureManager.getTexture("PLAYER"));
 
-	//windowCapture.create(1600, 1080);
+	windowCapture.create(CHUNK_NODE_ROWS * 3 * 24, CHUNK_NODE_COLS * 3 * 24);
 }
 
 /// <summary>
@@ -90,14 +90,14 @@ void Game::processKeys(sf::Event t_event)
 
 void Game::processKeyUp(sf::Event t_event)
 {
-	//if(t_event.key.code == sf::Keyboard::S)
-	//{
-	//	//sf::Texture texture;
-	//	//texture.create(m_window.getSize().x, m_window.getSize().y);  
-	//	//texture.update(m_window);  
-	//	sf::Image screenshot = windowCapture.getTexture().copyToImage();  
-	//	screenshot.saveToFile("ASSETS\\screenshot.png");  
-	//}
+	if(t_event.key.code == sf::Keyboard::S)
+	{
+		//sf::Texture texture;
+	/*	texture.create(CHUNK_NODE_ROWS * 5 * 24, CHUNK_NODE_COLS * 5 * 24);
+		texture.update(m_window);  */
+		sf::Image screenshot = windowCapture.getTexture().copyToImage();  
+		screenshot.saveToFile("ASSETS\\screenshot.png");  
+	}
 }
 
 /// <summary>
@@ -121,7 +121,7 @@ void Game::update(sf::Time t_deltaTime)
 			if(currentNode != node)
 			{
 				currentNode = node;
-				searchLocalArea(currentNode, 1);
+				searchLocalArea(currentNode, 2);
 			}
 		}
 	}
@@ -136,8 +136,30 @@ void Game::render()
 {
 	//m_window.setView(myPlayer.getPlayerCamera());
 	m_window.clear(sf::Color::Black);
-	myMap->render(m_window);
-	//windowCapture.display();
+	if (!windowTexture)
+	{
+	for(auto chunk : myMap->getChunks())
+	{
+		for(auto node: chunk->nodeGrid)
+		{
+			if (node->waterBackSprite && node->drawableNode) {
+				windowCapture.draw(*(node->waterBackSprite));
+				windowCapture.draw(*(node->drawableNode));
+			}
+		}
+	}
+		windowCapture.display();
+		saveTexture();
+	}
+	m_window.draw(wholeMap);
+	for(auto node : updateArea)
+	{
+		if (node != nullptr) {
+			m_window.draw(node->debugShape);
+		}
+	}
+	/*myMap->getChunks()[myPlayer.getCurrentChunkID()]->drawGrid(m_window);*/
+
 	myPlayer.render(m_window);
 	m_window.display();
 }
@@ -193,6 +215,16 @@ void Game::searchLocalArea(Node*& _startNode, int depth)
 	}
 	for (Node* node : updateArea) {
 		node->updating = false;
+	}
+}
+
+void Game::saveTexture()
+{
+	wholeMap.setTexture(windowCapture.getTexture());
+	windowTexture = true;
+	for (auto chunk : myMap->getChunks())
+	{
+		chunk->deleteSprites();
 	}
 }
 
