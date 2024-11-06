@@ -106,6 +106,7 @@ void Game::processKeyUp(sf::Event t_event)
 /// <param name="t_deltaTime">time interval per frame</param>
 void Game::update(sf::Time t_deltaTime)
 {
+	updateVisableNodes();
 	myPlayer.update(t_deltaTime.asMilliseconds());
 	for(auto chunk : myMap->getChunks())
 	{
@@ -159,8 +160,13 @@ void Game::render()
 			}
 		}
 	}*/
+	for (int index : visibleNodes) {
+		Node* node = myMap->getFullMap()[index];
 
-	for (int y = minY; y <= maxY; ++y) {
+		m_window.draw(*(node->waterBackSprite));
+		m_window.draw(*(node->drawableNode));
+	}
+	/*for (int y = minY; y <= maxY; ++y) {
 		for (int x = minX; x <= maxX; ++x) {
 			int index = y * (24 * 3) + x;
 
@@ -169,7 +175,7 @@ void Game::render()
 			m_window.draw(*(node->waterBackSprite));
 			m_window.draw(*(node->drawableNode));
 		}
-	}
+	}*/
 
 	//m_window.draw(wholeMap);
 	for(auto node : updateArea)
@@ -209,30 +215,30 @@ void Game::searchLocalArea(Node*& _startNode, int depth)
 	int iterations = (1 + 2 * depth) * (1 + 2 * depth);
 	int iterCount = 1;
 
-	std::queue <Node*> nodeQueue;
-
+	std::queue<Node*> nodeQueue;
 	nodeQueue.push(_startNode);
-	nodeQueue.front()->updating = true;
-	updateArea.push_back(_startNode);
-	nodeQueue.front()->debugShape.setFillColor(sf::Color(123, 123, 123, 180));
+	updateArea.insert(_startNode); 
 
-	while (iterCount < iterations)
-	{
+	_startNode->debugShape.setFillColor(sf::Color(123, 123, 123, 180));
 
-		auto neighbours = nodeQueue.front()->getNeighbours();
-		for (auto neighbour : neighbours)
-		{
-			if (neighbour->updating == false && iterCount < iterations)
-			{
-				neighbour->updating = true;
+	while (!nodeQueue.empty() && iterCount < iterations) {
+		Node* currentNode = nodeQueue.front();
+		nodeQueue.pop();
+
+		auto neighbours = currentNode->getNeighbours();
+		for (Node* neighbour : neighbours) {
+			
+			if (updateArea.find(neighbour) == updateArea.end() && iterCount < iterations) {
+				
 				neighbour->debugShape.setFillColor(sf::Color(123, 123, 123, 180));
 				iterCount++;
-				updateArea.push_back(neighbour);
+
+				updateArea.insert(neighbour);
 				nodeQueue.push(neighbour);
 			}
 		}
-		nodeQueue.pop();
 	}
+
 	for (Node* node : updateArea) {
 		node->updating = false;
 	}
@@ -246,5 +252,26 @@ void Game::saveTexture()
 	{
 		chunk->deleteSprites();
 	}
+}
+
+void Game::updateVisableNodes()
+{
+	sf::FloatRect viewBounds(myPlayer.getPlayerCamera().getCenter() - myPlayer.getPlayerCamera().getSize() / 2.0f, myPlayer.getPlayerCamera().getSize());
+
+	int minX = std::max(0, static_cast<int>(viewBounds.left / 24));
+	int maxX = std::min(24 * 3 - 1, static_cast<int>((viewBounds.left + viewBounds.width) / 24));
+	int minY = std::max(0, static_cast<int>(viewBounds.top / 24));
+	int maxY = std::min(24 * 3 - 1, static_cast<int>((viewBounds.top + viewBounds.height) / 24));
+
+	std::set<int> newVisibleNodes;
+
+	for (int y = minY; y <= maxY; ++y) {
+		for (int x = minX; x <= maxX; ++x) {
+			int index = y * (24 * 3) + x;
+			newVisibleNodes.insert(index);
+		}
+	}
+
+	visibleNodes = std::move(newVisibleNodes);
 }
 

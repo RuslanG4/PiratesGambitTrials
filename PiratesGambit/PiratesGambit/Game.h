@@ -33,6 +33,9 @@ private:
 
 	void saveTexture();
 
+	void updateVisableNodes();
+	std::set<int> visibleNodes;
+
 	bool keyUp = true;
 	bool windowTexture{ false };
 	sf::Sprite wholeMap;
@@ -47,7 +50,7 @@ private:
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font font;
 
-	std::vector<Node*> updateArea{nullptr};
+	std::set<Node*> updateArea{nullptr};
 
 	Node* currentNode;
 	
