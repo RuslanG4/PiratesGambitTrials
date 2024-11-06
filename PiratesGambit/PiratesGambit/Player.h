@@ -3,6 +3,7 @@
 
 #include"Utility.h"
 #include "Constants.h"
+#include"UpdateableArea.h"
 
 class Player
 {
@@ -23,17 +24,24 @@ public:
 	void increaseRotation();
 	void decreaseRotation();
 
-	void setSprite(const sf::Texture& texture) { body.setTexture(texture); };
-	void setCurrentChunkID(int id_) { currentChunkId = id_; };
+	void setSprite(const sf::Texture& texture) { body.setTexture(texture); }
+	void setCurrentChunkID(int id_) { currentChunkId = id_; }
+	void setCurrentNode(Node*& node_) { currentNode = node_; }
 
-	sf::Vector2f getVelocity() const { return vel; };
-	sf::View getPlayerCamera() const { return playerCamera; };
-	sf::Vector2f getPosition() const { return body.getPosition(); };
-	int getCurrentChunkID() const { return currentChunkId; };
+	sf::Vector2f getVelocity() const { return vel; }
+	sf::View getPlayerCamera() const { return playerCamera; }
+	sf::Vector2f getPosition() const { return body.getPosition(); }
+	int getCurrentChunkID() const { return currentChunkId; }
+	Node* getCurrentNode() const { return currentNode; }
+
+	void updateUpdateableArea(Node*& _startNode, int depth);
+
 private:
 	sf::Sprite body;
 
 	sf::View playerCamera;
+	UpdateableArea updateableArea;
+	Node* currentNode{nullptr};
 
 	double m_speed{ 0.0 };
 	double m_rotation{ 0.0 };

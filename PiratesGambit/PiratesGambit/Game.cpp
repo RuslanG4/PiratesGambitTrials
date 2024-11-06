@@ -106,28 +106,10 @@ void Game::processKeyUp(sf::Event t_event)
 /// <param name="t_deltaTime">time interval per frame</param>
 void Game::update(sf::Time t_deltaTime)
 {
-	updateVisableNodes();
 	myPlayer.update(t_deltaTime.asMilliseconds());
-	for(auto chunk : myMap->getChunks())
-	{
-		if(collision(myPlayer.getPosition(), chunk->getMinVector(), chunk->getMaxVector()))
-		{
-			myPlayer.setCurrentChunkID(chunk->getChunkID());
-		}
-	}
-	for(auto node : myMap->getChunks()[myPlayer.getCurrentChunkID()]->nodeGrid)
-	{
-		if(collision(myPlayer.getPosition(),node->getPosition(), sf::Vector2f(node->getPosition().x + node->getSize(), node->getPosition().y + node->getSize())))
-		{
-			if(currentNode != node)
-			{
-				currentNode = node;
-				searchLocalArea(currentNode, 2);
-			}
-		}
-	}
-
-	
+	updateVisableNodes();
+	findCurrentChunk();
+	findCurrentNode();
 }
 
 /// <summary>
@@ -135,57 +117,16 @@ void Game::update(sf::Time t_deltaTime)
 /// </summary>
 void Game::render()
 {
-	sf::FloatRect viewBounds(myPlayer.getPlayerCamera().getCenter() - myPlayer.getPlayerCamera().getSize() / 2.0f, myPlayer.getPlayerCamera().getSize());
-
-	int minX = std::max(0, static_cast<int>(viewBounds.left / 24));
-	int maxX = std::min(24 * 3 - 1, static_cast<int>((viewBounds.left + viewBounds.width) / 24));
-	int minY = std::max(0, static_cast<int>(viewBounds.top / 24));
-	int maxY = std::min(24 * 3 - 1, static_cast<int>((viewBounds.top + viewBounds.height) / 24));
-
-
-
 	m_window.setView(myPlayer.getPlayerCamera());
 	m_window.clear(sf::Color::Black);
-	
-	/*for(auto chunk : myMap->getChunks())
-	{
-		for(auto node: chunk->nodeGrid)
-		{
-			if (node->waterBackSprite && node->drawableNode) {
-				windowCapture.draw(*(node->waterBackSprite));
-				windowCapture.draw(*(node->drawableNode));
 
-				m_window.draw(*(node->waterBackSprite));
-				m_window.draw(*(node->drawableNode));
-			}
-		}
-	}*/
 	for (int index : visibleNodes) {
 		Node* node = myMap->getFullMap()[index];
 
 		m_window.draw(*(node->waterBackSprite));
 		m_window.draw(*(node->drawableNode));
 	}
-	/*for (int y = minY; y <= maxY; ++y) {
-		for (int x = minX; x <= maxX; ++x) {
-			int index = y * (24 * 3) + x;
-
-			Node* node = myMap->getFullMap()[index];
-
-			m_window.draw(*(node->waterBackSprite));
-			m_window.draw(*(node->drawableNode));
-		}
-	}*/
-
-	//m_window.draw(wholeMap);
-	for(auto node : updateArea)
-	{
-		if (node != nullptr) {
-			m_window.draw(node->debugShape);
-		}
-	}
-	//myMap->getChunks()[myPlayer.getCurrentChunkID()]->drawGrid(m_window);
-
+	
 	myPlayer.render(m_window);
 	m_window.display();
 }
@@ -198,50 +139,35 @@ void Game::initialise()
 	}
 }
 
-bool Game::collision(sf::Vector2f v1, sf::Vector2f v2Min, sf::Vector2f v2Max)
+void Game::findCurrentChunk()
 {
-	return v1.x > v2Min.x && v1.x < v2Max.x && v1.y > v2Min.y && v1.y < v2Max.y;
-}
-
-void Game::searchLocalArea(Node*& _startNode, int depth)
-{
-	for (Node* node : updateArea) {
-		if (node != nullptr) {
-			node->debugShape.setFillColor(sf::Color::Transparent);
+	for (auto chunk : myMap->getChunks())
+	{
+		if (collision(myPlayer.getPosition(), chunk->getMinVector(), chunk->getMaxVector()))
+		{
+			myPlayer.setCurrentChunkID(chunk->getChunkID());
 		}
 	}
-	updateArea.clear();
+}
 
-	int iterations = (1 + 2 * depth) * (1 + 2 * depth);
-	int iterCount = 1;
-
-	std::queue<Node*> nodeQueue;
-	nodeQueue.push(_startNode);
-	updateArea.insert(_startNode); 
-
-	_startNode->debugShape.setFillColor(sf::Color(123, 123, 123, 180));
-
-	while (!nodeQueue.empty() && iterCount < iterations) {
-		Node* currentNode = nodeQueue.front();
-		nodeQueue.pop();
-
-		auto neighbours = currentNode->getNeighbours();
-		for (Node* neighbour : neighbours) {
-			
-			if (updateArea.find(neighbour) == updateArea.end() && iterCount < iterations) {
-				
-				neighbour->debugShape.setFillColor(sf::Color(123, 123, 123, 180));
-				iterCount++;
-
-				updateArea.insert(neighbour);
-				nodeQueue.push(neighbour);
+void Game::findCurrentNode()
+{
+	for (auto node : myMap->getChunks()[myPlayer.getCurrentChunkID()]->nodeGrid)
+	{
+		if (collision(myPlayer.getPosition(), node->getPosition(), sf::Vector2f(node->getPosition().x + node->getSize(), node->getPosition().y + node->getSize())))
+		{
+			if (myPlayer.getCurrentNode() != node)
+			{
+				myPlayer.setCurrentNode(node);
+				myPlayer.updateUpdateableArea(node, 2);
 			}
 		}
 	}
+}
 
-	for (Node* node : updateArea) {
-		node->updating = false;
-	}
+bool Game::collision(sf::Vector2f v1, sf::Vector2f v2Min, sf::Vector2f v2Max)
+{
+	return v1.x > v2Min.x && v1.x < v2Max.x && v1.y > v2Min.y && v1.y < v2Max.y;
 }
 
 void Game::saveTexture()

@@ -29,8 +29,6 @@ private:
 
 	bool collision(sf::Vector2f v1, sf::Vector2f v2Min, sf::Vector2f v2Max);
 
-	void searchLocalArea(Node*& _startNode, int iterations_);
-
 	void saveTexture();
 
 	void updateVisableNodes();

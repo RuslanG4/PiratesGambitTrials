@@ -18,7 +18,7 @@ void Grid::drawGrid(sf::RenderWindow& _window) const
 			_window.draw(*(node->waterBackSprite));
 			_window.draw(*(node->drawableNode));
 		}
-		_window.draw(node->debugShape);
+		_window.draw(*(node->debugShape));
 	}
 }
 
@@ -105,7 +105,7 @@ void Grid::searchLocalArea(Node*& _startNode, int iterations_)
 	// loop through the queue while there are nodes in it.
 	while (!nodeQueue.empty() && currentIteration< iterations_)
 	{
-		nodeQueue.front()->debugShape.setFillColor(sf::Color(223, 123, 123, 66));
+		nodeQueue.front()->debugShape->setFillColor(sf::Color(223, 123, 123, 66));
 		currentIteration++;
 		auto neighbours = nodeQueue.front()->getNeighbours();
 		for (auto neighbour : neighbours)
@@ -296,7 +296,7 @@ void Grid::UnMarkNodes()
 	for (auto node : nodeGrid)
 	{
 		node->resetMarked();
-		node->debugShape.setFillColor(sf::Color::Transparent);
+		node->debugShape->setFillColor(sf::Color::Transparent);
 	}
 }
 

@@ -16,9 +16,11 @@ public:
 		if (other.drawableNode) {
 			drawableNode = std::make_shared<sf::Sprite>(*other.drawableNode);
 		}
-
 		if (other.waterBackSprite) {
 			waterBackSprite = std::make_shared<sf::Sprite>(*other.waterBackSprite);
+		}
+		if (other.debugShape) {
+			debugShape = std::make_shared<sf::RectangleShape>(*other.debugShape);
 		}
 	}
 	//
@@ -30,6 +32,7 @@ public:
 	{
 		drawableNode = std::make_shared<sf::Sprite>();
 		waterBackSprite = std::make_shared<sf::Sprite>();
+		debugShape = std::make_shared<sf::RectangleShape>();
 
 		drawableNode->setPosition(sf::Vector2f(gridX, gridY));
 		drawableNode->setScale(size / 64.f, size / 64.f); //64x64 is size of texture
@@ -37,17 +40,16 @@ public:
 		waterBackSprite->setPosition(sf::Vector2f(gridX, gridY));
 		waterBackSprite->setScale(size / 64.f, size / 64.f); //64x64 is size of texture
 
-		debugShape.setPosition(sf::Vector2f(gridX, gridY));
-		debugShape.setSize(sf::Vector2f(size, size));
-		debugShape.setFillColor(sf::Color(123,123,123,46));
+		debugShape->setPosition(sf::Vector2f(gridX, gridY));
+		debugShape->setSize(sf::Vector2f(size, size));
+		debugShape->setFillColor(sf::Color(123,123,123,46));
 	};
 
 	void addNeighbour(Node* t_cellId);
 
 	std::shared_ptr<sf::Sprite> drawableNode; //sfml render
 	std::shared_ptr<sf::Sprite> waterBackSprite; //back texture of water
-
-	sf::RectangleShape debugShape;
+	std::shared_ptr<sf::RectangleShape> debugShape;
 
 	//Getters
 	int getChunkId() const { return m_chunkId; };
@@ -74,8 +76,6 @@ public:
 	//Resetters
 	void resetMarked() { visited = false; };
 
-	bool updating{ false };
-
 private:
 	int m_id;
 	int m_chunkId;
@@ -83,8 +83,6 @@ private:
 	int size;
 	bool visited{ false };
 	bool isLand{ false };
-
-	
 
 	std::vector<Node*> m_neighbours;  
 	//							  0 3 5	

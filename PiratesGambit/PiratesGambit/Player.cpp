@@ -33,11 +33,16 @@ void Player::update(double dt)
 void Player::render(sf::RenderWindow& window) const
 {
 	window.draw(body);
+	for (Node* node : updateableArea.getUpdateableNodes())
+	{
+		if (node != nullptr) {
+			window.draw(*(node->debugShape));
+		}
+	}
 }
 
 void Player::handleKeyInput()
 {
-
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
 		increaseSpeed();
@@ -94,4 +99,9 @@ void Player::decreaseRotation()
 	{
 		m_rotation = 359.0;
 	}
+}
+
+void Player::updateUpdateableArea(Node*& _startNode, int depth)
+{
+	updateableArea.updateVisibleNodes(_startNode, depth);
 }
