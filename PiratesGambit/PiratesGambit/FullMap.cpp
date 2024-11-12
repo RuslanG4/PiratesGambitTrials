@@ -38,9 +38,9 @@ void FullMap::initChunks(TextureManager& instance, sf::RenderWindow& window)
 		{
 			int chunkIndex = chunkY * mapSize + chunkX;
 
-			std::vector<Node*> chunkNodes = populateChunk(chunkX, chunkY, 60);
+			std::vector<Node*> chunkNodes = populateChunk(chunkX, chunkY, 70);
 			Grid* chunk = new Grid(instance, chunkNodes);
-			chunk->ApplyCellular(2, window);
+			chunk->ApplyCellular(7, window);
 			chunk->setChunkID(chunkIndex);
 			chunks_.push_back(chunk);
 		}

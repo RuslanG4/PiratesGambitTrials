@@ -27,6 +27,9 @@ private:
 	void render();
 	void initialise();
 
+	void findCurrentNode();
+	void findCurrentChunk();
+
 	bool collision(sf::Vector2f v1, sf::Vector2f v2Min, sf::Vector2f v2Max);
 
 	void saveTexture();

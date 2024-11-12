@@ -2,7 +2,7 @@
 
 Player::Player()
 {
-	body.setPosition(sf::Vector2f(100, 100));
+	body.setPosition(sf::Vector2f(25, 25));
 	body.setOrigin(56, 33);
 	body.setScale(0.5, 0.5);
 
@@ -63,6 +63,7 @@ void Player::handleKeyInput()
 
 void Player::move(double dt)
 {
+	m_previousPosition = body.getPosition();
 
 	vel.x = std::cos(m_rotation * Utility::DEG_TO_RADIAN) * m_speed * (dt / 1000);
 	vel.y = std::sin(m_rotation * Utility::DEG_TO_RADIAN) * m_speed * (dt / 1000);
@@ -98,6 +99,16 @@ void Player::decreaseRotation()
 	if (m_rotation == 0.0)
 	{
 		m_rotation = 359.0;
+	}
+}
+
+void Player::defelect()
+{
+	// If tank was moving.
+	if (m_speed != 0)
+	{
+		body.setPosition(m_previousPosition);
+		m_speed = 0;
 	}
 }
 

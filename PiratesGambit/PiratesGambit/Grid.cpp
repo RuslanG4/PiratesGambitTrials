@@ -199,9 +199,9 @@ void Grid::FindLand(sf::RenderWindow& m_window)
 {
 	for(auto node : nodeGrid)
 	{
-		//drawGrid(m_window);
-		//m_window.display();
-		//wait(1);
+	/*	drawGrid(m_window);
+		m_window.display();
+		wait(1);*/
 		//node->debugShape.setFillColor(sf::Color(123, 123, 123, 123));
 
 		if(node->getMarked() == false && node->getIsLand())
@@ -250,10 +250,10 @@ void Grid::MapIsland(int _startIndex,bool saveIslandData, sf::RenderWindow & win
 					nodeQueue.push(neighbour);
 					FilterTiles(neighbour);
 
-					/*if (saveIslandData) {
+				/*	if (saveIslandData) {
 						neighbour->debugShape.setFillColor(sf::Color(23, 23, 23, 66));
-					}
-					drawGrid(window);
+					}*/
+				/*	drawGrid(window);
 					window.display();
 					wait(1);*/
 				}

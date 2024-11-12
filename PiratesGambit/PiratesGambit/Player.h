@@ -24,6 +24,8 @@ public:
 	void increaseRotation();
 	void decreaseRotation();
 
+	void defelect();
+
 	void setSprite(const sf::Texture& texture) { body.setTexture(texture); }
 	void setCurrentChunkID(int id_) { currentChunkId = id_; }
 	void setCurrentNode(Node*& node_) { currentNode = node_; }
@@ -33,6 +35,7 @@ public:
 	sf::Vector2f getPosition() const { return body.getPosition(); }
 	int getCurrentChunkID() const { return currentChunkId; }
 	Node* getCurrentNode() const { return currentNode; }
+	UpdateableArea getUpdateableArea() const { return updateableArea; }
 
 	void updateUpdateableArea(Node*& _startNode, int depth);
 

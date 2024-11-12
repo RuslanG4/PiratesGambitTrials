@@ -110,6 +110,16 @@ void Game::update(sf::Time t_deltaTime)
 	updateVisableNodes();
 	findCurrentChunk();
 	findCurrentNode();
+
+	for (auto& node : myPlayer.getUpdateableArea().getUpdateableNodes())
+	{
+		if (node->getIsLand()) {
+			if (collision(myPlayer.getPosition(), node->getPosition(), sf::Vector2f(node->getPosition().x + node->getSize(), node->getPosition().y + node->getSize())))
+			{
+				myPlayer.defelect();
+			}
+		}
+	}
 }
 
 /// <summary>
