@@ -11,11 +11,12 @@ Game::Game() :
 {
 	initialise();
 
-	myMap = new FullMap(m_window, textureManager, 3); //keep 1x1, 2x2
+	myMap = new FullMap(m_window, 3); //keep 1x1, 2x2
 
-	myPlayer.setSprite(textureManager.getTexture("PLAYER"));
+	playerBoat = new Boat();
+	myPlayer = std::make_unique<Player>(true, playerBoat, sf::Vector2f(25,25));
 
-	windowCapture.create(CHUNK_NODE_ROWS * 3 * 24, CHUNK_NODE_COLS * 3 * 24);
+	//myPlayer->setSprite(textureManager.getTexture("PLAYER_BOAT"));
 }
 
 /// <summary>
@@ -106,20 +107,11 @@ void Game::processKeyUp(sf::Event t_event)
 /// <param name="t_deltaTime">time interval per frame</param>
 void Game::update(sf::Time t_deltaTime)
 {
-	myPlayer.update(t_deltaTime.asMilliseconds());
+	myPlayer->update(t_deltaTime.asMilliseconds());
+
 	updateVisableNodes();
 	findCurrentChunk();
 	findCurrentNode();
-
-	for (auto& node : myPlayer.getUpdateableArea().getUpdateableNodes())
-	{
-		if (node->getIsLand()) {
-			if (collision(myPlayer.getPosition(), node->getPosition(), sf::Vector2f(node->getPosition().x + node->getSize(), node->getPosition().y + node->getSize())))
-			{
-				myPlayer.defelect();
-			}
-		}
-	}
 }
 
 /// <summary>
@@ -127,7 +119,7 @@ void Game::update(sf::Time t_deltaTime)
 /// </summary>
 void Game::render()
 {
-	m_window.setView(myPlayer.getPlayerCamera());
+	m_window.setView(myPlayer->getPlayerCamera());
 	m_window.clear(sf::Color::Black);
 
 	for (int index : visibleNodes) {
@@ -137,7 +129,9 @@ void Game::render()
 		m_window.draw(*(node->drawableNode));
 	}
 	
-	myPlayer.render(m_window);
+	myPlayer->render(m_window);
+	playerBoat->render(m_window);
+
 	m_window.display();
 }
 
@@ -153,46 +147,31 @@ void Game::findCurrentChunk()
 {
 	for (auto chunk : myMap->getChunks())
 	{
-		if (collision(myPlayer.getPosition(), chunk->getMinVector(), chunk->getMaxVector()))
+		if (Utility::collision(myPlayer->getPlayerController()->getPosition(), chunk->getMinVector(), chunk->getMaxVector()))
 		{
-			myPlayer.setCurrentChunkID(chunk->getChunkID());
+			myPlayer->setCurrentChunkID(chunk->getChunkID());
 		}
 	}
 }
 
 void Game::findCurrentNode()
 {
-	for (auto node : myMap->getChunks()[myPlayer.getCurrentChunkID()]->nodeGrid)
+	for (auto node : myMap->getChunks()[myPlayer->getCurrentChunkID()]->nodeGrid)
 	{
-		if (collision(myPlayer.getPosition(), node->getPosition(), sf::Vector2f(node->getPosition().x + node->getSize(), node->getPosition().y + node->getSize())))
+		if (Utility::collision(myPlayer->getPlayerController()->getPosition(), node->getPosition(), sf::Vector2f(node->getPosition().x + node->getSize(), node->getPosition().y + node->getSize())))
 		{
-			if (myPlayer.getCurrentNode() != node)
+			if (myPlayer->getCurrentNode() != node)
 			{
-				myPlayer.setCurrentNode(node);
-				myPlayer.updateUpdateableArea(node, 2);
+				myPlayer->setCurrentNode(node);
+				myPlayer->updateUpdateableArea(node, 2);
 			}
 		}
 	}
 }
 
-bool Game::collision(sf::Vector2f v1, sf::Vector2f v2Min, sf::Vector2f v2Max)
-{
-	return v1.x > v2Min.x && v1.x < v2Max.x && v1.y > v2Min.y && v1.y < v2Max.y;
-}
-
-void Game::saveTexture()
-{
-	wholeMap.setTexture(windowCapture.getTexture());
-	windowTexture = true;
-	for (auto chunk : myMap->getChunks())
-	{
-		chunk->deleteSprites();
-	}
-}
-
 void Game::updateVisableNodes()
 {
-	sf::FloatRect viewBounds(myPlayer.getPlayerCamera().getCenter() - myPlayer.getPlayerCamera().getSize() / 2.0f, myPlayer.getPlayerCamera().getSize());
+	sf::FloatRect viewBounds(myPlayer->getPlayerCamera().getCenter() - myPlayer->getPlayerCamera().getSize() / 2.0f, myPlayer->getPlayerCamera().getSize());
 
 	int minX = std::max(0, static_cast<int>(viewBounds.left / 24));
 	int maxX = std::min(24 * 3 - 1, static_cast<int>((viewBounds.left + viewBounds.width) / 24));

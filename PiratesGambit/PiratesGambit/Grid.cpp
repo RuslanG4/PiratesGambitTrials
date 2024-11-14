@@ -1,6 +1,6 @@
 #include "Grid.h"
 
-Grid::Grid(TextureManager& instance,const std::vector<Node*>& gridNodes_) : nodeGrid(gridNodes_), textureManager(instance)
+Grid::Grid(const std::vector<Node*>& gridNodes_) : nodeGrid(gridNodes_)
 {
 	chunkStartX = nodeGrid[0]->getPosition().x;
 	chunkEndX = nodeGrid[nodeGrid.size() - 1]->getPosition().x + (nodeGrid[0]->getSize());
@@ -161,12 +161,12 @@ void Grid::ApplyCellular(int _interations, sf::RenderWindow& m_window)
 	
 			if(landCount > 4)
 			{
-				node->drawableNode->setTexture(textureManager.getTexture("landTile"));
+				node->drawableNode->setTexture(TextureManager::getInstance().getTexture("landTile"));
 				node->setParentTileType(LAND);
 				node->setLand(true);
 			}else
 			{
-				node->drawableNode->setTexture(textureManager.getTexture("waterTile"));
+				node->drawableNode->setTexture(TextureManager::getInstance().getTexture("waterTile"));
 				node->setParentTileType(WATER);
 				node->setTileType(DEFAULT_WATER);
 				node->setLand(false);
@@ -324,75 +324,75 @@ void Grid::determineTileTexture(Node* _node) const
 	switch (_node->getTileType())
 	{
 	case DEFAULT_WATER:
-		_node->drawableNode->setTexture(textureManager.getTexture("waterTile"));
+		_node->drawableNode->setTexture(TextureManager::getInstance().getTexture("waterTile"));
 		break;
 	case GRASSY_LAND:
-		_node->drawableNode->setTexture(textureManager.getTexture("grassyLandTile"));
+		_node->drawableNode->setTexture(TextureManager::getInstance().getTexture("grassyLandTile"));
 		break;
 	case DEFAULT_SAND:
-		_node->drawableNode->setTexture(textureManager.getTexture("sandTile"));
+		_node->drawableNode->setTexture(TextureManager::getInstance().getTexture("sandTile"));
 		break;
 	case DEFAULT_LAND:
-		_node->drawableNode->setTexture(textureManager.getTexture("landTile"));
+		_node->drawableNode->setTexture(TextureManager::getInstance().getTexture("landTile"));
 		break;
 	case TR_SAND:
-		_node->setWaterTexture(textureManager.getTexture("waterTile"));
-		_node->drawableNode->setTexture(textureManager.getTexture("TRsandTile"));
+		_node->setWaterTexture(TextureManager::getInstance().getTexture("waterTile"));
+		_node->drawableNode->setTexture(TextureManager::getInstance().getTexture("TRsandTile"));
 		break;
 
 	case TL_SAND:
-		_node->setWaterTexture(textureManager.getTexture("waterTile"));
-		_node->drawableNode->setTexture(textureManager.getTexture("TLsandTile"));
+		_node->setWaterTexture(TextureManager::getInstance().getTexture("waterTile"));
+		_node->drawableNode->setTexture(TextureManager::getInstance().getTexture("TLsandTile"));
 		break;
 
 	case BR_SAND:
-		_node->setWaterTexture(textureManager.getTexture("waterTile"));
-		_node->drawableNode->setTexture(textureManager.getTexture("BRsandTile"));
+		_node->setWaterTexture(TextureManager::getInstance().getTexture("waterTile"));
+		_node->drawableNode->setTexture(TextureManager::getInstance().getTexture("BRsandTile"));
 		break;
 
 	case BL_SAND:
-		_node->setWaterTexture(textureManager.getTexture("waterTile"));
-		_node->drawableNode->setTexture(textureManager.getTexture("BLsandTile"));
+		_node->setWaterTexture(TextureManager::getInstance().getTexture("waterTile"));
+		_node->drawableNode->setTexture(TextureManager::getInstance().getTexture("BLsandTile"));
 		break;
 
 	case FT_SAND:
-		_node->setWaterTexture(textureManager.getTexture("waterTile"));
-		_node->drawableNode->setTexture(textureManager.getTexture("flatTop"));
+		_node->setWaterTexture(TextureManager::getInstance().getTexture("waterTile"));
+		_node->drawableNode->setTexture(TextureManager::getInstance().getTexture("flatTop"));
 		break;
 
 	case FB_SAND:
-		_node->setWaterTexture(textureManager.getTexture("waterTile"));
-		_node->drawableNode->setTexture(textureManager.getTexture("flatBottom"));
+		_node->setWaterTexture(TextureManager::getInstance().getTexture("waterTile"));
+		_node->drawableNode->setTexture(TextureManager::getInstance().getTexture("flatBottom"));
 		break;
 
 	case FR_SAND:
-		_node->setWaterTexture(textureManager.getTexture("waterTile"));
-		_node->drawableNode->setTexture(textureManager.getTexture("flatRight"));
+		_node->setWaterTexture(TextureManager::getInstance().getTexture("waterTile"));
+		_node->drawableNode->setTexture(TextureManager::getInstance().getTexture("flatRight"));
 		break;
 
 	case FL_SAND:
-		_node->setWaterTexture(textureManager.getTexture("waterTile"));
-		_node->drawableNode->setTexture(textureManager.getTexture("flatLeft"));
+		_node->setWaterTexture(TextureManager::getInstance().getTexture("waterTile"));
+		_node->drawableNode->setTexture(TextureManager::getInstance().getTexture("flatLeft"));
 		break;
 
 	case TR_LL_SAND:
-		_node->setWaterTexture(textureManager.getTexture("waterTile"));
-		_node->drawableNode->setTexture(textureManager.getTexture("LLSANDTR"));
+		_node->setWaterTexture(TextureManager::getInstance().getTexture("waterTile"));
+		_node->drawableNode->setTexture(TextureManager::getInstance().getTexture("LLSANDTR"));
 		break;
 
 	case TL_LL_SAND:
-		_node->setWaterTexture(textureManager.getTexture("waterTile"));
-		_node->drawableNode->setTexture(textureManager.getTexture("LLSANDTL"));
+		_node->setWaterTexture(TextureManager::getInstance().getTexture("waterTile"));
+		_node->drawableNode->setTexture(TextureManager::getInstance().getTexture("LLSANDTL"));
 		break;
 
 	case BR_LL_SAND:
-		_node->setWaterTexture(textureManager.getTexture("waterTile"));
-		_node->drawableNode->setTexture(textureManager.getTexture("LLSANDBR"));
+		_node->setWaterTexture(TextureManager::getInstance().getTexture("waterTile"));
+		_node->drawableNode->setTexture(TextureManager::getInstance().getTexture("LLSANDBR"));
 		break;
 
 	case BL_LL_SAND:
-		_node->setWaterTexture(textureManager.getTexture("waterTile"));
-		_node->drawableNode->setTexture(textureManager.getTexture("LLSANDBL"));
+		_node->setWaterTexture(TextureManager::getInstance().getTexture("waterTile"));
+		_node->drawableNode->setTexture(TextureManager::getInstance().getTexture("LLSANDBL"));
 		break;
 
 	default:

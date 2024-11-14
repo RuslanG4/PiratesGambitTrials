@@ -49,9 +49,9 @@ private:
         ///
         loadTexture("waterTile", WATER_SPRITE);
         //SHIPS
-        loadTexture("PLAYER", PLAYER);
-        loadTexture("PLAYER_DAMAGED", PLAYER_DAMAGED);
-        loadTexture("PLAYER_PLASTERED", PLAYER_PLASTERED);
+        loadTexture("PLAYER_BOAT", PLAYER);
+        loadTexture("PLAYER_BOAT_DAMAGED", PLAYER_DAMAGED);
+        loadTexture("PLAYER_BOAT_PLASTERED", PLAYER_PLASTERED);
     }
 
     std::map<std::string, sf::Texture> textures;

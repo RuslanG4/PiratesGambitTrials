@@ -1,14 +1,5 @@
 #include "Player.h"
 
-Player::Player()
-{
-	body.setPosition(sf::Vector2f(25, 25));
-	body.setOrigin(56, 33);
-	body.setScale(0.5, 0.5);
-
-	initCamera();
-}
-
 void Player::initCamera()
 {
 	playerCamera.setSize(CAMERA_WIDTH, CAMERA_HEIGHT);
@@ -17,22 +8,40 @@ void Player::initCamera()
 
 void Player::update(double dt)
 {
-	move(dt);
-
+	controller->updateSpeed();
 	handleKeyInput();
 
-	m_speed = std::clamp(m_speed, MAX_REVERSE_SPEED, MAX_FORWARD_SPEED);
-	m_speed = m_speed * 0.995;
+	sf::Vector2f desiredPosition = controller->move(dt);
 
-	//constantly rotates and sets rotation
-	body.setRotation(m_rotation);
+	for (auto& node : updateableArea.getUpdateableNodes())
+	{
+		if(checkCollision(node, desiredPosition) || boardBoat(node))
+		{
+			break;
+		};
 
-	playerCamera.setCenter(body.getPosition());
+	}
+	if(!isOnBoat())
+	{
+		body.setRotation(controller->getRotation());
+		sf::Vector2f temp = controller->getPosition();
+		body.setPosition(controller->getPosition());
+		playerCamera.setCenter(body.getPosition());
+	}else
+	{
+		currentBoat->setRotation(controller->getRotation());
+		currentBoat->setPosition(controller->getPosition());
+		playerCamera.setCenter(currentBoat->getPosition());
+	}
+	
 }
 
 void Player::render(sf::RenderWindow& window) const
 {
-	window.draw(body);
+	if(!onBoat)
+	{
+		window.draw(body);
+	}
 	for (Node* node : updateableArea.getUpdateableNodes())
 	{
 		if (node != nullptr) {
@@ -45,70 +54,19 @@ void Player::handleKeyInput()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
-		increaseSpeed();
+		controller->increaseSpeed();
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
-		decreaseSpeed();
+		controller->decreaseSpeed();
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
-		decreaseRotation();
+		controller->decreaseRotation();
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
-		increaseRotation();
-	}
-}
-
-void Player::move(double dt)
-{
-	m_previousPosition = body.getPosition();
-
-	vel.x = std::cos(m_rotation * Utility::DEG_TO_RADIAN) * m_speed * (dt / 1000);
-	vel.y = std::sin(m_rotation * Utility::DEG_TO_RADIAN) * m_speed * (dt / 1000);
-
-	newpos.x = body.getPosition().x + vel.x;
-	newpos.y = body.getPosition().y + vel.y;
-
-	body.setPosition(newpos);
-}
-
-void Player::increaseSpeed()
-{
-	m_speed += 5;
-}
-
-void Player::decreaseSpeed()
-{
-	m_speed -= 5;
-}
-
-void Player::increaseRotation()
-{
-	m_rotation += 1;
-	if (m_rotation == 360.0)
-	{
-		m_rotation = 0;
-	}
-}
-
-void Player::decreaseRotation()
-{
-	m_rotation -= 1;
-	if (m_rotation == 0.0)
-	{
-		m_rotation = 359.0;
-	}
-}
-
-void Player::defelect()
-{
-	// If tank was moving.
-	if (m_speed != 0)
-	{
-		body.setPosition(m_previousPosition);
-		m_speed = 0;
+		controller->increaseRotation();
 	}
 }
 
@@ -116,3 +74,60 @@ void Player::updateUpdateableArea(Node*& _startNode, int depth)
 {
 	updateableArea.updateVisibleNodes(_startNode, depth);
 }
+
+bool Player::checkCollision(Node*& _node, sf::Vector2f& _pos)
+{
+	sf::Vector2f nodeExtentedPos = sf::Vector2f(_node->getPosition().x + _node->getSize(), _node->getPosition().y + _node->getSize());
+	if (isOnBoat() && _node->getIsLand()) {
+		if (Utility::collision(_pos, _node->getPosition(), nodeExtentedPos))
+		{
+			//controller->deflect();
+			currentBoat->setCurrentNodeID(_node->getID());
+			exitBoat();
+			return true;
+		}
+	}
+	else if (!isOnBoat() && !_node->getIsLand())
+	{
+		if (Utility::collision(_pos, _node->getPosition(), nodeExtentedPos))
+		{
+			controller->deflect();
+			//myPlayer->exitBoat();
+			return true;
+		}
+	}
+	else
+	{
+		controller->setCurrentPosition(_pos);
+		return false;
+	}
+}
+
+bool Player::boardBoat(Node*& _node)
+{
+	if (_node->getID() == currentBoat->getCurrentNodeID())
+	{
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+		{
+			enterBoat();
+			return true;
+		}
+	}
+	return false;
+}
+
+void Player::enterBoat()
+{
+	//currentBoat = _boat;
+	controller->setCurrentPosition(currentBoat->getPosition());
+	controller->setSpeed(0);
+	onBoat = true;
+}
+
+void Player::exitBoat()
+{
+	if (currentBoat) {
+		onBoat = false;
+	}
+}
+

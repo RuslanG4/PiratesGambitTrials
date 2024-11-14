@@ -7,7 +7,7 @@
 class Grid
 {
 public:
-	Grid(TextureManager& instance, const std::vector<Node*>& gridNodes_);
+	Grid(const std::vector<Node*>& gridNodes_);
 	~Grid()
 	{
 		delete this;
@@ -55,8 +55,6 @@ public:
 	//clear memory
 	void deleteSprites() const;
 private:
-	TextureManager& textureManager;
-
 	std::vector<std::vector<Node*>> islandsGrid;
 
 	int chunkID;

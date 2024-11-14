@@ -4,11 +4,11 @@
 class FullMap
 {
 public:
-	FullMap(sf::RenderWindow & window, TextureManager& instance, const int& mapSize_);
+	FullMap(sf::RenderWindow & window, const int& mapSize_);
 	~FullMap();
 
 	void initMap(const int& mapSize_);
-	void initChunks(TextureManager& instance, sf::RenderWindow& window);
+	void initChunks(sf::RenderWindow& window);
 	std::vector<Node*> populateChunk(int _chunkX, int _chunkY, int _density) const;
 
 	void addNeighbours(int _currentNodeId) const;

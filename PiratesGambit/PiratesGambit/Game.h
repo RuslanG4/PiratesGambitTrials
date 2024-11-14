@@ -8,6 +8,7 @@
 #include"FullMap.h"
 #include "Player.h"
 
+
 class Game
 {
 public:
@@ -30,20 +31,10 @@ private:
 	void findCurrentNode();
 	void findCurrentChunk();
 
-	bool collision(sf::Vector2f v1, sf::Vector2f v2Min, sf::Vector2f v2Max);
-
-	void saveTexture();
-
 	void updateVisableNodes();
 	std::set<int> visibleNodes;
 
 	bool keyUp = true;
-	bool windowTexture{ false };
-	sf::Sprite wholeMap;
-
-	sf::RenderTexture windowCapture;
-
-	TextureManager& textureManager = TextureManager::getInstance();
 
 	sf::Sprite m_appleSprite;
 	sf::Texture m_appleTexture;
@@ -56,7 +47,9 @@ private:
 	Node* currentNode;
 	
 	FullMap* myMap;
-	Player myPlayer;
+	std::unique_ptr<Player> myPlayer;
+
+	Boat* playerBoat;
 };
 
 #endif // !GAME_HPP

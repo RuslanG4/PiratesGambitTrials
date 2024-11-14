@@ -1,15 +1,23 @@
 #pragma once
-#include<SFML/Graphics.hpp>
-
-#include"Utility.h"
-#include "Constants.h"
+#include"Includes.h"
 #include"UpdateableArea.h"
+#include"Boat.h"
+#include"PlayerController.h"
 
 class Player
 {
 public:
-	Player();
-	~Player() {};
+	Player(bool _onBoat, Boat* _boat, sf::Vector2f _pos) : onBoat(_onBoat), currentBoat(_boat)
+	{
+		controller = new PlayerController(_pos);
+
+		body.setTexture(TextureManager::getInstance().getTexture("PLAYER_BOAT"));
+		body.setOrigin(56, 33);
+		body.setScale(0.5, 0.5);
+
+		initCamera();
+	}
+	~Player() = default;
 
 	void initCamera();
 
@@ -17,45 +25,40 @@ public:
 	void render(sf::RenderWindow& window) const;
 
 	void handleKeyInput();
-	void move(double dt);
 
-	void increaseSpeed();
-	void decreaseSpeed();
-	void increaseRotation();
-	void decreaseRotation();
+	void updatePosition(const sf::Vector2f& _pos) { body.setPosition(_pos); }
 
-	void defelect();
-
-	void setSprite(const sf::Texture& texture) { body.setTexture(texture); }
 	void setCurrentChunkID(int id_) { currentChunkId = id_; }
 	void setCurrentNode(Node*& node_) { currentNode = node_; }
 
-	sf::Vector2f getVelocity() const { return vel; }
 	sf::View getPlayerCamera() const { return playerCamera; }
-	sf::Vector2f getPosition() const { return body.getPosition(); }
 	int getCurrentChunkID() const { return currentChunkId; }
 	Node* getCurrentNode() const { return currentNode; }
 	UpdateableArea getUpdateableArea() const { return updateableArea; }
+	bool isOnBoat() const { return onBoat; }
+	PlayerController* getPlayerController() const { return controller; }
 
 	void updateUpdateableArea(Node*& _startNode, int depth);
 
+	bool checkCollision(Node*& _node, sf::Vector2f& _pos);
+	bool boardBoat(Node*& _node);
+
+	//boat logic
+	void enterBoat();
+	void exitBoat();
+
 private:
 	sf::Sprite body;
+	PlayerController* controller;
 
 	sf::View playerCamera;
+
 	UpdateableArea updateableArea;
 	Node* currentNode{nullptr};
 
-	double m_speed{ 0.0 };
-	double m_rotation{ 0.0 };
+	int currentChunkId{-99};
 
-	sf::Vector2f vel;
-	sf::Vector2f newpos;
-	sf::Vector2f m_previousPosition;
-
-	const double MAX_REVERSE_SPEED = -40; //for movement
-	const double MAX_FORWARD_SPEED = 40;
-
-	int currentChunkId;
+	Boat* currentBoat;
+	bool onBoat{ true };
 
 };

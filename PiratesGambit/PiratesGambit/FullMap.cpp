@@ -1,9 +1,9 @@
 #include "FullMap.h"
 
-FullMap::FullMap(sf::RenderWindow& window, TextureManager& instance, const int& mapSize_)
+FullMap::FullMap(sf::RenderWindow& window, const int& mapSize_)
 {
 	initMap(mapSize_);
-	initChunks(instance, window);
+	initChunks(window);
 }
 
 void FullMap::initMap(const int& mapSize_)
@@ -30,7 +30,7 @@ void FullMap::initMap(const int& mapSize_)
 	}
 }
 
-void FullMap::initChunks(TextureManager& instance, sf::RenderWindow& window)
+void FullMap::initChunks(sf::RenderWindow& window)
 {
 	for (int chunkY = 0; chunkY < mapSize; chunkY++)
 	{
@@ -39,7 +39,7 @@ void FullMap::initChunks(TextureManager& instance, sf::RenderWindow& window)
 			int chunkIndex = chunkY * mapSize + chunkX;
 
 			std::vector<Node*> chunkNodes = populateChunk(chunkX, chunkY, 70);
-			Grid* chunk = new Grid(instance, chunkNodes);
+			Grid* chunk = new Grid(chunkNodes);
 			chunk->ApplyCellular(7, window);
 			chunk->setChunkID(chunkIndex);
 			chunks_.push_back(chunk);
