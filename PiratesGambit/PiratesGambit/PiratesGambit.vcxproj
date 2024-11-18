@@ -140,9 +140,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Boat.cpp" />
+    <ClCompile Include="BoatController.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="FullMap.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="HitBox.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -152,11 +155,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Boat.h" />
+    <ClInclude Include="BoatController.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="FullMap.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Grid.h" />
+    <ClInclude Include="HitBox.h" />
     <ClInclude Include="Includes.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Player.h" />

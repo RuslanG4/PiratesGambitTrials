@@ -11,10 +11,14 @@ Game::Game() :
 {
 	initialise();
 
-	myMap = new FullMap(m_window, 3); //keep 1x1, 2x2
+	myMap = new FullMap(m_window, 1); //keep 1x1, 2x2
 
-	playerBoat = new Boat();
-	myPlayer = std::make_unique<Player>(true, playerBoat, sf::Vector2f(25,25));
+	myPlayer = std::make_shared<Player>(sf::Vector2f(25, 25));
+
+	playerBoat = std::make_shared<Boat>(sf::Vector2f(25, 25), myPlayer);
+
+	myPlayer->boardBoat(playerBoat);
+	
 
 	//myPlayer->setSprite(textureManager.getTexture("PLAYER_BOAT"));
 }
@@ -107,11 +111,22 @@ void Game::processKeyUp(sf::Event t_event)
 /// <param name="t_deltaTime">time interval per frame</param>
 void Game::update(sf::Time t_deltaTime)
 {
-	myPlayer->update(t_deltaTime.asMilliseconds());
-
 	updateVisableNodes();
 	findCurrentChunk();
 	findCurrentNode();
+
+	handleKeyInput();
+	//
+	if(myPlayer->isOnBoat())
+	{
+		playerBoat->update(t_deltaTime.asMilliseconds());
+	}else
+	{
+		myPlayer->update(t_deltaTime.asMilliseconds());
+	}
+	
+	myCamera.setCameraCenter(myPlayer->getPlayerController()->getPosition());
+
 }
 
 /// <summary>
@@ -119,7 +134,7 @@ void Game::update(sf::Time t_deltaTime)
 /// </summary>
 void Game::render()
 {
-	m_window.setView(myPlayer->getPlayerCamera());
+	m_window.setView(myCamera.getCamera());
 	m_window.clear(sf::Color::Black);
 
 	for (int index : visibleNodes) {
@@ -147,9 +162,69 @@ void Game::findCurrentChunk()
 {
 	for (auto chunk : myMap->getChunks())
 	{
-		if (Utility::collision(myPlayer->getPlayerController()->getPosition(), chunk->getMinVector(), chunk->getMaxVector()))
+		if (Utility::collisionWithPoint(myPlayer->getPlayerController()->getPosition(), chunk->getMinVector(), chunk->getMaxVector()))
 		{
 			myPlayer->setCurrentChunkID(chunk->getChunkID());
+		}
+	}
+}
+
+void Game::handleKeyInput()
+{
+	sf::Vector2f desiredVelocity{ 0,0 };
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+	{
+		if(myPlayer->isOnBoat())
+		{
+			playerBoat->getController()->increaseSpeed();
+		}else
+		{
+			desiredVelocity.y--;
+		}
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	{
+		if (myPlayer->isOnBoat())
+		{
+			playerBoat->getController()->decreaseSpeed();
+		}
+		else
+		{
+			desiredVelocity.y++;
+		}
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	{
+		if (myPlayer->isOnBoat())
+		{
+			playerBoat->getController()->decreaseRotation();
+		}
+		else
+		{
+			desiredVelocity.x--;
+		}
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+	{
+		if (myPlayer->isOnBoat())
+		{
+			playerBoat->getController()->increaseRotation();
+		}
+		else
+		{
+			desiredVelocity.x++;
+		}
+	}
+	myPlayer->getPlayerController()->setLandVelocity(desiredVelocity);
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+	{
+		for(auto& node : myPlayer->getUpdateableArea().getUpdateableNodes())
+		{
+			if(node == playerBoat->getDockedNode())
+			{
+				myPlayer->boardBoat(playerBoat);
+			}
 		}
 	}
 }
@@ -158,7 +233,7 @@ void Game::findCurrentNode()
 {
 	for (auto node : myMap->getChunks()[myPlayer->getCurrentChunkID()]->nodeGrid)
 	{
-		if (Utility::collision(myPlayer->getPlayerController()->getPosition(), node->getPosition(), sf::Vector2f(node->getPosition().x + node->getSize(), node->getPosition().y + node->getSize())))
+		if (Utility::collisionWithPoint(myPlayer->getPlayerController()->getPosition(), node->getPosition(), sf::Vector2f(node->getPosition().x + node->getSize(), node->getPosition().y + node->getSize())))
 		{
 			if (myPlayer->getCurrentNode() != node)
 			{
@@ -171,18 +246,18 @@ void Game::findCurrentNode()
 
 void Game::updateVisableNodes()
 {
-	sf::FloatRect viewBounds(myPlayer->getPlayerCamera().getCenter() - myPlayer->getPlayerCamera().getSize() / 2.0f, myPlayer->getPlayerCamera().getSize());
+	sf::FloatRect viewBounds(myCamera.getCamera().getCenter() - myCamera.getCamera().getSize() / 2.0f, myCamera.getCamera().getSize());
 
-	int minX = std::max(0, static_cast<int>(viewBounds.left / 24));
-	int maxX = std::min(24 * 3 - 1, static_cast<int>((viewBounds.left + viewBounds.width) / 24));
-	int minY = std::max(0, static_cast<int>(viewBounds.top / 24));
-	int maxY = std::min(24 * 3 - 1, static_cast<int>((viewBounds.top + viewBounds.height) / 24));
+	int minX = std::max(0, static_cast<int>(viewBounds.left / 32));
+	int maxX = std::min(32 * 1 - 1, static_cast<int>((viewBounds.left + viewBounds.width) / 32));
+	int minY = std::max(0, static_cast<int>(viewBounds.top / 32));
+	int maxY = std::min(32 * 1 - 1, static_cast<int>((viewBounds.top + viewBounds.height) / 32));
 
 	std::set<int> newVisibleNodes;
 
 	for (int y = minY; y <= maxY; ++y) {
 		for (int x = minX; x <= maxX; ++x) {
-			int index = y * (24 * 3) + x;
+			int index = y * (32 * 1) + x;
 			newVisibleNodes.insert(index);
 		}
 	}

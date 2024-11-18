@@ -1,37 +1,54 @@
-#pragma once
+#ifndef PLAYER_H
+#define PLAYER_H
 #include"Includes.h"
 #include"UpdateableArea.h"
-#include"Boat.h"
 #include"PlayerController.h"
+#include "Node.h"
+#include "HitBox.h"
+
+class Boat;
+
+enum PlayerState
+{
+	IDLE,
+	WALK
+};
 
 class Player
 {
 public:
-	Player(bool _onBoat, Boat* _boat, sf::Vector2f _pos) : onBoat(_onBoat), currentBoat(_boat)
+	Player(sf::Vector2f _pos)
 	{
 		controller = new PlayerController(_pos);
 
-		body.setTexture(TextureManager::getInstance().getTexture("PLAYER_BOAT"));
-		body.setOrigin(56, 33);
-		body.setScale(0.5, 0.5);
+		body.setTexture(TextureManager::getInstance().getTexture("PIRATE_CAPTAIN"));
 
-		initCamera();
+		sf::IntRect rectSourceSprite;
+		rectSourceSprite.height = 32;
+		rectSourceSprite.width = 32;
+		rectSourceSprite.left = 0;
+		rectSourceSprite.top = 0;
+		body.setTextureRect(rectSourceSprite);
+		
+		body.setOrigin(16, 24);
+		body.setScale(2, 2);
+
+		myHitbox = new HitBox(sf::Vector2f(22, 22));
 	}
 	~Player() = default;
-
-	void initCamera();
 
 	void update(double dt);
 	void render(sf::RenderWindow& window) const;
 
-	void handleKeyInput();
+	void handlePlayerStates();
+	void animatePlayer(int _colAmt, int _rowNum);
+	void updatePlayerState();
 
 	void updatePosition(const sf::Vector2f& _pos) { body.setPosition(_pos); }
 
 	void setCurrentChunkID(int id_) { currentChunkId = id_; }
 	void setCurrentNode(Node*& node_) { currentNode = node_; }
 
-	sf::View getPlayerCamera() const { return playerCamera; }
 	int getCurrentChunkID() const { return currentChunkId; }
 	Node* getCurrentNode() const { return currentNode; }
 	UpdateableArea getUpdateableArea() const { return updateableArea; }
@@ -41,24 +58,29 @@ public:
 	void updateUpdateableArea(Node*& _startNode, int depth);
 
 	bool checkCollision(Node*& _node, sf::Vector2f& _pos);
-	bool boardBoat(Node*& _node);
 
-	//boat logic
-	void enterBoat();
-	void exitBoat();
+	void boardBoat(std::shared_ptr<Boat>& _boat);
+	void disembarkBoat(Node*& _node);
 
 private:
 	sf::Sprite body;
-	PlayerController* controller;
 
-	sf::View playerCamera;
+	PlayerController* controller;
+	PlayerState currentState = PlayerState::IDLE;
+
+	HitBox* myHitbox;
 
 	UpdateableArea updateableArea;
 	Node* currentNode{nullptr};
 
 	int currentChunkId{-99};
 
-	Boat* currentBoat;
+	int animateTime = 0;
+	int currentFrame = 0;
+
+	std::weak_ptr<Boat> currentBoat;
 	bool onBoat{ true };
 
 };
+
+#endif // PLAYER_H

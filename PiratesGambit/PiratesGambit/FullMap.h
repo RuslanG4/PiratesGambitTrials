@@ -30,6 +30,6 @@ private:
 
 	std::vector<Node*> fullMapGrid;
 
-	int nodeSize = 24;
+	int nodeSize = 32;
 };
 

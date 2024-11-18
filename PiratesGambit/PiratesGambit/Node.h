@@ -59,6 +59,7 @@ public:
 	bool getIsLand() const { return isLand; };
 	int getSize() const { return size; };
 	sf::Vector2f getPosition() const { return { static_cast<float>(gridX), static_cast<float>(gridY)}; }
+	sf::Vector2f getMidPoint() const { return  { static_cast<float>(gridX + (size / 2)), static_cast<float>(gridY + (size / 2)) }; }
 
 	//Tiles
 	TileType getTileType() const { return m_currentTileType; };

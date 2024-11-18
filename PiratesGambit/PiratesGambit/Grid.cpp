@@ -250,10 +250,10 @@ void Grid::MapIsland(int _startIndex,bool saveIslandData, sf::RenderWindow & win
 					nodeQueue.push(neighbour);
 					FilterTiles(neighbour);
 
-				/*	if (saveIslandData) {
-						neighbour->debugShape.setFillColor(sf::Color(23, 23, 23, 66));
-					}*/
-				/*	drawGrid(window);
+		/*			if (saveIslandData) {
+						neighbour->debugShape->setFillColor(sf::Color(23, 23, 23, 66));
+					}
+					drawGrid(window);
 					window.display();
 					wait(1);*/
 				}
@@ -296,7 +296,7 @@ void Grid::UnMarkNodes()
 	for (auto node : nodeGrid)
 	{
 		node->resetMarked();
-		node->debugShape->setFillColor(sf::Color::Transparent);
+		//node->debugShape->setFillColor(sf::Color::Transparent);
 	}
 }
 

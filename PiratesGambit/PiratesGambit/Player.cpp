@@ -1,46 +1,45 @@
 #include "Player.h"
-
-void Player::initCamera()
-{
-	playerCamera.setSize(CAMERA_WIDTH, CAMERA_HEIGHT);
-	playerCamera.setCenter(body.getPosition());
-}
+#include "Boat.h"
 
 void Player::update(double dt)
 {
-	controller->updateSpeed();
-	handleKeyInput();
-
+	bool temmp = false;
 	sf::Vector2f desiredPosition = controller->move(dt);
 
 	for (auto& node : updateableArea.getUpdateableNodes())
 	{
-		if(checkCollision(node, desiredPosition) || boardBoat(node))
+		if (checkCollision(node, desiredPosition))
 		{
+			temmp = true;
 			break;
-		};
+		}
 
 	}
-	if(!isOnBoat())
-	{
-		body.setRotation(controller->getRotation());
-		sf::Vector2f temp = controller->getPosition();
+	if (!temmp) {
+		controller->setCurrentPosition(controller->getPosition() + desiredPosition);
+
+		myHitbox->setPosition(controller->getPosition());
 		body.setPosition(controller->getPosition());
-		playerCamera.setCenter(body.getPosition());
-	}else
-	{
-		currentBoat->setRotation(controller->getRotation());
-		currentBoat->setPosition(controller->getPosition());
-		playerCamera.setCenter(currentBoat->getPosition());
+		
 	}
+	updatePlayerState();
+	handlePlayerStates();
+	//controller->setCurrentPosition(controller->getPosition());
+
+	
+	//body.setRotation(controller->getRotation());
+
+	
+	//myHitbox->setRotation(controller->getRotation());
 	
 }
 
 void Player::render(sf::RenderWindow& window) const
 {
-	if(!onBoat)
+	if (!onBoat)
 	{
 		window.draw(body);
+		myHitbox->render(window);
 	}
 	for (Node* node : updateableArea.getUpdateableNodes())
 	{
@@ -50,23 +49,51 @@ void Player::render(sf::RenderWindow& window) const
 	}
 }
 
-void Player::handleKeyInput()
+void Player::handlePlayerStates()
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+	switch(currentState)
 	{
-		controller->increaseSpeed();
+	case IDLE:
+		animatePlayer(4,0);
+		break;
+	case WALK:
+		animatePlayer(6, 1);
+		break;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+}
+
+void Player::animatePlayer(int _colAmt, int _rowNum)
+{
+	animateTime++;
+	if (animateTime > 12)//5 is the speed at how fast they animate
 	{
-		controller->decreaseSpeed();
+		currentFrame++;
+		if (currentFrame > _colAmt - 1) //frame 6 is the last frame the robot is running
+		{
+			currentFrame = 0;
+
+		}
+		animateTime = 0;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-	{
-		controller->decreaseRotation();
+	int col = currentFrame % _colAmt; //total cols is 5
+	int row = _rowNum; //row 0
+
+	sf::IntRect rectSourceSprite;
+	rectSourceSprite.height = 32;
+	rectSourceSprite.width = 32;
+	rectSourceSprite.left = col * rectSourceSprite.width;
+	rectSourceSprite.top = row * rectSourceSprite.height;
+	body.setTextureRect(rectSourceSprite);
+}
+
+void Player::updatePlayerState()
+{
+	if(Utility::magnitude(controller->getVelocity().x, controller->getVelocity().y) > 0.2f){
+		currentState = WALK;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+	else
 	{
-		controller->increaseRotation();
+		currentState = IDLE;
 	}
 }
 
@@ -77,57 +104,32 @@ void Player::updateUpdateableArea(Node*& _startNode, int depth)
 
 bool Player::checkCollision(Node*& _node, sf::Vector2f& _pos)
 {
-	sf::Vector2f nodeExtentedPos = sf::Vector2f(_node->getPosition().x + _node->getSize(), _node->getPosition().y + _node->getSize());
-	if (isOnBoat() && _node->getIsLand()) {
-		if (Utility::collision(_pos, _node->getPosition(), nodeExtentedPos))
-		{
-			//controller->deflect();
-			currentBoat->setCurrentNodeID(_node->getID());
-			exitBoat();
-			return true;
-		}
-	}
-	else if (!isOnBoat() && !_node->getIsLand())
+	if (!_node->getIsLand())
 	{
-		if (Utility::collision(_pos, _node->getPosition(), nodeExtentedPos))
+		if (Utility::collisionWithPoint(controller->getPosition() + _pos, _node->getPosition(), sf::Vector2f(_node->getSize(), _node->getSize())))
 		{
-			controller->deflect();
-			//myPlayer->exitBoat();
-			return true;
-		}
-	}
-	else
-	{
-		controller->setCurrentPosition(_pos);
-		return false;
-	}
-}
-
-bool Player::boardBoat(Node*& _node)
-{
-	if (_node->getID() == currentBoat->getCurrentNodeID())
-	{
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::R))
-		{
-			enterBoat();
 			return true;
 		}
 	}
 	return false;
 }
 
-void Player::enterBoat()
+void Player::boardBoat(std::shared_ptr<Boat>& _boat)
 {
-	//currentBoat = _boat;
-	controller->setCurrentPosition(currentBoat->getPosition());
-	controller->setSpeed(0);
 	onBoat = true;
+	currentBoat = _boat;
+	controller->setCurrentPosition(currentBoat.lock()->getController()->getPosition());
 }
 
-void Player::exitBoat()
+void Player::disembarkBoat(Node*& _node)
 {
-	if (currentBoat) {
-		onBoat = false;
-	}
+	onBoat = false;
+	currentBoat.reset();
+
+	controller->setCurrentPosition(_node->getMidPoint());
+	myHitbox->setPosition(controller->getPosition());
+	body.setPosition(controller->getPosition());
+
 }
+
 

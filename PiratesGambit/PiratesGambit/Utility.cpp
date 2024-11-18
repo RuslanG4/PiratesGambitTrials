@@ -33,7 +33,34 @@ float Utility::dotProduct(sf::Vector2f v1, sf::Vector2f v2)
 	return (v1.x * v2.x) + (v1.y * v2.y);
 }
 
-bool Utility::collision(sf::Vector2f v1, sf::Vector2f v2Min, sf::Vector2f v2Max)
+bool Utility::collisionWithPoint(sf::Vector2f point, sf::Vector2f v1, sf::Vector2f v1Size)
 {
-	return v1.x > v2Min.x && v1.x < v2Max.x && v1.y > v2Min.y && v1.y < v2Max.y;
+	// Get the boundaries of the rectangle
+	float v1Left = v1.x;
+	float v1Right = v1.x + v1Size.x;
+	float v1Top = v1.y;
+	float v1Bottom = v1.y + v1Size.y;
+
+	// Check if the point is within the boundaries of the rectangle
+	return point.x >= v1Left && point.x <= v1Right &&
+		point.y >= v1Top && point.y <= v1Bottom;
+}
+
+bool Utility::collisionWithNode(sf::Vector2f v1, sf::Vector2f v1Size, sf::Vector2f nodePos, int nodeSize)
+{
+	// Get the boundaries of v1
+	float v1Left = v1.x;
+	float v1Right = v1.x + v1Size.x;
+	float v1Top = v1.y;
+	float v1Bottom = v1.y + v1Size.y;
+
+	// Get the boundaries of the node
+	float nodeLeft = nodePos.x;
+	float nodeRight = nodePos.x + nodeSize;
+	float nodeTop = nodePos.y;
+	float nodeBottom = nodePos.y + nodeSize;
+
+	// Check for collision
+	return v1Right > nodeLeft && v1Left < nodeRight &&
+		v1Bottom > nodeTop && v1Top < nodeBottom;
 }

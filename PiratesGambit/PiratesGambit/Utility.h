@@ -21,6 +21,8 @@ namespace Utility
 
 	float dotProduct(sf::Vector2f v1, sf::Vector2f v2);
 
-	bool collision(sf::Vector2f v1, sf::Vector2f v2Min, sf::Vector2f v2Max);
+	bool collisionWithNode(sf::Vector2f v1, sf::Vector2f v1Size , sf::Vector2f nodePos, int nodeSize);
+
+	bool collisionWithPoint(sf::Vector2f point, sf::Vector2f v1, sf::Vector2f v1Size);
 };
 

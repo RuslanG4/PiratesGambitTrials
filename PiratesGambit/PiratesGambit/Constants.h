@@ -25,6 +25,8 @@ const char* const PLAYER = "ASSETS\\IMAGES\\PLAYER\\PLAYER.png";
 const char* const PLAYER_DAMAGED = "ASSETS\\IMAGES\\PLAYER\\PLAYER_DAMAGED.png";
 const char* const PLAYER_PLASTERED = "ASSETS\\IMAGES\\PLAYER\\PLAYER_PLASTERED.png";
 
+const char* const PIRATE_CAPTAIN = "ASSETS\\IMAGES\\Pirates\\MiniPirateCaptain.png";
+
 const char* const FONT_PATH = "ASSETS\\FONTS\\ComicNeueSansID.ttf";
 
 const char* const FONT = "ASSETS\\FONTS\\edge.ttf";
@@ -37,5 +39,5 @@ constexpr int SCREEN_HEIGHT = 1080;
 constexpr int CAMERA_WIDTH= 1920 / 2;
 constexpr int CAMERA_HEIGHT = 1080 / 2;
 
-constexpr int CHUNK_NODE_ROWS = 24;
-constexpr int CHUNK_NODE_COLS = 24;
+constexpr int CHUNK_NODE_ROWS = 32;
+constexpr int CHUNK_NODE_COLS = 32;

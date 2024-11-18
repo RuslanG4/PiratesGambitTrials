@@ -52,6 +52,9 @@ private:
         loadTexture("PLAYER_BOAT", PLAYER);
         loadTexture("PLAYER_BOAT_DAMAGED", PLAYER_DAMAGED);
         loadTexture("PLAYER_BOAT_PLASTERED", PLAYER_PLASTERED);
+        //
+        loadTexture("PIRATE_CAPTAIN", PIRATE_CAPTAIN);
+        
     }
 
     std::map<std::string, sf::Texture> textures;

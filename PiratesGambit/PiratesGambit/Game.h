@@ -7,6 +7,8 @@
 #include"Grid.h"
 #include"FullMap.h"
 #include "Player.h"
+#include"Boat.h"
+#include"Camera.h"
 
 
 class Game
@@ -31,6 +33,8 @@ private:
 	void findCurrentNode();
 	void findCurrentChunk();
 
+	void handleKeyInput();
+
 	void updateVisableNodes();
 	std::set<int> visibleNodes;
 
@@ -47,9 +51,10 @@ private:
 	Node* currentNode;
 	
 	FullMap* myMap;
-	std::unique_ptr<Player> myPlayer;
+	std::shared_ptr<Player> myPlayer;
+	std::shared_ptr<Boat> playerBoat;
 
-	Boat* playerBoat;
+	Camera myCamera;
 };
 
 #endif // !GAME_HPP
