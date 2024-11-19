@@ -17,11 +17,7 @@ public:
 
 	sf::Vector2f move(double dt);
 
-
 	float getRotation() const { return m_rotation; }
-	double getSpeed() const { return m_speed; }
-	sf::Vector2f getVelocity() const { return vel; }
-	sf::Vector2f getPreviousPosition() const { return m_previousPosition; }
 	sf::Vector2f getPosition() const { return m_currentPosition; }
 
 	void setSpeed(const double& _speed) { m_speed = _speed; }

@@ -24,14 +24,6 @@ void Player::update(double dt)
 	}
 	updatePlayerState();
 	handlePlayerStates();
-	//controller->setCurrentPosition(controller->getPosition());
-
-	
-	//body.setRotation(controller->getRotation());
-
-	
-	//myHitbox->setRotation(controller->getRotation());
-	
 }
 
 void Player::render(sf::RenderWindow& window) const

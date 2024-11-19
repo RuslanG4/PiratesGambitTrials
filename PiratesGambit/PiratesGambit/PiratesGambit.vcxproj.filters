@@ -66,14 +66,14 @@
     <ClCompile Include="UpdateableArea.cpp">
       <Filter>Source Files\Player</Filter>
     </ClCompile>
-    <ClCompile Include="BoatController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HitBox.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BoatController.cpp">
+      <Filter>Source Files\Boat</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -119,14 +119,14 @@
     <ClInclude Include="Utility.h">
       <Filter>Header Files\Globals</Filter>
     </ClInclude>
-    <ClInclude Include="BoatController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HitBox.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BoatController.h">
+      <Filter>Header Files\Boat</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

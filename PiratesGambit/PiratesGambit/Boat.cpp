@@ -33,15 +33,6 @@ void Boat::update(double dt)
 	}
 }
 
-void Boat::deflect(BoatController* _controller)
-{
-	if (_controller->getSpeed() != 0)
-	{
-		boatSprite.setPosition(_controller->getPreviousPosition());
-		_controller->setSpeed(0);
-	}
-}
-
 bool Boat::checkCollision(Node*& _node, sf::Vector2f& _pos)
 {
 	if (_node->getIsLand()) {

@@ -1,17 +1,7 @@
 #include "PlayerController.h"
 
-void PlayerController::deflect()
-{
-	// Reverse the velocity and scale it down to simulate deflection
-	vel = { -vel.x * 2.75f, -vel.y * 2.75f };
-
-	// Adjust the position slightly to move the player out of the collision area
-	m_currentPosition = m_currentPosition + vel; // Small adjustment
-}
-
 sf::Vector2f PlayerController::move(double dt)
 {
-	const float speed = 1.0f; 
 	sf::Vector2f newPosition = vel * speed;
 
 	return newPosition;

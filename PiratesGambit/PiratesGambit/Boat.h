@@ -27,16 +27,14 @@ public:
 
 	void update(double dt);
 
-	void deflect(BoatController* _controller);
 	bool checkCollision(Node*& _node, sf::Vector2f& _pos);
 
 	sf::Vector2f getPosition() const { return position; }
-	int getCurrentNodeID() const { return currentNodeID; }
 	BoatController* getController() const { return controller; }
 	Node* getDockedNode() const { return dockedNode; }
+
 	void setPosition(sf::Vector2f _pos) { position = _pos; boatSprite.setPosition(position); }
 	void setRotation(float _rotation){ boatSprite.setRotation(_rotation); }
-	void setCurrentNodeID(int _id) { currentNodeID = _id; }
 private:
 	sf::Vector2f position;
 	sf::Sprite boatSprite;
@@ -46,9 +44,6 @@ private:
 
 	BoatController* controller;
 	std::shared_ptr<Player> currentPlayer;
-
-	int currentNodeID;
-
 };
 
 #endif // BOAT_H
