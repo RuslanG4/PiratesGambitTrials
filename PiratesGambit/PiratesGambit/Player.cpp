@@ -98,8 +98,10 @@ bool Player::checkCollision(Node*& _node, sf::Vector2f& _pos)
 {
 	if (!_node->getIsLand())
 	{
-		if (Utility::collisionWithPoint(controller->getPosition() + _pos, _node->getPosition(), sf::Vector2f(_node->getSize(), _node->getSize())))
+		if (Utility::collisionWithNode(myHitbox->getTopLeftCorner() + _pos, myHitbox->getSize(), _node->getPosition(), _node->getSize()))
 		{
+			controller->deflect();
+			myHitbox->setPosition(controller->getPosition());
 			return true;
 		}
 	}

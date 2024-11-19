@@ -1,5 +1,11 @@
 #include "PlayerController.h"
 
+void PlayerController::deflect()
+{
+	vel =-vel;
+	m_currentPosition = m_currentPosition + vel;
+}
+
 sf::Vector2f PlayerController::move(double dt)
 {
 	sf::Vector2f newPosition = vel * speed;
