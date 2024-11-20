@@ -52,6 +52,7 @@ private:
         loadTexture("PLAYER_BOAT", PLAYER);
         loadTexture("PLAYER_BOAT_DAMAGED", PLAYER_DAMAGED);
         loadTexture("PLAYER_BOAT_PLASTERED", PLAYER_PLASTERED);
+        loadTexture("CANNON_BALL", CANNON_BALL);
         //
         loadTexture("PIRATE_CAPTAIN", PIRATE_CAPTAIN);
         

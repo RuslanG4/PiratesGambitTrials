@@ -18,6 +18,8 @@ Game::Game() :
 	playerBoat = std::make_shared<Boat>(sf::Vector2f(25, 25), myPlayer);
 
 	myPlayer->boardBoat(playerBoat);
+
+	playerBoat->addCannonBall();
 	
 
 	//myPlayer->setSprite(textureManager.getTexture("PLAYER_BOAT"));
@@ -72,10 +74,16 @@ void Game::processEvents()
 		if (sf::Event::KeyPressed == newEvent.type) //user pressed a key
 		{
 			processKeys(newEvent);
+			if (myPlayer->isOnBoat()) {
+				playerBoat->processKeys(newEvent);
+			}
 		}
 		if(sf::Event::KeyReleased == newEvent.type)
 		{
 			processKeyUp(newEvent);
+			if (myPlayer->isOnBoat()) {
+				playerBoat->processKeyUp(newEvent);
+			}
 		}
 	}
 }
@@ -87,22 +95,15 @@ void Game::processEvents()
 /// <param name="t_event">key press event</param>
 void Game::processKeys(sf::Event t_event)
 {
-	if(t_event.key.code == sf::Keyboard::S)
-	{
-		keyUp = false;
-	}
+	
 }
 
 void Game::processKeyUp(sf::Event t_event)
 {
-	//if(t_event.key.code == sf::Keyboard::S)
-	//{
-	//	//sf::Texture texture;
-	///*	texture.create(CHUNK_NODE_ROWS * 5 * 24, CHUNK_NODE_COLS * 5 * 24);
-	//	texture.update(m_window);  */
-	//	sf::Image screenshot = windowCapture.getTexture().copyToImage();  
-	//	screenshot.saveToFile("ASSETS\\screenshot.png");  
-	//}
+	if(t_event.key.code == sf::Keyboard::R)
+	{
+		keyUp = true;
+	}
 }
 
 /// <summary>
@@ -217,13 +218,27 @@ void Game::handleKeyInput()
 	}
 	myPlayer->getPlayerController()->setLandVelocity(desiredVelocity);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R) && keyUp)
 	{
-		for(auto& node : myPlayer->getUpdateableArea().getUpdateableNodes())
-		{
-			if(node == playerBoat->getDockedNode())
+		keyUp = false;
+		if (!myPlayer->isOnBoat()) {
+			for (auto& node : myPlayer->getUpdateableArea().getUpdateableNodes())
 			{
-				myPlayer->boardBoat(playerBoat);
+				if (node == playerBoat->getDockedNode())
+				{
+					myPlayer->boardBoat(playerBoat);
+				}
+			}
+		}
+		else
+		{
+			for (auto& node : myPlayer->getUpdateableArea().getUpdateableNodes())
+			{
+				if (node->getIsLand())
+				{
+					myPlayer->disembarkBoat(node);
+					playerBoat->setDockedNode(node);
+				}
 			}
 		}
 	}
@@ -238,7 +253,7 @@ void Game::findCurrentNode()
 			if (myPlayer->getCurrentNode() != node)
 			{
 				myPlayer->setCurrentNode(node);
-				myPlayer->updateUpdateableArea(node, 2);
+				myPlayer->updateUpdateableArea(node, 1);
 			}
 		}
 	}

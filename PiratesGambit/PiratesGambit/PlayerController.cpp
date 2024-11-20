@@ -18,7 +18,7 @@ void PlayerController::setLandVelocity(sf::Vector2f _vel)
 	if (_vel.x != 0 || _vel.y != 0)
 	{
 		float magnitude = std::sqrt(_vel.x * _vel.x + _vel.y * _vel.y);
-		vel = _vel /= magnitude;
+		vel = (_vel /= magnitude) * 1.5f;
 	}else
 	{
 		vel = { 0,0 };

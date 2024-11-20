@@ -60,7 +60,7 @@ public:
 	bool checkCollision(Node*& _node, sf::Vector2f& _pos);
 
 	void boardBoat(std::shared_ptr<Boat>& _boat);
-	void disembarkBoat(Node*& _node);
+	void disembarkBoat(Node* _node);
 
 private:
 	sf::Sprite body;

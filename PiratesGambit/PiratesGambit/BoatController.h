@@ -29,7 +29,8 @@ private:
 	sf::Vector2f m_previousPosition;
 
 	double m_speed{ 0.0 };
-	float m_rotation{ 0.0 };
+	float m_rotation{ 360 };
+	float previousRotation;
 
 	const double MAX_REVERSE_SPEED = -40; //for movement
 	const double MAX_FORWARD_SPEED = 40;

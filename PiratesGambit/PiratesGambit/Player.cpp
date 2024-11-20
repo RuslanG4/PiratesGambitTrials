@@ -20,6 +20,15 @@ void Player::update(double dt)
 
 		myHitbox->setPosition(controller->getPosition());
 		body.setPosition(controller->getPosition());
+
+		if (controller->getVelocity().x < 0)
+		{
+			body.setScale(-2, 2);
+		}
+		else if (controller->getVelocity().x > 0)
+		{
+			body.setScale(2, 2);
+		}
 		
 	}
 	updatePlayerState();
@@ -57,18 +66,18 @@ void Player::handlePlayerStates()
 void Player::animatePlayer(int _colAmt, int _rowNum)
 {
 	animateTime++;
-	if (animateTime > 12)//5 is the speed at how fast they animate
+	if (animateTime > 8)//8 is the speed at how fast they animate
 	{
 		currentFrame++;
-		if (currentFrame > _colAmt - 1) //frame 6 is the last frame the robot is running
+		if (currentFrame > _colAmt - 1)
 		{
 			currentFrame = 0;
 
 		}
 		animateTime = 0;
 	}
-	int col = currentFrame % _colAmt; //total cols is 5
-	int row = _rowNum; //row 0
+	int col = currentFrame % _colAmt;
+	int row = _rowNum;
 
 	sf::IntRect rectSourceSprite;
 	rectSourceSprite.height = 32;
@@ -115,7 +124,7 @@ void Player::boardBoat(std::shared_ptr<Boat>& _boat)
 	controller->setCurrentPosition(currentBoat.lock()->getController()->getPosition());
 }
 
-void Player::disembarkBoat(Node*& _node)
+void Player::disembarkBoat(Node* _node)
 {
 	onBoat = false;
 	currentBoat.reset();
