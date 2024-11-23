@@ -26,6 +26,8 @@ const char* const PLAYER_DAMAGED = "ASSETS\\IMAGES\\PLAYER\\PLAYER_DAMAGED.png";
 const char* const PLAYER_PLASTERED = "ASSETS\\IMAGES\\PLAYER\\PLAYER_PLASTERED.png";
 const char* const CANNON_BALL = "ASSETS\\IMAGES\\PLAYER\\CANNON_BALL.png";
 
+const char* const BARREL = "ASSETS\\IMAGES\\GameObjects\\BARREL.png";
+
 
 const char* const PIRATE_CAPTAIN = "ASSETS\\IMAGES\\Pirates\\MiniPirateCaptain.png";
 

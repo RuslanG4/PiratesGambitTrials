@@ -4,6 +4,8 @@
 #include"TextureManager.h"
 #include"TileRules.h"
 
+#include "Barrel.h"
+
 class Grid
 {
 public:
@@ -13,6 +15,10 @@ public:
 		delete this;
 	}
 	void drawGrid(sf::RenderWindow& _window) const;
+
+	void drawGameObject(sf::RenderWindow& _window) const;
+	void positionGameObjects();
+	std::vector<GameObject*> getGameObjects() const { return gameObjects; }
 
 	void setChunkID(int id_) { chunkID = id_; }
 	int getChunkID() const { return chunkID; }
@@ -61,5 +67,7 @@ private:
 
 	int chunkStartX, chunkStartY;
 	int chunkEndX, chunkEndY;
+
+	std::vector<GameObject*> gameObjects;
 };
 

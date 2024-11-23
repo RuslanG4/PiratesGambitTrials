@@ -7,6 +7,8 @@ Grid::Grid(const std::vector<Node*>& gridNodes_) : nodeGrid(gridNodes_)
 
 	chunkStartY = nodeGrid[0]->getPosition().y;
 	chunkEndY = nodeGrid[nodeGrid.size() - 1]->getPosition().y + (nodeGrid[0]->getSize());
+
+	gameObjects.push_back(new Barrel());
 }
 
 void Grid::drawGrid(sf::RenderWindow& _window) const
@@ -20,6 +22,31 @@ void Grid::drawGrid(sf::RenderWindow& _window) const
 		}
 		_window.draw(*(node->debugShape));
 	}
+}
+
+void Grid::drawGameObject(sf::RenderWindow& _window) const
+{
+	for(auto& object : gameObjects)
+	{
+		object->render(_window);
+	}
+}
+
+void Grid::positionGameObjects()
+{
+	for(auto* node : islandsGrid[0])
+	{
+		if(node->getParentTileType() == LAND)
+		{
+			for (auto& object : gameObjects)
+			{
+				object->setPosition(node->getMidPoint());
+				object->setNodeId(node->getID());
+				break;
+			}
+		}
+	}
+
 }
 
 void Grid::FilterTiles(Node* _currentNode) const
@@ -280,6 +307,7 @@ void Grid::SaveIslandData(sf::RenderWindow& window)
 			MapIsland(node->getChunkId(),true, window);
 		}
 	}
+	positionGameObjects();
 }
 
 //removes edge tiles so chunk edge is always water

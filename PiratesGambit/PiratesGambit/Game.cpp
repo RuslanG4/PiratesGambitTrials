@@ -20,6 +20,8 @@ Game::Game() :
 	myPlayer->boardBoat(playerBoat);
 
 	playerBoat->addCannonBall();
+
+	findCurrentChunk();
 	
 
 	//myPlayer->setSprite(textureManager.getTexture("PLAYER_BOAT"));
@@ -104,6 +106,10 @@ void Game::processKeyUp(sf::Event t_event)
 	{
 		keyUp = true;
 	}
+	if (t_event.key.code == sf::Keyboard::E)
+	{
+		interactWithObject = false;
+	}
 }
 
 /// <summary>
@@ -117,6 +123,10 @@ void Game::update(sf::Time t_deltaTime)
 	findCurrentNode();
 
 	handleKeyInput();
+	for (auto* gameObject : myMap->getChunks()[myPlayer->getCurrentChunkID()]->getGameObjects())
+	{
+		gameObject->update();
+	}
 	//
 	if(myPlayer->isOnBoat())
 	{
@@ -147,6 +157,8 @@ void Game::render()
 	
 	myPlayer->render(m_window);
 	playerBoat->render(m_window);
+
+	myMap->getChunks()[myPlayer->getCurrentChunkID()]->drawGameObject(m_window);
 
 	m_window.display();
 }
@@ -218,6 +230,12 @@ void Game::handleKeyInput()
 	}
 	myPlayer->getPlayerController()->setLandVelocity(desiredVelocity);
 
+	if(sf::Keyboard::isKeyPressed((sf::Keyboard::E)) && !interactWithObject)
+	{
+		interactWithObject = true;
+		interactWithObjects();
+	}
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R) && keyUp)
 	{
 		keyUp = false;
@@ -239,6 +257,20 @@ void Game::handleKeyInput()
 					myPlayer->disembarkBoat(node);
 					playerBoat->setDockedNode(node);
 				}
+			}
+		}
+	}
+}
+
+void Game::interactWithObjects()
+{
+	for (auto& node : myPlayer->getUpdateableArea().getUpdateableNodes())
+	{
+		for(auto* gameObject : myMap->getChunks()[myPlayer->getCurrentChunkID()]->getGameObjects())
+		{
+			if(gameObject->getID() == node->getID())
+			{
+				gameObject->interact();
 			}
 		}
 	}

@@ -1,9 +1,8 @@
 #pragma once
-#include "Includes.h"
 #include "TextureManager.h"
 #include "Utility.h"
 
-class CannonBall
+class CannonBall 
 {
 public:
 	CannonBall(sf::Vector2f _pos, sf::Vector2f _vel = {0,0});

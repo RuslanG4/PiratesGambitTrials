@@ -55,6 +55,8 @@ private:
         loadTexture("CANNON_BALL", CANNON_BALL);
         //
         loadTexture("PIRATE_CAPTAIN", PIRATE_CAPTAIN);
+        //
+        loadTexture("BARREL", BARREL);
         
     }
 

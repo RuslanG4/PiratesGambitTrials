@@ -10,6 +10,8 @@
 #include"Boat.h"
 #include"Camera.h"
 
+#include"Barrel.h"
+
 
 class Game
 {
@@ -35,10 +37,13 @@ private:
 
 	void handleKeyInput();
 
+	void interactWithObjects();
+
 	void updateVisableNodes();
 	std::set<int> visibleNodes;
 
 	bool keyUp = true;
+	bool interactWithObject = false;
 
 	sf::Sprite m_appleSprite;
 	sf::Texture m_appleTexture;
@@ -55,6 +60,9 @@ private:
 	std::shared_ptr<Boat> playerBoat;
 
 	Camera myCamera;
+
+	GameObject* currentObjectInteract{nullptr};
+
 };
 
 #endif // !GAME_HPP

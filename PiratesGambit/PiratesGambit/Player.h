@@ -5,6 +5,7 @@
 #include"PlayerController.h"
 #include "Node.h"
 #include "HitBox.h"
+#include"Inventory.h"
 
 class Boat;
 
@@ -20,6 +21,8 @@ public:
 	Player(sf::Vector2f _pos)
 	{
 		controller = new PlayerController(_pos);
+
+		//inventory = new Inventory();
 
 		body.setTexture(TextureManager::getInstance().getTexture("PIRATE_CAPTAIN"));
 
@@ -67,6 +70,8 @@ private:
 
 	PlayerController* controller;
 	PlayerState currentState = PlayerState::IDLE;
+
+	//Inventory* inventory;
 
 	HitBox* myHitbox;
 
