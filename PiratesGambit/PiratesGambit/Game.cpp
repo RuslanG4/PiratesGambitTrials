@@ -11,7 +11,7 @@ Game::Game() :
 {
 	initialise();
 
-	myMap = new FullMap(m_window, 1); //keep 1x1, 2x2
+	myMap = std::make_unique<FullMap>(m_window, 1); //keep 1x1, 2x2
 
 	myPlayer = std::make_shared<Player>(sf::Vector2f(25, 25));
 
@@ -177,7 +177,7 @@ void Game::initialise()
 
 void Game::findCurrentChunk()
 {
-	for (auto chunk : myMap->getChunks())
+	for (auto& chunk : myMap->getChunks())
 	{
 		if (Utility::collisionWithPoint(myPlayer->getPlayerController()->getPosition(), chunk->getMinVector(), chunk->getMaxVector()))
 		{

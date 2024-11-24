@@ -58,7 +58,7 @@ private:
 
 	Node* currentNode;
 	
-	FullMap* myMap;
+	std::unique_ptr<FullMap> myMap;
 	std::shared_ptr<Player> myPlayer;
 	std::shared_ptr<Boat> playerBoat;
 

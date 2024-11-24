@@ -4,8 +4,8 @@
 class FullMap
 {
 public:
+	FullMap() {};
 	FullMap(sf::RenderWindow & window, const int& mapSize_);
-	~FullMap();
 
 	void initMap(const int& mapSize_);
 	void initChunks(sf::RenderWindow& window);
@@ -15,12 +15,13 @@ public:
 
 	void render(sf::RenderWindow& window) const;
 
-	std::vector<Grid*> getChunks() { return chunks_; };
+	const std::vector<std::unique_ptr<Grid>>& getChunks() const { return chunks_; };
 	std::vector<Node*> getFullMap() { return fullMapGrid; };
 
 	static void configureNode(Node* _node, int _density);
 private:
-	std::vector<Grid*> chunks_;
+	std::vector<std::unique_ptr<Grid>> chunks_;
+	//std::vector<Grid*> chunks_;
 
 	sf::Sprite fullMapSprite;
 	sf::Texture fullMapTexture;

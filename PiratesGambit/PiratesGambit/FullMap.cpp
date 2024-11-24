@@ -39,10 +39,11 @@ void FullMap::initChunks(sf::RenderWindow& window)
 			int chunkIndex = chunkY * mapSize + chunkX;
 
 			std::vector<Node*> chunkNodes = populateChunk(chunkX, chunkY, 70);
-			Grid* chunk = new Grid(chunkNodes);
+			//Grid* chunk = new Grid(chunkNodes);
+			std::unique_ptr<Grid> chunk = std::make_unique<Grid>(chunkNodes);
 			chunk->ApplyCellular(7, window);
 			chunk->setChunkID(chunkIndex);
-			chunks_.push_back(chunk);
+			chunks_.push_back(std::move(chunk));
 		}
 	}
 }
@@ -94,7 +95,7 @@ void FullMap::addNeighbours(int _currentNodeId) const
 
 void FullMap::render(sf::RenderWindow& window) const
 {
-	for (auto chunk : chunks_)
+	for (auto& chunk : chunks_)
 	{
 		chunk->drawGrid(window);
 	}
