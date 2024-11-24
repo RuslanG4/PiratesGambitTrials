@@ -6,11 +6,13 @@
 class RenderableInventory
 {
 public:
-	RenderableInventory();
+	RenderableInventory(int _rows, int _cols);
 
-	void setUpInventory();
+	void setUpInventory(int _rows, int _cols);
 	void passItems(std::vector<std::unique_ptr<InventoryItem>>& _currentItems);
 	void render(sf::RenderWindow& _win);
+
+	std::vector<InventorySlot*> getSlots() const { return inventorySlots; }
 
 private:
 	sf::RectangleShape inventoryBackground;

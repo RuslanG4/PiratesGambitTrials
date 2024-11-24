@@ -4,7 +4,7 @@
 #include"TextureManager.h"
 #include"TileRules.h"
 
-#include "Barrel.h"
+#include"Island.h"
 
 class Grid
 {
@@ -15,10 +15,10 @@ public:
 		delete this;
 	}
 	void drawGrid(sf::RenderWindow& _window) const;
-
 	void drawGameObject(sf::RenderWindow& _window) const;
-	void positionGameObjects();
-	std::vector<GameObject*> getGameObjects() const { return gameObjects; }
+
+	void updateIslands() const;
+	const std::vector<std::unique_ptr<Island>>& getIslands() const { return islands; }
 
 	void setChunkID(int id_) { chunkID = id_; }
 	int getChunkID() const { return chunkID; }
@@ -61,7 +61,9 @@ public:
 	//clear memory
 	void deleteSprites() const;
 private:
-	std::vector<std::vector<Node*>> islandsGrid;
+	//std::vector<std::vector<Node*>> islandsGrid;
+
+	std::vector<std::unique_ptr<Island>> islands;
 
 	int chunkID;
 

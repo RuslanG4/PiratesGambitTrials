@@ -5,7 +5,7 @@
 #include"PlayerController.h"
 #include "Node.h"
 #include "HitBox.h"
-#include"Inventory.h"
+#include "Inventory.h"
 
 class Boat;
 
@@ -21,6 +21,7 @@ public:
 	Player(sf::Vector2f _pos)
 	{
 		controller = new PlayerController(_pos);
+		inventory = std::make_unique<Inventory>();
 
 		//inventory = new Inventory();
 
@@ -57,6 +58,8 @@ public:
 	UpdateableArea getUpdateableArea() const { return updateableArea; }
 	bool isOnBoat() const { return onBoat; }
 	PlayerController* getPlayerController() const { return controller; }
+	//Inventory
+	const std::unique_ptr<Inventory>& getInventory() const { return inventory; }
 
 	void updateUpdateableArea(Node*& _startNode, int depth);
 
@@ -71,7 +74,7 @@ private:
 	PlayerController* controller;
 	PlayerState currentState = PlayerState::IDLE;
 
-	//Inventory* inventory;
+	std::unique_ptr<Inventory> inventory;
 
 	HitBox* myHitbox;
 

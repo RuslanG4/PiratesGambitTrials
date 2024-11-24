@@ -11,6 +11,7 @@
 #include"Camera.h"
 
 #include"Barrel.h"
+#include"Mouse.h"
 
 
 class Game
@@ -39,6 +40,8 @@ private:
 
 	void interactWithObjects();
 
+	void transferInventoryItems();
+
 	void updateVisableNodes();
 	std::set<int> visibleNodes;
 
@@ -61,7 +64,7 @@ private:
 
 	Camera myCamera;
 
-	GameObject* currentObjectInteract{nullptr};
+	std::weak_ptr<GameObject> currentObjectInteract;
 
 };
 

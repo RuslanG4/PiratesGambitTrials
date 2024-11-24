@@ -7,8 +7,6 @@ Grid::Grid(const std::vector<Node*>& gridNodes_) : nodeGrid(gridNodes_)
 
 	chunkStartY = nodeGrid[0]->getPosition().y;
 	chunkEndY = nodeGrid[nodeGrid.size() - 1]->getPosition().y + (nodeGrid[0]->getSize());
-
-	gameObjects.push_back(new Barrel());
 }
 
 void Grid::drawGrid(sf::RenderWindow& _window) const
@@ -26,27 +24,18 @@ void Grid::drawGrid(sf::RenderWindow& _window) const
 
 void Grid::drawGameObject(sf::RenderWindow& _window) const
 {
-	for(auto& object : gameObjects)
+	for(auto& island : islands)
 	{
-		object->render(_window);
+		island->render(_window);
 	}
 }
 
-void Grid::positionGameObjects()
+void Grid::updateIslands() const
 {
-	for(auto* node : islandsGrid[0])
+	for (auto& island : islands)
 	{
-		if(node->getParentTileType() == LAND)
-		{
-			for (auto& object : gameObjects)
-			{
-				object->setPosition(node->getMidPoint());
-				object->setNodeId(node->getID());
-				break;
-			}
-		}
+		island->update();
 	}
-
 }
 
 void Grid::FilterTiles(Node* _currentNode) const
@@ -292,7 +281,7 @@ void Grid::MapIsland(int _startIndex,bool saveIslandData, sf::RenderWindow & win
 	}
 	if(saveIslandData)
 	{
-		islandsGrid.push_back(currentIsland);
+		islands.push_back(std::move(std::make_unique<Island>(currentIsland)));
 	}
 	
 }
@@ -307,7 +296,6 @@ void Grid::SaveIslandData(sf::RenderWindow& window)
 			MapIsland(node->getChunkId(),true, window);
 		}
 	}
-	positionGameObjects();
 }
 
 //removes edge tiles so chunk edge is always water

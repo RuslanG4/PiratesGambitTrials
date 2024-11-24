@@ -14,7 +14,7 @@ public:
 	void interact() override;
 
 	void update() override;
+
 private:
-	Inventory* inventory;
 };
 

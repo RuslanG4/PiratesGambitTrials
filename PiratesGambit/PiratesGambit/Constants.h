@@ -28,12 +28,13 @@ const char* const CANNON_BALL = "ASSETS\\IMAGES\\PLAYER\\CANNON_BALL.png";
 
 const char* const BARREL = "ASSETS\\IMAGES\\GameObjects\\BARREL.png";
 
+//icons
+const char* const CANNON_BALL_ICON = "ASSETS\\IMAGES\\ICONS\\CANNON_BALL.png";
+
 
 const char* const PIRATE_CAPTAIN = "ASSETS\\IMAGES\\Pirates\\MiniPirateCaptain.png";
 
-const char* const FONT_PATH = "ASSETS\\FONTS\\ComicNeueSansID.ttf";
-
-const char* const FONT = "ASSETS\\FONTS\\edge.ttf";
+const char* const FONT = "ASSETS\\FONTS\\ComicNeueSansID.ttf";
 
 const sf::Color GRAY = sf::Color(21, 21, 21);
 

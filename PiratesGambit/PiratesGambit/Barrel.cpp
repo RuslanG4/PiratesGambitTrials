@@ -2,8 +2,8 @@
 
 Barrel::Barrel()
 {
-	inventory = new Inventory;
-	inventory->addItem(std::move(std::make_unique<CannonBallItem>()));
+	inventory = std::make_unique<Inventory>();
+	inventory->addItem(std::move(std::make_unique<CannonBallItem>(6)));
 
 	sprite.setTexture(TextureManager::getInstance().getTexture("BARREL"));
 }

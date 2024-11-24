@@ -5,10 +5,13 @@
 class CannonBallItem : public InventoryItem
 {
 public:
-	CannonBallItem()
+	CannonBallItem(int _stackCount)
 	{
-		itemSprite.setTexture(TextureManager::getInstance().getTexture("CANNON_BALL"));
-	};
+		itemSprite.setTexture(TextureManager::getInstance().getTexture("CANNON_BALL_ICON"));
+		itemSprite.setScale(2, 2);
+		currentStack = _stackCount;
+		itemName = "CannonBall";
+	}
 private:
 };
 

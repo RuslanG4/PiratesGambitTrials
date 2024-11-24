@@ -2,28 +2,30 @@
 #include "Includes.h"
 #include"InventoryItem.h"
 #include "RenderableIventory.h"
+
 class Inventory
 {
 public:
 	Inventory();
 
 	void addItem(std::unique_ptr<InventoryItem> _item);
-	void takeAwayItem(InventoryItem _item);
+	std::unique_ptr<InventoryItem> removeItem(std::string _name);
 
 	void openInventory();
 	void closeInventory();
 
 	void update();
+	void checkMousePosition();
 
-	//std::vector<std::unique_ptr<InventoryItem>> getItems() const { return inventory; }
+	const std::vector<std::unique_ptr<InventoryItem>>& getItems() const { return inventory; }
 	RenderableInventory* getRenderableInventory() const { return renderableInventory; }
 
-	bool isInventoryOpen() const { return inventoryOpen; }
+	static bool isInventoryOpen() { return inventoryOpen; }
 
 private:
 	std::vector<std::unique_ptr<InventoryItem>> inventory;
 	RenderableInventory* renderableInventory;
 
-	bool inventoryOpen{false};
+	static bool inventoryOpen;
 };
 

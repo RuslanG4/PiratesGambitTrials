@@ -18,6 +18,21 @@ public:
         return false;
     }
 
+    bool loadFont(const std::string& filename)
+    {
+        sf::Font font;
+        if (font.loadFromFile(filename)) {
+            globalFont = font;
+            return true;
+        }
+        return false;
+    }
+
+    sf::Font& getFont()
+    {
+        return globalFont;
+    }
+
     sf::Texture& getTexture(const std::string& name) {
         return textures[name];
     }
@@ -28,6 +43,8 @@ public:
 private:
     TextureManager()
     {
+        loadFont(FONT);
+        //
         loadTexture("landTile", LAND_SPRITE);
         loadTexture("grassyLandTile", GRASSY_LAND_SPRITE);
         loadTexture("sandTile", SAND_SPRITE);
@@ -57,8 +74,12 @@ private:
         loadTexture("PIRATE_CAPTAIN", PIRATE_CAPTAIN);
         //
         loadTexture("BARREL", BARREL);
+        //ICONS
+    	loadTexture("CANNON_BALL_ICON", CANNON_BALL_ICON);
         
     }
 
     std::map<std::string, sf::Texture> textures;
+
+    sf::Font globalFont;
 };

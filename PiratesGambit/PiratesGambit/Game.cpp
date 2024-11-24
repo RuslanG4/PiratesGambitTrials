@@ -22,7 +22,6 @@ Game::Game() :
 	playerBoat->addCannonBall();
 
 	findCurrentChunk();
-	
 
 	//myPlayer->setSprite(textureManager.getTexture("PLAYER_BOAT"));
 }
@@ -87,6 +86,15 @@ void Game::processEvents()
 				playerBoat->processKeyUp(newEvent);
 			}
 		}
+		if (sf::Event::MouseButtonPressed == newEvent.type) //user pressed mouse
+		{
+			Mouse::getInstance().processMouse(newEvent);
+			transferInventoryItems();
+		}
+		if (sf::Event::MouseButtonReleased == newEvent.type)
+		{
+			Mouse::getInstance().processMouseUp(newEvent);
+		}
 	}
 }
 
@@ -118,15 +126,14 @@ void Game::processKeyUp(sf::Event t_event)
 /// <param name="t_deltaTime">time interval per frame</param>
 void Game::update(sf::Time t_deltaTime)
 {
+	Mouse::getInstance().update(m_window);
+
 	updateVisableNodes();
 	findCurrentChunk();
 	findCurrentNode();
 
 	handleKeyInput();
-	for (auto* gameObject : myMap->getChunks()[myPlayer->getCurrentChunkID()]->getGameObjects())
-	{
-		gameObject->update();
-	}
+	myMap->getChunks()[myPlayer->getCurrentChunkID()]->updateIslands();
 	//
 	if(myPlayer->isOnBoat())
 	{
@@ -165,10 +172,7 @@ void Game::render()
 
 void Game::initialise()
 {
-	if (!font.loadFromFile(FONT_PATH))
-	{
-		std::cout << "error loading font";
-	}
+
 }
 
 void Game::findCurrentChunk()
@@ -184,81 +188,84 @@ void Game::findCurrentChunk()
 
 void Game::handleKeyInput()
 {
-	sf::Vector2f desiredVelocity{ 0,0 };
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-	{
-		if(myPlayer->isOnBoat())
+	if (!Inventory::isInventoryOpen()) {
+		sf::Vector2f desiredVelocity{ 0,0 };
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 		{
-			playerBoat->getController()->increaseSpeed();
-		}else
-		{
-			desiredVelocity.y--;
+			if (myPlayer->isOnBoat())
+			{
+				playerBoat->getController()->increaseSpeed();
+			}
+			else
+			{
+				desiredVelocity.y--;
+			}
 		}
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-	{
-		if (myPlayer->isOnBoat())
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 		{
-			playerBoat->getController()->decreaseSpeed();
+			if (myPlayer->isOnBoat())
+			{
+				playerBoat->getController()->decreaseSpeed();
+			}
+			else
+			{
+				desiredVelocity.y++;
+			}
 		}
-		else
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
-			desiredVelocity.y++;
+			if (myPlayer->isOnBoat())
+			{
+				playerBoat->getController()->decreaseRotation();
+			}
+			else
+			{
+				desiredVelocity.x--;
+			}
 		}
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-	{
-		if (myPlayer->isOnBoat())
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 		{
-			playerBoat->getController()->decreaseRotation();
+			if (myPlayer->isOnBoat())
+			{
+				playerBoat->getController()->increaseRotation();
+			}
+			else
+			{
+				desiredVelocity.x++;
+			}
 		}
-		else
-		{
-			desiredVelocity.x--;
-		}
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-	{
-		if (myPlayer->isOnBoat())
-		{
-			playerBoat->getController()->increaseRotation();
-		}
-		else
-		{
-			desiredVelocity.x++;
-		}
-	}
-	myPlayer->getPlayerController()->setLandVelocity(desiredVelocity);
+		myPlayer->getPlayerController()->setLandVelocity(desiredVelocity);
 
-	if(sf::Keyboard::isKeyPressed((sf::Keyboard::E)) && !interactWithObject)
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::R) && keyUp)
+		{
+			keyUp = false;
+			if (!myPlayer->isOnBoat()) {
+				for (auto& node : myPlayer->getUpdateableArea().getUpdateableNodes())
+				{
+					if (node == playerBoat->getDockedNode())
+					{
+						myPlayer->boardBoat(playerBoat);
+					}
+				}
+			}
+			else
+			{
+				for (auto& node : myPlayer->getUpdateableArea().getUpdateableNodes())
+				{
+					if (node->getIsLand())
+					{
+						myPlayer->disembarkBoat(node);
+						playerBoat->setDockedNode(node);
+					}
+				}
+			}
+		}
+	}
+
+	if (sf::Keyboard::isKeyPressed((sf::Keyboard::E)) && !interactWithObject)
 	{
 		interactWithObject = true;
 		interactWithObjects();
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R) && keyUp)
-	{
-		keyUp = false;
-		if (!myPlayer->isOnBoat()) {
-			for (auto& node : myPlayer->getUpdateableArea().getUpdateableNodes())
-			{
-				if (node == playerBoat->getDockedNode())
-				{
-					myPlayer->boardBoat(playerBoat);
-				}
-			}
-		}
-		else
-		{
-			for (auto& node : myPlayer->getUpdateableArea().getUpdateableNodes())
-			{
-				if (node->getIsLand())
-				{
-					myPlayer->disembarkBoat(node);
-					playerBoat->setDockedNode(node);
-				}
-			}
-		}
 	}
 }
 
@@ -266,11 +273,32 @@ void Game::interactWithObjects()
 {
 	for (auto& node : myPlayer->getUpdateableArea().getUpdateableNodes())
 	{
-		for(auto* gameObject : myMap->getChunks()[myPlayer->getCurrentChunkID()]->getGameObjects())
+		for(auto& island : myMap->getChunks()[myPlayer->getCurrentChunkID()]->getIslands())
 		{
-			if(gameObject->getID() == node->getID())
+			for(auto& gameObject: island->getGameObjects())
 			{
-				gameObject->interact();
+				if (gameObject->getID() == node->getID())
+				{
+					gameObject->interact();
+					currentObjectInteract = gameObject;
+				}
+			}
+		}
+	}
+}
+
+void Game::transferInventoryItems()
+{
+	sf::Vector2f mousePos = static_cast<sf::Vector2f>(Mouse::getInstance().getMousePosition());
+	for (auto& slot : currentObjectInteract.lock()->getInventory()->getRenderableInventory()->getSlots())
+	{
+		if (Mouse::getInstance().getHasClicked() && slot->getIsOccupied())
+		{
+			if (slot->getBackgroundSprite().getGlobalBounds().contains(mousePos))
+			{
+				std::unique_ptr<InventoryItem> item = currentObjectInteract.lock()->getInventory()->removeItem(slot->getOccupiedBy());
+				slot->clearSlot();
+				myPlayer->getInventory()->addItem(std::move(item));
 			}
 		}
 	}

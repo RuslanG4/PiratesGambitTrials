@@ -46,6 +46,12 @@
     <Filter Include="Source Files\GameObjects">
       <UniqueIdentifier>{23f75b9a-91cf-4b46-a7e0-4e7b58d32b79}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Inventory\Items">
+      <UniqueIdentifier>{a0c42ba2-128f-4d95-a654-d2107e33c0ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Inventory\Items">
+      <UniqueIdentifier>{fbe6147b-4dea-4a81-bf80-b703f9d59cc0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -87,13 +93,7 @@
     <ClCompile Include="BoatController.cpp">
       <Filter>Source Files\Boat</Filter>
     </ClCompile>
-    <ClCompile Include="CannonBall.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Inventory.cpp">
-      <Filter>Source Files\Inventory</Filter>
-    </ClCompile>
-    <ClCompile Include="InventoryItem.cpp">
       <Filter>Source Files\Inventory</Filter>
     </ClCompile>
     <ClCompile Include="InventorySlot.cpp">
@@ -102,14 +102,26 @@
     <ClCompile Include="RenderableIventory.cpp">
       <Filter>Source Files\Inventory</Filter>
     </ClCompile>
-    <ClCompile Include="CannonBallItem.cpp">
-      <Filter>Source Files\GameObjects</Filter>
-    </ClCompile>
     <ClCompile Include="Barrel.cpp">
       <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="Island.cpp">
+      <Filter>Source Files\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="CannonBall.cpp">
+      <Filter>Source Files\Boat</Filter>
+    </ClCompile>
     <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Mouse.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CannonBallItem.cpp">
+      <Filter>Source Files\Inventory\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="InventoryItem.cpp">
+      <Filter>Source Files\Inventory\Items</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -164,15 +176,6 @@
     <ClInclude Include="BoatController.h">
       <Filter>Header Files\Boat</Filter>
     </ClInclude>
-    <ClInclude Include="CannonBall.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Inventory.h">
-      <Filter>Header Files\Inventory</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryItem.h">
-      <Filter>Header Files\Inventory</Filter>
-    </ClInclude>
     <ClInclude Include="InventorySlot.h">
       <Filter>Header Files\Inventory</Filter>
     </ClInclude>
@@ -182,11 +185,26 @@
     <ClInclude Include="RenderableIventory.h">
       <Filter>Header Files\Inventory</Filter>
     </ClInclude>
-    <ClInclude Include="CannonBallItem.h">
-      <Filter>Header Files\GameObjects</Filter>
+    <ClInclude Include="Island.h">
+      <Filter>Header Files\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="CannonBall.h">
+      <Filter>Header Files\Boat</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Mouse.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CannonBallItem.h">
+      <Filter>Header Files\Inventory\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Inventory.h">
+      <Filter>Header Files\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryItem.h">
+      <Filter>Header Files\Inventory\Items</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

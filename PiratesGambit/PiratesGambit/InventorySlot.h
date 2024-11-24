@@ -8,14 +8,26 @@ public:
 
 	sf::RectangleShape getBackgroundSprite() const { return slotSprite; }
 	sf::Sprite getItemSprite() const { return ItemSprite; }
-	void setSprite(sf::Sprite _sprite) { ItemSprite = _sprite; }
-	void configureSprite();
+	sf::Text getTest() const { return stackSize; }
+	void setSprite(const sf::Sprite& _sprite) { ItemSprite = _sprite; }
+	void configureSprite(int _stackSize);
+	void setOccupiedBy(std::string _who) { occupiedBy = _who; }
+	std::string getOccupiedBy() const { return occupiedBy; }
+
+	void updateSlot(bool _status) { isOccupied = _status; }
+	void clearSlot();
+	bool getIsOccupied() const { return isOccupied; }
 private:
 	sf::RectangleShape slotSprite;
 	sf::Sprite ItemSprite;
 	int m_id;
 
+	std::string occupiedBy;
+	bool isOccupied{ false };
+
 	sf::Vector2f midPoint;
+
+	sf::Text stackSize;
 
 };
 
