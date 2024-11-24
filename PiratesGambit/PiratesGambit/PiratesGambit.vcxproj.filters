@@ -52,15 +52,21 @@
     <Filter Include="Source Files\Inventory\Items">
       <UniqueIdentifier>{fbe6147b-4dea-4a81-bf80-b703f9d59cc0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Singletons">
+      <UniqueIdentifier>{edbe3168-57c8-4207-b239-af3f1546cc62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Globals">
+      <UniqueIdentifier>{25bb644e-b788-4fbb-bf6c-9fe1c7813835}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Singletons">
+      <UniqueIdentifier>{ec436789-1d06-4ede-b57e-91d6b1051624}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Utility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Boat.cpp">
@@ -83,9 +89,6 @@
     </ClCompile>
     <ClCompile Include="UpdateableArea.cpp">
       <Filter>Source Files\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HitBox.cpp">
       <Filter>Source Files</Filter>
@@ -114,14 +117,20 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="Mouse.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CannonBallItem.cpp">
       <Filter>Source Files\Inventory\Items</Filter>
     </ClCompile>
     <ClCompile Include="InventoryItem.cpp">
       <Filter>Source Files\Inventory\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility.cpp">
+      <Filter>Source Files\Globals</Filter>
+    </ClCompile>
+    <ClCompile Include="Mouse.cpp">
+      <Filter>Source Files\Singletons</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\Singletons</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -155,9 +164,6 @@
     <ClInclude Include="PlayerController.h">
       <Filter>Header Files\Player</Filter>
     </ClInclude>
-    <ClInclude Include="TextureManager.h">
-      <Filter>Header Files\Globals</Filter>
-    </ClInclude>
     <ClInclude Include="TileRules.h">
       <Filter>Header Files\Globals</Filter>
     </ClInclude>
@@ -166,9 +172,6 @@
     </ClInclude>
     <ClInclude Include="Utility.h">
       <Filter>Header Files\Globals</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HitBox.h">
       <Filter>Header Files</Filter>
@@ -194,9 +197,6 @@
     <ClInclude Include="GameObject.h">
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="Mouse.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CannonBallItem.h">
       <Filter>Header Files\Inventory\Items</Filter>
     </ClInclude>
@@ -205,6 +205,15 @@
     </ClInclude>
     <ClInclude Include="InventoryItem.h">
       <Filter>Header Files\Inventory\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files\Singletons</Filter>
+    </ClInclude>
+    <ClInclude Include="Mouse.h">
+      <Filter>Header Files\Singletons</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Header Files\Singletons</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

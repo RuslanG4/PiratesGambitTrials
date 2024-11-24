@@ -14,6 +14,8 @@ public:
 	void openInventory();
 	void closeInventory();
 
+	void combineItems(const std::unique_ptr<InventoryItem>& _item);
+
 	void update();
 	void checkMousePosition();
 
