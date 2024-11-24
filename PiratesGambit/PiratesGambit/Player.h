@@ -71,7 +71,7 @@ public:
 	bool checkCollision(const std::shared_ptr<Node>& _node, sf::Vector2f& _pos);
 
 	//boat interaction functions
-	void boardBoat(std::shared_ptr<Boat>& _boat);
+	void boardBoat(const std::shared_ptr<Boat>& _boat);
 	void disembarkBoat(const std::shared_ptr<Node>& _node);
 	bool isOnBoat() const { return onBoat; }
 
