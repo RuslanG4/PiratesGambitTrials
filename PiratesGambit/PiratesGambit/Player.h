@@ -7,7 +7,7 @@
 #include "HitBox.h"
 #include "Inventory.h"
 
-class Boat;
+class Boat; //forward ref
 
 enum PlayerState
 {
@@ -22,6 +22,7 @@ public:
 	{
 		controller = new PlayerController(_pos);
 		inventory = std::make_unique<Inventory>();
+		updateableArea = std::make_unique<UpdateableArea>();
 
 		//inventory = new Inventory();
 
@@ -44,48 +45,56 @@ public:
 	void update(double dt);
 	void render(sf::RenderWindow& window) const;
 
+	//animation
 	void handlePlayerStates();
 	void animatePlayer(int _colAmt, int _rowNum);
 	void updatePlayerState();
 
+	//Current Node + chunk
+	void setCurrentChunkID(int id_) { currentChunkId = id_; }
+	void setCurrentNode(const std::shared_ptr<Node>& node_) { currentNode = node_; }
+	int getCurrentChunkID() const { return currentChunkId; }
+	const std::shared_ptr<Node>& getCurrentNode() const { return currentNode; }
+	
+	//player controller
+	PlayerController* getPlayerController() const { return controller; }
 	void updatePosition(const sf::Vector2f& _pos) { body.setPosition(_pos); }
 
-	void setCurrentChunkID(int id_) { currentChunkId = id_; }
-	void setCurrentNode(Node*& node_) { currentNode = node_; }
-
-	int getCurrentChunkID() const { return currentChunkId; }
-	Node* getCurrentNode() const { return currentNode; }
-	UpdateableArea getUpdateableArea() const { return updateableArea; }
-	bool isOnBoat() const { return onBoat; }
-	PlayerController* getPlayerController() const { return controller; }
 	//Inventory
 	const std::unique_ptr<Inventory>& getInventory() const { return inventory; }
 
-	void updateUpdateableArea(Node*& _startNode, int depth);
+	//update area
+	void updateUpdateableArea(const std::shared_ptr<Node>& _startNode, int depth) const;
+	const std::unique_ptr<UpdateableArea>& getUpdateableArea() const { return updateableArea; }
 
-	bool checkCollision(Node*& _node, sf::Vector2f& _pos);
+	//land collision
+	bool checkCollision(const std::shared_ptr<Node>& _node, sf::Vector2f& _pos);
 
+	//boat interaction functions
 	void boardBoat(std::shared_ptr<Boat>& _boat);
-	void disembarkBoat(Node* _node);
+	void disembarkBoat(const std::shared_ptr<Node>& _node);
+	bool isOnBoat() const { return onBoat; }
 
 private:
 	sf::Sprite body;
 
-	PlayerController* controller;
-	PlayerState currentState = PlayerState::IDLE;
+	PlayerController* controller; //control player
+	PlayerState currentState = PlayerState::IDLE; //animation state
 
-	std::unique_ptr<Inventory> inventory;
+	std::unique_ptr<Inventory> inventory; //player inventory
 
-	HitBox* myHitbox;
+	HitBox* myHitbox; //hitbox for collisions
 
-	UpdateableArea updateableArea;
-	Node* currentNode{nullptr};
+	std::unique_ptr<UpdateableArea> updateableArea; //update area around player
+	std::shared_ptr<Node> currentNode{nullptr}; 
 
 	int currentChunkId{-99};
 
+	//animation
 	int animateTime = 0;
 	int currentFrame = 0;
 
+	//Boat
 	std::weak_ptr<Boat> currentBoat;
 	bool onBoat{ true };
 

@@ -5,11 +5,11 @@
 class UpdateableArea
 {
 public:
-	UpdateableArea() = default;
+	UpdateableArea(){};
 
-	void updateVisibleNodes(Node* _startNode, int depth);
-	std::vector<Node*> getUpdateableNodes() const { return updateArea; }
+	void updateVisibleNodes(const std::shared_ptr<Node>& _startNode, int depth);
+	const std::vector<std::shared_ptr<Node>>& getUpdateableNodes() const { return updateArea; }
 private:
-	std::vector<Node*> updateArea;
+	std::vector<std::shared_ptr<Node>> updateArea;
 };
 

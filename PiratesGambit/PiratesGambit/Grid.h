@@ -3,17 +3,16 @@
 #include"Node.h"
 #include"TextureManager.h"
 #include"TileRules.h"
-
 #include"Island.h"
 
+///<summary>
+/// Individual chunks in game world, responsible for procedural generation, and holding generated islands as well as nodes inside the chunk
+///</summary>
 class Grid
 {
 public:
-	Grid(const std::vector<Node*>& gridNodes_);
-	~Grid()
-	{
-		delete this;
-	}
+	Grid(const std::vector<std::shared_ptr<Node>>& gridNodes_);
+
 	void drawGrid(sf::RenderWindow& _window) const;
 	void drawGameObject(sf::RenderWindow& _window) const;
 
@@ -25,9 +24,6 @@ public:
 	sf::Vector2f getMinVector() const { return { static_cast<float>(chunkStartX), static_cast<float>(chunkStartY) }; }
 	sf::Vector2f getMaxVector() const { return { static_cast<float>(chunkEndX),static_cast<float>(chunkEndY) }; }
 
-	//Surrounding Nodes for updating
-	void searchLocalArea(Node*& _startNode, int iterations_);
-
 	//Debug wait
 	void wait(int time);
 
@@ -38,28 +34,28 @@ public:
 	void FindLand(sf::RenderWindow& m_window);
 	void MapIsland(int _startIndex, bool saveIslandData, sf::RenderWindow& window);
 	void SaveIslandData(sf::RenderWindow& window);
-	void removeWorldEdges(Node* _currentNode) const;
-	void UnMarkNodes();
+	void removeWorldEdges(std::shared_ptr<Node>& _currentNode) const;
+	void UnMarkNodes() const;
 
 	//Tile rules
-	void FilterTiles(Node* _currentNode) const;
-	int FollowsPatterns(const Node* _currentNode, const std::vector<std::vector<std::pair<int, bool>>>& _pattern) const;
-	bool FilterWaterTiles(const Node* _currentNode)const;
-	bool filterUndesiredTiles(const Node* _currentNode) const;
-	bool CheckPattern(const Node* _currentNode, const std::vector<std::pair<int, bool>>& _pattern) const;
+	void FilterTiles(std::shared_ptr<Node>& _currentNode) const;
+	int FollowsPatterns(const std::shared_ptr<Node>& _currentNode, const std::vector<std::vector<std::pair<int, bool>>>& _pattern) const;
+	bool FilterWaterTiles(const std::shared_ptr<Node>& _currentNode)const;
+	bool filterUndesiredTiles(const std::shared_ptr<Node>& _currentNode) const;
+	bool CheckPattern(const std::shared_ptr<Node>& _currentNode, const std::vector<std::pair<int, bool>>& _pattern) const;
 
+	//removes undesired jutting tiles
+	void replaceUndesiredLand(std::shared_ptr<Node>& _node) const;
+	//sets individual node texture
+	void determineTileTexture(const std::shared_ptr<Node>& _node) const;
 
-	void replaceUndesiredLand(Node* _node) const;
-	void determineTileTexture(Node* _node) const;
+	//determines whether tile is sand land or water
+	void determineSandTileType(const std::shared_ptr<Node>& _node) const;
+	void determineLandTileType(const std::shared_ptr<Node>& _node) const;
+	void determineWaterTileType(const std::shared_ptr<Node>& _node) const;
 
-	void determineSandTileType(Node* _node) const;
-	void determineLandTileType(Node* _node) const;
-	void determineWaterTileType(Node* _node) const;
+	std::vector<std::shared_ptr<Node>> nodeGrid;
 
-	std::vector<Node*> nodeGrid;
-
-	//clear memory
-	void deleteSprites() const;
 private:
 	//std::vector<std::vector<Node*>> islandsGrid;
 
@@ -69,7 +65,5 @@ private:
 
 	int chunkStartX, chunkStartY;
 	int chunkEndX, chunkEndY;
-
-	std::vector<GameObject*> gameObjects;
 };
 

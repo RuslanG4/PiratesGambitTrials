@@ -28,7 +28,7 @@ void Boat::update(double dt)
 {
 	sf::Vector2f desiredPosition = controller->move(dt);
 
-	for (auto& node : currentPlayer->getUpdateableArea().getUpdateableNodes())
+	for (auto& node : currentPlayer->getUpdateableArea()->getUpdateableNodes())
 	{
 		if (checkCollision(node, desiredPosition))
 		{
@@ -54,7 +54,7 @@ void Boat::update(double dt)
 	}
 }
 
-bool Boat::checkCollision(Node*& _node, sf::Vector2f& _pos)
+bool Boat::checkCollision(const std::shared_ptr<Node>& _node, sf::Vector2f& _pos)
 {
 	if (_node->getIsLand()) {
 		if (Utility::collisionWithPoint(myHitbox->getPosition() + _pos, _node->getPosition(), sf::Vector2f(_node->getSize(), _node->getSize())))

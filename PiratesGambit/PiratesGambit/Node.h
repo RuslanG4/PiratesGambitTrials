@@ -2,6 +2,9 @@
 #include"Includes.h"
 #include"TextureManager.h"
 
+/// <summary>
+/// Handles individual grid nodes inside tile-map
+/// </summary>
 class Node
 {
 public:
@@ -45,7 +48,7 @@ public:
 		debugShape->setFillColor(sf::Color(123,123,123,46));
 	};
 
-	void addNeighbour(Node* t_cellId);
+	void addNeighbour(const std::shared_ptr<Node>& t_cellId);
 
 	std::shared_ptr<sf::Sprite> drawableNode; //sfml render
 	std::shared_ptr<sf::Sprite> waterBackSprite; //back texture of water
@@ -54,7 +57,7 @@ public:
 	//Getters
 	int getChunkId() const { return m_chunkId; };
 	int getID() const { return m_id; };
-	std::vector<Node*> getNeighbours() const { return m_neighbours; };
+	const std::vector<std::shared_ptr<Node>>& getNeighbours() const { return m_neighbours; };
 	bool getMarked() const{ return visited; };
 	bool getIsLand() const { return isLand; };
 	int getSize() const { return size; };
@@ -85,7 +88,7 @@ private:
 	bool visited{ false };
 	bool isLand{ false };
 
-	std::vector<Node*> m_neighbours;  
+	std::vector<std::shared_ptr<Node>> m_neighbours;
 	//							  0 3 5	
 	// structure of neighbours -> 1 X 6
 	//							  2 4 7

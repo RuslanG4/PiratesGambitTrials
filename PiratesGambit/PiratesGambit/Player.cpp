@@ -3,25 +3,24 @@
 
 void Player::update(double dt)
 {
-	bool temmp = false;
-	sf::Vector2f desiredPosition = controller->move(dt);
+	bool collision = false;
+	sf::Vector2f desiredPosition = controller->move(dt); //next position prediction
 
-	for (auto& node : updateableArea.getUpdateableNodes())
+	for (auto& node : updateableArea->getUpdateableNodes())
 	{
 		if (checkCollision(node, desiredPosition))
 		{
-			temmp = true;
+			collision = true;
 			break;
 		}
 
 	}
-	if (!temmp) {
-		controller->setCurrentPosition(controller->getPosition() + desiredPosition);
-
+	if (!collision) {
+		controller->setCurrentPosition(controller->getPosition() + desiredPosition); //set positions
 		myHitbox->setPosition(controller->getPosition());
 		body.setPosition(controller->getPosition());
 
-		if (controller->getVelocity().x < 0)
+		if (controller->getVelocity().x < 0) //sprite facing direction
 		{
 			body.setScale(-2, 2);
 		}
@@ -31,7 +30,8 @@ void Player::update(double dt)
 		}
 		
 	}
-	updatePlayerState();
+
+	updatePlayerState(); //animation
 	handlePlayerStates();
 }
 
@@ -42,7 +42,9 @@ void Player::render(sf::RenderWindow& window) const
 		window.draw(body);
 		myHitbox->render(window);
 	}
-	for (Node* node : updateableArea.getUpdateableNodes())
+
+	//debug
+	for (auto& node : updateableArea->getUpdateableNodes())
 	{
 		if (node != nullptr) {
 			window.draw(*(node->debugShape));
@@ -50,6 +52,9 @@ void Player::render(sf::RenderWindow& window) const
 	}
 }
 
+/// <summary>
+/// handles the state of player for animation and updates
+/// </summary>
 void Player::handlePlayerStates()
 {
 	switch(currentState)
@@ -63,6 +68,9 @@ void Player::handlePlayerStates()
 	}
 }
 
+///<summary>
+/// sprite sheet animation of player based on rows and cols
+///</summary>
 void Player::animatePlayer(int _colAmt, int _rowNum)
 {
 	animateTime++;
@@ -87,6 +95,9 @@ void Player::animatePlayer(int _colAmt, int _rowNum)
 	body.setTextureRect(rectSourceSprite);
 }
 
+///<summary>
+/// determines players state based on movement
+///</summary>
 void Player::updatePlayerState()
 {
 	if(Utility::magnitude(controller->getVelocity().x, controller->getVelocity().y) > 0.2f){
@@ -98,18 +109,26 @@ void Player::updatePlayerState()
 	}
 }
 
-void Player::updateUpdateableArea(Node*& _startNode, int depth)
+/// <summary>
+/// updates local area 
+/// </summary>
+/// <param name="_startNode">current node</param>
+/// <param name="depth">how wide area</param>
+void Player::updateUpdateableArea(const std::shared_ptr<Node>& _startNode, int depth) const
 {
-	updateableArea.updateVisibleNodes(_startNode, depth);
+	updateableArea->updateVisibleNodes(_startNode, depth);
 }
 
-bool Player::checkCollision(Node*& _node, sf::Vector2f& _pos)
+///<summary>
+/// Collision check with land
+///</summary>
+bool Player::checkCollision(const std::shared_ptr<Node>& _node, sf::Vector2f& _pos)
 {
 	if (!_node->getIsLand())
 	{
 		if (Utility::collisionWithNode(myHitbox->getTopLeftCorner() + _pos, myHitbox->getSize(), _node->getPosition(), _node->getSize()))
 		{
-			controller->deflect();
+			controller->deflect(); //put player back
 			myHitbox->setPosition(controller->getPosition());
 			return true;
 		}
@@ -117,14 +136,21 @@ bool Player::checkCollision(Node*& _node, sf::Vector2f& _pos)
 	return false;
 }
 
-void Player::boardBoat(std::shared_ptr<Boat>& _boat)
+///<summary>
+/// set boat to change movement and updates
+///</summary>
+void Player::boardBoat(const std::shared_ptr<Boat>& _boat)
 {
 	onBoat = true;
 	currentBoat = _boat;
 	controller->setCurrentPosition(currentBoat.lock()->getController()->getPosition());
 }
 
-void Player::disembarkBoat(Node* _node)
+/// <summary>
+/// leave current boat
+/// </summary>
+/// <param name="_node">position to drop player sprite</param>
+void Player::disembarkBoat(const std::shared_ptr<Node>& _node)
 {
 	onBoat = false;
 	currentBoat.reset();

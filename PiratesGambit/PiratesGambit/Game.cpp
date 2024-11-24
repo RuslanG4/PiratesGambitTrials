@@ -156,7 +156,7 @@ void Game::render()
 	m_window.clear(sf::Color::Black);
 
 	for (int index : visibleNodes) {
-		Node* node = myMap->getFullMap()[index];
+		std::shared_ptr<Node> node = myMap->getFullMap()[index];
 
 		m_window.draw(*(node->waterBackSprite));
 		m_window.draw(*(node->drawableNode));
@@ -240,7 +240,7 @@ void Game::handleKeyInput()
 		{
 			keyUp = false;
 			if (!myPlayer->isOnBoat()) {
-				for (auto& node : myPlayer->getUpdateableArea().getUpdateableNodes())
+				for (auto& node : myPlayer->getUpdateableArea()->getUpdateableNodes())
 				{
 					if (node == playerBoat->getDockedNode())
 					{
@@ -250,7 +250,7 @@ void Game::handleKeyInput()
 			}
 			else
 			{
-				for (auto& node : myPlayer->getUpdateableArea().getUpdateableNodes())
+				for (auto& node : myPlayer->getUpdateableArea()->getUpdateableNodes())
 				{
 					if (node->getIsLand())
 					{
@@ -271,7 +271,7 @@ void Game::handleKeyInput()
 
 void Game::interactWithObjects()
 {
-	for (auto& node : myPlayer->getUpdateableArea().getUpdateableNodes())
+	for (auto& node : myPlayer->getUpdateableArea()->getUpdateableNodes())
 	{
 		for(auto& island : myMap->getChunks()[myPlayer->getCurrentChunkID()]->getIslands())
 		{
@@ -306,7 +306,7 @@ void Game::transferInventoryItems()
 
 void Game::findCurrentNode()
 {
-	for (auto node : myMap->getChunks()[myPlayer->getCurrentChunkID()]->nodeGrid)
+	for (auto& node : myMap->getChunks()[myPlayer->getCurrentChunkID()]->nodeGrid)
 	{
 		if (Utility::collisionWithPoint(myPlayer->getPlayerController()->getPosition(), node->getPosition(), sf::Vector2f(node->getPosition().x + node->getSize(), node->getPosition().y + node->getSize())))
 		{

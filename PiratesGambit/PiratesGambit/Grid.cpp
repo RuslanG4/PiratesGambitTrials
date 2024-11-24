@@ -1,6 +1,6 @@
 #include "Grid.h"
 
-Grid::Grid(const std::vector<Node*>& gridNodes_) : nodeGrid(gridNodes_)
+Grid::Grid(const std::vector<std::shared_ptr<Node>>& gridNodes_) : nodeGrid(gridNodes_)
 {
 	chunkStartX = nodeGrid[0]->getPosition().x;
 	chunkEndX = nodeGrid[nodeGrid.size() - 1]->getPosition().x + (nodeGrid[0]->getSize());
@@ -9,9 +9,13 @@ Grid::Grid(const std::vector<Node*>& gridNodes_) : nodeGrid(gridNodes_)
 	chunkEndY = nodeGrid[nodeGrid.size() - 1]->getPosition().y + (nodeGrid[0]->getSize());
 }
 
+/// <summary>
+/// renders nodes for visual debugging in generation
+/// </summary>
+/// <param name="_window">sfml render window</param>
 void Grid::drawGrid(sf::RenderWindow& _window) const
 {
-	for(auto node : nodeGrid)
+	for(auto& node : nodeGrid)
 	{
 		if(node->waterBackSprite && node->drawableNode)
 		{
@@ -22,6 +26,10 @@ void Grid::drawGrid(sf::RenderWindow& _window) const
 	}
 }
 
+/// <summary>
+/// passes render window to island in order to draw objects
+/// </summary>
+/// <param name="_window">sfml render window</param>
 void Grid::drawGameObject(sf::RenderWindow& _window) const
 {
 	for(auto& island : islands)
@@ -30,6 +38,9 @@ void Grid::drawGameObject(sf::RenderWindow& _window) const
 	}
 }
 
+/// <summary>
+/// updates islands
+/// </summary>
 void Grid::updateIslands() const
 {
 	for (auto& island : islands)
@@ -38,7 +49,11 @@ void Grid::updateIslands() const
 	}
 }
 
-void Grid::FilterTiles(Node* _currentNode) const
+/// <summary>
+/// Determines the state of an individual tile
+/// </summary>
+/// <param name="_currentNode"></param>
+void Grid::FilterTiles(std::shared_ptr<Node>& _currentNode) const
 {
 	if (filterUndesiredTiles(_currentNode))
 	{
@@ -54,8 +69,10 @@ void Grid::FilterTiles(Node* _currentNode) const
 	determineTileTexture(_currentNode);
 }
 
-//Checks sand tile texture rules
-int Grid::FollowsPatterns(const Node* _currentNode, const std::vector<std::vector<std::pair<int, bool>>>& _pattern) const
+///<summary>
+///Checks sand tile texture rules
+///</summary>
+int Grid::FollowsPatterns(const std::shared_ptr<Node>& _currentNode, const std::vector<std::vector<std::pair<int, bool>>>& _pattern) const
 {
 	for(int currentPattern = 0; currentPattern < _pattern.size(); currentPattern++)
 	{
@@ -67,23 +84,30 @@ int Grid::FollowsPatterns(const Node* _currentNode, const std::vector<std::vecto
 	return -1;
 }
 
-bool Grid::FilterWaterTiles(const Node* _currentNode) const
+///<summary>
+/// Checks water tile texture rules
+///</summary>
+bool Grid::FilterWaterTiles(const std::shared_ptr<Node>& _currentNode) const
 {
 	return std::ranges::any_of(undesiredLandTiles, [&](const auto& pattern) {
 		return CheckPattern(_currentNode, pattern);
 		});
 }
 
-//checks undesired tile rules
-bool Grid::filterUndesiredTiles(const Node* _currentNode) const
+///<summary>
+/// Checks undesired tile rules
+///</summary>
+bool Grid::filterUndesiredTiles(const std::shared_ptr<Node>& _currentNode) const
 {
 	return std::ranges::any_of(undesiredTiles, [&](const auto& pattern) {
 		return CheckPattern(_currentNode, pattern);
 		});
 }
 
-//takes in patterns and corss checks neighbours to see if match
-bool Grid::CheckPattern(const Node* _currentNode, const std::vector<std::pair<int, bool>>& _pattern) const
+///<summary>
+/// takes in patterns and cross checks neighbours to see if match
+///</summary>
+bool Grid::CheckPattern(const std::shared_ptr<Node>& _currentNode, const std::vector<std::pair<int, bool>>& _pattern) const
 {
 	int patternCount = 0;
 	for (int i = 0; i < _pattern.size(); i++)
@@ -109,34 +133,10 @@ bool Grid::CheckPattern(const Node* _currentNode, const std::vector<std::pair<in
 	return false;
 }
 
-void Grid::searchLocalArea(Node*& _startNode, int iterations_)
-{
-	UnMarkNodes();
-
-	std::queue <Node*> nodeQueue;
-	int currentIteration = 0;
-	nodeQueue.push(_startNode);
-	nodeQueue.front()->setMarked();
-
-	// loop through the queue while there are nodes in it.
-	while (!nodeQueue.empty() && currentIteration< iterations_)
-	{
-		nodeQueue.front()->debugShape->setFillColor(sf::Color(223, 123, 123, 66));
-		currentIteration++;
-		auto neighbours = nodeQueue.front()->getNeighbours();
-		for (auto neighbour : neighbours)
-		{
-			if (neighbour->getMarked() == false)
-			{
-				neighbour->setMarked();
-				nodeQueue.push(neighbour);
-			}
-		}
-		nodeQueue.pop();
-	}
-}
-
-//debug wait timer
+/// <summary>
+/// Slow down for visual debugging for generation
+/// </summary>
+/// <param name="time">how slow</param>
 void Grid::wait(int time)
 {
 	int timer = 0;
@@ -151,6 +151,10 @@ void Grid::wait(int time)
 	}
 }
 
+/// <summary>
+/// Celuar Automata algorithm for shape generation
+/// </summary>
+/// <param name="_interations">How many times we do algorithm</param>
 void Grid::ApplyCellular(int _interations, sf::RenderWindow& m_window)
 {
 	for(int i =0;i<_interations;i++)
@@ -167,7 +171,7 @@ void Grid::ApplyCellular(int _interations, sf::RenderWindow& m_window)
 		{
 			int landCount = 0;
 
-			for(auto neighbour : node->getNeighbours())
+			for(auto& neighbour : node->getNeighbours())
 			{
 				if(neighbour->getIsLand())
 				{
@@ -188,7 +192,7 @@ void Grid::ApplyCellular(int _interations, sf::RenderWindow& m_window)
 				node->setLand(false);
 			}
 		}
-		// Now apply changes back to the original nodeGrid
+		//apply changes back to the original nodeGrid
 		for (size_t j = 0; j < nodeGrid.size(); j++)
 		{
 			nodeGrid[j]->setLand(tempGrid[j]->getIsLand());
@@ -200,20 +204,22 @@ void Grid::ApplyCellular(int _interations, sf::RenderWindow& m_window)
 			m_window.display();
 			wait(1);*/
 		}
-		// Clean up the temporary grid
+		// delete temp deep copied nodes 
 		for (Node* node : tempGrid)
 		{
-			delete node;  // Free memory for deep-copied nodes
+			delete node;  
 		}
 	}
 
 	FindLand(m_window);
 }
 
-//looks for any land in grid
+///<summary>
+/// Iterated through chunk to find any land nodes to start island mapping
+///</summary>
 void Grid::FindLand(sf::RenderWindow& m_window)
 {
-	for(auto node : nodeGrid)
+	for(auto& node : nodeGrid)
 	{
 	/*	drawGrid(m_window);
 		m_window.display();
@@ -222,18 +228,23 @@ void Grid::FindLand(sf::RenderWindow& m_window)
 
 		if(node->getMarked() == false && node->getIsLand())
 		{
-			MapIsland(node->getChunkId(),false ,m_window);
+			MapIsland(node->getChunkId(),false ,m_window); //start island mapping
 		}
 	}
 	UnMarkNodes();
 	SaveIslandData(m_window);
 }
 
-///Kind of WFC but not really
+/// <summary>
+/// Wave function collapse variation to generate tile textures
+/// </summary>
+/// <param name="_startIndex">Begin node</param>
+/// <param name="saveIslandData">If we want to store in islands vector</param>
+/// <param name="window">sfml window</param>
 void Grid::MapIsland(int _startIndex,bool saveIslandData, sf::RenderWindow & window)
 {
-	std::vector<Node*> currentIsland;
-	std::queue <Node*> nodeQueue;
+	std::vector<std::shared_ptr<Node>> currentIsland;
+	std::queue<std::shared_ptr<Node>> nodeQueue;
 
 	nodeQueue.push(nodeGrid[_startIndex]);
 	nodeQueue.front()->setMarked();
@@ -246,13 +257,12 @@ void Grid::MapIsland(int _startIndex,bool saveIslandData, sf::RenderWindow & win
 	// loop through the queue while there are nodes in it.
 	while (!nodeQueue.empty())
 	{
-		FilterTiles(nodeQueue.front());
+		FilterTiles(nodeQueue.front()); //determine tile 
 
 		//nodeQueue.front()->debugShape.setFillColor(sf::Color(123, 123, 123, 66));
 		//drawGrid(window);
 		//window.display();
 		//wait(1);
-
 
 		auto neighbours = nodeQueue.front()->getNeighbours();
 		for (auto neighbour : neighbours)
@@ -275,7 +285,6 @@ void Grid::MapIsland(int _startIndex,bool saveIslandData, sf::RenderWindow & win
 				}
 			}
 		}
-		
 		nodeQueue.pop();
 		
 	}
@@ -286,10 +295,12 @@ void Grid::MapIsland(int _startIndex,bool saveIslandData, sf::RenderWindow & win
 	
 }
 
-//Saves islands to a node vector for future use
+///<summary>
+/// Saves nodes to island 
+///</summary>
 void Grid::SaveIslandData(sf::RenderWindow& window)
 {
-	for (auto node : nodeGrid)
+	for (auto& node : nodeGrid)
 	{
 		if (node->getMarked() == false && node->getIsLand())
 		{
@@ -298,8 +309,11 @@ void Grid::SaveIslandData(sf::RenderWindow& window)
 	}
 }
 
-//removes edge tiles so chunk edge is always water
-void Grid::removeWorldEdges(Node* _currentNode) const
+/// <summary>
+/// removes edge tiles so chunk edge is always water
+/// </summary>
+/// <param name="_currentNode"></param>
+void Grid::removeWorldEdges(std::shared_ptr<Node>& _currentNode) const
 {
 	_currentNode->setParentTileType(WATER);
 	_currentNode->setTileType(DEFAULT_WATER);
@@ -307,24 +321,30 @@ void Grid::removeWorldEdges(Node* _currentNode) const
 	determineTileTexture(_currentNode);
 }
 
-void Grid::UnMarkNodes()
+///<summary>
+/// unmarks nodes for other graph algorithms
+///</summary>
+void Grid::UnMarkNodes() const
 {
-	for (auto node : nodeGrid)
+	for (auto& node : nodeGrid)
 	{
 		node->resetMarked();
 		//node->debugShape->setFillColor(sf::Color::Transparent);
 	}
 }
 
-//removes edge cases of single nodes sticking out, expands on them
-void Grid::replaceUndesiredLand(Node* _node) const
+/// <summary>
+/// removes edge cases of single nodes sticking out, expands on them
+/// </summary>
+/// <param name="_node">start node</param>
+void Grid::replaceUndesiredLand(std::shared_ptr<Node>& _node) const
 {
 	_node->resetMarked();
 	_node->setLand(false);
 	_node->setParentTileType(WATER);
 	_node->setTileType(DEFAULT_WATER);
 	determineTileTexture(_node);
-	for (auto neigh : _node->getNeighbours())
+	for (auto& neigh : _node->getNeighbours())
 	{
 		neigh->resetMarked();
 		_node->setLand(false);
@@ -334,8 +354,11 @@ void Grid::replaceUndesiredLand(Node* _node) const
 	}
 }
 
-//set texture 
-void Grid::determineTileTexture(Node* _node) const
+/// <summary>
+/// sets texture for tile based on switch
+/// </summary>
+/// <param name="_node">current node</param>
+void Grid::determineTileTexture(const std::shared_ptr<Node>& _node) const
 {
 	switch (_node->getTileType())
 	{
@@ -416,7 +439,11 @@ void Grid::determineTileTexture(Node* _node) const
 	}
 }
 
-void Grid::determineSandTileType(Node* _node) const
+/// <summary>
+///  determines what type of sand node is if follows patterns
+/// </summary>
+/// <param name="_node">current node</param>
+void Grid::determineSandTileType(const std::shared_ptr<Node>& _node) const
 {
 	switch (FollowsPatterns(_node, sandCornerPatterns))
 	{
@@ -471,7 +498,7 @@ void Grid::determineSandTileType(Node* _node) const
 	}
 }
 
-void Grid::determineLandTileType(Node* _node) const
+void Grid::determineLandTileType(const std::shared_ptr<Node>& _node) const
 {
 	int random = std::rand() % 100;
 	switch (FollowsPatterns(_node, landPatterns))
@@ -489,7 +516,7 @@ void Grid::determineLandTileType(Node* _node) const
 	}
 }
 
-void Grid::determineWaterTileType(Node* _node) const
+void Grid::determineWaterTileType(const std::shared_ptr<Node>& _node) const
 {
 	if(!_node->getIsLand())
 	{
@@ -497,14 +524,6 @@ void Grid::determineWaterTileType(Node* _node) const
 	}
 }
 
-void Grid::deleteSprites() const
-{
-	for(auto node : nodeGrid)
-	{
-		node->waterBackSprite.reset();
-		node->drawableNode.reset();
-	}
-}
 
 
 

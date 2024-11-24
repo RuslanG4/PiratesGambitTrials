@@ -1,10 +1,10 @@
 #include "UpdateableArea.h"
 
 //searches neighbours of a start node based on the depth and adds them to a set to know which nodes to immediately update
-void UpdateableArea::updateVisibleNodes(Node* _startNode, int depth)
+void UpdateableArea::updateVisibleNodes(const std::shared_ptr<Node>& _startNode, int depth)
 {
 	//debug
-	for (Node* node : updateArea) {
+	for (auto& node : updateArea) {
 		if (node != nullptr) {
 			node->debugShape->setFillColor(sf::Color::Transparent);
 		}
@@ -16,7 +16,7 @@ void UpdateableArea::updateVisibleNodes(Node* _startNode, int depth)
 	int iterations = (1 + 2 * depth) * (1 + 2 * depth);
 	int iterCount = 1;
 
-	std::queue<Node*> nodeQueue;
+	std::queue<std::shared_ptr<Node>> nodeQueue;
 	nodeQueue.push(_startNode);
 	updateArea.push_back(_startNode);
 
@@ -24,11 +24,11 @@ void UpdateableArea::updateVisibleNodes(Node* _startNode, int depth)
 	_startNode->debugShape->setFillColor(sf::Color(123, 123, 123, 180));
 
 	while (!nodeQueue.empty() && iterCount < iterations) {
-		Node* currentNode = nodeQueue.front();
+		std::shared_ptr<Node> currentNode = nodeQueue.front();
 		nodeQueue.pop();
 
 		auto neighbours = currentNode->getNeighbours();
-		for (Node* neighbour : neighbours) {
+		for (auto& neighbour : neighbours) {
 			//add node if it's not already in my area and i haven't reached my limit of iterations of neighbours
 			if (std::ranges::find(updateArea.begin(), updateArea.end(), neighbour) == updateArea.end() && iterCount < iterations) {
 

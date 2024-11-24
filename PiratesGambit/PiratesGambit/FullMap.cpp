@@ -6,6 +6,10 @@ FullMap::FullMap(sf::RenderWindow& window, const int& mapSize_)
 	initChunks(window);
 }
 
+/// <summary>
+/// Generates map based on size given with set chunk sizes
+/// </summary>
+/// <param name="mapSize_">how big you want map</param>
 void FullMap::initMap(const int& mapSize_)
 {
 	mapSize = mapSize_;
@@ -18,7 +22,7 @@ void FullMap::initMap(const int& mapSize_)
 	{
 		for (int x = 0; x < cols; x++)
 		{
-			fullMapGrid.push_back(new Node(x * nodeSize, y * nodeSize, nodeSize, false));
+			fullMapGrid.push_back(std::make_shared<Node>(x * nodeSize, y * nodeSize, nodeSize, false));
 		}
 	}
 	//Setup id's first
@@ -30,6 +34,10 @@ void FullMap::initMap(const int& mapSize_)
 	}
 }
 
+/// <summary>
+/// Seperates the map into chunks for efficiency
+/// </summary>
+/// <param name="window"></param>
 void FullMap::initChunks(sf::RenderWindow& window)
 {
 	for (int chunkY = 0; chunkY < mapSize; chunkY++)
@@ -38,7 +46,7 @@ void FullMap::initChunks(sf::RenderWindow& window)
 		{
 			int chunkIndex = chunkY * mapSize + chunkX;
 
-			std::vector<Node*> chunkNodes = populateChunk(chunkX, chunkY, 70);
+			std::vector<std::shared_ptr<Node>> chunkNodes = populateChunk(chunkX, chunkY, 70); //populate start chunk to apply cellular later
 			//Grid* chunk = new Grid(chunkNodes);
 			std::unique_ptr<Grid> chunk = std::make_unique<Grid>(chunkNodes);
 			chunk->ApplyCellular(7, window);
@@ -47,16 +55,19 @@ void FullMap::initChunks(sf::RenderWindow& window)
 		}
 	}
 }
-///Splits larger grid into chunks and assigns those a chunk ID
-std::vector<Node*> FullMap::populateChunk(int _chunkX, int _chunkY, int _density) const 
+
+///<summary>
+/// Splits larger grid into chunks and assigns those a chunk ID
+///</summary>
+std::vector<std::shared_ptr<Node>> FullMap::populateChunk(int _chunkX, int _chunkY, int _density) const
 {
-	std::vector<Node*> chunkNodes;
+	std::vector<std::shared_ptr<Node>> chunkNodes;
 	int newId = 0;
 	for (int y = 0; y < CHUNK_NODE_COLS; y++) {
 		for (int x = 0; x < CHUNK_NODE_ROWS; x++) {
 			int nodePos = (_chunkX * CHUNK_NODE_COLS + y) * (mapSize * CHUNK_NODE_ROWS) + (_chunkY * CHUNK_NODE_ROWS + x);
 
-			configureNode(fullMapGrid[nodePos], _density);
+			configureNode(fullMapGrid[nodePos], _density); //set node to land/water 
 
 			chunkNodes.push_back(fullMapGrid[nodePos]);
 			fullMapGrid[nodePos]->setChunkID(newId);
@@ -66,6 +77,9 @@ std::vector<Node*> FullMap::populateChunk(int _chunkX, int _chunkY, int _density
 	return chunkNodes;
 }
 
+///<summary>
+/// adds neighbours to every node
+///</summary>
 void FullMap::addNeighbours(int _currentNodeId) const
 {
 	const int MAX_ROWS = CHUNK_NODE_ROWS * mapSize;
@@ -101,16 +115,19 @@ void FullMap::render(sf::RenderWindow& window) const
 	}
 }
 
-void FullMap::configureNode(Node* _node, int _density)
+///<summary>
+/// Determines if node should be land or water for algorithms
+///</summary>
+void FullMap::configureNode(const std::weak_ptr<Node>& _node, int _density)
 {
 	int random = std::rand() % 100;
 	if (random > _density)
 	{
-		_node->setLand(false);
+		_node.lock()->setLand(false);
 	}
 	else
 	{
-		_node->setLand(true);
+		_node.lock()->setLand(true);
 	}
 }
 

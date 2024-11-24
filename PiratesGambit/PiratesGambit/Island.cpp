@@ -8,7 +8,7 @@ void Island::render(sf::RenderWindow& _win) const
 	}
 }
 
-void Island::update()
+void Island::update() const
 {
 	for(auto& gameObject : gameObjects)
 	{
@@ -16,10 +16,10 @@ void Island::update()
 	}
 }
 
-void Island::positionGameObjects()
+void Island::positionGameObjects() const
 {
 	bool condition = false;
-	for (auto* node : landNodes)
+	for (auto& node : landNodes)
 	{
 		if (node->getParentTileType() == LAND)
 		{

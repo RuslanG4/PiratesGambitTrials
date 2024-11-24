@@ -30,24 +30,24 @@ public:
 	void render(sf::RenderWindow& window) const;
 	void update(double dt);
 
-	bool checkCollision(Node*& _node, sf::Vector2f& _pos);
+	bool checkCollision(const std::shared_ptr<Node>& _node, sf::Vector2f& _pos);
 
 	sf::Vector2f getPosition() const { return position; }
 	BoatController* getController() const { return controller; }
-	Node* getDockedNode() const { return dockedNode; }
+	const std::shared_ptr<Node>& getDockedNode() const { return dockedNode; }
 
 	void addCannonBall();
 	void fireCannonBall(int _direction);
 
 	void setPosition(sf::Vector2f _pos) { position = _pos; boatSprite.setPosition(position); }
 	void setRotation(float _rotation){ boatSprite.setRotation(_rotation); }
-	void setDockedNode(Node* _node) { dockedNode = _node; }
+	void setDockedNode(const std::shared_ptr<Node>& _node) { dockedNode = _node; }
 private:
 	sf::Vector2f position;
 	sf::Sprite boatSprite;
 
 	HitBox* myHitbox;
-	Node* dockedNode;
+	std::shared_ptr<Node> dockedNode;
 
 	std::vector<std::shared_ptr<CannonBall>> cannonBalls;
 	int nextAvailableCannonBall{ 0 };
