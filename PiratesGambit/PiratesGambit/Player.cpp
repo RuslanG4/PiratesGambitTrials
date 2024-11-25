@@ -60,39 +60,12 @@ void Player::handlePlayerStates()
 	switch(currentState)
 	{
 	case IDLE:
-		animatePlayer(4,0);
+		Animator::getInstance().AnimateSprite(body, 4, 0);
 		break;
 	case WALK:
-		animatePlayer(6, 1);
+		Animator::getInstance().AnimateSprite(body, 6, 1);
 		break;
 	}
-}
-
-///<summary>
-/// sprite sheet animation of player based on rows and cols
-///</summary>
-void Player::animatePlayer(int _colAmt, int _rowNum)
-{
-	animateTime++;
-	if (animateTime > 8)//8 is the speed at how fast they animate
-	{
-		currentFrame++;
-		if (currentFrame > _colAmt - 1)
-		{
-			currentFrame = 0;
-
-		}
-		animateTime = 0;
-	}
-	int col = currentFrame % _colAmt;
-	int row = _rowNum;
-
-	sf::IntRect rectSourceSprite;
-	rectSourceSprite.height = 32;
-	rectSourceSprite.width = 32;
-	rectSourceSprite.left = col * rectSourceSprite.width;
-	rectSourceSprite.top = row * rectSourceSprite.height;
-	body.setTextureRect(rectSourceSprite);
 }
 
 ///<summary>

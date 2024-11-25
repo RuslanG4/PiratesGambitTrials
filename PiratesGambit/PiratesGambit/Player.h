@@ -6,14 +6,12 @@
 #include "Node.h"
 #include "HitBox.h"
 #include "Inventory.h"
+#include "Animator.h"
+#include "Enums.h"
+#include"Army.h"
+
 
 class Boat; //forward ref
-
-enum PlayerState
-{
-	IDLE,
-	WALK
-};
 
 class Player
 {
@@ -23,6 +21,7 @@ public:
 		controller = new PlayerController(_pos);
 		inventory = std::make_unique<Inventory>();
 		updateableArea = std::make_unique<UpdateableArea>();
+		playerArmy = std::make_unique<Army>();
 
 		//inventory = new Inventory();
 
@@ -47,7 +46,6 @@ public:
 
 	//animation
 	void handlePlayerStates();
-	void animatePlayer(int _colAmt, int _rowNum);
 	void updatePlayerState();
 
 	//Current Node + chunk
@@ -75,18 +73,23 @@ public:
 	void disembarkBoat(const std::shared_ptr<Node>& _node);
 	bool isOnBoat() const { return onBoat; }
 
+	//Army
+	const std::unique_ptr<Army>& getArmy() const { return playerArmy; }
+
 private:
 	sf::Sprite body;
 
 	PlayerController* controller; //control player
-	PlayerState currentState = PlayerState::IDLE; //animation state
+	UnitState currentState = UnitState::IDLE; //animation state
 
 	std::unique_ptr<Inventory> inventory; //player inventory
 
 	HitBox* myHitbox; //hitbox for collisions
 
 	std::unique_ptr<UpdateableArea> updateableArea; //update area around player
-	std::shared_ptr<Node> currentNode{nullptr}; 
+	std::shared_ptr<Node> currentNode{nullptr};
+
+	std::unique_ptr<Army> playerArmy;
 
 	int currentChunkId{-99};
 

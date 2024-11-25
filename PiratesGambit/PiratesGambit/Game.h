@@ -13,6 +13,8 @@
 #include"Barrel.h"
 #include"Mouse.h"
 
+#include "BattleScene.h"
+
 
 class Game
 {
@@ -65,6 +67,10 @@ private:
 	Camera myCamera;
 
 	std::weak_ptr<GameObject> currentObjectInteract;
+
+	//battle scene
+	std::unique_ptr<BattleScene> battleScene;
+	bool battle = false;
 
 };
 

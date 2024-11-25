@@ -23,6 +23,8 @@ Game::Game() :
 
 	findCurrentChunk();
 
+	battleScene = std::make_unique<BattleScene>(myPlayer);
+
 	//myPlayer->setSprite(textureManager.getTexture("PLAYER_BOAT"));
 }
 
@@ -89,7 +91,9 @@ void Game::processEvents()
 		if (sf::Event::MouseButtonPressed == newEvent.type) //user pressed mouse
 		{
 			Mouse::getInstance().processMouse(newEvent);
-			transferInventoryItems();
+			if (!battle) {
+				transferInventoryItems();
+			}
 		}
 		if (sf::Event::MouseButtonReleased == newEvent.type)
 		{
@@ -127,23 +131,28 @@ void Game::processKeyUp(sf::Event t_event)
 void Game::update(sf::Time t_deltaTime)
 {
 	Mouse::getInstance().update(m_window);
+	if (!battle) {
+		updateVisableNodes();
+		findCurrentChunk();
+		findCurrentNode();
 
-	updateVisableNodes();
-	findCurrentChunk();
-	findCurrentNode();
+		handleKeyInput();
+		myMap->getChunks()[myPlayer->getCurrentChunkID()]->updateIslands();
+		//
+		if (myPlayer->isOnBoat())
+		{
+			playerBoat->update(t_deltaTime.asMilliseconds());
+		}
+		else
+		{
+			myPlayer->update(t_deltaTime.asMilliseconds());
+		}
 
-	handleKeyInput();
-	myMap->getChunks()[myPlayer->getCurrentChunkID()]->updateIslands();
-	//
-	if(myPlayer->isOnBoat())
-	{
-		playerBoat->update(t_deltaTime.asMilliseconds());
-	}else
-	{
-		myPlayer->update(t_deltaTime.asMilliseconds());
+		myCamera.setCameraCenter(myPlayer->getPlayerController()->getPosition());
 	}
-	
-	myCamera.setCameraCenter(myPlayer->getPlayerController()->getPosition());
+	else {
+		battleScene->update();
+	}
 
 }
 
@@ -152,20 +161,25 @@ void Game::update(sf::Time t_deltaTime)
 /// </summary>
 void Game::render()
 {
-	m_window.setView(myCamera.getCamera());
-	m_window.clear(sf::Color::Black);
+	if (!battle) {
+		m_window.setView(myCamera.getCamera());
+		m_window.clear(sf::Color::Black);
 
-	for (int index : visibleNodes) {
-		std::shared_ptr<Node> node = myMap->getFullMap()[index];
+		for (int index : visibleNodes) {
+			std::shared_ptr<Node> node = myMap->getFullMap()[index];
 
-		m_window.draw(*(node->waterBackSprite));
-		m_window.draw(*(node->drawableNode));
+			m_window.draw(*(node->waterBackSprite));
+			m_window.draw(*(node->drawableNode));
+		}
+
+		myPlayer->render(m_window);
+		playerBoat->render(m_window);
+
+		myMap->getChunks()[myPlayer->getCurrentChunkID()]->drawGameObject(m_window);
+	}else
+	{
+		battleScene->render(m_window);
 	}
-	
-	myPlayer->render(m_window);
-	playerBoat->render(m_window);
-
-	myMap->getChunks()[myPlayer->getCurrentChunkID()]->drawGameObject(m_window);
 
 	m_window.display();
 }

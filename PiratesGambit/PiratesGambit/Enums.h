@@ -25,3 +25,9 @@ enum TileType
 	DEFAULT_SAND,
 	DEFAULT_WATER
 };
+
+enum UnitState
+{
+	IDLE,
+	WALK
+};

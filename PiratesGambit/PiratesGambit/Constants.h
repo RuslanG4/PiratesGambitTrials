@@ -33,6 +33,8 @@ const char* const CANNON_BALL_ICON = "ASSETS\\IMAGES\\ICONS\\CANNON_BALL.png";
 
 
 const char* const PIRATE_CAPTAIN = "ASSETS\\IMAGES\\Pirates\\MiniPirateCaptain.png";
+const char* const BUCCANEER = "ASSETS\\IMAGES\\Pirates\\MiniPirateCrew.png";
+const char* const GUNNER = "ASSETS\\IMAGES\\Pirates\\MiniPirateGunner.png";
 
 const char* const FONT = "ASSETS\\FONTS\\ComicNeueSansID.ttf";
 

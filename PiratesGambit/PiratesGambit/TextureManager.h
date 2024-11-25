@@ -70,8 +70,10 @@ private:
         loadTexture("PLAYER_BOAT_DAMAGED", PLAYER_DAMAGED);
         loadTexture("PLAYER_BOAT_PLASTERED", PLAYER_PLASTERED);
         loadTexture("CANNON_BALL", CANNON_BALL);
-        //
+        //Pirate
         loadTexture("PIRATE_CAPTAIN", PIRATE_CAPTAIN);
+        loadTexture("BUCCANEER", BUCCANEER);
+        loadTexture("GUNNER", GUNNER);
         //
         loadTexture("BARREL", BARREL);
         //ICONS
