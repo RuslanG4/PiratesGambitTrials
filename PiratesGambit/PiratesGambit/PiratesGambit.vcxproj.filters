@@ -61,6 +61,24 @@
     <Filter Include="Source Files\Singletons">
       <UniqueIdentifier>{ec436789-1d06-4ede-b57e-91d6b1051624}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Army">
+      <UniqueIdentifier>{3ada86ba-60fd-4d63-b048-ed5e6280c291}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Army">
+      <UniqueIdentifier>{6235c117-becc-48f4-b7c7-46895cad855e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Army\Units">
+      <UniqueIdentifier>{19af9c9a-5f95-476d-8d19-bdfe6e6dd19d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Army\Units">
+      <UniqueIdentifier>{1928ab4e-c7e2-47d6-bffc-fb73bf317e75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Battle">
+      <UniqueIdentifier>{7f669997-01da-47ee-9c18-14732bd4d9ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Battle">
+      <UniqueIdentifier>{934d50bd-0a6d-43a2-a756-5340b98f3c92}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -132,26 +150,29 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files\Singletons</Filter>
     </ClCompile>
-    <ClCompile Include="PirateUnit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Buccaneer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Army.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BattleScene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BattleGridNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Gunner.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Animator.cpp">
       <Filter>Source Files\Singletons</Filter>
+    </ClCompile>
+    <ClCompile Include="Army.cpp">
+      <Filter>Source Files\Army</Filter>
+    </ClCompile>
+    <ClCompile Include="Buccaneer.cpp">
+      <Filter>Source Files\Army\Units</Filter>
+    </ClCompile>
+    <ClCompile Include="Gunner.cpp">
+      <Filter>Source Files\Army\Units</Filter>
+    </ClCompile>
+    <ClCompile Include="PirateUnit.cpp">
+      <Filter>Source Files\Army\Units</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleScene.cpp">
+      <Filter>Source Files\Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleGridNode.cpp">
+      <Filter>Source Files\Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseNode.cpp">
+      <Filter>Source Files\Map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -236,29 +257,35 @@
     <ClInclude Include="TextureManager.h">
       <Filter>Header Files\Singletons</Filter>
     </ClInclude>
-    <ClInclude Include="PirateUnit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Buccaneer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Army.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PirateUnits.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BattleScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BattleGridNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Gunner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Animator.h">
       <Filter>Header Files\Singletons</Filter>
+    </ClInclude>
+    <ClInclude Include="Army.h">
+      <Filter>Header Files\Army</Filter>
+    </ClInclude>
+    <ClInclude Include="Gunner.h">
+      <Filter>Header Files\Army\Units</Filter>
+    </ClInclude>
+    <ClInclude Include="Buccaneer.h">
+      <Filter>Header Files\Army\Units</Filter>
+    </ClInclude>
+    <ClInclude Include="PirateUnit.h">
+      <Filter>Header Files\Army\Units</Filter>
+    </ClInclude>
+    <ClInclude Include="PirateUnits.h">
+      <Filter>Header Files\Globals</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleScene.h">
+      <Filter>Header Files\Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleGridNode.h">
+      <Filter>Header Files\Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="Structs.h">
+      <Filter>Header Files\Globals</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseNode.h">
+      <Filter>Header Files\Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

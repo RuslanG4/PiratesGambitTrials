@@ -32,7 +32,7 @@ void Player::update(double dt)
 	}
 
 	updatePlayerState(); //animation
-	handlePlayerStates();
+	handlePlayerStates(dt);
 }
 
 void Player::render(sf::RenderWindow& window) const
@@ -55,15 +55,15 @@ void Player::render(sf::RenderWindow& window) const
 /// <summary>
 /// handles the state of player for animation and updates
 /// </summary>
-void Player::handlePlayerStates()
+void Player::handlePlayerStates(double dt)
 {
 	switch(currentState)
 	{
 	case IDLE:
-		Animator::getInstance().AnimateSprite(body, 4, 0);
+		Animator::getInstance().AnimateSprite(body, animationState, 4, 0,dt);
 		break;
 	case WALK:
-		Animator::getInstance().AnimateSprite(body, 6, 1);
+		Animator::getInstance().AnimateSprite(body, animationState, 6, 1,dt);
 		break;
 	}
 }

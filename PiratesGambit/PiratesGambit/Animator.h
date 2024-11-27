@@ -1,5 +1,6 @@
 #pragma once
 #include "Includes.h"
+#include "Structs.h"
 
 class Animator
 {
@@ -11,7 +12,7 @@ public:
 
 	void update(sf::RenderWindow& _win);
 
-	void AnimateSprite(sf::Sprite& _sprite,int _colAmt, int _rowNum);
+	void AnimateSprite(sf::Sprite& _sprite, AnimationState& _state,int _colAmt, int _rowNum, float _dt);
 
 	Animator(Animator const&) = delete;
 private:
@@ -19,7 +20,7 @@ private:
 	{
 
 	};
-	int animateTime{0};
+	float animateTime{0};
 	int currentFrame{ 0 };
 };
 

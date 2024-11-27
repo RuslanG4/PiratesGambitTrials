@@ -31,3 +31,10 @@ enum UnitState
 	IDLE,
 	WALK
 };
+
+enum BattleState
+{
+	PREP,
+	BATTLE,
+	END
+};

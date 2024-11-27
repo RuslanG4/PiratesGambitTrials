@@ -31,7 +31,7 @@ private:
 	void processEvents();
 	void processKeys(sf::Event t_event);
 	void processKeyUp(sf::Event t_event);
-	void update(sf::Time t_deltaTime);
+	void update(double t_deltaTime);
 	void render();
 	void initialise();
 
@@ -70,7 +70,7 @@ private:
 
 	//battle scene
 	std::unique_ptr<BattleScene> battleScene;
-	bool battle = false;
+	bool battle = true;
 
 };
 

@@ -11,24 +11,26 @@ void Buccaneer::init()
 	rectSourceSprite.top = 0;
 	sprite.setTextureRect(rectSourceSprite);
 
-	sprite.setScale(2, 2);
+	sprite.setScale(3, 3);
 	sprite.setOrigin(16, 24);
+
+	speed = 4;
 }
 
-void Buccaneer::animateSprite()
+void Buccaneer::animateSprite(float _dt)
 {
 	switch (currentState)
 	{
 	case IDLE:
-		Animator::getInstance().AnimateSprite(sprite, 4, 0);
+		Animator::getInstance().AnimateSprite(sprite, animationState, 4, 0, _dt);
 		break;
 	case WALK:
-		Animator::getInstance().AnimateSprite(sprite, 6, 1);
+		Animator::getInstance().AnimateSprite(sprite, animationState, 6, 1, _dt);
 		break;
 	}
 }
 
-void Buccaneer::update()
+void Buccaneer::update(float _dt)
 {
-	animateSprite();
+	animateSprite(_dt);
 }

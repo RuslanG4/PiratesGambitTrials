@@ -9,6 +9,7 @@
 #include "Animator.h"
 #include "Enums.h"
 #include"Army.h"
+#include"Structs.h"
 
 
 class Boat; //forward ref
@@ -45,7 +46,7 @@ public:
 	void render(sf::RenderWindow& window) const;
 
 	//animation
-	void handlePlayerStates();
+	void handlePlayerStates(double dt);
 	void updatePlayerState();
 
 	//Current Node + chunk
@@ -78,6 +79,7 @@ public:
 
 private:
 	sf::Sprite body;
+	AnimationState animationState;
 
 	PlayerController* controller; //control player
 	UnitState currentState = UnitState::IDLE; //animation state

@@ -10,8 +10,8 @@ public:
 	};
 
 	void init();
-	void animateSprite() override;
-	void update() override;
+	void animateSprite(float _dt) override;
+	void update(float _dt) override;
 
 private:
 };

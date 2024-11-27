@@ -1,19 +1,22 @@
 #include "Animator.h"
 
-void Animator::AnimateSprite(sf::Sprite& _sprite, int _colAmt, int _rowNum)
+void Animator::AnimateSprite(sf::Sprite& _sprite, AnimationState& _state, int _colAmt, int _rowNum, float _dt)
 {
-	animateTime++;
-	if (animateTime > 8)//8 is the speed at how fast they animate
+	const float frameDuration = 0.1f;
+
+	_state.elapsedTime += _dt * 0.001;
+
+	if (_state.elapsedTime >= frameDuration)
 	{
-		currentFrame++;
-		if (currentFrame > _colAmt - 1)
+		_state.currentFrame++;
+		if (_state.currentFrame > _colAmt - 1)
 		{
-			currentFrame = 0;
+			_state.currentFrame = 0;
 
 		}
-		animateTime = 0;
+		_state.elapsedTime = 0;
 	}
-	int col = currentFrame % _colAmt;
+	int col = _state.currentFrame % _colAmt;
 	int row = _rowNum;
 
 	sf::IntRect rectSourceSprite;

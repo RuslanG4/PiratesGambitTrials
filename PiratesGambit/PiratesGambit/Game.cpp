@@ -59,7 +59,7 @@ void Game::run()
 		{
 			timeSinceLastUpdate -= timePerFrame;
 			processEvents(); // at least 60 fps
-			update(timePerFrame); //60 fps
+			update(timePerFrame.asMilliseconds()); //60 fps
 		}
 		render(); // as many as possible
 	}
@@ -128,7 +128,7 @@ void Game::processKeyUp(sf::Event t_event)
 /// Update the game world
 /// </summary>
 /// <param name="t_deltaTime">time interval per frame</param>
-void Game::update(sf::Time t_deltaTime)
+void Game::update(double t_deltaTime)
 {
 	Mouse::getInstance().update(m_window);
 	if (!battle) {
@@ -141,17 +141,17 @@ void Game::update(sf::Time t_deltaTime)
 		//
 		if (myPlayer->isOnBoat())
 		{
-			playerBoat->update(t_deltaTime.asMilliseconds());
+			playerBoat->update(t_deltaTime);
 		}
 		else
 		{
-			myPlayer->update(t_deltaTime.asMilliseconds());
+			myPlayer->update(t_deltaTime);
 		}
 
 		myCamera.setCameraCenter(myPlayer->getPlayerController()->getPosition());
 	}
 	else {
-		battleScene->update();
+		battleScene->update(t_deltaTime);
 	}
 
 }
@@ -328,6 +328,7 @@ void Game::findCurrentNode()
 			{
 				myPlayer->setCurrentNode(node);
 				myPlayer->updateUpdateableArea(node, 1);
+				std::cout << myPlayer->getCurrentNode()->getID() << "\n";
 			}
 		}
 	}
