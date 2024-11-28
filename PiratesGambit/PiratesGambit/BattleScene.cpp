@@ -25,26 +25,28 @@ void BattleScene::update(float _dt)
 		unit->update(_dt);
 	}
 	detectMouse();
-	if (moveUnit)
+	if (move)
 	{
-		sf::Vector2f distance = path[currentNodeInPath]->getMidPoint()- playerRef->getArmy()->getArmy()[5]->getPosition();
-		if(Utility::magnitude(distance.x , distance.y) < 0.1)
+		sf::Vector2f distance = path[currentNodeInPath]->getMidPoint() - playerRef->getArmy()->getArmy()[5]->getPosition();
+		std::cout << Utility::magnitude(distance.x, distance.y)<<"\n";
+		if (Utility::magnitude(distance.x, distance.y) < 2)
 		{
 			currentNodeInPath++;
-			std::cout << currentNodeInPath;
-			if(currentNodeInPath == path.size())
+			if (currentNodeInPath == path.size())
 			{
-				moveUnit = false;
-				currentNodeInPath--;
+				move = false;
+				battleGrid[playerRef->getArmy()->getArmy()[5]->getCurrentNodeId()]->updateOccupied(false);
+				playerRef->getArmy()->getArmy()[5]->setCurrentNodeId(path[currentNodeInPath - 1]->getID());
+				createMoveableArea(playerRef->getArmy()->getArmy()[5]);
+				currentNodeInPath = 0;
+				distance = { 0.0,0.0 };
+
 			}
 			else {
 				distance = path[currentNodeInPath]->getMidPoint() - playerRef->getArmy()->getArmy()[5]->getPosition();
 			}
 		}
-		if (moveUnit) {
-			playerRef->getArmy()->getArmy()[5]->moveUnit(Utility::unitVector2D(distance));
-		}
-
+		playerRef->getArmy()->getArmy()[5]->moveUnit(Utility::unitVector2D(distance));
 	}
 }
 
@@ -86,14 +88,19 @@ void BattleScene::initialiseBattleGrid()
 
 void BattleScene::addNeighbours(int _currentNodeId) const
 {
-	int row = _currentNodeId / rowAmount;
+	int row = _currentNodeId / colAmount;
 	int col = _currentNodeId % colAmount;
 	int neighbourIndex = -1;
+
+	if(_currentNodeId ==60)
+	{
+		int d = 0;
+	}
 
 	//This neighbour algoritihim prioritises vertical/hjorizontal then diagonal
 	std::array<int, 8> directionOrder
 	{
-		1,2,3,5,6,7,8 //exclude 4 since that is our cell
+		0,1,2,3,5,6,7,8 //exclude 4 since that is our cell
 	};
 	for (auto& direction : directionOrder) {
 
@@ -124,13 +131,12 @@ void BattleScene::createMoveableArea(const std::unique_ptr<PirateUnit>& _unit)
 		auto [currentNode, currentDistance] = nodeQueue.front();
 		nodeQueue.pop();
 
-		if (currentDistance >= 4)
+		if (currentDistance >= _unit->getSpeed())
 			continue;
 
 		auto neighbours = currentNode->getNeighbours();
 		for (auto& neighbour : neighbours)
 		{
-			int d = neighbour.second % 2 != 0;
 			if (!neighbour.first->hasBeenTraversed() && neighbour.second % 2 != 0)
 			{
 				neighbour.first->updateTraversed(true);
@@ -159,7 +165,9 @@ void BattleScene::aStarPathFind(const std::shared_ptr<BattleGridNode>& _start, c
 	std::priority_queue<std::shared_ptr<BattleGridNode>, std::vector<std::shared_ptr<BattleGridNode>>, Compare> nodeQueue;
 
 	nodeQueue.push(_start);
-	nodeQueue.top()->setPrevious(nullptr);
+	_start->clearPrevious();
+	end->clearPrevious();
+
 
 	while (!nodeQueue.empty()) {
 		std::shared_ptr<BattleGridNode> currentTop = nodeQueue.top();
@@ -200,8 +208,9 @@ void BattleScene::createVectors(const std::shared_ptr<BattleGridNode>& end)
 	while(current->getPrevious() != nullptr)
 	{
 		path.push_back(current);
-		/*int f = current->getID();
 		current->walkableArea->setFillColor(sf::Color::Red);
+		/*int f = current->getID();
+		
 		sf::Vector2f direction = current->getPosition()-current->getPrevious()->getPosition();
 		direction = Utility::unitVector2D(direction);
 		current->getPrevious()->setMovementVector(direction);
@@ -214,6 +223,11 @@ void BattleScene::createVectors(const std::shared_ptr<BattleGridNode>& end)
 	{
 		node->updateTraversed(false);
 	}
+	for(auto& node : walkableNodes)
+	{
+		node->walkableArea->setFillColor(sf::Color::Transparent);
+	}
+	walkableNodes.clear();
 }
 
 void BattleScene::initialiseStartArea()
@@ -238,11 +252,15 @@ void BattleScene::detectMouse()
 			if (node->walkableArea->getGlobalBounds().contains(mousePos))
 			{
 				aStarPathFind(battleGrid[playerRef->getArmy()->getArmy()[5]->getCurrentNodeId()], node);
-				selectedNodeID = node->getID();
-				moveUnit = true;
+				move = true;
 			}
 		}
 	}
+}
+
+void BattleScene::moveUnit(const std::unique_ptr<PirateUnit>& _unit)
+{
+	
 }
 
 int BattleScene::getCurrentNodeID(sf::Vector2f _pos)

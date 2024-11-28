@@ -20,6 +20,7 @@ public:
 	void setCurrentNodeId(int _id) { nodeId = _id; }
 	int getCurrentNodeId()const { return nodeId; }
 	sf::Vector2f getPosition() const { return sprite.getPosition(); }
+	int getSpeed() const { return speed; }
 protected:
 	int initiative;
 	int nodeId;
@@ -27,6 +28,8 @@ protected:
 	AnimationState animationState;
 	sf::Sprite sprite;
 	UnitState currentState = IDLE;
+
+	sf::Vector2f velocity;
 private:
 };
 

@@ -27,6 +27,8 @@ public:
 	void addNeighbour(const std::shared_ptr<BaseNode>& t_cellId, int _neighbourPos) override;
 	void setPrevious(const std::shared_ptr<BaseNode>& _previous) override;
 
+	void clearPrevious() { previousNode = nullptr; }
+
 	const std::vector<std::pair<std::shared_ptr<BattleGridNode>, int>>& getNeighbours();
 	const std::shared_ptr<BattleGridNode>& getPrevious();
 

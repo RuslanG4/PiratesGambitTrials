@@ -44,6 +44,8 @@ public:
 
 	void detectMouse();
 
+	void moveUnit(const std::unique_ptr<PirateUnit>& _unit);
+
 	int getCurrentNodeID(sf::Vector2f _pos);
 private:
 	std::vector<std::shared_ptr<BattleGridNode>> battleGrid;
@@ -68,6 +70,6 @@ private:
 
 	int currentNodeInPath = 0;
 
-	bool moveUnit{ false };
+	bool move{ false };
 };
 

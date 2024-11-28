@@ -14,12 +14,19 @@ void Gunner::init()
 	sprite.setScale(3, 3);
 	sprite.setOrigin(16, 24);
 
-	speed = 3;
+	speed = 4;
 }
 
 void Gunner::update(float _dt)
 {
 	animateSprite(_dt);
+	if(Utility::magnitude(velocity.x, velocity.y) > 0)
+	{
+		currentState = WALK;
+	}else
+	{
+		currentState = IDLE;
+	}
 }
 
 void Gunner::animateSprite(float _dt)

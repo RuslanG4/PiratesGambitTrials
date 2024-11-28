@@ -9,7 +9,7 @@ sf::Vector2f Utility::unitVector2D(sf::Vector2f vec)
 {
 	float mag = magnitude(vec.x, vec.y);
 	if (mag == 0) {
-		throw std::runtime_error("Cannot normalize a zero vector.");
+		return sf::Vector2f(0, 0);
 	}
 	vec.x /= mag;
 	vec.y /= mag;
