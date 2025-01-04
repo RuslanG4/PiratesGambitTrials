@@ -67,7 +67,7 @@ void Inventory::checkMousePosition()
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(Mouse::getInstance().getMousePosition());
 	for(auto& slot : renderableInventory->getSlots())
 	{
-		if(Mouse::getInstance().getHasClicked() && slot->getIsOccupied())
+		if(Mouse::getInstance().LeftClicked() && slot->getIsOccupied())
 		{
 			if (slot->getBackgroundSprite().getGlobalBounds().contains(mousePos))
 			{

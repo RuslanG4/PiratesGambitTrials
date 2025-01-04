@@ -2,8 +2,11 @@
 #include "Includes.h"
 #include "BattleGridNode.h"
 #include"Player.h"
+#include"Enemy.h"
 #include"Enums.h"
 #include"Mouse.h"
+#include"BattleActionUI.h"
+#include"TacticsArmyUI.h"
 
 class BattleScene
 {
@@ -20,15 +23,22 @@ public:
 		}
 	};
 
-	BattleScene(const std::shared_ptr<Player>& _player) : playerRef(_player)
+	BattleScene(const std::shared_ptr<Player>& _player, const std::shared_ptr<Enemy>& _enemy) : playerRef(_player), enemyRef(_enemy)
 	{
+		UIInterface = std::make_unique<BattleActionUI>();
+		tacticsArmyUI = std::make_unique<TacticsArmyUI>(_player->getArmy());
+
+		attackIcon.setTexture(TextureManager::getInstance().getTexture("SWORD_ICON"));
+		attackIcon.setScale(-2, 2);
+		attackIcon.setOrigin(16,16);
+
 		initialiseBattleGrid();
 		initialiseStartArea();
 
-		placeUnits();
+		placeUnits(playerRef->getArmy(), false);
 	};
 
-	void placeUnits();
+	void placeUnits(const std::unique_ptr<Army>& _army, bool _isEnemy) const;
 
 	void update(float _dt);
 	void render(sf::RenderWindow& _win) const;
@@ -44,32 +54,64 @@ public:
 
 	void detectMouse();
 
-	void moveUnit(const std::unique_ptr<PirateUnit>& _unit);
+	void hoverMouseOnNode();
+	void pinpointMousePosition(sf::Vector2f _mousePos, const std::shared_ptr<BattleGridNode>& _currentNode);
+	void adjustAttackIcon(int _pinPointID);
+
+	bool isNodeInRangeOfUnit();
+
+	void moveUnit();
+
+	void preGameStartUpPlacement(sf::Vector2f _mousePos);
+
+	void clearStartArea();
+
+	PirateUnit* selectUnit(sf::Vector2f _mousePos);
 
 	int getCurrentNodeID(sf::Vector2f _pos);
 private:
 	std::vector<std::shared_ptr<BattleGridNode>> battleGrid;
+
 	std::vector<std::shared_ptr<BattleGridNode>> startArea;
+	std::vector<std::shared_ptr<BattleGridNode>> enemyStartArea;
 
 	std::vector<std::shared_ptr<BattleGridNode>> walkableNodes;
 
 	std::vector<std::shared_ptr<BattleGridNode>> path;
 
+	std::unique_ptr<BattleActionUI> UIInterface;
+
+	std::unique_ptr<TacticsArmyUI> tacticsArmyUI;
+
 	BattleState currentState = PREP;
 
+	PirateUnit* currentSelectedUnit;
+
 	std::shared_ptr<Player> playerRef;
+	std::shared_ptr<Enemy> enemyRef;
 
-	sf::Vector2f offset{ 300,200 };
+	sf::Vector2f offset{ 450,50 };
 
-	int nodeSize = 64;
+	sf::Sprite attackIcon;
 
-	int rowAmount = 12;
+	int nodeSize = 80;
+
+	int rowAmount = 8;
 	int colAmount = 14;
 
 	int selectedNodeID;
 
+	int currentHoverNodeID=0;
+
 	int currentNodeInPath = 0;
 
+	int oldPositionRef = 0;
+
+	bool clickedUnit{false};
+
 	bool move{ false };
+
+	bool canAttack{ false };
+	int attackNode = -1;
 };
 

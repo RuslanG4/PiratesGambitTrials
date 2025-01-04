@@ -60,10 +60,10 @@ void Player::handlePlayerStates(double dt)
 	switch(currentState)
 	{
 	case IDLE:
-		Animator::getInstance().AnimateSprite(body, animationState, 4, 0,dt);
+		Animator::getInstance().AnimateSprite(body, animationState,idleAnimation, 4, 0,dt);
 		break;
 	case WALK:
-		Animator::getInstance().AnimateSprite(body, animationState, 6, 1,dt);
+		Animator::getInstance().AnimateSprite(body, animationState,walkAnimation, 6, 1,dt);
 		break;
 	}
 }

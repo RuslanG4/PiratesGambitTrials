@@ -14,13 +14,21 @@ public:
 	void processMouse(sf::Event t_event)
 	{
 		if (canClick) {
-			hasClicked = true;
+			if(t_event.mouseButton.button == sf::Mouse::Left)
+			{
+				hasClickedLeft = true;
+			}
+			if (t_event.mouseButton.button == sf::Mouse::Right)
+			{
+				hasClickedRight = true;
+			}
 			canClick = false;
 		}
 	}
 	void processMouseUp(sf::Event t_event)
 	{
-		hasClicked = false;
+		hasClickedLeft = false;
+		hasClickedRight = false;
 		canClick = true;
 	}
 
@@ -28,8 +36,12 @@ public:
 		return mousePosition;
 	}
 
-	bool& getHasClicked(){
-		return hasClicked;
+	bool& LeftClicked(){
+		return hasClickedLeft;
+	}
+
+	bool& RightClicked() {
+		return hasClickedRight;
 	}
 
 	Mouse(Mouse const&) = delete;
@@ -42,6 +54,7 @@ private:
 	sf::Vector2i mousePosition;
 
 	bool canClick{ true };
-	bool hasClicked{ false };
+	bool hasClickedRight{ false };
+	bool hasClickedLeft{ false };
 };
 

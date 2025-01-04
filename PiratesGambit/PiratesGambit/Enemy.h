@@ -1,8 +1,7 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#ifndef ENEMY_H
+#define ENEMY_H
 #include"Includes.h"
 #include"UpdateableArea.h"
-#include"PlayerController.h"
 #include "Node.h"
 #include "HitBox.h"
 #include "Inventory.h"
@@ -11,21 +10,18 @@
 #include"Army.h"
 #include"Structs.h"
 
-
-class Boat; //forward ref
-
-class Player
+class Enemy
 {
 public:
-	Player(sf::Vector2f _pos)
+	Enemy(sf::Vector2f _pos)
 	{
-		controller = new PlayerController(_pos);
+		//controller = new PlayerController(_pos);
 		inventory = std::make_unique<Inventory>();
-		updateableArea = std::make_unique<UpdateableArea>();
-		playerArmy = std::make_unique<Army>();
+		///updateableArea = std::make_unique<UpdateableArea>();
+		army = std::make_unique<Army>();
 
-		playerArmy->addUnit(std::move(std::make_unique<Buccaneer>(23)));
-		playerArmy->addUnit(std::move(std::make_unique<Gunner>(16)));
+		army->addUnit(std::move(std::make_unique<Buccaneer>(23)));
+		army->addUnit(std::move(std::make_unique<Gunner>(16)));
 
 		//inventory = new Inventory();
 
@@ -37,13 +33,13 @@ public:
 		rectSourceSprite.left = 0;
 		rectSourceSprite.top = 0;
 		body.setTextureRect(rectSourceSprite);
-		
+
 		body.setOrigin(16, 24);
 		body.setScale(2, 2);
 
 		myHitbox = new HitBox(sf::Vector2f(22, 22));
 	}
-	~Player() = default;
+	~Enemy() = default;
 
 	void update(double dt);
 	void render(sf::RenderWindow& window) const;
@@ -57,58 +53,53 @@ public:
 	void setCurrentNode(const std::shared_ptr<Node>& node_) { currentNode = node_; }
 	int getCurrentChunkID() const { return currentChunkId; }
 	const std::shared_ptr<Node>& getCurrentNode() const { return currentNode; }
-	
-	//player controller
-	PlayerController* getPlayerController() const { return controller; }
+
 	void updatePosition(const sf::Vector2f& _pos) { body.setPosition(_pos); }
 
 	//Inventory
-	const std::unique_ptr<Inventory>& getInventory() const { return inventory; }
+	//const std::unique_ptr<Inventory>& getInventory() const { return inventory; }
 
 	//update area
-	void updateUpdateableArea(const std::shared_ptr<Node>& _startNode, int depth) const;
-	const std::unique_ptr<UpdateableArea>& getUpdateableArea() const { return updateableArea; }
+	//void updateUpdateableArea(const std::shared_ptr<Node>& _startNode, int depth) const;
+	//const std::unique_ptr<UpdateableArea>& getUpdateableArea() const { return updateableArea; }
 
 	//land collision
 	bool checkCollision(const std::shared_ptr<Node>& _node, sf::Vector2f& _pos);
 
 	//boat interaction functions
-	void boardBoat(const std::shared_ptr<Boat>& _boat);
-	void disembarkBoat(const std::shared_ptr<Node>& _node);
-	bool isOnBoat() const { return onBoat; }
+	//void boardBoat(const std::shared_ptr<Boat>& _boat);
+	//void disembarkBoat(const std::shared_ptr<Node>& _node);
+	//bool isOnBoat() const { return onBoat; }
 
 	//Army
-	const std::unique_ptr<Army>& getArmy() const { return playerArmy; }
+	const std::unique_ptr<Army>& getArmy() const { return army; }
 
 private:
 	sf::Sprite body;
 	AnimationState animationState;
 
-	PlayerController* controller; //control player
 	UnitState currentState = UnitState::IDLE; //animation state
 
 	std::unique_ptr<Inventory> inventory; //player inventory
 
 	HitBox* myHitbox; //hitbox for collisions
 
-	std::unique_ptr<UpdateableArea> updateableArea; //update area around player
-	std::shared_ptr<Node> currentNode{nullptr};
+	//std::unique_ptr<UpdateableArea> updateableArea; //update area around player
+	std::shared_ptr<Node> currentNode{ nullptr };
 
-	std::unique_ptr<Army> playerArmy;
+	std::unique_ptr<Army> army;
 
-	int currentChunkId{-99};
+	int currentChunkId{ -99 };
 
 	//animation
 	int animateTime = 0;
 	int currentFrame = 0;
 
 	//Boat
-	std::weak_ptr<Boat> currentBoat;
-	bool onBoat{ true };
-
-	bool idleAnimation;
-	bool walkAnimation;
+	//std::weak_ptr<Boat> currentBoat;
+	//bool onBoat{ true };
 
 };
 
-#endif // PLAYER_H
+#endif 
+

@@ -7,6 +7,7 @@
 #include"Grid.h"
 #include"FullMap.h"
 #include "Player.h"
+#include "Enemy.h"
 #include"Boat.h"
 #include"Camera.h"
 
@@ -63,6 +64,8 @@ private:
 	std::unique_ptr<FullMap> myMap;
 	std::shared_ptr<Player> myPlayer;
 	std::shared_ptr<Boat> playerBoat;
+
+	std::shared_ptr<Enemy> enemy;
 
 	Camera myCamera;
 

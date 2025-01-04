@@ -29,7 +29,8 @@ enum TileType
 enum UnitState
 {
 	IDLE,
-	WALK
+	WALK,
+	ATTACK
 };
 
 enum BattleState
@@ -37,4 +38,11 @@ enum BattleState
 	PREP,
 	BATTLE,
 	END
+};
+
+enum UnitType
+{
+	EMPTY,
+	BUCCANEER,
+	GUNNER
 };

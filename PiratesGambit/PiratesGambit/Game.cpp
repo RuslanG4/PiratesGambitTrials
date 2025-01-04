@@ -15,6 +15,8 @@ Game::Game() :
 
 	myPlayer = std::make_shared<Player>(sf::Vector2f(25, 25));
 
+	enemy = std::make_shared<Enemy>(sf::Vector2f(25, 25));
+
 	playerBoat = std::make_shared<Boat>(sf::Vector2f(25, 25), myPlayer);
 
 	myPlayer->boardBoat(playerBoat);
@@ -23,7 +25,7 @@ Game::Game() :
 
 	findCurrentChunk();
 
-	battleScene = std::make_unique<BattleScene>(myPlayer);
+	battleScene = std::make_unique<BattleScene>(myPlayer, enemy);
 
 	//myPlayer->setSprite(textureManager.getTexture("PLAYER_BOAT"));
 }
@@ -152,6 +154,7 @@ void Game::update(double t_deltaTime)
 	}
 	else {
 		battleScene->update(t_deltaTime);
+		Mouse::getInstance().update(m_window);
 	}
 
 }
@@ -161,9 +164,9 @@ void Game::update(double t_deltaTime)
 /// </summary>
 void Game::render()
 {
+	m_window.clear(sf::Color::Black);
 	if (!battle) {
 		m_window.setView(myCamera.getCamera());
-		m_window.clear(sf::Color::Black);
 
 		for (int index : visibleNodes) {
 			std::shared_ptr<Node> node = myMap->getFullMap()[index];
@@ -306,7 +309,7 @@ void Game::transferInventoryItems()
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(Mouse::getInstance().getMousePosition());
 	for (auto& slot : currentObjectInteract.lock()->getInventory()->getRenderableInventory()->getSlots())
 	{
-		if (Mouse::getInstance().getHasClicked() && slot->getIsOccupied())
+		if (Mouse::getInstance().LeftClicked() && slot->getIsOccupied())
 		{
 			if (slot->getBackgroundSprite().getGlobalBounds().contains(mousePos))
 			{

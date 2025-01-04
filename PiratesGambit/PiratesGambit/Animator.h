@@ -10,9 +10,7 @@ public:
 		return instance;
 	}
 
-	void update(sf::RenderWindow& _win);
-
-	void AnimateSprite(sf::Sprite& _sprite, AnimationState& _state,int _colAmt, int _rowNum, float _dt);
+	void AnimateSprite(sf::Sprite& _sprite, AnimationState& _state, bool& _animationComplete ,int _colAmt, int _rowNum, float _dt);
 
 	Animator(Animator const&) = delete;
 private:

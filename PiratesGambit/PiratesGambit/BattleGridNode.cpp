@@ -20,6 +20,18 @@ void BattleGridNode::setPrevious(const std::shared_ptr<BaseNode>& _previous)
     }
 }
 
+void BattleGridNode::setAsWalkable()
+{
+    debugShape->setFillColor(sf::Color(76, 138, 14, 128));
+    debugShape->setOutlineColor(sf::Color(37, 69, 5, 128));
+}
+
+void BattleGridNode::setTransparent()
+{
+    debugShape->setFillColor(sf::Color::Transparent);
+    debugShape->setOutlineColor(sf::Color::Transparent);
+}
+
 const std::vector<std::pair<std::shared_ptr<BattleGridNode>, int>>& BattleGridNode::getNeighbours()
 {
     return m_neighbours;

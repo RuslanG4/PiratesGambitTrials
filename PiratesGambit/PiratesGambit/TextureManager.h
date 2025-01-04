@@ -72,12 +72,17 @@ private:
         loadTexture("CANNON_BALL", CANNON_BALL);
         //Pirate
         loadTexture("PIRATE_CAPTAIN", PIRATE_CAPTAIN);
-        loadTexture("BUCCANEER", BUCCANEER);
-        loadTexture("GUNNER", GUNNER);
+        loadTexture("BUCCANEER", BUCCANEER_SPRITE);
+        loadTexture("GUNNER", GUNNER_SPRITE);
         //
         loadTexture("BARREL", BARREL);
         //ICONS
     	loadTexture("CANNON_BALL_ICON", CANNON_BALL_ICON);
+        loadTexture("SWORD_ICON", SWORD_ICON);
+        //BORDERS
+        loadTexture("ACTION_BORDER", ACTION_BORDER);
+        loadTexture("BULKY_BORDER", BULKY_BORDER);
+
         
     }
 

@@ -11,8 +11,10 @@ void Gunner::init()
 	rectSourceSprite.top = 0;
 	sprite.setTextureRect(rectSourceSprite);
 
-	sprite.setScale(3, 3);
+	sprite.setScale(3.5, 3.5);
 	sprite.setOrigin(16, 24);
+
+	updateUnitAmount(currentStack);
 
 	speed = 4;
 }
@@ -34,10 +36,10 @@ void Gunner::animateSprite(float _dt)
 	switch (currentState)
 	{
 	case IDLE:
-		Animator::getInstance().AnimateSprite(sprite, animationState, 4, 0, _dt);
+		Animator::getInstance().AnimateSprite(sprite, animationState,idleAnimation, 4, 0, _dt);
 		break;
 	case WALK:
-		Animator::getInstance().AnimateSprite(sprite, animationState, 6, 1, _dt);
+		Animator::getInstance().AnimateSprite(sprite, animationState,walkAnimation, 6, 1, _dt);
 		break;
 	}
 }

@@ -30,11 +30,16 @@ const char* const BARREL = "ASSETS\\IMAGES\\GameObjects\\BARREL.png";
 
 //icons
 const char* const CANNON_BALL_ICON = "ASSETS\\IMAGES\\ICONS\\CANNON_BALL.png";
+const char* const SWORD_ICON = "ASSETS\\IMAGES\\ICONS\\FIGHT.png";
+
+//Borders
+const char* const ACTION_BORDER = "ASSETS\\IMAGES\\Borders\\ActionButton.png";
+const char* const BULKY_BORDER = "ASSETS\\IMAGES\\Borders\\BulkyBorder.png";
 
 
 const char* const PIRATE_CAPTAIN = "ASSETS\\IMAGES\\Pirates\\MiniPirateCaptain.png";
-const char* const BUCCANEER = "ASSETS\\IMAGES\\Pirates\\MiniPirateCrew.png";
-const char* const GUNNER = "ASSETS\\IMAGES\\Pirates\\MiniPirateGunner.png";
+const char* const BUCCANEER_SPRITE = "ASSETS\\IMAGES\\Pirates\\MiniPirateCrew.png";
+const char* const GUNNER_SPRITE = "ASSETS\\IMAGES\\Pirates\\MiniPirateGunner.png";
 
 const char* const FONT = "ASSETS\\FONTS\\ComicNeueSansID.ttf";
 

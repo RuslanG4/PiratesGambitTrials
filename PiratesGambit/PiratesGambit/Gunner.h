@@ -4,10 +4,12 @@
 class Gunner : public PirateUnit
 {
 public:
-	Gunner()
+	Gunner(int _stackCount)
 	{
+		currentStack = _stackCount;
+		unitType = UnitType::GUNNER;
 		init();
-	};
+	}
 
 	void init();
 	void update(float _dt) override;
