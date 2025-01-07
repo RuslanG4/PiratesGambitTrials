@@ -46,7 +46,7 @@ public:
 	void initialiseBattleGrid();
 	void addNeighbours(int _currentNodeId) const;
 
-	void createMoveableArea(const std::unique_ptr<PirateUnit>& _unit);
+	void createMoveableArea(const std::shared_ptr<PirateUnit>& _unit);
 	void aStarPathFind(const std::shared_ptr<BattleGridNode>& _start, const std::shared_ptr<BattleGridNode>& end);
 	void createVectors(const std::shared_ptr<BattleGridNode>& end);
 
@@ -66,7 +66,7 @@ public:
 
 	void clearStartArea();
 
-	PirateUnit* selectUnit(sf::Vector2f _mousePos);
+	std::shared_ptr<PirateUnit> selectUnit(sf::Vector2f _mousePos);
 
 	int getCurrentNodeID(sf::Vector2f _pos);
 private:
@@ -77,6 +77,8 @@ private:
 
 	std::vector<std::shared_ptr<BattleGridNode>> walkableNodes;
 
+	//bug clicking on other enemy shows attack button
+
 	std::vector<std::shared_ptr<BattleGridNode>> path;
 
 	std::unique_ptr<BattleActionUI> UIInterface;
@@ -85,7 +87,7 @@ private:
 
 	BattleState currentState = PREP;
 
-	PirateUnit* currentSelectedUnit;
+	std::shared_ptr<PirateUnit> currentSelectedUnit;
 
 	std::shared_ptr<Player> playerRef;
 	std::shared_ptr<Enemy> enemyRef;

@@ -4,10 +4,12 @@
 class Buccaneer : public PirateUnit
 {
 public:
-	Buccaneer(int _stackCount)
+	Buccaneer(int _stackCount, UnitAllegiance _allegiance)
 	{
-		currentStack = _stackCount;
+		unitStats.stackSize = _stackCount;
+		unitStats.initiative = 10;
 		unitType = UnitType::BUCCANEER;
+		allegiance = _allegiance;
 		init();
 	}
 

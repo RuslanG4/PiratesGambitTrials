@@ -2,38 +2,31 @@
 
 TacticsArmySlot::TacticsArmySlot(UnitType _type, sf::Vector2f _pos, bool _mainIcon)
 {
-	init(_type);
-
+	init();
+	updateSlots(_type);
 	boxBorder.setScale(5, 5);
 	boxBorder.setPosition(_pos);
-
+	teamColor.setScale(5, 5);
+	teamColor.setPosition(boxBorder.getPosition());
 	unitSprite.setScale(8, 8);
 	unitSprite.setPosition(boxBorder.getPosition());
 }
 
 TacticsArmySlot::TacticsArmySlot(UnitType _type, sf::Vector2f _pos)
 {
-	init(_type);
-
+	init();
+	updateSlots(_type);
 	boxBorder.setScale(2.5, 2.5);
 	boxBorder.setPosition(_pos);
-
+	teamColor.setScale(2.5, 2.5);
+	teamColor.setPosition(boxBorder.getPosition());
 	unitSprite.setPosition(boxBorder.getPosition());
 	unitSprite.setScale(4, 4);
+
 }
 
-void TacticsArmySlot::init(UnitType _type)
+void TacticsArmySlot::init()
 {
-	switch (_type)
-	{
-	case BUCCANEER:
-		unitSprite.setTexture(TextureManager::getInstance().getTexture("BUCCANEER"));
-		break;
-	case GUNNER:
-		unitSprite.setTexture(TextureManager::getInstance().getTexture("GUNNER"));
-		break;
-	}
-
 	sf::IntRect rectSourceSprite;
 	rectSourceSprite.height = 32;
 	rectSourceSprite.width = 32;
@@ -44,10 +37,47 @@ void TacticsArmySlot::init(UnitType _type)
 
 	boxBorder.setTexture(TextureManager::getInstance().getTexture("BULKY_BORDER"));
 	boxBorder.setOrigin(24, 24);
+
+	teamColor.setSize(sf::Vector2f(48, 48));
+	teamColor.setOrigin(24, 24);
+	teamColor.setFillColor(sf::Color::Black);
+}
+
+void TacticsArmySlot::updateSlots(UnitType _type)
+{
+	switch (_type)
+	{
+	case BUCCANEER:
+		unitSprite.setTexture(TextureManager::getInstance().getTexture("BUCCANEER"));
+		break;
+	case GUNNER:
+		unitSprite.setTexture(TextureManager::getInstance().getTexture("GUNNER"));
+		break;
+	}
+}
+
+void TacticsArmySlot::updateAllegianceColor(UnitAllegiance _allegiance)
+{
+	switch (_allegiance)
+	{
+	case RED_PLAYER:
+		teamColor.setFillColor(sf::Color::Red);
+		break;
+	case BLUE_PLAYER:
+		teamColor.setFillColor(sf::Color::Blue);
+		break;
+	case GREEN_PLAYER:
+		teamColor.setFillColor(sf::Color::Green);
+		break;
+	case YELLOW_PLAYER:
+		teamColor.setFillColor(sf::Color::Yellow);
+		break;
+	}
 }
 
 void TacticsArmySlot::render(sf::RenderWindow& _win) const
 {
+	_win.draw(teamColor);
 	_win.draw(boxBorder);
 	_win.draw(unitSprite);
 }

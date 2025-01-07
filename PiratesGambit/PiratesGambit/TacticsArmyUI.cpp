@@ -18,12 +18,34 @@ TacticsArmyUI::TacticsArmyUI(const std::unique_ptr<Army>& _army)
 	}
 }
 
+void TacticsArmyUI::AddArmy(const std::unique_ptr<Army>& _army)
+{
+}
+
 void TacticsArmyUI::extend()
 {
 	for (int i = 0; i < 3; i++)
 	{
 		sf::Vector2f pos = armySlots.back()->getPosition();
 		armySlots.push_back(std::make_unique<TacticsArmySlot>(EMPTY, sf::Vector2f(pos.x + 120, pos.y)));
+	}
+	UpdateToInitiativeView();
+}
+
+void TacticsArmyUI::UpdateToInitiativeView()
+{
+	int slotIndex = 0;
+	auto turnOrder = initiativeSystem.getTurnOrder();
+	for(auto& unit : turnOrder)
+	{
+		armySlots[slotIndex]->updateSlots(unit->unitType);
+		armySlots[slotIndex]->updateAllegianceColor(unit->allegiance);
+		if(slotIndex ==0)
+		{
+			firstSlot->updateSlots(unit->unitType);
+			firstSlot->updateAllegianceColor(unit->allegiance);
+		}
+		slotIndex++;
 	}
 }
 
@@ -35,3 +57,4 @@ void TacticsArmyUI::render(sf::RenderWindow& _win) const
 		slot->render(_win);
 	}
 }
+

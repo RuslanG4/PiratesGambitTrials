@@ -13,9 +13,9 @@ public:
 	void addUnit(std::unique_ptr<PirateUnit> _unit);
 	void removeUnit();
 
-	const std::vector<std::unique_ptr<PirateUnit>>& getArmy() const { return army; }
+	const std::vector<std::shared_ptr<PirateUnit>>& getArmy() const { return army; }
 
 private:
-	std::vector<std::unique_ptr<PirateUnit>> army;
+	std::vector<std::shared_ptr<PirateUnit>> army;
 };
 

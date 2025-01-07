@@ -14,9 +14,9 @@ void Gunner::init()
 	sprite.setScale(3.5, 3.5);
 	sprite.setOrigin(16, 24);
 
-	updateUnitAmount(currentStack);
+	updateUnitAmount(unitStats.stackSize);
 
-	speed = 4;
+	unitStats.speed = 4;
 }
 
 void Gunner::update(float _dt)

@@ -195,6 +195,9 @@
     <ClCompile Include="TacticsArmySlot.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="InitiativeSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -322,6 +325,9 @@
     </ClInclude>
     <ClInclude Include="UnitAmount.h">
       <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="InitiativeSystem.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

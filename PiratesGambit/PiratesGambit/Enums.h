@@ -46,3 +46,11 @@ enum UnitType
 	BUCCANEER,
 	GUNNER
 };
+
+enum UnitAllegiance
+{
+	RED_PLAYER,
+	BLUE_PLAYER,
+	GREEN_PLAYER,
+	YELLOW_PLAYER
+};

@@ -24,8 +24,8 @@ public:
 		updateableArea = std::make_unique<UpdateableArea>();
 		playerArmy = std::make_unique<Army>();
 
-		playerArmy->addUnit(std::move(std::make_unique<Buccaneer>(23)));
-		playerArmy->addUnit(std::move(std::make_unique<Gunner>(16)));
+		playerArmy->addUnit(std::move(std::make_unique<Buccaneer>(23,RED_PLAYER)));
+		playerArmy->addUnit(std::move(std::make_unique<Gunner>(16, RED_PLAYER)));
 
 		//inventory = new Inventory();
 
