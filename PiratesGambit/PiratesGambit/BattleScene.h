@@ -112,6 +112,7 @@ private:
 	bool clickedUnit{false};
 
 	bool move{ false };
+	bool newAreaSet{ false };
 
 	bool canAttack{ false };
 	int attackNode = -1;

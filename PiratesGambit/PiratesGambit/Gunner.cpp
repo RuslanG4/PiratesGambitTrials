@@ -25,6 +25,8 @@ void Gunner::update(float _dt)
 	if(Utility::magnitude(velocity.x, velocity.y) > 0)
 	{
 		currentState = WALK;
+		if (velocity.x < 0) sprite.setScale(-3.5, 3.5);
+		else sprite.setScale(3.5, 3.5);
 	}else
 	{
 		currentState = IDLE;

@@ -40,6 +40,8 @@ public:
 	int getSpeed() const { return unitStats.speed; }
 	sf::FloatRect getGlobalBounds() const { return sprite.getGlobalBounds(); }
 
+	bool isFinishedAttacking() const { return attackAnimation; }
+
 	UnitType unitType;
 
 	UnitState currentState = IDLE;
@@ -54,7 +56,7 @@ protected:
 	sf::Sprite sprite;
 	bool isAttacking{ false };
 
-	bool attackAnimation;
+	bool attackAnimation = false;
 	bool walkAnimation;
 	bool idleAnimation;
 

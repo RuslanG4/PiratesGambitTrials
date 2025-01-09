@@ -200,7 +200,7 @@ void Grid::ApplyCellular(int _interations, sf::RenderWindow& m_window)
 			nodeGrid[j]->setTileType(tempGrid[j]->getTileType());
 
 			//Uncomment for debug
-		/*	drawGrid(m_window);
+			/*drawGrid(m_window);
 			m_window.display();
 			wait(1);*/
 		}
@@ -259,10 +259,10 @@ void Grid::MapIsland(int _startIndex,bool saveIslandData, sf::RenderWindow & win
 	{
 		FilterTiles(nodeQueue.front()); //determine tile 
 
-		//nodeQueue.front()->debugShape.setFillColor(sf::Color(123, 123, 123, 66));
-		//drawGrid(window);
-		//window.display();
-		//wait(1);
+		/*nodeQueue.front()->debugShape.setFillColor(sf::Color(123, 123, 123, 66));
+		drawGrid(window);
+		window.display();
+		wait(1);*/
 
 		auto neighbours = nodeQueue.front()->getNeighbours();
 		for (auto neighbour : neighbours)

@@ -31,6 +31,11 @@ void BattleScene::update(float _dt)
 		{
 			moveUnit();
 		}
+		if (currentSelectedUnit->currentState == IDLE && !newAreaSet) {
+			tacticsArmyUI->UpdateToInitiativeView(); //update initiative bar
+			currentSelectedUnit = tacticsArmyUI->initiativeSystem.getNextUnit();
+			createMoveableArea(currentSelectedUnit);
+		}
 		break;
 	case END:
 		break;
@@ -163,6 +168,7 @@ void BattleScene::createMoveableArea(const std::shared_ptr<PirateUnit>& _unit)
 	{
 		node->updateTraversed(false);
 	}
+	newAreaSet = true;
 }
 
 void BattleScene::aStarPathFind(const std::shared_ptr<BattleGridNode>& _start, const std::shared_ptr<BattleGridNode>& end)
@@ -298,7 +304,7 @@ void BattleScene::detectMouse()
 	}
 	else
 	{
-		if (!move) {
+		if (!move && currentState == BATTLE) {
 			hoverMouseOnNode();
 		}
 		if (currentSelectedUnit && currentState ==PREP) {
@@ -323,6 +329,7 @@ void BattleScene::hoverMouseOnNode()
 			{
 				canAttack = false;
 				attackNode = -1;
+				attackIcon.setPosition(sf::Vector2f(-200,-200)); //offscreen
 			}
 
 		}
@@ -396,17 +403,31 @@ void BattleScene::adjustAttackIcon(int _pinPointID)
 			attackNode = nodeID;
 			attackIcon.setPosition(battleGrid[nodeID]->getMidPoint());
 		}
+		else
+		//Puts icon on first neighbour of unit to attack if on edge of area
+		{
+			for (auto& node : battleGrid[currentHoverNodeID]->getNeighbours()) {
+				if (std::find(walkableNodes.begin(), walkableNodes.end(), node.first) != walkableNodes.end()) {
+					attackNode = nodeID;
+					attackIcon.setPosition(node.first->getMidPoint());
+					break;
+				}
+			}
+		}
 
 	}
 }
 
 bool BattleScene::isNodeInRangeOfUnit()
 {
-	for(auto& unit : enemyRef->getArmy()->getArmy())
+	for (auto& unit : enemyRef->getArmy()->getArmy())
 	{
-		if(unit->getCurrentNodeId() == currentHoverNodeID)
-		{
-			return true;
+		for (auto& node : battleGrid[unit->getCurrentNodeId()]->getNeighbours()) {
+			if (std::find(walkableNodes.begin(), walkableNodes.end(), node.first) != walkableNodes.end()) {
+				if (!node.first->isOccupied() && currentHoverNodeID == battleGrid[unit->getCurrentNodeId()]->getID()) {
+					return true;
+				}
+			}
 		}
 	}
 	return false;
@@ -430,18 +451,13 @@ void BattleScene::moveUnit()
 			currentSelectedUnit->setCurrentNodeId(path[currentNodeInPath - 1]->getID());
 			currentNodeInPath = 0;
 			distance = { 0.0,0.0 };
+			newAreaSet = false;
 		}
 		else {
 			distance = path[currentNodeInPath]->getMidPoint() - currentSelectedUnit->getPosition();
 		}
 	}
 	currentSelectedUnit->moveUnit(Utility::unitVector2D(distance));
-	if(Utility::magnitude(distance.x,distance.y) <=0)
-	{
-		tacticsArmyUI->UpdateToInitiativeView();
-		currentSelectedUnit = tacticsArmyUI->initiativeSystem.getNextUnit();
-		createMoveableArea(currentSelectedUnit);
-	}
 }
 
 void BattleScene::preGameStartUpPlacement(sf::Vector2f _mousePos)

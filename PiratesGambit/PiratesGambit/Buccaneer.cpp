@@ -11,7 +11,10 @@ void Buccaneer::init()
 	rectSourceSprite.top = 0;
 	sprite.setTextureRect(rectSourceSprite);
 
-	sprite.setScale(3.5, 3.5);
+	if (allegiance != RED_PLAYER) {
+		scaleX = -scaleX;
+	}
+	sprite.setScale(scaleX, scaleY);
 	sprite.setOrigin(16, 24);
 
 	updateUnitAmount(unitStats.stackSize);
@@ -26,10 +29,13 @@ void Buccaneer::update(float _dt)
 		if (Utility::magnitude(velocity.x, velocity.y) > 0)
 		{
 			currentState = WALK;
+			if (velocity.x < 0) sprite.setScale(-3.5, 3.5);
+			else sprite.setScale(3.5, 3.5);
 		}
 		else
 		{
 			currentState = IDLE;
+			sprite.setScale(scaleX, scaleY);
 		}
 	}
 }
@@ -50,6 +56,7 @@ void Buccaneer::animateSprite(float _dt)
 		{
 			currentState = IDLE;
 			animationState.elapsedTime = 0;
+			sprite.setScale(scaleX, scaleY);
 		}
 		break;
 	}

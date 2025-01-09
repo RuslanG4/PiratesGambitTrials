@@ -36,16 +36,19 @@ void TacticsArmyUI::UpdateToInitiativeView()
 {
 	int slotIndex = 0;
 	auto turnOrder = initiativeSystem.getTurnOrder();
-	for(auto& unit : turnOrder)
-	{
-		armySlots[slotIndex]->updateSlots(unit->unitType);
-		armySlots[slotIndex]->updateAllegianceColor(unit->allegiance);
-		if(slotIndex ==0)
+
+	for (auto& slot : armySlots) {
+		if (slot == armySlots[0])
 		{
-			firstSlot->updateSlots(unit->unitType);
-			firstSlot->updateAllegianceColor(unit->allegiance);
+			firstSlot->updateSlots(turnOrder[slotIndex]->unitType);
+			firstSlot->updateAllegianceColor(turnOrder[slotIndex]->allegiance);
 		}
+		slot->updateSlots(turnOrder[slotIndex]->unitType);
+		slot->updateAllegianceColor(turnOrder[slotIndex]->allegiance);
 		slotIndex++;
+		if (slotIndex >= turnOrder.size()) {
+			slotIndex = 0;
+		}
 	}
 }
 

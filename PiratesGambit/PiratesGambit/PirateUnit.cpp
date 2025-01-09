@@ -16,6 +16,9 @@ void PirateUnit::moveUnit(sf::Vector2f _vel)
 	velocity = _vel;
 	sprite.setPosition(sprite.getPosition() + _vel * 2.f);
 	placeUnitAmountText();
+	if (Utility::magnitude(velocity.x, velocity.y) <= 0 && currentState != ATTACK) {
+		currentState = IDLE;
+	}
 }
 
 void PirateUnit::Attack()
