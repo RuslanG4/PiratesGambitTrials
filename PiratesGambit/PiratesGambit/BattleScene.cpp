@@ -400,15 +400,17 @@ void BattleScene::adjustAttackIcon(int _pinPointID)
 			});
 
 		if (it != walkableNodes.end() && !battleGrid[nodeID]->isOccupied()) {
-			attackNode = nodeID;
-			attackIcon.setPosition(battleGrid[nodeID]->getMidPoint());
+			if (!battleGrid[nodeID]->isOccupied()) {
+				attackNode = nodeID;
+				attackIcon.setPosition(battleGrid[nodeID]->getMidPoint());
+			}
 		}
 		else
 		//Puts icon on first neighbour of unit to attack if on edge of area
 		{
 			for (auto& node : battleGrid[currentHoverNodeID]->getNeighbours()) {
 				if (std::find(walkableNodes.begin(), walkableNodes.end(), node.first) != walkableNodes.end()) {
-					attackNode = nodeID;
+					attackNode = node.first->getID();
 					attackIcon.setPosition(node.first->getMidPoint());
 					break;
 				}
@@ -449,6 +451,7 @@ void BattleScene::moveUnit()
 			move = false;
 			battleGrid[currentSelectedUnit->getCurrentNodeId()]->updateOccupied(false);
 			currentSelectedUnit->setCurrentNodeId(path[currentNodeInPath - 1]->getID());
+			battleGrid[currentSelectedUnit->getCurrentNodeId()]->updateOccupied(true);
 			currentNodeInPath = 0;
 			distance = { 0.0,0.0 };
 			newAreaSet = false;
