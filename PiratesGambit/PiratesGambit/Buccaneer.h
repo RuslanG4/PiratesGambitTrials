@@ -18,6 +18,6 @@ public:
 	void update(float _dt) override;
 
 private:
-	float scaleX = 3.5, scaleY = 3.5;
+
 };
 

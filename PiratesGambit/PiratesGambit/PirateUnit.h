@@ -40,8 +40,6 @@ public:
 	int getSpeed() const { return unitStats.speed; }
 	sf::FloatRect getGlobalBounds() const { return sprite.getGlobalBounds(); }
 
-	bool isFinishedAttacking() const { return attackAnimation; }
-
 	UnitType unitType;
 
 	UnitState currentState = IDLE;
@@ -51,10 +49,9 @@ public:
 	UnitAllegiance allegiance;
 
 protected:
-	
+	float scaleX = 3.5, scaleY = 3.5;
 	int nodeId;
 	sf::Sprite sprite;
-	bool isAttacking{ false };
 
 	bool attackAnimation = false;
 	bool walkAnimation;

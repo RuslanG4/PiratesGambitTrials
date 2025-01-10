@@ -54,6 +54,8 @@ public:
 
 	void detectMouse();
 
+	void TakeUnitAction(const std::shared_ptr<BattleGridNode>& _targetNode);
+
 	void hoverMouseOnNode();
 	void pinpointMousePosition(sf::Vector2f _mousePos, const std::shared_ptr<BattleGridNode>& _currentNode);
 	void adjustAttackIcon(int _pinPointID);

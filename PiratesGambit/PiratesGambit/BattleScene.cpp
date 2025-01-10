@@ -279,20 +279,32 @@ void BattleScene::detectMouse()
 			preGameStartUpPlacement(mousePos);
 			break;
 		case BATTLE:
-				for (auto& node : walkableNodes) {
-					if(attackNode != -1)
-					{
+			
+				if (currentHoverNodeID != -1 && battleGrid[currentHoverNodeID]->isOccupied() && battleGrid[currentHoverNodeID]->debugShape->getGlobalBounds().contains(mousePos)) {
+					if (currentSelectedUnit->unitType == GUNNER) {
+					//attacl ranged
+						for (auto& node : walkableNodes)
+						{
+							node->setTransparent();
+						}
+						walkableNodes.clear();
+					newAreaSet = false;
+					currentSelectedUnit->Attack();
+					canAttack = false;
+					}
+					else{
 						aStarPathFind(battleGrid[currentSelectedUnit->getCurrentNodeId()], battleGrid[attackNode]);
 						move = true;
 						canAttack = false;
 					}
-					else if (node->debugShape->getGlobalBounds().contains(mousePos) && !move)
-					{
-						aStarPathFind(battleGrid[currentSelectedUnit->getCurrentNodeId()], node);
-						move = true;
-						canAttack = false;
+			}
+			else {
+				for (auto& node : walkableNodes) {
+					if (node->debugShape->getGlobalBounds().contains(mousePos)) {
+						TakeUnitAction(node);
 					}
 				}
+			}
 			break;
 		case END:
 			break;
@@ -313,6 +325,14 @@ void BattleScene::detectMouse()
 	}
 }
 
+void BattleScene::TakeUnitAction(const std::shared_ptr<BattleGridNode>& _targetNode)
+{
+
+	aStarPathFind(battleGrid[currentSelectedUnit->getCurrentNodeId()], _targetNode);
+	move = true;
+	canAttack = false;
+}
+
 void BattleScene::hoverMouseOnNode()
 {
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(Mouse::getInstance().getMousePosition());
@@ -321,15 +341,18 @@ void BattleScene::hoverMouseOnNode()
 		if(node->walkableArea->getGlobalBounds().contains(mousePos))
 		{
 			currentHoverNodeID = node->getID();
-			if(isNodeInRangeOfUnit())
-			{
-				canAttack = true;
-				pinpointMousePosition(mousePos, node);
-			}else
-			{
-				canAttack = false;
-				attackNode = -1;
-				attackIcon.setPosition(sf::Vector2f(-200,-200)); //offscreen
+			if (currentSelectedUnit->unitType == BUCCANEER) {
+				if (isNodeInRangeOfUnit())
+				{
+					canAttack = true;
+					pinpointMousePosition(mousePos, node);
+				}
+				else
+				{
+					canAttack = false;
+					attackNode = -1;
+					attackIcon.setPosition(sf::Vector2f(-200, -200)); //offscreen
+				}
 			}
 
 		}
