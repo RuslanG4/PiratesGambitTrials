@@ -63,6 +63,7 @@ public:
 	bool isNodeInRangeOfUnit();
 
 	void moveUnit();
+	void finalizeMoveUnit();
 
 	void preGameStartUpPlacement(sf::Vector2f _mousePos);
 

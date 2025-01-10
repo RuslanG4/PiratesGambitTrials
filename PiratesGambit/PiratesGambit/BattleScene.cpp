@@ -153,13 +153,18 @@ void BattleScene::createMoveableArea(const std::shared_ptr<PirateUnit>& _unit)
 			if (!neighbour.first->hasBeenTraversed() && neighbour.second % 2 != 0)
 			{
 				neighbour.first->updateTraversed(true);
-				int dx = (neighbour.first->getPosition().x - startPos.x) * (neighbour.first->getPosition().x - startPos.x) / nodeSize; //Euclidean Distance, / nodeSize
-				int dy = (neighbour.first->getPosition().y - startPos.y) * (neighbour.first->getPosition().y - startPos.y) / nodeSize;
-				nodeQueue.emplace(neighbour.first, std::ceil(std::sqrt(dx /nodeSize  + dy / nodeSize))); // std::ceil for .5s
-				if(!neighbour.first->isOccupied())
-				{
+
+				float dx = static_cast<float>(neighbour.first->getPosition().x - startPos.x);
+				float dy = static_cast<float>(neighbour.first->getPosition().y - startPos.y);
+
+				float distance = std::hypotf(dx / nodeSize, dy / nodeSize);
+
+				nodeQueue.emplace(neighbour.first, std::ceil(distance)); // std::ceil for rounding up
+
+				if (!neighbour.first->isOccupied()) {
 					neighbour.first->setAsWalkable();
 				}
+
 				walkableNodes.push_back(neighbour.first);
 			}
 		}
@@ -199,9 +204,14 @@ void BattleScene::aStarPathFind(const std::shared_ptr<BattleGridNode>& _start, c
 					neighbour.first->setPrevious(currentTop);
 
 					neighbour.first->setGCost(currentTop->getNodeData().gCost + 1);
-					int dx = (neighbour.first->getPosition().x - end->getPosition().x) * (neighbour.first->getPosition().x - end->getPosition().x) / nodeSize; //Euclidean Distance, / nodeSize
-					int dy = (neighbour.first->getPosition().y - end->getPosition().y) * (neighbour.first->getPosition().y - end->getPosition().y) / nodeSize;
-					neighbour.first->setHCost(std::ceil(std::sqrt(dx / nodeSize + dy / nodeSize)));
+
+					float dx = static_cast<float>(neighbour.first->getPosition().x - end->getPosition().x);
+					float dy = static_cast<float>(neighbour.first->getPosition().y - end->getPosition().y);
+
+					// hypof is Euclidean distance (hypotaneuse)
+					float hCost = std::hypotf(dx / nodeSize, dy / nodeSize);
+					neighbour.first->setHCost(std::ceil(hCost));
+
 					neighbour.first->setFCost(neighbour.first->getNodeData().gCost + neighbour.first->getNodeData().hCost);
 
 					nodeQueue.push(neighbour.first);
@@ -460,30 +470,47 @@ bool BattleScene::isNodeInRangeOfUnit()
 
 void BattleScene::moveUnit()
 {
-	sf::Vector2f distance = path[currentNodeInPath]->getMidPoint() - currentSelectedUnit->getPosition();
-	std::cout << Utility::magnitude(distance.x, distance.y) << "\n";
-	if (Utility::magnitude(distance.x, distance.y) < 2)
-	{
-		currentNodeInPath++;
-		if (currentNodeInPath == path.size())
-		{
-			//animate attack
-			if (attackNode != -1) {
-				currentSelectedUnit->Attack();
-			}
-			move = false;
-			battleGrid[currentSelectedUnit->getCurrentNodeId()]->updateOccupied(false);
-			currentSelectedUnit->setCurrentNodeId(path[currentNodeInPath - 1]->getID());
-			battleGrid[currentSelectedUnit->getCurrentNodeId()]->updateOccupied(true);
-			currentNodeInPath = 0;
-			distance = { 0.0,0.0 };
-			newAreaSet = false;
-		}
-		else {
-			distance = path[currentNodeInPath]->getMidPoint() - currentSelectedUnit->getPosition();
-		}
+	if (path.empty()) {
+		move = false;
+		return;
 	}
+
+	//distance to next node in path
+	sf::Vector2f distance = path[currentNodeInPath]->getMidPoint() - currentSelectedUnit->getPosition();
+	float magnitude = Utility::magnitude(distance.x, distance.y);
+
+	if (magnitude < 2.0f) {
+		currentNodeInPath++;
+
+		if (currentNodeInPath == path.size()) {
+			//final node reached
+			finalizeMoveUnit();
+			return;
+		}
+
+		//updated distance for next node
+		distance = path[currentNodeInPath]->getMidPoint() - currentSelectedUnit->getPosition();
+	}
+
 	currentSelectedUnit->moveUnit(Utility::unitVector2D(distance));
+}
+
+void BattleScene::finalizeMoveUnit()
+{
+	if (attackNode != -1) {
+		currentSelectedUnit->Attack();
+	}
+
+	//update new grid positions
+	currentSelectedUnit->moveUnit(sf::Vector2f(0, 0));
+	battleGrid[currentSelectedUnit->getCurrentNodeId()]->updateOccupied(false);
+	currentSelectedUnit->setCurrentNodeId(path[currentNodeInPath - 1]->getID());
+	battleGrid[currentSelectedUnit->getCurrentNodeId()]->updateOccupied(true);
+
+	//reset
+	move = false;
+	currentNodeInPath = 0;
+	newAreaSet = false;
 }
 
 void BattleScene::preGameStartUpPlacement(sf::Vector2f _mousePos)
