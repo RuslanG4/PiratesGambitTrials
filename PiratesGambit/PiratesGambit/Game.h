@@ -54,7 +54,7 @@ private:
 	sf::Sprite m_appleSprite;
 	sf::Texture m_appleTexture;
 
-	sf::RenderWindow m_window; // main SFML window
+	std::unique_ptr<sf::RenderWindow> m_window; // main SFML window
 	sf::Font font;
 
 	std::set<Node*> updateArea{nullptr};

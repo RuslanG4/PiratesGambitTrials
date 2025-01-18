@@ -8,12 +8,12 @@ Barrel::Barrel()
 	sprite.setTexture(TextureManager::getInstance().getTexture("BARREL"));
 }
 
-void Barrel::render(sf::RenderWindow& _win)
+void Barrel::render(const std::unique_ptr<sf::RenderWindow>& window)
 {
-	_win.draw(sprite);
+	window->draw(sprite);
 	if(inventory->isInventoryOpen())
 	{
-		inventory->getRenderableInventory()->render(_win);
+		inventory->getRenderableInventory()->render(window);
 	}
 }
 

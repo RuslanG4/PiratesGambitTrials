@@ -15,10 +15,10 @@ void CannonBall::init()
 	body.setPosition(position);
 }
 
-void CannonBall::render(sf::RenderWindow& _win) const
+void CannonBall::render(const std::unique_ptr<sf::RenderWindow>& window) const
 {
 	if (isActive) {
-		_win.draw(body);
+		window->draw(body);
 	}
 }
 

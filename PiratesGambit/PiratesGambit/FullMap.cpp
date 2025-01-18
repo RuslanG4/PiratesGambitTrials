@@ -1,6 +1,6 @@
 #include "FullMap.h"
 
-FullMap::FullMap(sf::RenderWindow& window, const int& mapSize_)
+FullMap::FullMap(const std::unique_ptr<sf::RenderWindow>& window, const int& mapSize_)
 {
 	initMap(mapSize_);
 	initChunks(window);
@@ -38,7 +38,7 @@ void FullMap::initMap(const int& mapSize_)
 /// Seperates the map into chunks for efficiency
 /// </summary>
 /// <param name="window"></param>
-void FullMap::initChunks(sf::RenderWindow& window)
+void FullMap::initChunks(const std::unique_ptr<sf::RenderWindow>& window)
 {
 	for (int chunkY = 0; chunkY < mapSize; chunkY++)
 	{
@@ -107,7 +107,7 @@ void FullMap::addNeighbours(int _currentNodeId) const
 	}
 }
 
-void FullMap::render(sf::RenderWindow& window) const
+void FullMap::render(const std::unique_ptr<sf::RenderWindow>& window) const
 {
 	for (auto& chunk : chunks_)
 	{

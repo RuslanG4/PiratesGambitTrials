@@ -42,6 +42,12 @@ enum BattleState
 
 enum UnitType
 {
+	MELEE,
+	RANGED
+};
+
+enum UnitName
+{
 	EMPTY,
 	BUCCANEER,
 	GUNNER

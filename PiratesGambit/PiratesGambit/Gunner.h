@@ -8,8 +8,9 @@ public:
 	{
 		unitStats.stackSize = _stackCount;
 		unitStats.initiative = 8;
-		unitType = UnitType::GUNNER;
-		allegiance = _allegiance;
+		unitInformation.unitName = GUNNER;
+		unitInformation.allegiance = _allegiance;
+		unitInformation.unitType = RANGED;
 		init();
 	}
 

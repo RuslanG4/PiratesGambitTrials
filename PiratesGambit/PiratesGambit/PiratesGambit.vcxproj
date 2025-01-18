@@ -153,6 +153,7 @@
     <ClCompile Include="CannonBall.cpp" />
     <ClCompile Include="CannonBallItem.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyMoveConditions.cpp" />
     <ClCompile Include="FullMap.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="CannonBallItem.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyMoveConditions.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="FullMap.h" />
     <ClInclude Include="Game.h" />

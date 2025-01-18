@@ -1,6 +1,10 @@
 #include "Mouse.h"
 
-void Mouse::update(sf::RenderWindow& _win)
+void Mouse::update(const std::unique_ptr<sf::RenderWindow>& window)
 {
-	mousePosition = sf::Mouse::getPosition(_win);
+	if(!windowRef)
+	{
+		windowRef = window.get();
+	}
+	mousePosition = sf::Mouse::getPosition(*window);
 }

@@ -8,8 +8,9 @@ public:
 	{
 		unitStats.stackSize = _stackCount;
 		unitStats.initiative = 10;
-		unitType = UnitType::BUCCANEER;
-		allegiance = _allegiance;
+		unitInformation.unitName = BUCCANEER;
+		unitInformation.allegiance = _allegiance;
+		unitInformation.unitType = MELEE;
 		init();
 	}
 

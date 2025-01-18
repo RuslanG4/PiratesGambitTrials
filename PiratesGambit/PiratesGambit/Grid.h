@@ -13,8 +13,8 @@ class Grid
 public:
 	Grid(const std::vector<std::shared_ptr<Node>>& gridNodes_);
 
-	void drawGrid(sf::RenderWindow& _window) const;
-	void drawGameObject(sf::RenderWindow& _window) const;
+	void drawGrid(const std::unique_ptr<sf::RenderWindow>& window) const;
+	void drawGameObject(const std::unique_ptr<sf::RenderWindow>& window) const;
 
 	void updateIslands() const;
 	const std::vector<std::unique_ptr<Island>>& getIslands() const { return islands; }
@@ -28,12 +28,12 @@ public:
 	void wait(int time);
 
 	//Cellular Automata
-	void ApplyCellular(int _interations, sf::RenderWindow& window);
+	void ApplyCellular(int _interations, const std::unique_ptr<sf::RenderWindow>& window);
 
 	//Find + Map Islands
-	void FindLand(sf::RenderWindow& m_window);
-	void MapIsland(int _startIndex, bool saveIslandData, sf::RenderWindow& window);
-	void SaveIslandData(sf::RenderWindow& window);
+	void FindLand(const std::unique_ptr<sf::RenderWindow>& window);
+	void MapIsland(int _startIndex, bool saveIslandData, const std::unique_ptr<sf::RenderWindow>& window);
+	void SaveIslandData(const std::unique_ptr<sf::RenderWindow>& window);
 	void removeWorldEdges(std::shared_ptr<Node>& _currentNode) const;
 	void UnMarkNodes() const;
 

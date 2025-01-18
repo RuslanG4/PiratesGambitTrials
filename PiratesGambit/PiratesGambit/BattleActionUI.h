@@ -7,7 +7,7 @@ class BattleActionUI
 {
 public:
 	BattleActionUI();
-	void render(sf::RenderWindow& _win) const;
+	void render(const std::unique_ptr<sf::RenderWindow>& _win) const;
 	void update();
 
 	bool UIPressed() const { return buttonPressed; }

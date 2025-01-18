@@ -1,5 +1,7 @@
 #include "BattleScene.h"
 
+#include "EnemyMoveConditions.h"
+
 void BattleScene::placeUnits(const std::unique_ptr<Army>& _army, bool _isEnemy) const
 {
 	auto area = _isEnemy ? enemyStartArea : startArea;
@@ -34,7 +36,13 @@ void BattleScene::update(float _dt)
 		if (currentSelectedUnit->currentState == IDLE && !newAreaSet) {
 			tacticsArmyUI->UpdateToInitiativeView(); //update initiative bar
 			currentSelectedUnit = tacticsArmyUI->initiativeSystem.getNextUnit();
-			createMoveableArea(currentSelectedUnit);
+			if (currentSelectedUnit->unitInformation.allegiance == RED_PLAYER) {
+				createMoveableArea(currentSelectedUnit);
+			}else
+			{
+				createMoveableArea(currentSelectedUnit);
+				EnemyTurn();
+			}
 		}
 		break;
 	case END:
@@ -52,29 +60,29 @@ void BattleScene::update(float _dt)
 	
 }
 
-void BattleScene::render(sf::RenderWindow& _win) const
+void BattleScene::render(const std::unique_ptr<sf::RenderWindow>& window) const
 {
-	_win.setView(_win.getDefaultView());
+	window->setView(window->getDefaultView());
 	for(auto& node: battleGrid)
 	{
-		_win.draw(*node->walkableArea);
-		_win.draw(*node->debugShape);
+		window->draw(*node->walkableArea);
+		window->draw(*node->debugShape);
 	}
 	for (auto& unit : playerRef->getArmy()->getArmy())
 	{
-		unit->render(_win);
+		unit->render(window);
 	}
 	for (auto& unit : enemyRef->getArmy()->getArmy())
 	{
-		unit->render(_win);
+		unit->render(window);
 	}
 	if(canAttack)
 	{
-		_win.draw(attackIcon);
+		window->draw(attackIcon);
 	}
-	tacticsArmyUI->render(_win);
+	tacticsArmyUI->render(window);
 	
-	UIInterface->render(_win);
+	UIInterface->render(window);
 }
 
 void BattleScene::initialiseBattleGrid()
@@ -291,7 +299,7 @@ void BattleScene::detectMouse()
 		case BATTLE:
 			
 				if (currentHoverNodeID != -1 && battleGrid[currentHoverNodeID]->isOccupied() && battleGrid[currentHoverNodeID]->debugShape->getGlobalBounds().contains(mousePos)) {
-					if (currentSelectedUnit->unitType == GUNNER) {
+					if (currentSelectedUnit->unitInformation.unitType == RANGED) {
 					//attacl ranged
 						for (auto& node : walkableNodes)
 						{
@@ -301,6 +309,7 @@ void BattleScene::detectMouse()
 					newAreaSet = false;
 					currentSelectedUnit->Attack();
 					canAttack = false;
+					Mouse::getInstance().SetToDefault();
 					}
 					else{
 						aStarPathFind(battleGrid[currentSelectedUnit->getCurrentNodeId()], battleGrid[attackNode]);
@@ -346,25 +355,62 @@ void BattleScene::TakeUnitAction(const std::shared_ptr<BattleGridNode>& _targetN
 void BattleScene::hoverMouseOnNode()
 {
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(Mouse::getInstance().getMousePosition());
-	for(auto& node : battleGrid)
-	{
-		if(node->walkableArea->getGlobalBounds().contains(mousePos))
-		{
-			currentHoverNodeID = node->getID();
-			if (currentSelectedUnit->unitType == BUCCANEER) {
-				if (isNodeInRangeOfUnit())
-				{
-					canAttack = true;
-					pinpointMousePosition(mousePos, node);
-				}
-				else
-				{
-					canAttack = false;
-					attackNode = -1;
-					attackIcon.setPosition(sf::Vector2f(-200, -200)); //offscreen
-				}
-			}
 
+	// Track the node currently under the cursor
+	int hoveredNodeID = -1;
+
+	// Check which node is currently being hovered
+	for (auto& node : battleGrid) {
+		if (node->walkableArea->getGlobalBounds().contains(mousePos)) {
+			hoveredNodeID = node->getID();
+			break; // Stop checking once the hovered node is found
+		}
+	}
+
+	// If the cursor is on the same node for ranged units, do nothing
+	if (currentSelectedUnit->unitInformation.unitType == RANGED && hoveredNodeID == currentHoverNodeID) {
+		return;
+	}
+
+	// Update the hovered node ID
+	currentHoverNodeID = hoveredNodeID;
+
+	// If no valid node is hovered, reset to default cursor
+	if (currentHoverNodeID == -1) {
+		Mouse::getInstance().SetToDefault();
+		return;
+	}
+
+	// Handle logic for MELEE units
+	if (currentSelectedUnit->unitInformation.unitType == MELEE) {
+		if (isNodeInRangeOfUnit()) {
+			canAttack = true;
+			auto node = battleGrid[currentHoverNodeID];
+			pinpointMousePosition(mousePos, node);
+		}
+		else {
+			canAttack = false;
+			attackNode = -1;
+			attackIcon.setPosition(sf::Vector2f(-200, -200)); // Offscreen
+		}
+	}
+
+	// Handle logic for RANGED units
+	else if (currentSelectedUnit->unitInformation.unitType == RANGED) {
+		bool isEnemyHovered = false;
+
+		// Check if the hovered node contains an enemy
+		for (auto& enemyUnit : enemyRef->getArmy()->getArmy()) {
+			if (enemyUnit->getCurrentNodeId() == currentHoverNodeID) {
+				Mouse::getInstance().SetToRanged();
+				isEnemyHovered = true;
+				break;
+			}
+		}
+
+		// Reset cursor to default if no enemy is on the hovered node
+		if (!isEnemyHovered) {
+			Mouse::getInstance().SetToDefault();
 		}
 	}
 }
@@ -541,6 +587,47 @@ void BattleScene::clearStartArea()
 		node->setTransparent();
 	}
 	startArea.clear();
+}
+
+void BattleScene::EnemyTurn()
+{
+	if(currentSelectedUnit->unitInformation.unitType == RANGED)
+	{
+		for (auto& node : walkableNodes)
+		{
+			node->setTransparent();
+		}
+		walkableNodes.clear();
+		newAreaSet = false;
+		currentSelectedUnit->Attack();
+		canAttack = false;
+	}else //melee
+	{
+		std::vector<std::shared_ptr<PirateUnit>> possibleUnits;
+		float shortestDistanceToUnit = 100;
+		for (auto& unit : playerRef->getArmy()->getArmy()) {
+			if (EnemyMoveConditions::distanceToEnemy(currentSelectedUnit->getPosition(), unit->getPosition()) <= currentSelectedUnit->unitStats.speed) //unit close
+			{
+				//attack in walkable area
+			}
+		}
+		if(possibleUnits.empty()) //currently just finds the closest node in area to enemy number 1
+		{
+			float shortestDistance=100.f;
+			int selectedNode=-1;
+			for(auto& node : walkableNodes)
+			{
+				if(EnemyMoveConditions::distanceToEnemy(node->getMidPoint(), playerRef->getArmy()->getArmy()[0]->getPosition()) < shortestDistance)
+				{
+					shortestDistance = EnemyMoveConditions::distanceToEnemy(node->getMidPoint(), playerRef->getArmy()->getArmy()[0]->getPosition());
+					selectedNode = node->getID();
+				}
+			}
+			aStarPathFind(battleGrid[currentSelectedUnit->getCurrentNodeId()], battleGrid[selectedNode]);
+			move = true;
+			canAttack = false;
+		}
+	}
 }
 
 std::shared_ptr<PirateUnit> BattleScene::selectUnit(sf::Vector2f _mousePos)

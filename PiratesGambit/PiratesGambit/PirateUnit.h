@@ -14,6 +14,13 @@ struct UnitStats
 	bool isActive = true;
 };
 
+struct UnitInformation
+{
+	UnitType unitType;
+	UnitName unitName;
+	UnitAllegiance allegiance;
+};
+
 class PirateUnit
 {
 public:
@@ -32,7 +39,7 @@ public:
 	void moveUnit(sf::Vector2f _vel);
 	void Attack();
 
-	void render(sf::RenderWindow& _win) const;
+	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
 	void placeUnit(sf::Vector2f _pos);
 	void setCurrentNodeId(int _id) { nodeId = _id; }
 	int getCurrentNodeId()const { return nodeId; }
@@ -40,13 +47,11 @@ public:
 	int getSpeed() const { return unitStats.speed; }
 	sf::FloatRect getGlobalBounds() const { return sprite.getGlobalBounds(); }
 
-	UnitType unitType;
-
 	UnitState currentState = IDLE;
 
 	UnitStats unitStats;
 
-	UnitAllegiance allegiance;
+	UnitInformation unitInformation;
 
 protected:
 	float scaleX = 3.5, scaleY = 3.5;

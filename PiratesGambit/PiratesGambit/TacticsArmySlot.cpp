@@ -1,6 +1,6 @@
 #include "TacticsArmySlot.h"
 
-TacticsArmySlot::TacticsArmySlot(UnitType _type, sf::Vector2f _pos, bool _mainIcon)
+TacticsArmySlot::TacticsArmySlot(UnitName _type, sf::Vector2f _pos, bool _mainIcon)
 {
 	init();
 	updateSlots(_type);
@@ -12,7 +12,7 @@ TacticsArmySlot::TacticsArmySlot(UnitType _type, sf::Vector2f _pos, bool _mainIc
 	unitSprite.setPosition(boxBorder.getPosition());
 }
 
-TacticsArmySlot::TacticsArmySlot(UnitType _type, sf::Vector2f _pos)
+TacticsArmySlot::TacticsArmySlot(UnitName _type, sf::Vector2f _pos)
 {
 	init();
 	updateSlots(_type);
@@ -43,7 +43,7 @@ void TacticsArmySlot::init()
 	teamColor.setFillColor(sf::Color::Black);
 }
 
-void TacticsArmySlot::updateSlots(UnitType _type)
+void TacticsArmySlot::updateSlots(UnitName _type)
 {
 	switch (_type)
 	{
@@ -75,9 +75,9 @@ void TacticsArmySlot::updateAllegianceColor(UnitAllegiance _allegiance)
 	}
 }
 
-void TacticsArmySlot::render(sf::RenderWindow& _win) const
+void TacticsArmySlot::render(const std::unique_ptr<sf::RenderWindow>& _win) const
 {
-	_win.draw(teamColor);
-	_win.draw(boxBorder);
-	_win.draw(unitSprite);
+	_win->draw(teamColor);
+	_win->draw(boxBorder);
+	_win->draw(unitSprite);
 }

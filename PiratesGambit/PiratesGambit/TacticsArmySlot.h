@@ -6,13 +6,13 @@
 class TacticsArmySlot
 {
 public:
-	TacticsArmySlot(UnitType _type, sf::Vector2f _pos, bool _mainIcon);
-	TacticsArmySlot(UnitType _type,sf::Vector2f _pos);
+	TacticsArmySlot(UnitName _type, sf::Vector2f _pos, bool _mainIcon);
+	TacticsArmySlot(UnitName _type,sf::Vector2f _pos);
 
 	void init();
-	void updateSlots(UnitType _type);
+	void updateSlots(UnitName _type);
 	void updateAllegianceColor(UnitAllegiance _allegiance);
-	void render(sf::RenderWindow& _win) const;
+	void render(const std::unique_ptr<sf::RenderWindow>& _win) const;
 	sf::Vector2f getPosition() const { return boxBorder.getPosition(); }
 
 	sf::Sprite unitSprite;

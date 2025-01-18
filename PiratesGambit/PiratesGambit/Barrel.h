@@ -9,7 +9,7 @@ class Barrel : public GameObject
 public:
 	Barrel();
 
-	void render(sf::RenderWindow& _win) override;
+	void render(const std::unique_ptr<sf::RenderWindow>& window) override;
 	
 	void interact() override;
 

@@ -27,7 +27,7 @@ public:
 	void processKeys(sf::Event t_event);
 	void processKeyUp(sf::Event t_event);
 
-	void render(sf::RenderWindow& window) const;
+	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
 	void update(double dt);
 
 	bool checkCollision(const std::shared_ptr<Node>& _node, sf::Vector2f& _pos);

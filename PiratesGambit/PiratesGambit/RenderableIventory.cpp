@@ -46,15 +46,15 @@ void RenderableInventory::passItems(std::vector<std::unique_ptr<InventoryItem>>&
 	}
 }
 
-void RenderableInventory::render(sf::RenderWindow& _win)
+void RenderableInventory::render(const std::unique_ptr<sf::RenderWindow>& window)
 {
-	_win.setView(_win.getDefaultView());
-	_win.draw(inventoryBackground);
+	window->setView(window->getDefaultView());
+	window->draw(inventoryBackground);
 	for(auto& slot: inventorySlots)
 	{
-		_win.draw(slot->getBackgroundSprite());
-		_win.draw(slot->getItemSprite());
-		_win.draw(slot->getTest());
+		window->draw(slot->getBackgroundSprite());
+		window->draw(slot->getItemSprite());
+		window->draw(slot->getTest());
 	}
 	
 }

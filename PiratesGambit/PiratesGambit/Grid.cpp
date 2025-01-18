@@ -13,16 +13,16 @@ Grid::Grid(const std::vector<std::shared_ptr<Node>>& gridNodes_) : nodeGrid(grid
 /// renders nodes for visual debugging in generation
 /// </summary>
 /// <param name="_window">sfml render window</param>
-void Grid::drawGrid(sf::RenderWindow& _window) const
+void Grid::drawGrid(const std::unique_ptr<sf::RenderWindow>& window) const
 {
 	for(auto& node : nodeGrid)
 	{
 		if(node->waterBackSprite && node->drawableNode)
 		{
-			_window.draw(*(node->waterBackSprite));
-			_window.draw(*(node->drawableNode));
+			window->draw(*(node->waterBackSprite));
+			window->draw(*(node->drawableNode));
 		}
-		_window.draw(*(node->debugShape));
+		window->draw(*(node->debugShape));
 	}
 }
 
@@ -30,11 +30,11 @@ void Grid::drawGrid(sf::RenderWindow& _window) const
 /// passes render window to island in order to draw objects
 /// </summary>
 /// <param name="_window">sfml render window</param>
-void Grid::drawGameObject(sf::RenderWindow& _window) const
+void Grid::drawGameObject(const std::unique_ptr<sf::RenderWindow>& window) const
 {
 	for(auto& island : islands)
 	{
-		island->render(_window);
+		island->render(window);
 	}
 }
 
@@ -155,7 +155,7 @@ void Grid::wait(int time)
 /// Celuar Automata algorithm for shape generation
 /// </summary>
 /// <param name="_interations">How many times we do algorithm</param>
-void Grid::ApplyCellular(int _interations, sf::RenderWindow& m_window)
+void Grid::ApplyCellular(int _interations, const std::unique_ptr<sf::RenderWindow>& window)
 {
 	for(int i =0;i<_interations;i++)
 	{
@@ -211,13 +211,13 @@ void Grid::ApplyCellular(int _interations, sf::RenderWindow& m_window)
 		}
 	}
 
-	FindLand(m_window);
+	FindLand(window);
 }
 
 ///<summary>
 /// Iterated through chunk to find any land nodes to start island mapping
 ///</summary>
-void Grid::FindLand(sf::RenderWindow& m_window)
+void Grid::FindLand(const std::unique_ptr<sf::RenderWindow>& window)
 {
 	for(auto& node : nodeGrid)
 	{
@@ -228,11 +228,11 @@ void Grid::FindLand(sf::RenderWindow& m_window)
 
 		if(node->getMarked() == false && node->getIsLand())
 		{
-			MapIsland(node->getChunkId(),false ,m_window); //start island mapping
+			MapIsland(node->getChunkId(),false ,window); //start island mapping
 		}
 	}
 	UnMarkNodes();
-	SaveIslandData(m_window);
+	SaveIslandData(window);
 }
 
 /// <summary>
@@ -241,7 +241,7 @@ void Grid::FindLand(sf::RenderWindow& m_window)
 /// <param name="_startIndex">Begin node</param>
 /// <param name="saveIslandData">If we want to store in islands vector</param>
 /// <param name="window">sfml window</param>
-void Grid::MapIsland(int _startIndex,bool saveIslandData, sf::RenderWindow & window)
+void Grid::MapIsland(int _startIndex,bool saveIslandData, const std::unique_ptr<sf::RenderWindow>& window)
 {
 	std::vector<std::shared_ptr<Node>> currentIsland;
 	std::queue<std::shared_ptr<Node>> nodeQueue;
@@ -298,7 +298,7 @@ void Grid::MapIsland(int _startIndex,bool saveIslandData, sf::RenderWindow & win
 ///<summary>
 /// Saves nodes to island 
 ///</summary>
-void Grid::SaveIslandData(sf::RenderWindow& window)
+void Grid::SaveIslandData(const std::unique_ptr<sf::RenderWindow>& window)
 {
 	for (auto& node : nodeGrid)
 	{

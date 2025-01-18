@@ -6,9 +6,9 @@
 /// load and setup the text 
 /// load and setup thne image
 /// </summary>
-Game::Game() :
-	m_window{ sf::VideoMode{ SCREEN_WIDTH,SCREEN_HEIGHT, 32U }, "SFML Game" }
+Game::Game()
 {
+	m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode( SCREEN_WIDTH,SCREEN_HEIGHT), 32U );
 	initialise();
 
 	myMap = std::make_unique<FullMap>(m_window, 1); //keep 1x1, 2x2
@@ -53,7 +53,7 @@ void Game::run()
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	const float fps{ 60.0f };
 	sf::Time timePerFrame = sf::seconds(1.0f / fps); // 60 fps
-	while (m_window.isOpen())
+	while (m_window->isOpen())
 	{
 		processEvents(); // as many as possible
 		timeSinceLastUpdate += clock.restart();
@@ -74,7 +74,7 @@ void Game::run()
 void Game::processEvents()
 {
 	sf::Event newEvent;
-	while (m_window.pollEvent(newEvent))
+	while (m_window->pollEvent(newEvent))
 	{
 		if (sf::Event::KeyPressed == newEvent.type) //user pressed a key
 		{
@@ -164,15 +164,15 @@ void Game::update(double t_deltaTime)
 /// </summary>
 void Game::render()
 {
-	m_window.clear(sf::Color::Black);
+	m_window->clear(sf::Color::Black);
 	if (!battle) {
-		m_window.setView(myCamera.getCamera());
+		m_window->setView(myCamera.getCamera());
 
 		for (int index : visibleNodes) {
 			std::shared_ptr<Node> node = myMap->getFullMap()[index];
 
-			m_window.draw(*(node->waterBackSprite));
-			m_window.draw(*(node->drawableNode));
+			m_window->draw(*(node->waterBackSprite));
+			m_window->draw(*(node->drawableNode));
 		}
 
 		myPlayer->render(m_window);
@@ -184,7 +184,7 @@ void Game::render()
 		battleScene->render(m_window);
 	}
 
-	m_window.display();
+	m_window->display();
 }
 
 void Game::initialise()

@@ -11,7 +11,7 @@ void Gunner::init()
 	rectSourceSprite.top = 0;
 	sprite.setTextureRect(rectSourceSprite);
 
-	if (allegiance != RED_PLAYER) {
+	if (unitInformation.allegiance != RED_PLAYER) {
 		scaleX = -scaleX;
 	}
 	sprite.setScale(scaleX, scaleY);

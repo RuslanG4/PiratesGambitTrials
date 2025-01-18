@@ -8,7 +8,7 @@ public:
 	CannonBall(sf::Vector2f _pos, sf::Vector2f _vel = {0,0});
 
 	void init();
-	void render(sf::RenderWindow& _win) const;
+	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
 	void update();
 
 	sf::FloatRect getBounds() const { return body.getGlobalBounds(); }

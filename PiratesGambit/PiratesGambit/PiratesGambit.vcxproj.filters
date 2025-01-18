@@ -198,6 +198,9 @@
     <ClCompile Include="InitiativeSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyMoveConditions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -327,6 +330,9 @@
       <Filter>Header Files\UI</Filter>
     </ClInclude>
     <ClInclude Include="InitiativeSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyMoveConditions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

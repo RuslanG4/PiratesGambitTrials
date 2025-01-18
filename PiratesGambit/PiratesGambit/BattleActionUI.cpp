@@ -18,11 +18,11 @@ BattleActionUI::BattleActionUI()
 	currentMode.setPosition(250, 50);
 }
 
-void BattleActionUI::render(sf::RenderWindow& _win) const
+void BattleActionUI::render(const std::unique_ptr<sf::RenderWindow>& _win) const
 {
-	_win.draw(uiBorder);
-	_win.draw(attackSprite);
-	_win.draw(currentMode);
+	_win->draw(uiBorder);
+	_win->draw(attackSprite);
+	_win->draw(currentMode);
 }
 
 void BattleActionUI::update()

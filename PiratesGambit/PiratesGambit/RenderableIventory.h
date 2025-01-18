@@ -10,7 +10,7 @@ public:
 
 	void setUpInventory(int _rows, int _cols);
 	void passItems(std::vector<std::unique_ptr<InventoryItem>>& _currentItems);
-	void render(sf::RenderWindow& _win);
+	void render(const std::unique_ptr<sf::RenderWindow>& window);
 
 	std::vector<InventorySlot*> getSlots() const { return inventorySlots; }
 

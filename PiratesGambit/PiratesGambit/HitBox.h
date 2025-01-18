@@ -12,7 +12,7 @@ public:
 		hitbox.setOrigin(_size.x / 2, _size.y / 2);
 	}
 
-	void render(sf::RenderWindow& _window)const { _window.draw(hitbox); }
+	void render(const std::unique_ptr<sf::RenderWindow>& window)const { window->draw(hitbox); }
 
 	void setPosition(sf::Vector2f _pos) { hitbox.setPosition(_pos); }
 	void setRotation(float _rotation) { hitbox.setRotation(_rotation); }

@@ -35,11 +35,11 @@ void Player::update(double dt)
 	handlePlayerStates(dt);
 }
 
-void Player::render(sf::RenderWindow& window) const
+void Player::render(const std::unique_ptr<sf::RenderWindow>& window) const
 {
 	if (!onBoat)
 	{
-		window.draw(body);
+		window->draw(body);
 		myHitbox->render(window);
 	}
 
@@ -47,7 +47,7 @@ void Player::render(sf::RenderWindow& window) const
 	for (auto& node : updateableArea->getUpdateableNodes())
 	{
 		if (node != nullptr) {
-			window.draw(*(node->debugShape));
+			window->draw(*(node->debugShape));
 		}
 	}
 }

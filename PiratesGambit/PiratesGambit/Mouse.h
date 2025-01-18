@@ -1,5 +1,6 @@
 #pragma once
 #include"Includes.h"
+#include "TextureManager.h"
 
 class Mouse
 {
@@ -9,7 +10,7 @@ public:
 		return instance;
 	}
 
-	void update(sf::RenderWindow& _win);
+	void update(const std::unique_ptr<sf::RenderWindow>& window);
 
 	void processMouse(sf::Event t_event)
 	{
@@ -36,6 +37,22 @@ public:
 		return mousePosition;
 	}
 
+	void SetToRanged()
+	{
+		if (!customCursor.loadFromPixels(rangedCursor.getPixelsPtr(), rangedCursor.getSize(), sf::Vector2u(2, 2))) {
+			std::cerr << "Failed to create custom cursor!";
+		}
+		windowRef->setMouseCursor(customCursor);
+	}
+
+	void SetToDefault()
+	{
+		if (!customCursor.loadFromSystem(sf::Cursor::Arrow)) {
+			std::cerr << "Failed to load default cursor!";
+		}
+		windowRef->setMouseCursor(customCursor);
+	}
+
 	bool& LeftClicked(){
 		return hasClickedLeft;
 	}
@@ -49,9 +66,24 @@ public:
 private:
 	Mouse()
 	{
-		
-	};
+		renderTexture.create(48, 48); // Double the size (example)
+		sf::Sprite sprite;
+		sprite.setTexture(TextureManager::getInstance().getTexture("SHOOT_ICON"));
+		sprite.setScale(1.5f, 1.5f); // Scale factor
+
+		renderTexture.draw(sprite);
+
+		rangedCursor = renderTexture.getTexture().copyToImage();
+		rangedCursor.flipHorizontally();
+		rangedCursor.flipVertically();
+	}
 	sf::Vector2i mousePosition;
+
+	sf::RenderWindow* windowRef;
+
+	sf::RenderTexture renderTexture;
+	sf::Image rangedCursor;
+	sf::Cursor customCursor;
 
 	bool canClick{ true };
 	bool hasClickedRight{ false };

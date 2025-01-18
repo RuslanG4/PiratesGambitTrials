@@ -28,10 +28,10 @@ void PirateUnit::Attack()
 	animationState.elapsedTime = 0;
 }
 
-void PirateUnit::render(sf::RenderWindow& _win) const
+void PirateUnit::render(const std::unique_ptr<sf::RenderWindow>& window) const
 {
-	_win.draw(sprite);
-	unitAmount.render(_win);
+	window->draw(sprite);
+	unitAmount.render(window);
 }
 
 void PirateUnit::placeUnit(sf::Vector2f _pos)

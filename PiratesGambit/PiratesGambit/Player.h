@@ -46,7 +46,7 @@ public:
 	~Player() = default;
 
 	void update(double dt);
-	void render(sf::RenderWindow& window) const;
+	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
 
 	//animation
 	void handlePlayerStates(double dt);

@@ -11,10 +11,10 @@ void UnitAmount::init()
 	background.setOutlineThickness(1);
 }
 
-void UnitAmount::render(sf::RenderWindow& _win) const
+void UnitAmount::render(const std::unique_ptr<sf::RenderWindow>& window) const
 {
-	_win.draw(background);
-	_win.draw(amountText);
+	window->draw(background);
+	window->draw(amountText);
 }
 
 void UnitAmount::centerText()

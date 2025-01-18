@@ -14,7 +14,7 @@ public:
 	void AddArmy(const std::unique_ptr<Army>& _army);
 	void extend();
 	void UpdateToInitiativeView();
-	void render(sf::RenderWindow& _win) const;
+	void render(const std::unique_ptr<sf::RenderWindow>& _win) const;
 
 	InitiativeSystem initiativeSystem;
 private:

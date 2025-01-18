@@ -1,10 +1,10 @@
 #include "Island.h"
 
-void Island::render(sf::RenderWindow& _win) const
+void Island::render(const std::unique_ptr<sf::RenderWindow>& window) const
 {
 	for (auto& object : gameObjects)
 	{
-		object->render(_win);
+		object->render(window);
 	}
 }
 

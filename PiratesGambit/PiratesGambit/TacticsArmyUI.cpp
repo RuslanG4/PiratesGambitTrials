@@ -5,12 +5,12 @@ TacticsArmyUI::TacticsArmyUI(const std::unique_ptr<Army>& _army)
 	firstSlot = std::make_unique<TacticsArmySlot>(EMPTY, sf::Vector2f(180, 850), 1);
 
 	sf::Vector2f pos = firstSlot->getPosition();
-	armySlots.push_back(std::make_unique<TacticsArmySlot>(_army->getArmy()[0]->unitType, sf::Vector2f(pos.x + 180, pos.y)));
+	armySlots.push_back(std::make_unique<TacticsArmySlot>(_army->getArmy()[0]->unitInformation.unitName, sf::Vector2f(pos.x + 180, pos.y)));
 	for(int i = 1; i < 7;i++)
 	{
 		pos = armySlots.back()->getPosition();
 		if (i < _army->getArmy().size()) {
-			armySlots.push_back(std::make_unique<TacticsArmySlot>(_army->getArmy()[i]->unitType, sf::Vector2f(pos.x + 120, pos.y)));
+			armySlots.push_back(std::make_unique<TacticsArmySlot>(_army->getArmy()[i]->unitInformation.unitName, sf::Vector2f(pos.x + 120, pos.y)));
 		}else
 		{
 			armySlots.push_back(std::make_unique<TacticsArmySlot>(EMPTY, sf::Vector2f(pos.x + 120, pos.y)));
@@ -40,11 +40,11 @@ void TacticsArmyUI::UpdateToInitiativeView()
 	for (auto& slot : armySlots) {
 		if (slot == armySlots[0])
 		{
-			firstSlot->updateSlots(turnOrder[slotIndex]->unitType);
-			firstSlot->updateAllegianceColor(turnOrder[slotIndex]->allegiance);
+			firstSlot->updateSlots(turnOrder[slotIndex]->unitInformation.unitName);
+			firstSlot->updateAllegianceColor(turnOrder[slotIndex]->unitInformation.allegiance);
 		}
-		slot->updateSlots(turnOrder[slotIndex]->unitType);
-		slot->updateAllegianceColor(turnOrder[slotIndex]->allegiance);
+		slot->updateSlots(turnOrder[slotIndex]->unitInformation.unitName);
+		slot->updateAllegianceColor(turnOrder[slotIndex]->unitInformation.allegiance);
 		slotIndex++;
 		if (slotIndex >= turnOrder.size()) {
 			slotIndex = 0;
@@ -52,7 +52,7 @@ void TacticsArmyUI::UpdateToInitiativeView()
 	}
 }
 
-void TacticsArmyUI::render(sf::RenderWindow& _win) const
+void TacticsArmyUI::render(const std::unique_ptr<sf::RenderWindow>& _win) const
 {
 	for(auto& slot : armySlots)
 	{

@@ -29,7 +29,7 @@ public:
 		tacticsArmyUI = std::make_unique<TacticsArmyUI>(_player->getArmy());
 
 		attackIcon.setTexture(TextureManager::getInstance().getTexture("SWORD_ICON"));
-		attackIcon.setScale(-2, 2);
+		attackIcon.setScale(2, 2);
 		attackIcon.setOrigin(16,16);
 
 		initialiseBattleGrid();
@@ -41,7 +41,7 @@ public:
 	void placeUnits(const std::unique_ptr<Army>& _army, bool _isEnemy) const;
 
 	void update(float _dt);
-	void render(sf::RenderWindow& _win) const;
+	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
 
 	void initialiseBattleGrid();
 	void addNeighbours(int _currentNodeId) const;
@@ -68,6 +68,8 @@ public:
 	void preGameStartUpPlacement(sf::Vector2f _mousePos);
 
 	void clearStartArea();
+
+	void EnemyTurn();
 
 	std::shared_ptr<PirateUnit> selectUnit(sf::Vector2f _mousePos);
 
@@ -116,6 +118,8 @@ private:
 
 	bool move{ false };
 	bool newAreaSet{ false };
+
+	bool rangedIcon{ false };
 
 	bool canAttack{ false };
 	int attackNode = -1;

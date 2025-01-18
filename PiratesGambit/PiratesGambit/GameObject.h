@@ -5,7 +5,7 @@
 class GameObject
 {
 public:
-	virtual void render(sf::RenderWindow& _win) = 0;
+	virtual void render(const std::unique_ptr<sf::RenderWindow>& window) = 0;
 	virtual void interact() = 0;
 	virtual void update() = 0;
 

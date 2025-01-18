@@ -8,7 +8,7 @@ public:
 	UnitAmount() { init(); }
 
 	void init();
-	void render(sf::RenderWindow& _win) const;
+	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
 
 	void centerText();
 

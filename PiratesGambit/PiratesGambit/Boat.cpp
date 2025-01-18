@@ -15,9 +15,9 @@ void Boat::processKeyUp(sf::Event t_event)
 	canShoot = true;
 }
 
-void Boat::render(sf::RenderWindow& window) const
+void Boat::render(const std::unique_ptr<sf::RenderWindow>& window) const
 {
-	window.draw(boatSprite);
+	window->draw(boatSprite);
 	myHitbox->render(window);
 	for (auto& cannonball : cannonBalls) {
 		cannonball->render(window);
