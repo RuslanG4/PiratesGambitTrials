@@ -7,6 +7,7 @@
 #include"Mouse.h"
 #include"BattleActionUI.h"
 #include"TacticsArmyUI.h"
+#include"PathFindingFunctions.h"
 
 class BattleScene
 {
@@ -71,6 +72,8 @@ public:
 
 	void EnemyTurn();
 
+	void calculateDamage(const std::shared_ptr<PirateUnit>& _attacker, const std::shared_ptr<PirateUnit>& _defender);
+
 	std::shared_ptr<PirateUnit> selectUnit(sf::Vector2f _mousePos);
 
 	int getCurrentNodeID(sf::Vector2f _pos);
@@ -93,6 +96,8 @@ private:
 	BattleState currentState = PREP;
 
 	std::shared_ptr<PirateUnit> currentSelectedUnit;
+	std::shared_ptr<PirateUnit> currentDefendingUnit;
+
 
 	std::shared_ptr<Player> playerRef;
 	std::shared_ptr<Enemy> enemyRef;

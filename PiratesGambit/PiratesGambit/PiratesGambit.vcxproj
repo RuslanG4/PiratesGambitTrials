@@ -152,6 +152,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CannonBall.cpp" />
     <ClCompile Include="CannonBallItem.cpp" />
+    <ClCompile Include="DamageCalculations.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyMoveConditions.cpp" />
     <ClCompile Include="FullMap.cpp" />
@@ -168,6 +169,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="PathFindingFunctions.cpp" />
     <ClCompile Include="PirateUnit.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerController.cpp" />
@@ -193,6 +195,7 @@
     <ClInclude Include="CannonBall.h" />
     <ClInclude Include="CannonBallItem.h" />
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="DamageCalculations.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyMoveConditions.h" />
     <ClInclude Include="Enums.h" />
@@ -210,6 +213,7 @@
     <ClInclude Include="Island.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="PathFindingFunctions.h" />
     <ClInclude Include="PirateUnit.h" />
     <ClInclude Include="PirateUnits.h" />
     <ClInclude Include="Player.h" />

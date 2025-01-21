@@ -6,11 +6,17 @@ class Buccaneer : public PirateUnit
 public:
 	Buccaneer(int _stackCount, UnitAllegiance _allegiance)
 	{
-		unitStats.stackSize = _stackCount;
-		unitStats.initiative = 10;
 		unitInformation.unitName = BUCCANEER;
 		unitInformation.allegiance = _allegiance;
 		unitInformation.unitType = MELEE;
+
+		UnitStats stats = {
+			10,0,true,4,_stackCount,1,2,1,2,10
+		};
+
+		unitStats = stats;
+		unitBaseStats = stats;
+
 		init();
 	}
 

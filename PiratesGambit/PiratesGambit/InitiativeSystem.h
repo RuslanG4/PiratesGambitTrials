@@ -9,6 +9,18 @@ public:
         unit->unitStats.turnPoints = unit->unitStats.initiative;
     }
 
+    void removeUnit(const std::shared_ptr<PirateUnit>& unit)
+    {
+        auto it = std::ranges::find(units, unit);
+        if (it != units.end()) {
+            units.erase(it);
+            std::cout << "Unit removed successfully.\n";
+        }
+        else {
+            std::cout << "Unit not found.\n";
+        }
+    }
+
     std::shared_ptr<PirateUnit> getNextUnit() {
         for (auto& unit : units) {
             if (unit->unitStats.isActive) {

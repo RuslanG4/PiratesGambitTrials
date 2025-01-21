@@ -14,6 +14,8 @@ public:
 
 	void setPosition(sf::Vector2f _pos);
 	void updateAmount(int _amount);
+
+	bool renderUnitAmount = true;
 private:
 	sf::Text amountText;
 	sf::RectangleShape background;

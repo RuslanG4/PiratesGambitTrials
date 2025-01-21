@@ -13,8 +13,10 @@ void UnitAmount::init()
 
 void UnitAmount::render(const std::unique_ptr<sf::RenderWindow>& window) const
 {
-	window->draw(background);
-	window->draw(amountText);
+	if (renderUnitAmount) {
+		window->draw(background);
+		window->draw(amountText);
+	}
 }
 
 void UnitAmount::centerText()

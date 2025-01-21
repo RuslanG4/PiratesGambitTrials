@@ -6,11 +6,17 @@ class Gunner : public PirateUnit
 public:
 	Gunner(int _stackCount, UnitAllegiance _allegiance)
 	{
-		unitStats.stackSize = _stackCount;
-		unitStats.initiative = 8;
 		unitInformation.unitName = GUNNER;
 		unitInformation.allegiance = _allegiance;
 		unitInformation.unitType = RANGED;
+
+		UnitStats stats = {
+		9,0,true,4,_stackCount,4,3,2,4,10
+		};
+
+		unitStats = stats;
+		unitBaseStats = stats;
+
 		init();
 	}
 

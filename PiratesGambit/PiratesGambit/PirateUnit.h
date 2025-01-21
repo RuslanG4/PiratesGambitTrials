@@ -7,11 +7,21 @@
 
 struct UnitStats
 {
+	//turn orders
 	int initiative;
-	float speed;
-	int stackSize;
-	float turnPoints = 0; 
+	float turnPoints = 0;
 	bool isActive = true;
+
+	//movement
+	float speed;
+
+	//damage calcs
+	int stackSize;
+	int attackStat;
+	int defenceStat;
+	int minDamage;
+	int maxDamage;
+	int health;
 };
 
 struct UnitInformation
@@ -39,6 +49,8 @@ public:
 	void moveUnit(sf::Vector2f _vel);
 	void Attack();
 
+	void TakeDamage(int _totalDamage);
+
 	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
 	void placeUnit(sf::Vector2f _pos);
 	void setCurrentNodeId(int _id) { nodeId = _id; }
@@ -61,6 +73,9 @@ protected:
 	bool attackAnimation = false;
 	bool walkAnimation;
 	bool idleAnimation;
+	bool deathAnimation = false;
+
+	UnitStats unitBaseStats;
 
 	AnimationState animationState;
 

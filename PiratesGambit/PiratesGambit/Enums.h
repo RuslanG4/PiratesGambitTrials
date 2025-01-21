@@ -30,7 +30,8 @@ enum UnitState
 {
 	IDLE,
 	WALK,
-	ATTACK
+	ATTACK,
+	DEATH
 };
 
 enum BattleState

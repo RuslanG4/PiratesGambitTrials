@@ -18,24 +18,24 @@ void Buccaneer::init()
 	sprite.setOrigin(16, 24);
 
 	updateUnitAmount(unitStats.stackSize);
-
-	unitStats.speed = 4;
 }
 
 void Buccaneer::update(float _dt)
 {
-	animateSprite(_dt);
-	if (currentState != ATTACK) {
-		if (Utility::magnitude(velocity.x, velocity.y) > 0)
-		{
-			currentState = WALK;
-			if (velocity.x < 0) sprite.setScale(-3.5, 3.5);
-			else sprite.setScale(3.5, 3.5);
-		}
-		else
-		{
-			currentState = IDLE;
-			sprite.setScale(scaleX, scaleY);
+	if (unitStats.isActive) {
+		animateSprite(_dt);
+		if (currentState != ATTACK && currentState != DEATH) {
+			if (Utility::magnitude(velocity.x, velocity.y) > 0)
+			{
+				currentState = WALK;
+				if (velocity.x < 0) sprite.setScale(-3.5, 3.5);
+				else sprite.setScale(3.5, 3.5);
+			}
+			else
+			{
+				currentState = IDLE;
+				sprite.setScale(scaleX, scaleY);
+			}
 		}
 	}
 }
@@ -57,6 +57,15 @@ void Buccaneer::animateSprite(float _dt)
 			currentState = IDLE;
 			animationState.elapsedTime = 0;
 			sprite.setScale(scaleX, scaleY);
+		}
+		break;
+	case DEATH:
+		Animator::getInstance().AnimateSprite(sprite, animationState, deathAnimation, 4, 5, _dt);
+		if (deathAnimation)
+		{
+			unitStats.isActive = false;
+			unitAmount.renderUnitAmount = false;
+			Animator::getInstance().AnimateDeath(sprite, 3, 5);
 		}
 		break;
 	}

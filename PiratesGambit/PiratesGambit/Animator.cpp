@@ -28,3 +28,13 @@ void Animator::AnimateSprite(sf::Sprite& _sprite, AnimationState& _state, bool& 
 	rectSourceSprite.top = row * rectSourceSprite.height;
 	_sprite.setTextureRect(rectSourceSprite);
 }
+
+void Animator::AnimateDeath(sf::Sprite& _sprite, int _colNum, int _rowNum)
+{
+	sf::IntRect rectSourceSprite;
+	rectSourceSprite.height = 32;
+	rectSourceSprite.width = 32;
+	rectSourceSprite.left = _colNum * rectSourceSprite.width;
+	rectSourceSprite.top = _rowNum * rectSourceSprite.height;
+	_sprite.setTextureRect(rectSourceSprite);
+}
