@@ -30,6 +30,7 @@ void BattleScene::update(float _dt)
 		break;
 
 	case BATTLE:
+		BulletFactory::getInstance().update();
 		if (move) {
 			moveUnit();
 		}
@@ -37,16 +38,16 @@ void BattleScene::update(float _dt)
 		{
 			if (hasAttacked && BulletFactory::getInstance().checkCollision(currentDefendingUnit->getGlobalBounds())) {
 				calculateDamage(currentSelectedUnit, currentDefendingUnit); // Damage calculation
-
 				updateNextTurn();
 			}
-		}else if ((currentSelectedUnit->currentState == IDLE && !newAreaSet)) {
+			else if (currentSelectedUnit->currentState == IDLE && !newAreaSet && !hasAttacked) {
+				updateNextTurn();
+			}
+		}
+		else if ((currentSelectedUnit->currentState == IDLE && !newAreaSet)) {
 			updateNextTurn();
 		}
-
-		BulletFactory::getInstance().update();
 		break;
-
 	case END:
 		break;
 	}
@@ -386,11 +387,6 @@ void BattleScene::hoverMouseOnNode()
 		}
 	}
 
-	// If the cursor is on the same node for ranged units, do nothing
-	if (currentSelectedUnit->unitInformation.unitType == RANGED && hoveredNodeID == currentHoverNodeID) {
-		return;
-	}
-
 	// Update the hovered node ID
 	currentHoverNodeID = hoveredNodeID;
 
@@ -402,6 +398,7 @@ void BattleScene::hoverMouseOnNode()
 
 	// Handle logic for MELEE units
 	if (currentSelectedUnit->unitInformation.unitType == MELEE) {
+		Mouse::getInstance().SetToDefault();
 		if (isNodeInRangeOfUnit()) {
 			canAttack = true;
 			auto node = battleGrid[currentHoverNodeID];
