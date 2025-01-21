@@ -664,8 +664,6 @@ void BattleScene::calculateDamage(const std::shared_ptr<PirateUnit>& _attacker, 
 
 	_defender->TakeDamage(damage);
 
-	std::cout << "damage : " << damage << "\n";
-
 	if (_defender->currentState == DEATH) { //dead
 		tacticsArmyUI->initiativeSystem.removeUnit(_defender);
 		tacticsArmyUI->UpdateToInitiativeView();

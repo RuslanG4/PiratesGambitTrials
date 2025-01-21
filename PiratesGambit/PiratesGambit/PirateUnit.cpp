@@ -32,27 +32,38 @@ void PirateUnit::Attack()
 
 void PirateUnit::TakeDamage(int _totalDamage)
 {
-	int totalCurrentHealth = (unitStats.stackSize * unitBaseStats.health) + unitStats.health;
+	std::cout << "Current stack : " << unitStats.stackSize << " Current health : " << unitStats.health << "\n";
 
-	std::cout << "Current health: " << totalCurrentHealth << "\n";
 
-	// Subtract the damage
-	totalCurrentHealth -= _totalDamage;
-
-	// Check for death
-	if (totalCurrentHealth <= 10) {
-		currentState = DEATH;
-		animationState.currentFrame = 0;
-		animationState.elapsedTime = 0;
-		return;
+	std::cout << "damage : " << _totalDamage << "\n";
+	while(_totalDamage != 0)
+	{
+		if(_totalDamage - unitBaseStats.health >= 0)
+		{
+			unitStats.stackSize--;
+			std::cout << "new stack (-10) : " << unitStats.stackSize << "\n";
+			_totalDamage -= unitBaseStats.health;
+		}else
+		{
+			unitStats.health -= _totalDamage;
+			std::cout  << "new health : " << unitStats.health << "\n";
+			if(unitStats.health <= 0)
+			{
+				unitStats.health = unitBaseStats.health + unitStats.health;
+				unitStats.stackSize--;
+			}
+			_totalDamage = 0;
+		}
+		if (unitStats.stackSize <= 0)
+		{
+			currentState = DEATH;
+			animationState.currentFrame = 0;
+			animationState.elapsedTime = 0;
+			return;
+		}
 	}
 
-	unitStats.stackSize = totalCurrentHealth / unitBaseStats.health; // actual stack size
-
-	// Update health of the last unit
-	unitStats.health = totalCurrentHealth % unitBaseStats.health;
-
-	std::cout << "New total health: " << (unitStats.stackSize * unitBaseStats.health) + unitStats.health << "\n";
+	std::cout << "End stack : " << unitStats.stackSize<< " End health : " << unitStats.health <<"\n";
 
 	// Update the displayed stack size
 	unitAmount.updateAmount(unitStats.stackSize);
