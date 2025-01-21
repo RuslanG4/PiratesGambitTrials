@@ -44,6 +44,8 @@ public:
 	void update(float _dt);
 	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
 
+	void updateNextTurn();
+
 	void initialiseBattleGrid();
 	void addNeighbours(int _currentNodeId) const;
 
@@ -127,6 +129,7 @@ private:
 	bool rangedIcon{ false };
 
 	bool canAttack{ false };
+	bool hasAttacked = false;
 	int attackNode = -1;
 };
 

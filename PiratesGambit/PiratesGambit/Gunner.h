@@ -1,5 +1,6 @@
 #pragma once
 #include "PirateUnit.h"
+#include"BulletFactory.h"
 
 class Gunner : public PirateUnit
 {
@@ -25,5 +26,8 @@ public:
 	void animateSprite(float _dt) override;
 
 private:
+	bool shootBullet = false;
+
+	sf::Vector2f bulletDirection;
 };
 

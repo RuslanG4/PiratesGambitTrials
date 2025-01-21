@@ -149,6 +149,7 @@
     <ClCompile Include="Boat.cpp" />
     <ClCompile Include="BoatController.cpp" />
     <ClCompile Include="Buccaneer.cpp" />
+    <ClCompile Include="BulletFactory.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CannonBall.cpp" />
     <ClCompile Include="CannonBallItem.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="Boat.h" />
     <ClInclude Include="BoatController.h" />
     <ClInclude Include="Buccaneer.h" />
+    <ClInclude Include="BulletFactory.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CannonBall.h" />
     <ClInclude Include="CannonBallItem.h" />

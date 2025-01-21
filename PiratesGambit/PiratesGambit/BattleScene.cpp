@@ -24,28 +24,29 @@ void BattleScene::placeUnits(const std::unique_ptr<Army>& _army, bool _isEnemy) 
 
 void BattleScene::update(float _dt)
 {
-	switch (currentState)
-	{
+	switch (currentState) {
 	case PREP:
 		UIInterface->update();
 		break;
+
 	case BATTLE:
-		if (move)
-		{
+		if (move) {
 			moveUnit();
 		}
-		else if (currentSelectedUnit->currentState == IDLE && !newAreaSet) {
-			tacticsArmyUI->UpdateToInitiativeView(); //update initiative bar
-			currentSelectedUnit = tacticsArmyUI->initiativeSystem.getNextUnit();
-			if (currentSelectedUnit->unitInformation.allegiance == RED_PLAYER) {
-				createMoveableArea(currentSelectedUnit);
-			}else
-			{
-				createMoveableArea(currentSelectedUnit);
-				EnemyTurn();
+		if(currentSelectedUnit->unitInformation.unitType == RANGED)
+		{
+			if (hasAttacked && BulletFactory::getInstance().checkCollision(currentDefendingUnit->getGlobalBounds())) {
+				calculateDamage(currentSelectedUnit, currentDefendingUnit); // Damage calculation
+
+				updateNextTurn();
 			}
+		}else if ((currentSelectedUnit->currentState == IDLE && !newAreaSet)) {
+			updateNextTurn();
 		}
+
+		BulletFactory::getInstance().update();
 		break;
+
 	case END:
 		break;
 	}
@@ -82,8 +83,24 @@ void BattleScene::render(const std::unique_ptr<sf::RenderWindow>& window) const
 		window->draw(attackIcon);
 	}
 	tacticsArmyUI->render(window);
+	BulletFactory::getInstance().render(window);
 	
 	UIInterface->render(window);
+}
+
+void BattleScene::updateNextTurn()
+{
+	//update initiative
+	tacticsArmyUI->UpdateToInitiativeView();
+
+	//set next unit
+	currentSelectedUnit = tacticsArmyUI->initiativeSystem.getNextUnit();
+
+	//
+	createMoveableArea(currentSelectedUnit);
+	if (currentSelectedUnit->unitInformation.allegiance != RED_PLAYER) {
+		EnemyTurn();
+	}
 }
 
 void BattleScene::initialiseBattleGrid()
@@ -309,9 +326,9 @@ void BattleScene::detectMouse()
 						}
 						walkableNodes.clear();
 					newAreaSet = false;
-					currentSelectedUnit->Attack(); //animation
-					calculateDamage(currentSelectedUnit, currentDefendingUnit); //damage calc
+					currentSelectedUnit->Attack(currentDefendingUnit->getPosition()); //animation
 					canAttack = false;
+					hasAttacked = true;
 					Mouse::getInstance().SetToDefault();
 					}
 					else{
@@ -549,7 +566,8 @@ void BattleScene::moveUnit()
 void BattleScene::finalizeMoveUnit()
 {
 	if (attackNode != -1) {
-		currentSelectedUnit->Attack();
+		currentSelectedUnit->Attack(currentDefendingUnit->getPosition());
+		hasAttacked = true;
 		calculateDamage(currentSelectedUnit, currentDefendingUnit); //damage calc
 	}
 	//update new grid positions
@@ -607,8 +625,8 @@ void BattleScene::EnemyTurn()
 		currentDefendingUnit = playerRef->getArmy()->getArmy()[0];
 		walkableNodes.clear();
 		newAreaSet = false;
-		currentSelectedUnit->Attack();
-		calculateDamage(currentSelectedUnit, currentDefendingUnit); //damage calc
+		currentSelectedUnit->Attack(currentDefendingUnit->getPosition());
+		hasAttacked = true;
 		canAttack = false;
 	}else //melee
 	{
@@ -640,7 +658,7 @@ void BattleScene::EnemyTurn()
 		{
 		
 			auto enemyNode = battleGrid[possibleUnits.front()->getCurrentNodeId()];
-			auto possibleAttackNodes = PathFindingFunctions::getInstance().BreathSearchNodes(enemyNode, 1);
+			auto possibleAttackNodes = PathFindingFunctions::BreathSearchNodes(enemyNode, 1);
 
 			for(auto& node : possibleAttackNodes)
 			{

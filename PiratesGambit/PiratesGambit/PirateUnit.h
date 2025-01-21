@@ -1,6 +1,7 @@
 #pragma once
 #include"Includes.h"
 #include"Animator.h"
+#include "CannonBall.h"
 #include "TextureManager.h"
 #include"Enums.h"
 #include"UnitAmount.h"
@@ -47,7 +48,7 @@ public:
 	void placeUnitAmountText();
 
 	void moveUnit(sf::Vector2f _vel);
-	void Attack();
+	void Attack(sf::Vector2f _targetDirection);
 
 	void TakeDamage(int _totalDamage);
 
@@ -81,5 +82,9 @@ protected:
 
 	UnitAmount unitAmount;
 	sf::Vector2f velocity;
+
+	std::vector<std::shared_ptr<CannonBall>> bullets;
+
+	sf::Vector2f targetPosition;
 };
 

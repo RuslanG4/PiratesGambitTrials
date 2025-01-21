@@ -23,11 +23,13 @@ void PirateUnit::moveUnit(sf::Vector2f _vel)
 	}
 }
 
-void PirateUnit::Attack()
+void PirateUnit::Attack(sf::Vector2f _targetDirection)
 {
 	currentState = ATTACK;
 	animationState.currentFrame = 0;
 	animationState.elapsedTime = 0;
+
+	targetPosition = _targetDirection;
 }
 
 void PirateUnit::TakeDamage(int _totalDamage)

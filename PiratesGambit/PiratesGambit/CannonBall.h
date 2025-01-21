@@ -24,6 +24,6 @@ private:
 
 	bool isActive{ false };
 
-	float force{ 8.5 };
+	float force{ 16.f };
 };
 

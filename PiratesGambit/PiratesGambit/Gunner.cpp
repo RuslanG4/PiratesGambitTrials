@@ -53,7 +53,14 @@ void Gunner::animateSprite(float _dt)
 		Animator::getInstance().AnimateSprite(sprite, animationState, walkAnimation, 6, 1, _dt);
 		break;
 	case ATTACK:
-		Animator::getInstance().AnimateSprite(sprite, animationState, attackAnimation, 7, 3, _dt);
+		Animator::getInstance().AnimateShoot(sprite, animationState, attackAnimation, shootBullet, 7, 3, _dt);
+		if(shootBullet)
+		{
+			bulletDirection = targetPosition- sprite.getPosition();
+			bulletDirection = Utility::unitVector2D(bulletDirection);
+			BulletFactory::getInstance().createCannonBall(sprite.getPosition(), bulletDirection);
+			shootBullet = false;
+		}
 		if (attackAnimation)
 		{
 			currentState = IDLE;
