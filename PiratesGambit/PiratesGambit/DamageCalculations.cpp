@@ -40,3 +40,27 @@ float DamageCalculations::calcDamageMultiplier(const int& _attack, const int& _d
 {
     return 1.f + 0.05f * (_attack - _defence);
 }
+
+UnitStats DamageCalculations::calculateDamage(UnitStats unitStats, const UnitStats& unitBaseStats, int totalDamage)
+{
+	while (totalDamage != 0) {
+        if (totalDamage - unitBaseStats.health >= 0) {
+            unitStats.stackSize--;
+            totalDamage -= unitBaseStats.health;
+        }
+        else {
+            unitStats.health -= totalDamage;
+            if (unitStats.health <= 0) {
+                unitStats.health = unitBaseStats.health + unitStats.health;
+                unitStats.stackSize--;
+            }
+            totalDamage = 0;
+        }
+        if (unitStats.stackSize <= 0) {
+            unitStats.isActive = false;
+            break;
+        }
+    }
+
+    return unitStats;
+}

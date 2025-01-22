@@ -307,7 +307,7 @@ void BattleScene::detectMouse()
 			tacticsArmyUI->extend();
 			currentSelectedUnit = tacticsArmyUI->initiativeSystem.getNextUnit();
 			UIInterface->updateModeString("Battle Mode");
-			clearStartArea();
+			clearArea(startArea);
 			createMoveableArea(currentSelectedUnit);
 		}
 		sf::Vector2f mousePos = static_cast<sf::Vector2f>(Mouse::getInstance().getMousePosition());
@@ -563,8 +563,7 @@ void BattleScene::moveUnit()
 void BattleScene::finalizeMoveUnit()
 {
 	if (attackNode != -1) {
-		currentSelectedUnit->Attack(currentDefendingUnit->getPosition());
-		hasAttacked = true;
+		TriggerAttack();
 		calculateDamage(currentSelectedUnit, currentDefendingUnit); //damage calc
 	}
 	//update new grid positions
@@ -579,6 +578,7 @@ void BattleScene::finalizeMoveUnit()
 	move = false;
 	currentNodeInPath = 0;
 	newAreaSet = false;
+	hasAttacked = false;
 }
 
 void BattleScene::preGameStartUpPlacement(sf::Vector2f _mousePos)
@@ -602,74 +602,47 @@ void BattleScene::preGameStartUpPlacement(sf::Vector2f _mousePos)
 	}
 }
 
-void BattleScene::clearStartArea()
+void BattleScene::clearArea(std::vector<std::shared_ptr<BattleGridNode>>& _vector)
 {
-	for(auto& node : startArea)
+	for(auto& node : _vector)
 	{
 		node->setTransparent();
 	}
-	startArea.clear();
+	_vector.clear();
 }
+
+void BattleScene::TriggerAttack()
+{
+	currentSelectedUnit->Attack(currentDefendingUnit->getPosition());
+	hasAttacked = true;
+}
+
 
 void BattleScene::EnemyTurn()
 {
+	//Ranged Unit Attack
 	if(currentSelectedUnit->unitInformation.unitType == RANGED)
 	{
-		for (auto& node : walkableNodes)
-		{
-			node->setTransparent();
-		}
-		currentDefendingUnit = playerRef->getArmy()->getArmy()[0];
-		walkableNodes.clear();
-		newAreaSet = false;
-		currentSelectedUnit->Attack(currentDefendingUnit->getPosition());
-		hasAttacked = true;
+		clearArea(walkableNodes);
+		currentDefendingUnit = PickUnitToAttack(playerRef->getArmy()->getArmy());
+		TriggerAttack();
 		canAttack = false;
-	}else //melee
+		newAreaSet = false;
+	}else
+	//Melee Attack
 	{
-		std::vector<std::shared_ptr<PirateUnit>> possibleUnits;
-
-		for (auto& unit : playerRef->getArmy()->getArmy()) {
-			if (unit->unitStats.isActive) {
-				if (EnemyMoveConditions::distanceToEnemy(currentSelectedUnit->getPosition(), unit->getPosition()) <= currentSelectedUnit->unitStats.speed) //unit close
-				{
-					possibleUnits.push_back(unit);
-				}
-			}
-		}
-		
-		float shortestDistance = 100.f;
 		int selectedNode = -1;
-		if (possibleUnits.empty()) //currently just finds the closest node in area to enemy number 1
+		if (ScanNearByUnits().empty()) //No nearby units
 		{
-			for (auto& node : walkableNodes)
-			{
-				if (EnemyMoveConditions::distanceToEnemy(node->getMidPoint(), playerRef->getArmy()->getArmy()[0]->getPosition()) < shortestDistance)
-				{
-					shortestDistance = EnemyMoveConditions::distanceToEnemy(node->getMidPoint(), playerRef->getArmy()->getArmy()[0]->getPosition());
-					selectedNode = node->getID();
-					canAttack = false;
-				}
-			}
+			selectedNode = SelectNodeToWalkTo();
 		}else
 		{
-		
-			auto enemyNode = battleGrid[possibleUnits.front()->getCurrentNodeId()];
-			auto possibleAttackNodes = PathFindingFunctions::BreathSearchNodes(enemyNode, 1);
-
-			for(auto& node : possibleAttackNodes)
-			{
-				if (EnemyMoveConditions::distanceToEnemy(node->getMidPoint(), currentSelectedUnit->getPosition()) < shortestDistance)
-				{
-					shortestDistance = EnemyMoveConditions::distanceToEnemy(node->getMidPoint(), currentSelectedUnit->getPosition());
-					selectedNode = node->getID();
-					attackNode = node->getID();
-					currentDefendingUnit = possibleUnits.front();
-				}
-			}
+			selectedNode = SelectAttackNodeToWalkTo();
+			attackNode = selectedNode;
+			currentDefendingUnit = PickUnitToAttack(playerRef->getArmy()->getArmy());
 		}
-			aStarPathFind(battleGrid[currentSelectedUnit->getCurrentNodeId()], battleGrid[selectedNode]);
-			move = true;
+		aStarPathFind(battleGrid[currentSelectedUnit->getCurrentNodeId()], battleGrid[selectedNode]);
+		move = true;
 	}
 }
 
@@ -709,3 +682,79 @@ int BattleScene::getCurrentNodeID(sf::Vector2f _pos)
 
 	return currentNode;
 }
+
+std::shared_ptr<PirateUnit> BattleScene::PickUnitToAttack(const std::vector<std::shared_ptr<PirateUnit>>& _possibleUnits) const 
+{
+	int highestDamage = 0;
+
+	std::shared_ptr<PirateUnit> selectedUnit;
+	for(auto & unit : _possibleUnits)
+	{
+		if (unit->currentState != DEATH) {
+			int predictedDamage = DamageCalculations::calculateHitPointsLost(currentSelectedUnit, unit);
+			if (predictedDamage > highestDamage) //Damage will always prioritise the closest units
+			{
+				selectedUnit = unit;
+				highestDamage = DamageCalculations::calculateHitPointsLost(currentSelectedUnit, unit);
+			}
+			//Unit will die so prioritise
+			if(!DamageCalculations::calculateDamage(unit->unitStats, unit->unitBaseStats, predictedDamage).isActive)
+			{
+				return unit;
+			}
+		}
+	}
+	return selectedUnit;
+}
+
+int BattleScene::SelectNodeToWalkTo()
+{
+	int shortestDistance = 100;
+	int selectedID = -1;
+	for (auto& node : walkableNodes)
+	{
+		if (EnemyMoveConditions::distanceToEnemy(node->getMidPoint(), PickUnitToAttack(playerRef->getArmy()->getArmy())->getPosition()) < shortestDistance)
+		{
+			shortestDistance = EnemyMoveConditions::distanceToEnemy(node->getMidPoint(), PickUnitToAttack(playerRef->getArmy()->getArmy())->getPosition());
+			selectedID = node->getID();
+			canAttack = false;
+		}
+	}
+	return selectedID;
+}
+
+int BattleScene::SelectAttackNodeToWalkTo()
+{
+	float shortestDistance = 100.f;
+	int selectedID = -1;
+	auto enemyNode = battleGrid[PickUnitToAttack(playerRef->getArmy()->getArmy())->getCurrentNodeId()];
+	auto possibleAttackNodes = PathFindingFunctions::BreathSearchNodes(enemyNode, 1); //nodes neighbouring enemy position
+
+	for (auto& node : possibleAttackNodes)
+	{
+		if (EnemyMoveConditions::distanceToEnemy(node->getMidPoint(), currentSelectedUnit->getPosition()) < shortestDistance)
+		{
+			shortestDistance = EnemyMoveConditions::distanceToEnemy(node->getMidPoint(), currentSelectedUnit->getPosition());
+			selectedID = node->getID();
+		}
+	}
+
+	return selectedID;
+}
+
+std::vector <std::shared_ptr<PirateUnit>> BattleScene::ScanNearByUnits()
+{
+	std::vector<std::shared_ptr<PirateUnit>> possibleUnits;
+
+	for (auto& unit : playerRef->getArmy()->getArmy()) {
+		if (unit->unitStats.isActive) {
+			if (EnemyMoveConditions::distanceToEnemy(currentSelectedUnit->getPosition(), unit->getPosition()) <= currentSelectedUnit->unitStats.speed) //unit close
+			{
+				possibleUnits.push_back(unit);
+			}
+		}
+	}
+
+	return possibleUnits;
+}
+

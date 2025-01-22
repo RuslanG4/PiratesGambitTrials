@@ -70,7 +70,9 @@ public:
 
 	void preGameStartUpPlacement(sf::Vector2f _mousePos);
 
-	void clearStartArea();
+	static void clearArea(std::vector<std::shared_ptr<BattleGridNode>>& _vector);
+
+	void TriggerAttack();
 
 	void EnemyTurn();
 
@@ -79,6 +81,13 @@ public:
 	std::shared_ptr<PirateUnit> selectUnit(sf::Vector2f _mousePos);
 
 	int getCurrentNodeID(sf::Vector2f _pos);
+
+	std::vector<std::shared_ptr<PirateUnit>> ScanNearByUnits();
+	std::shared_ptr<PirateUnit> PickUnitToAttack(const std::vector<std::shared_ptr<PirateUnit>>& _possibleUnits) const;
+
+	int SelectNodeToWalkTo();
+	int SelectAttackNodeToWalkTo();
+
 private:
 	std::vector<std::shared_ptr<BattleGridNode>> battleGrid;
 

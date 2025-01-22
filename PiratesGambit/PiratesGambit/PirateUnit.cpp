@@ -36,7 +36,6 @@ void PirateUnit::TakeDamage(int _totalDamage)
 {
 	std::cout << "Current stack : " << unitStats.stackSize << " Current health : " << unitStats.health << "\n";
 
-
 	std::cout << "damage : " << _totalDamage << "\n";
 	while(_totalDamage != 0)
 	{

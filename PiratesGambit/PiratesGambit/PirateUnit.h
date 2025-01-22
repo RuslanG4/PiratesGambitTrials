@@ -64,6 +64,8 @@ public:
 
 	UnitStats unitStats;
 
+	UnitStats unitBaseStats;
+
 	UnitInformation unitInformation;
 
 protected:
@@ -76,7 +78,7 @@ protected:
 	bool idleAnimation;
 	bool deathAnimation = false;
 
-	UnitStats unitBaseStats;
+	
 
 	AnimationState animationState;
 
