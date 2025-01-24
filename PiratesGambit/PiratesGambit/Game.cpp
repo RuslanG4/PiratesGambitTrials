@@ -134,6 +134,7 @@ void Game::update(double t_deltaTime)
 {
 	Mouse::getInstance().update(m_window);
 	ParticleManager::getInstance().update(t_deltaTime);
+	BulletFactory::getInstance().update();
 	if (!battle) {
 		updateVisableNodes();
 		findCurrentChunk();

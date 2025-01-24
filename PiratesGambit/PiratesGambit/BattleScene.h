@@ -91,7 +91,7 @@ public:
 	std::shared_ptr<PirateUnit> PickUnitToAttack(const std::vector<std::shared_ptr<PirateUnit>>& _possibleUnits) const;
 
 	int SelectNodeToWalkTo();
-	int SelectAttackNodeToWalkTo();
+	int SelectAttackNodeToWalkTo(const std::vector<std::shared_ptr<PirateUnit>>& _possibleUnits) const;
 
 private:
 	std::vector<std::shared_ptr<BattleGridNode>> battleGrid;

@@ -28,7 +28,6 @@ void BattleScene::update(float _dt)
 		break;
 
 	case BATTLE:
-		BulletFactory::getInstance().update();
 		if (move) {
 			moveUnit();
 		}
@@ -46,6 +45,7 @@ void BattleScene::update(float _dt)
 
 						startEnemyTurnTimer = true;
 						enemyWaitTime.restart();
+						hasAttacked = false;
 					}
 				}
 			}
@@ -408,7 +408,7 @@ void BattleScene::hoverMouseOnNode()
 
 		// Check if the hovered node contains an enemy
 		for (auto& enemyUnit : enemyRef->getArmy()->getArmy()) {
-			if (enemyUnit->getCurrentNodeId() == currentHoverNodeID) {
+			if (enemyUnit->getCurrentNodeId() == currentHoverNodeID && enemyUnit->unitStats.isActive) {
 				Mouse::getInstance().SetToRanged();
 				isEnemyHovered = true;
 				currentDefendingUnit = enemyUnit;
@@ -487,7 +487,7 @@ void BattleScene::adjustAttackIcon(int _pinPointID)
 			});
 
 		if (it != walkableNodes.end() && !battleGrid[nodeID]->isOccupied()) {
-			if (!battleGrid[nodeID]->isOccupied()) {
+			if (!battleGrid[nodeID]->isOccupied() || currentSelectedUnit->getCurrentNodeId() == nodeID) {
 				attackNode = nodeID;
 				attackIcon.setPosition(battleGrid[nodeID]->getMidPoint());
 			}
@@ -625,19 +625,20 @@ void BattleScene::EnemyTurn()
 		//Melee Attack
 	{
 		int selectedNode = -1;
-		if (ScanNearByUnits().empty()) //No nearby units
+		auto closeEnemies = ScanNearByUnits();
+		if (closeEnemies.empty()) //No nearby units
 		{
 			selectedNode = SelectNodeToWalkTo();
+			//add ability to attack if you on edge node
 		}
 		else
 		{
-			selectedNode = SelectAttackNodeToWalkTo();
+			selectedNode = SelectAttackNodeToWalkTo(closeEnemies);
 			attackNode = selectedNode;
-			currentDefendingUnit = PickUnitToAttack(playerRef->getArmy()->getArmy());
+			currentDefendingUnit = PickUnitToAttack(closeEnemies);
 		}
 		aStarPathFind(battleGrid[currentSelectedUnit->getCurrentNodeId()], battleGrid[selectedNode]);
 		move = true;
-		//enemyCanTakeTurn = false;
 	}
 }
 
@@ -718,11 +719,11 @@ int BattleScene::SelectNodeToWalkTo()
 	return selectedID;
 }
 
-int BattleScene::SelectAttackNodeToWalkTo()
+int BattleScene::SelectAttackNodeToWalkTo(const std::vector<std::shared_ptr<PirateUnit>>& _possibleUnits) const 
 {
 	float shortestDistance = 100.f;
 	int selectedID = -1;
-	auto enemyNode = battleGrid[PickUnitToAttack(playerRef->getArmy()->getArmy())->getCurrentNodeId()];
+	auto enemyNode = battleGrid[PickUnitToAttack(_possibleUnits)->getCurrentNodeId()];
 	auto possibleAttackNodes = PathFindingFunctions::BreathSearchNodes(enemyNode, 1); //nodes neighbouring enemy position
 
 	for (auto& node : possibleAttackNodes)
