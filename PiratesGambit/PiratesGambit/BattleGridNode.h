@@ -21,7 +21,9 @@ public:
 
 		walkableArea->setPosition(sf::Vector2f(nodeData.gridX, nodeData.gridY));
 		walkableArea->setSize(sf::Vector2f(nodeData.size, nodeData.size));
-		//walkableArea->setFillColor(sf::Color(123, 123, 123, 46));
+		walkableArea->setFillColor(sf::Color(123, 123, 123, 46));
+		walkableArea->setOutlineThickness(1);
+		walkableArea->setOutlineColor(sf::Color(0,0,0,10));
 	};
 
 	void addNeighbour(const std::shared_ptr<BaseNode>& t_cellId, int _neighbourPos) override;

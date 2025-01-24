@@ -162,6 +162,8 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Gunner.cpp" />
+    <ClCompile Include="Harpoon.cpp" />
+    <ClCompile Include="Harpooner.cpp" />
     <ClCompile Include="HitBox.cpp" />
     <ClCompile Include="InitiativeSystem.cpp" />
     <ClCompile Include="Inventory.cpp" />
@@ -177,6 +179,7 @@
     <ClCompile Include="PirateUnit.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerController.cpp" />
+    <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="RenderableIventory.cpp" />
     <ClCompile Include="ShotParticle.cpp" />
     <ClCompile Include="TacticsArmySlot.cpp" />
@@ -211,6 +214,8 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Gunner.h" />
+    <ClInclude Include="Harpoon.h" />
+    <ClInclude Include="Harpooner.h" />
     <ClInclude Include="HitBox.h" />
     <ClInclude Include="Includes.h" />
     <ClInclude Include="InitiativeSystem.h" />
@@ -227,6 +232,7 @@
     <ClInclude Include="PirateUnits.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerController.h" />
+    <ClInclude Include="Projectile.h" />
     <ClInclude Include="RenderableIventory.h" />
     <ClInclude Include="ShotParticle.h" />
     <ClInclude Include="Structs.h" />

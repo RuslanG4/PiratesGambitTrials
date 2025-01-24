@@ -24,7 +24,8 @@ const char* const BR_LANDLOCK = "ASSETS\\IMAGES\\BR_LandLocked.png";
 const char* const PLAYER = "ASSETS\\IMAGES\\PLAYER\\PLAYER.png";
 const char* const PLAYER_DAMAGED = "ASSETS\\IMAGES\\PLAYER\\PLAYER_DAMAGED.png";
 const char* const PLAYER_PLASTERED = "ASSETS\\IMAGES\\PLAYER\\PLAYER_PLASTERED.png";
-const char* const CANNON_BALL = "ASSETS\\IMAGES\\PLAYER\\CANNON_BALL.png";
+const char* const CANNON_BALL = "ASSETS\\IMAGES\\Pirates\\MiniCannonBall.png";
+const char* const HARPOON = "ASSETS\\IMAGES\\Pirates\\MiniHarpoon.png";
 
 const char* const BARREL = "ASSETS\\IMAGES\\GameObjects\\BARREL.png";
 
@@ -42,10 +43,13 @@ const char* const BULKY_BORDER = "ASSETS\\IMAGES\\Borders\\BulkyBorder.png";
 const char* const PIRATE_CAPTAIN = "ASSETS\\IMAGES\\Pirates\\MiniPirateCaptain.png";
 const char* const BUCCANEER_SPRITE = "ASSETS\\IMAGES\\Pirates\\MiniPirateCrew.png";
 const char* const GUNNER_SPRITE = "ASSETS\\IMAGES\\Pirates\\MiniPirateGunner.png";
+const char* const HARPOONER_SPRITE = "ASSETS\\IMAGES\\Pirates\\MiniPirateHarpooner.png";
 
 //PARTICLES
 const char* const BLOOD_PARTICLES = "ASSETS\\IMAGES\\Particles\\BLOOD_PARTICLES.png";
 const char* const SHOOT_PARTICLES = "ASSETS\\IMAGES\\Particles\\848.png";
+
+const char* const BACKGROUND = "ASSETS\\IMAGES\\export.png";
 
 const char* const FONT = "ASSETS\\FONTS\\ComicNeueSansID.ttf";
 

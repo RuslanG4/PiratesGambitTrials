@@ -1,8 +1,8 @@
-#include "Gunner.h"
+#include "Harpooner.h"
 
-void Gunner::init()
+void Harpooner::init()
 {
-	sprite.setTexture(TextureManager::getInstance().getTexture("GUNNER"));
+	sprite.setTexture(TextureManager::getInstance().getTexture("HARPOONER"));
 
 	sf::IntRect rectSourceSprite;
 	rectSourceSprite.height = 32;
@@ -21,11 +21,11 @@ void Gunner::init()
 	updateUnitAmount(unitStats.stackSize);
 }
 
-void Gunner::update(float _dt)
+void Harpooner::update(float _dt)
 {
 	if (unitStats.isActive) {
 		animateSprite(_dt);
-		if (currentState != ATTACK && currentState != DEATH && currentState!= DAMAGED) {
+		if (currentState != ATTACK && currentState != DEATH && currentState != DAMAGED) {
 			if (Utility::magnitude(velocity.x, velocity.y) > 0)
 			{
 				currentState = WALK;
@@ -41,7 +41,7 @@ void Gunner::update(float _dt)
 	}
 }
 
-void Gunner::animateSprite(float _dt)
+void Harpooner::animateSprite(float _dt)
 {
 	switch (currentState)
 	{
@@ -52,13 +52,13 @@ void Gunner::animateSprite(float _dt)
 		Animator::getInstance().AnimateSprite(sprite, animationState, walkAnimation, 6, 1, _dt);
 		break;
 	case ATTACK:
-		Animator::getInstance().AnimateShoot(sprite, animationState, attackAnimation, shootBullet,2, 7, 3, _dt);
-		if(shootBullet)
+		Animator::getInstance().AnimateShoot(sprite, animationState, attackAnimation, shootBullet,1, 10, 3, _dt);
+		if (shootBullet)
 		{
-			bulletDirection = targetPosition- sprite.getPosition();
+			bulletDirection = targetPosition - sprite.getPosition();
 			bulletDirection = Utility::unitVector2D(bulletDirection);
-			BulletFactory::getInstance().createCannonBall(sprite.getPosition(), bulletDirection);
-			ParticleManager::getInstance().CreateShootParticle(sf::Vector2f(sprite.getPosition().x + (44 * facingDirection), sprite.getPosition().y));
+			BulletFactory::getInstance().createHarpoon(sprite.getPosition(), bulletDirection);
+			ParticleManager::getInstance().CreateShootParticle(sf::Vector2f(sprite.getPosition().x + (30 * facingDirection), sprite.getPosition().y + 10));
 			shootBullet = false;
 		}
 		if (attackAnimation)
@@ -69,19 +69,19 @@ void Gunner::animateSprite(float _dt)
 		}
 		break;
 	case DAMAGED:
-		Animator::getInstance().AnimateSprite(sprite, animationState, damagedAnimation, 2, 5, _dt);
-		if(damagedAnimation)
+		Animator::getInstance().AnimateSprite(sprite, animationState, damagedAnimation, 2, 6, _dt);
+		if (damagedAnimation)
 		{
 			currentState = IDLE;
 		}
 		break;
 	case DEATH:
-		Animator::getInstance().AnimateSprite(sprite, animationState, deathAnimation, 4, 6, _dt);
+		Animator::getInstance().AnimateSprite(sprite, animationState, deathAnimation, 5, 7, _dt);
 		if (deathAnimation)
 		{
 			unitStats.isActive = false;
 			unitAmount.renderUnitAmount = false;
-			Animator::getInstance().AnimateDeath(sprite, 3, 6);
+			Animator::getInstance().AnimateDeath(sprite, 4, 7);
 		}
 		break;
 	}

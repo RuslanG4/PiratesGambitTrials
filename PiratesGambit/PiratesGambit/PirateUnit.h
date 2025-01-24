@@ -6,6 +6,7 @@
 #include"Enums.h"
 #include"UnitAmount.h"
 #include"ParticleManager.h"
+#include"BulletFactory.h"
 
 struct UnitStats
 {
@@ -89,5 +90,7 @@ protected:
 	std::vector<std::shared_ptr<CannonBall>> bullets;
 
 	sf::Vector2f targetPosition;
+
+	sf::CircleShape shadow;
 };
 

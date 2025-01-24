@@ -11,12 +11,18 @@ void PirateUnit::placeUnitAmountText()
 {
 	sf::Vector2f position = { sprite.getPosition().x - 32, sprite.getPosition().y + 14 };
 	unitAmount.setPosition(position);
+
+	shadow.setPosition(sf::Vector2f(sprite.getPosition().x, sprite.getPosition().y + 18));
+	shadow.setRadius(20);
+	shadow.setOrigin(20, 20);
+	shadow.setFillColor(sf::Color(0,0,0,128));
 }
 
 void PirateUnit::moveUnit(sf::Vector2f _vel)
 {
 	velocity = _vel;
 	sprite.setPosition(sprite.getPosition() + _vel * 2.f);
+	shadow.setPosition(sf::Vector2f(sprite.getPosition().x, sprite.getPosition().y + 18));
 	placeUnitAmountText();
 	if (Utility::magnitude(velocity.x, velocity.y) <= 0 && currentState != ATTACK) {
 		currentState = IDLE;
@@ -77,6 +83,7 @@ void PirateUnit::TakeDamage(int _totalDamage)
 
 void PirateUnit::render(const std::unique_ptr<sf::RenderWindow>& window) const
 {
+	window->draw(shadow);
 	window->draw(sprite);
 	unitAmount.render(window);
 }

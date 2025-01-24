@@ -103,6 +103,12 @@
     <Filter Include="Source Files\Particles\BaseParticle">
       <UniqueIdentifier>{cce15248-9e6e-48ac-aa0b-24b06a327bef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Projectile">
+      <UniqueIdentifier>{ba4dc14c-9f77-4158-9f62-cf327cb7ea88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Projectile">
+      <UniqueIdentifier>{e14abfce-aeca-4bbf-9320-bca3a0cb4032}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -152,9 +158,6 @@
     </ClCompile>
     <ClCompile Include="Island.cpp">
       <Filter>Source Files\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="CannonBall.cpp">
-      <Filter>Source Files\Boat</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>Source Files\GameObjects</Filter>
@@ -238,7 +241,19 @@
       <Filter>Source Files\Particles</Filter>
     </ClCompile>
     <ClCompile Include="ShotParticle.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Harpooner.cpp">
+      <Filter>Source Files\Army\Units</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Source Files\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="CannonBall.cpp">
+      <Filter>Source Files\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="Harpoon.cpp">
+      <Filter>Source Files\Projectile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -298,9 +313,6 @@
     </ClInclude>
     <ClInclude Include="Island.h">
       <Filter>Header Files\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="CannonBall.h">
-      <Filter>Header Files\Boat</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Header Files\GameObjects</Filter>
@@ -393,7 +405,19 @@
       <Filter>Header Files\Particles</Filter>
     </ClInclude>
     <ClInclude Include="ShotParticle.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Harpooner.h">
+      <Filter>Header Files\Army\Units</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Header Files\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="CannonBall.h">
+      <Filter>Header Files\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="Harpoon.h">
+      <Filter>Header Files\Projectile</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

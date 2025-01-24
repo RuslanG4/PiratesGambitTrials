@@ -29,7 +29,7 @@ void Animator::AnimateSprite(sf::Sprite& _sprite, AnimationState& _state, bool& 
 	_sprite.setTextureRect(rectSourceSprite);
 }
 
-void Animator::AnimateShoot(sf::Sprite& _sprite, AnimationState& _state, bool& _animationComplete , bool& _bulletFrame, int _colAmt, int _rowNum, float _dt)
+void Animator::AnimateShoot(sf::Sprite& _sprite, AnimationState& _state, bool& _animationComplete , bool& _bulletFrame, int _bulletFrameNumber, int _colAmt, int _rowNum, float _dt)
 {
 	const float frameDuration = 0.1f;
 
@@ -40,7 +40,7 @@ void Animator::AnimateShoot(sf::Sprite& _sprite, AnimationState& _state, bool& _
 	if (_state.elapsedTime >= frameDuration)
 	{
 		_state.currentFrame++;
-		if(_state.currentFrame == 2)
+		if(_state.currentFrame == _bulletFrameNumber)
 		{
 			_bulletFrame = true;
 		}

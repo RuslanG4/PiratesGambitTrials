@@ -70,10 +70,12 @@ private:
         loadTexture("PLAYER_BOAT_DAMAGED", PLAYER_DAMAGED);
         loadTexture("PLAYER_BOAT_PLASTERED", PLAYER_PLASTERED);
         loadTexture("CANNON_BALL", CANNON_BALL);
+        loadTexture("HARPOON", HARPOON);
         //Pirate
         loadTexture("PIRATE_CAPTAIN", PIRATE_CAPTAIN);
         loadTexture("BUCCANEER", BUCCANEER_SPRITE);
         loadTexture("GUNNER", GUNNER_SPRITE);
+        loadTexture("HARPOONER", HARPOONER_SPRITE);
         //
         loadTexture("BARREL", BARREL);
         //ICONS
@@ -86,6 +88,9 @@ private:
         //Particles
         loadTexture("BLOOD_PARTICLES", BLOOD_PARTICLES);
         loadTexture("SHOOT_PARTICLES", SHOOT_PARTICLES);
+
+        //bg
+        loadTexture("background", BACKGROUND);
 
         
     }

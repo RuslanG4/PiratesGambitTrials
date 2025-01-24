@@ -52,7 +52,8 @@ enum UnitName
 {
 	EMPTY,
 	BUCCANEER,
-	GUNNER
+	GUNNER,
+	HARPOONER
 };
 
 enum UnitAllegiance

@@ -1,6 +1,9 @@
 #pragma once
 #include"Includes.h"
 #include"CannonBall.h"
+#include"Harpoon.h"
+
+class Harpoon;
 
 class BulletFactory {
 public:
@@ -13,32 +16,38 @@ public:
     }
 
     void createCannonBall(const sf::Vector2f& position, const sf::Vector2f& velocity) {
-        cannonBalls.emplace_back(position, velocity);
-        cannonBalls.back().init();
-        cannonBalls.back().fire(position, velocity);
+        projectiles.push_back(std::make_unique<CannonBall>(position, velocity));
+        projectiles.back()->init();
+        projectiles.back()->fire(position, velocity);
+    }
+
+    void createHarpoon(const sf::Vector2f& position, const sf::Vector2f& velocity) {
+        projectiles.push_back(std::make_unique<Harpoon>(position, velocity));
+        projectiles.back()->init();
+        projectiles.back()->fire(position, velocity);
     }
 
     void update() {
-        for (auto& ball : cannonBalls) {
-            if (ball.getIsActive()) {
-                ball.update();
+        for (auto& proj : projectiles) {
+            if (proj->getIsActive()) {
+                proj->update();
             }
         }
     }
 
     void render(const std::unique_ptr<sf::RenderWindow>& window) const {
-        for (const auto& ball : cannonBalls) {
-            if (ball.getIsActive()) {
-                ball.render(window);
+        for (const auto& proj : projectiles) {
+            if (proj->getIsActive()) {
+                proj->render(window);
             }
         }
     }
 
     bool checkCollision(const sf::FloatRect& target) {
-        for (auto it = cannonBalls.begin(); it != cannonBalls.end();) {
-            if (it->getIsActive() && it->getBounds().intersects(target)) {
-                it = cannonBalls.erase(it); 
-                return true; 
+        for (auto it = projectiles.begin(); it != projectiles.end();) {
+            if ((*it) && (*it)->getBounds().intersects(target)) {
+                it = projectiles.erase(it); 
+                return true;              
             }
             else {
                 ++it; 
@@ -48,7 +57,7 @@ public:
     }
 
 private:
-    std::vector<CannonBall> cannonBalls;
+    std::vector<std::unique_ptr<Projectile>> projectiles;
 
     BulletFactory() = default;
     ~BulletFactory() = default;

@@ -40,6 +40,8 @@ public:
 		initialiseStartArea();
 
 		placeUnits(playerRef->getArmy(), false);
+
+		background.setTexture(TextureManager::getInstance().getTexture("background"));
 	};
 
 	void placeUnits(const std::unique_ptr<Army>& _army, bool _isEnemy) const;
@@ -116,7 +118,7 @@ private:
 	std::shared_ptr<Player> playerRef;
 	std::shared_ptr<Enemy> enemyRef;
 
-	sf::Vector2f offset{ 450,50 };
+	sf::Vector2f offset{ 380,65 };
 
 	sf::Sprite attackIcon;
 
@@ -143,5 +145,7 @@ private:
 	sf::Clock enemyWaitTime;
 	void WaitForTurn();
 	int attackNode = -1;
+
+	sf::Sprite background;
 };
 

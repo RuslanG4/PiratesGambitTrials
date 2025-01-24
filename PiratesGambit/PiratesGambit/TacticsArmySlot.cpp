@@ -53,6 +53,9 @@ void TacticsArmySlot::updateSlots(UnitName _type)
 	case GUNNER:
 		unitSprite.setTexture(TextureManager::getInstance().getTexture("GUNNER"));
 		break;
+	case HARPOONER:
+		unitSprite.setTexture(TextureManager::getInstance().getTexture("HARPOONER"));
+		break;
 	}
 }
 

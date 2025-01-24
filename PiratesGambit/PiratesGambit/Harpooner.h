@@ -1,17 +1,17 @@
 #pragma once
 #include "PirateUnit.h"
 
-class Gunner : public PirateUnit
+class Harpooner : public PirateUnit
 {
 public:
-	Gunner(int _stackCount, UnitAllegiance _allegiance)
+	Harpooner(int _stackCount, UnitAllegiance _allegiance)
 	{
-		unitInformation.unitName = GUNNER;
+		unitInformation.unitName = HARPOONER;
 		unitInformation.allegiance = _allegiance;
 		unitInformation.unitType = RANGED;
 
 		UnitStats stats = {
-		9,0,true,4,_stackCount,4,3,2,4,10
+		10,0,true,3,_stackCount,9,7,7,12,42
 		};
 
 		unitStats = stats;

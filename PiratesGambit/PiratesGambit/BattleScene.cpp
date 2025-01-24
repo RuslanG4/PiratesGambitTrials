@@ -68,6 +68,7 @@ void BattleScene::update(float _dt)
 void BattleScene::render(const std::unique_ptr<sf::RenderWindow>& window) const
 {
 	window->setView(window->getDefaultView());
+	window->draw(background);
 	for(auto& node: battleGrid)
 	{
 		window->draw(*node->walkableArea);
@@ -268,11 +269,7 @@ void BattleScene::createVectors(const std::shared_ptr<BattleGridNode>& end)
 			node->updateTraversed(false);
 		}
 	}
-	for (auto& node : walkableNodes)
-	{
-		node->setTransparent();
-	}
-	walkableNodes.clear();
+	clearArea(walkableNodes);
 }
 
 void BattleScene::initialiseStartArea()
@@ -363,6 +360,7 @@ void BattleScene::TakeUnitAction(const std::shared_ptr<BattleGridNode>& _targetN
 {
 	aStarPathFind(battleGrid[currentSelectedUnit->getCurrentNodeId()], _targetNode);
 	move = true;
+	canAttack = false;
 }
 
 void BattleScene::hoverMouseOnNode()
@@ -374,7 +372,7 @@ void BattleScene::hoverMouseOnNode()
 
 	// Check which node is currently being hovered
 	for (auto& node : battleGrid) {
-		if (node->walkableArea->getGlobalBounds().contains(mousePos)) {
+		if (node->debugShape->getGlobalBounds().contains(mousePos)) {
 			hoveredNodeID = node->getID();
 			break; // Stop checking once the hovered node is found
 		}
@@ -741,7 +739,7 @@ int BattleScene::SelectAttackNodeToWalkTo()
 
 void BattleScene::WaitForTurn()
 {
-	if(enemyWaitTime.getElapsedTime().asSeconds() > 1.f)
+	if(enemyWaitTime.getElapsedTime().asSeconds() > 0.5f)
 	{
 		updateNextTurn();
 		startEnemyTurnTimer = false;
