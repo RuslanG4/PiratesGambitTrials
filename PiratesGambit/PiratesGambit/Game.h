@@ -16,6 +16,8 @@
 
 #include "BattleScene.h"
 
+#include"ParticleManager.h"
+
 
 class Game
 {

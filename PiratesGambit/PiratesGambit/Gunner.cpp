@@ -13,6 +13,7 @@ void Gunner::init()
 
 	if (unitInformation.allegiance != RED_PLAYER) {
 		scaleX = -scaleX;
+		facingDirection = -facingDirection;
 	}
 	sprite.setScale(scaleX, scaleY);
 	sprite.setOrigin(16, 24);
@@ -26,7 +27,7 @@ void Gunner::update(float _dt)
 {
 	if (unitStats.isActive) {
 		animateSprite(_dt);
-		if (currentState != ATTACK && currentState != DEATH) {
+		if (currentState != ATTACK && currentState != DEATH && currentState!= DAMAGED) {
 			if (Utility::magnitude(velocity.x, velocity.y) > 0)
 			{
 				currentState = WALK;
@@ -59,6 +60,7 @@ void Gunner::animateSprite(float _dt)
 			bulletDirection = targetPosition- sprite.getPosition();
 			bulletDirection = Utility::unitVector2D(bulletDirection);
 			BulletFactory::getInstance().createCannonBall(sprite.getPosition(), bulletDirection);
+			ParticleManager::getInstance().CreateShootParticle(sf::Vector2f(sprite.getPosition().x + (40 * facingDirection), sprite.getPosition().y));
 			shootBullet = false;
 		}
 		if (attackAnimation)
@@ -66,6 +68,13 @@ void Gunner::animateSprite(float _dt)
 			currentState = IDLE;
 			animationState.elapsedTime = 0;
 			sprite.setScale(scaleX, scaleY);
+		}
+		break;
+	case DAMAGED:
+		Animator::getInstance().AnimateSprite(sprite, animationState, damagedAnimation, 2, 5, _dt);
+		if(damagedAnimation)
+		{
+			currentState = IDLE;
 		}
 		break;
 	case DEATH:

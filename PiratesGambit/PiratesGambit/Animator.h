@@ -14,6 +14,8 @@ public:
 	void AnimateShoot(sf::Sprite& _sprite, AnimationState& _state, bool& _animationComplete, bool& _bulletFrame, int _colAmt, int _rowNum, float _dt);
 	void AnimateDeath(sf::Sprite& _sprite, int _colNum, int _rowNum);
 
+	void AnimateParticle(sf::Sprite& _sprite, AnimationState& _state, bool& _animationComplete, int _colNum, int _rowNum, int _width, int _height, float _dt);
+
 	Animator(Animator const&) = delete;
 private:
 	Animator()

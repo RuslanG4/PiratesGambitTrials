@@ -43,6 +43,10 @@ const char* const PIRATE_CAPTAIN = "ASSETS\\IMAGES\\Pirates\\MiniPirateCaptain.p
 const char* const BUCCANEER_SPRITE = "ASSETS\\IMAGES\\Pirates\\MiniPirateCrew.png";
 const char* const GUNNER_SPRITE = "ASSETS\\IMAGES\\Pirates\\MiniPirateGunner.png";
 
+//PARTICLES
+const char* const BLOOD_PARTICLES = "ASSETS\\IMAGES\\Particles\\BLOOD_PARTICLES.png";
+const char* const SHOOT_PARTICLES = "ASSETS\\IMAGES\\Particles\\848.png";
+
 const char* const FONT = "ASSETS\\FONTS\\ComicNeueSansID.ttf";
 
 const sf::Color GRAY = sf::Color(21, 21, 21);

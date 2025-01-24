@@ -146,6 +146,7 @@
     <ClCompile Include="BattleActionUI.cpp" />
     <ClCompile Include="BattleGridNode.cpp" />
     <ClCompile Include="BattleScene.cpp" />
+    <ClCompile Include="BloodParticle.cpp" />
     <ClCompile Include="Boat.cpp" />
     <ClCompile Include="BoatController.cpp" />
     <ClCompile Include="Buccaneer.cpp" />
@@ -170,11 +171,14 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="ParticleManager.cpp" />
     <ClCompile Include="PathFindingFunctions.cpp" />
     <ClCompile Include="PirateUnit.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="RenderableIventory.cpp" />
+    <ClCompile Include="ShotParticle.cpp" />
     <ClCompile Include="TacticsArmySlot.cpp" />
     <ClCompile Include="TacticsArmyUI.cpp" />
     <ClCompile Include="UnitAmount.cpp" />
@@ -189,6 +193,7 @@
     <ClInclude Include="BattleActionUI.h" />
     <ClInclude Include="BattleGridNode.h" />
     <ClInclude Include="BattleScene.h" />
+    <ClInclude Include="BloodParticle.h" />
     <ClInclude Include="Boat.h" />
     <ClInclude Include="BoatController.h" />
     <ClInclude Include="Buccaneer.h" />
@@ -215,12 +220,15 @@
     <ClInclude Include="Island.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="ParticleManager.h" />
     <ClInclude Include="PathFindingFunctions.h" />
     <ClInclude Include="PirateUnit.h" />
     <ClInclude Include="PirateUnits.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="RenderableIventory.h" />
+    <ClInclude Include="ShotParticle.h" />
     <ClInclude Include="Structs.h" />
     <ClInclude Include="TacticsArmySlot.h" />
     <ClInclude Include="TacticsArmyUI.h" />

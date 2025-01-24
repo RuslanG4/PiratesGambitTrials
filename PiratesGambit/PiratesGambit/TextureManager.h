@@ -83,6 +83,9 @@ private:
         //BORDERS
         loadTexture("ACTION_BORDER", ACTION_BORDER);
         loadTexture("BULKY_BORDER", BULKY_BORDER);
+        //Particles
+        loadTexture("BLOOD_PARTICLES", BLOOD_PARTICLES);
+        loadTexture("SHOOT_PARTICLES", SHOOT_PARTICLES);
 
         
     }

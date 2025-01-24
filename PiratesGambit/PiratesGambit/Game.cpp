@@ -133,6 +133,7 @@ void Game::processKeyUp(sf::Event t_event)
 void Game::update(double t_deltaTime)
 {
 	Mouse::getInstance().update(m_window);
+	ParticleManager::getInstance().update(t_deltaTime);
 	if (!battle) {
 		updateVisableNodes();
 		findCurrentChunk();
@@ -184,6 +185,7 @@ void Game::render()
 		battleScene->render(m_window);
 	}
 
+	ParticleManager::getInstance().render(m_window);
 	m_window->display();
 }
 

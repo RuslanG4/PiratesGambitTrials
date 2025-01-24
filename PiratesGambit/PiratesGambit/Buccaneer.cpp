@@ -24,7 +24,7 @@ void Buccaneer::update(float _dt)
 {
 	if (unitStats.isActive) {
 		animateSprite(_dt);
-		if (currentState != ATTACK && currentState != DEATH) {
+		if (currentState != ATTACK && currentState != DEATH && currentState != DAMAGED) {
 			if (Utility::magnitude(velocity.x, velocity.y) > 0)
 			{
 				currentState = WALK;
@@ -57,6 +57,15 @@ void Buccaneer::animateSprite(float _dt)
 			currentState = IDLE;
 			animationState.elapsedTime = 0;
 			sprite.setScale(scaleX, scaleY);
+		}
+		break;
+	case DAMAGED:
+		Animator::getInstance().AnimateSprite(sprite, animationState, damagedAnimation, 2, 5, _dt);
+		if (damagedAnimation)
+		{
+			currentState = IDLE;
+			animationState.elapsedTime = 0;
+			animationState.currentFrame = 0;
 		}
 		break;
 	case DEATH:

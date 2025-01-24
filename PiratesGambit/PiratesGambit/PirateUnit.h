@@ -5,6 +5,7 @@
 #include "TextureManager.h"
 #include"Enums.h"
 #include"UnitAmount.h"
+#include"ParticleManager.h"
 
 struct UnitStats
 {
@@ -69,6 +70,7 @@ public:
 	UnitInformation unitInformation;
 
 protected:
+	int facingDirection = 1;
 	float scaleX = 3.5, scaleY = 3.5;
 	int nodeId;
 	sf::Sprite sprite;
@@ -77,8 +79,7 @@ protected:
 	bool walkAnimation;
 	bool idleAnimation;
 	bool deathAnimation = false;
-
-	
+	bool damagedAnimation = false;
 
 	AnimationState animationState;
 

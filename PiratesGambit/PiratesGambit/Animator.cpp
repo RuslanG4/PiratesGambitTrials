@@ -71,3 +71,29 @@ void Animator::AnimateDeath(sf::Sprite& _sprite, int _colNum, int _rowNum)
 	rectSourceSprite.top = _rowNum * rectSourceSprite.height;
 	_sprite.setTextureRect(rectSourceSprite);
 }
+
+void Animator::AnimateParticle(sf::Sprite& _sprite, AnimationState& _state, bool& _animationComplete, int _colNum, int _rowNum, int _width, int _height, float _dt)
+{
+	const float frameDuration = 0.03f;
+
+	_state.elapsedTime += _dt * 0.001;
+
+	if (_state.elapsedTime >= frameDuration)
+	{
+		_state.currentFrame++;
+		if (_state.currentFrame > _colNum - 1)
+		{
+			_animationComplete = true;
+		}
+		_state.elapsedTime = 0;
+	}
+	int col = _state.currentFrame % _colNum;
+	int row = _rowNum;
+
+	sf::IntRect rectSourceSprite;
+	rectSourceSprite.height = _height;
+	rectSourceSprite.width = _width;
+	rectSourceSprite.left = col * rectSourceSprite.width;
+	rectSourceSprite.top = row * rectSourceSprite.height;
+	_sprite.setTextureRect(rectSourceSprite);
+}

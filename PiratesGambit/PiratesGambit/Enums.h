@@ -31,6 +31,7 @@ enum UnitState
 	IDLE,
 	WALK,
 	ATTACK,
+	DAMAGED,
 	DEATH
 };
 

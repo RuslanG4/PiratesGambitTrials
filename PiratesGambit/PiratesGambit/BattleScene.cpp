@@ -1,7 +1,5 @@
 #include "BattleScene.h"
 
-#include "DamageCalculations.h"
-#include "EnemyMoveConditions.h"
 
 void BattleScene::placeUnits(const std::unique_ptr<Army>& _army, bool _isEnemy) const
 {
@@ -34,18 +32,23 @@ void BattleScene::update(float _dt)
 		if (move) {
 			moveUnit();
 		}
-		if(currentSelectedUnit->unitInformation.unitType == RANGED)
+		if(startEnemyTurnTimer)
 		{
-			if (hasAttacked && BulletFactory::getInstance().checkCollision(currentDefendingUnit->getGlobalBounds())) {
-				calculateDamage(currentSelectedUnit, currentDefendingUnit); // Damage calculation
-				updateNextTurn();
-			}
-			else if (currentSelectedUnit->currentState == IDLE && !newAreaSet && !hasAttacked) {
-				updateNextTurn();
-			}
+			WaitForTurn();
 		}
-		else if ((currentSelectedUnit->currentState == IDLE && !newAreaSet)) {
-			updateNextTurn();
+		else {
+			if (currentSelectedUnit->unitInformation.unitType == RANGED)
+			{
+				if (hasAttacked) {
+					if (BulletFactory::getInstance().checkCollision(currentDefendingUnit->getGlobalBounds())) {
+						ParticleManager::getInstance().CreateBloodParticle(currentDefendingUnit->getPosition());
+						calculateDamage(currentSelectedUnit, currentDefendingUnit); // Damage calculation
+
+						startEnemyTurnTimer = true;
+						enemyWaitTime.restart();
+					}
+				}
+			}
 		}
 		break;
 	case END:
@@ -60,7 +63,6 @@ void BattleScene::update(float _dt)
 		unit->update(_dt);
 	}
 	detectMouse();
-	
 }
 
 void BattleScene::render(const std::unique_ptr<sf::RenderWindow>& window) const
@@ -97,8 +99,8 @@ void BattleScene::updateNextTurn()
 	//set next unit
 	currentSelectedUnit = tacticsArmyUI->initiativeSystem.getNextUnit();
 
-	//
 	createMoveableArea(currentSelectedUnit);
+
 	if (currentSelectedUnit->unitInformation.allegiance != RED_PLAYER) {
 		EnemyTurn();
 	}
@@ -320,22 +322,14 @@ void BattleScene::detectMouse()
 		case BATTLE:
 				if (currentHoverNodeID != -1 && battleGrid[currentHoverNodeID]->isOccupied() && battleGrid[currentHoverNodeID]->debugShape->getGlobalBounds().contains(mousePos) && newAreaSet) {
 					if (currentSelectedUnit->unitInformation.unitType == RANGED) {
-					//attacl ranged
-						for (auto& node : walkableNodes)
-						{
-							node->setTransparent();
-						}
-						walkableNodes.clear();
-					newAreaSet = false;
-					currentSelectedUnit->Attack(currentDefendingUnit->getPosition()); //animation
-					canAttack = false;
-					hasAttacked = true;
+					//Ranged Attack
+					clearArea(walkableNodes);
+					TriggerAttack();
 					Mouse::getInstance().SetToDefault();
 					}
-					else{
+					else{//walk 
 						aStarPathFind(battleGrid[currentSelectedUnit->getCurrentNodeId()], battleGrid[attackNode]);
 						move = true;
-						canAttack = false;
 					}
 			}
 			else {
@@ -369,7 +363,6 @@ void BattleScene::TakeUnitAction(const std::shared_ptr<BattleGridNode>& _targetN
 {
 	aStarPathFind(battleGrid[currentSelectedUnit->getCurrentNodeId()], _targetNode);
 	move = true;
-	canAttack = false;
 }
 
 void BattleScene::hoverMouseOnNode()
@@ -535,7 +528,6 @@ bool BattleScene::isNodeInRangeOfUnit()
 void BattleScene::moveUnit()
 {
 	if (path.empty()) {
-		move = false;
 		finalizeMoveUnit();
 		return;
 	}
@@ -564,6 +556,7 @@ void BattleScene::finalizeMoveUnit()
 {
 	if (attackNode != -1) {
 		TriggerAttack();
+		ParticleManager::getInstance().CreateBloodParticle(currentDefendingUnit->getPosition());
 		calculateDamage(currentSelectedUnit, currentDefendingUnit); //damage calc
 	}
 	//update new grid positions
@@ -577,8 +570,10 @@ void BattleScene::finalizeMoveUnit()
 	//reset
 	move = false;
 	currentNodeInPath = 0;
-	newAreaSet = false;
-	hasAttacked = false;
+
+	//next turn
+	startEnemyTurnTimer = true;
+	enemyWaitTime.restart();
 }
 
 void BattleScene::preGameStartUpPlacement(sf::Vector2f _mousePos)
@@ -621,21 +616,22 @@ void BattleScene::TriggerAttack()
 void BattleScene::EnemyTurn()
 {
 	//Ranged Unit Attack
-	if(currentSelectedUnit->unitInformation.unitType == RANGED)
+	if (currentSelectedUnit->unitInformation.unitType == RANGED)
 	{
 		clearArea(walkableNodes);
+
 		currentDefendingUnit = PickUnitToAttack(playerRef->getArmy()->getArmy());
 		TriggerAttack();
-		canAttack = false;
-		newAreaSet = false;
-	}else
-	//Melee Attack
+	}
+	else
+		//Melee Attack
 	{
 		int selectedNode = -1;
 		if (ScanNearByUnits().empty()) //No nearby units
 		{
 			selectedNode = SelectNodeToWalkTo();
-		}else
+		}
+		else
 		{
 			selectedNode = SelectAttackNodeToWalkTo();
 			attackNode = selectedNode;
@@ -643,6 +639,7 @@ void BattleScene::EnemyTurn()
 		}
 		aStarPathFind(battleGrid[currentSelectedUnit->getCurrentNodeId()], battleGrid[selectedNode]);
 		move = true;
+		//enemyCanTakeTurn = false;
 	}
 }
 
@@ -740,6 +737,15 @@ int BattleScene::SelectAttackNodeToWalkTo()
 	}
 
 	return selectedID;
+}
+
+void BattleScene::WaitForTurn()
+{
+	if(enemyWaitTime.getElapsedTime().asSeconds() > 1.f)
+	{
+		updateNextTurn();
+		startEnemyTurnTimer = false;
+	}
 }
 
 std::vector <std::shared_ptr<PirateUnit>> BattleScene::ScanNearByUnits()

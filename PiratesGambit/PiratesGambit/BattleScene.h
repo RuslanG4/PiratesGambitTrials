@@ -8,6 +8,9 @@
 #include"BattleActionUI.h"
 #include"TacticsArmyUI.h"
 #include"PathFindingFunctions.h"
+#include "DamageCalculations.h"
+#include "EnemyMoveConditions.h"
+#include "ParticleManager.h"
 
 class BattleScene
 {
@@ -130,15 +133,15 @@ private:
 
 	int oldPositionRef = 0;
 
-	bool clickedUnit{false};
-
 	bool move{ false };
 	bool newAreaSet{ false };
 
-	bool rangedIcon{ false };
-
 	bool canAttack{ false };
 	bool hasAttacked = false;
+
+	bool startEnemyTurnTimer{ false };
+	sf::Clock enemyWaitTime;
+	void WaitForTurn();
 	int attackNode = -1;
 };
 

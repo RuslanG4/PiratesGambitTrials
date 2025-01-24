@@ -85,6 +85,24 @@
     <Filter Include="Source Files\UI">
       <UniqueIdentifier>{89d1a975-8b56-4a0b-ba31-a0611602af1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Enemy">
+      <UniqueIdentifier>{61650074-58ea-43fd-83a2-591f759b8c4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Enemy">
+      <UniqueIdentifier>{caa64a0a-be5f-464a-be57-6b7958cf1ae6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Particles">
+      <UniqueIdentifier>{ce07d7f6-abaa-4089-b714-ff5de3d56b47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Particles">
+      <UniqueIdentifier>{a7967f1d-5906-43c8-ba4b-aad78179fa6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Particles\BaseParticle">
+      <UniqueIdentifier>{4b62a665-b78c-4a1b-a964-516db93e36c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Particles\BaseParticle">
+      <UniqueIdentifier>{cce15248-9e6e-48ac-aa0b-24b06a327bef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -183,9 +201,6 @@
     <ClCompile Include="BattleActionUI.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="UnitAmount.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
@@ -195,12 +210,6 @@
     <ClCompile Include="TacticsArmySlot.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="InitiativeSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyMoveConditions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PathFindingFunctions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -208,6 +217,27 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BulletFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InitiativeSystem.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Source Files\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyMoveConditions.cpp">
+      <Filter>Source Files\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleManager.cpp">
+      <Filter>Source Files\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>Source Files\Particles\BaseParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="BloodParticle.cpp">
+      <Filter>Source Files\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="ShotParticle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -326,9 +356,6 @@
     <ClInclude Include="BattleActionUI.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TacticsArmySlot.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
@@ -338,12 +365,6 @@
     <ClInclude Include="UnitAmount.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="InitiativeSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyMoveConditions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PathFindingFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -351,6 +372,27 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BulletFactory.h">
+      <Filter>Header Files\Globals</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Header Files\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyMoveConditions.h">
+      <Filter>Header Files\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="InitiativeSystem.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleManager.h">
+      <Filter>Header Files\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Header Files\Particles\BaseParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="BloodParticle.h">
+      <Filter>Header Files\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="ShotParticle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -61,6 +61,11 @@ void PirateUnit::TakeDamage(int _totalDamage)
 			animationState.currentFrame = 0;
 			animationState.elapsedTime = 0;
 			return;
+		}else
+		{
+			currentState = DAMAGED;
+			animationState.currentFrame = 0;
+			animationState.elapsedTime = 0;
 		}
 	}
 
