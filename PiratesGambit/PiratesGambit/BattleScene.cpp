@@ -42,11 +42,8 @@ void BattleScene::update(float _dt)
 				if (hasAttacked && projectileCollisionCheck()) {
 					ParticleManager::getInstance().CreateBloodParticle(currentDefendingUnit->getPosition());
 					calculateDamage(currentSelectedUnit, currentDefendingUnit); // Damage calculation
-
 					startEnemyTurnTimer = true;
 					enemyWaitTime.restart();
-					hasAttacked = false;
-					
 				}
 			}
 		}
@@ -94,6 +91,7 @@ void BattleScene::render(const std::unique_ptr<sf::RenderWindow>& window) const
 
 void BattleScene::updateNextTurn()
 {
+	Mouse::getInstance().SetToDefault();
 	//update initiative
 	tacticsArmyUI->UpdateToInitiativeView();
 
@@ -260,7 +258,7 @@ void BattleScene::detectMouse()
 	}
 	else
 	{
-		if (!move && currentState == BATTLE) {
+		if (currentState == BATTLE && currentSelectedUnit->unitInformation.allegiance == RED_PLAYER && !hasAttacked) {
 			hoverMouseOnNode();
 		}
 		if (currentSelectedUnit && currentState ==PREP) {
@@ -283,6 +281,7 @@ void BattleScene::TakeUnitAction(const std::shared_ptr<BattleGridNode>& _targetN
 			aStarPathFind(battleGrid[currentSelectedUnit->getCurrentNodeId()], battleGrid[targetNodeID]);
 			move = true;
 			canAttack = false;
+			Mouse::getInstance().SetToDefault();
 		}
 		};
 
@@ -356,20 +355,18 @@ void BattleScene::hoverMouseOnNode()
 
 	// Handle logic for RANGED units
 	else if (currentSelectedUnit->unitInformation.unitType == RANGED) {
-		bool isEnemyHovered = false;
-
 		// Check if the hovered node contains an enemy
+		bool defaultIcon = true;
 		for (auto& enemyUnit : enemyRef->getArmy()->getArmy()) {
 			if (enemyUnit->getCurrentNodeId() == currentHoverNodeID && enemyUnit->unitStats.isActive) {
 				Mouse::getInstance().SetToRanged();
-				isEnemyHovered = true;
 				currentDefendingUnit = enemyUnit;
+				defaultIcon = false;
 				break;
 			}
 		}
-
-		// Reset cursor to default if no enemy is on the hovered node
-		if (!isEnemyHovered) {
+		if(defaultIcon)
+		{
 			Mouse::getInstance().SetToDefault();
 		}
 	}
@@ -706,6 +703,7 @@ void BattleScene::WaitForTurn()
 	{
 		updateNextTurn();
 		startEnemyTurnTimer = false;
+		hasAttacked = false;
 	}
 }
 
