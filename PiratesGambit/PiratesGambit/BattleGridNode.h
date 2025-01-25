@@ -34,6 +34,9 @@ public:
 	void setAsWalkable();
 	void setTransparent();
 
+	void updateAllegiance(UnitAllegiance _allegiance);
+
+	UnitAllegiance getCurrentAllegiance() const { return occupiedUnitAllegiance; }
 	const std::vector<std::pair<std::shared_ptr<BattleGridNode>, int>>& getNeighbours();
 	const std::shared_ptr<BattleGridNode>& getPrevious();
 
@@ -43,5 +46,7 @@ public:
 private:
 	std::shared_ptr<BattleGridNode> previousNode;
 	std::vector<std::pair<std::shared_ptr<BattleGridNode>, int>> m_neighbours;
+
+	UnitAllegiance occupiedUnitAllegiance;
 };
 

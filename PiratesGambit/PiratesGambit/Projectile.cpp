@@ -3,6 +3,7 @@
 void Projectile::update()
 {
 	if (isActive) {
+		prevPosition = position;
 		position += velocity;
 		body.setPosition(position);
 	}

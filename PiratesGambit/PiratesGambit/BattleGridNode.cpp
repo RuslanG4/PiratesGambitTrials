@@ -32,6 +32,11 @@ void BattleGridNode::setTransparent()
     debugShape->setOutlineColor(sf::Color::Transparent);
 }
 
+void BattleGridNode::updateAllegiance(UnitAllegiance _allegiance)
+{
+    occupiedUnitAllegiance = _allegiance;
+}
+
 const std::vector<std::pair<std::shared_ptr<BattleGridNode>, int>>& BattleGridNode::getNeighbours()
 {
     return m_neighbours;

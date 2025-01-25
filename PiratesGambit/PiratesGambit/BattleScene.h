@@ -15,18 +15,6 @@
 class BattleScene
 {
 public:
-	class Compare {
-	public:
-		bool operator()(const std::shared_ptr<BattleGridNode>& a, const std::shared_ptr<BattleGridNode>& b) {
-			// Compare based on the total estimated cost (f cost)
-			if (a->getNodeData().fCost == b->getNodeData().fCost) {
-				// Use h cost as a tiebreaker
-				return a->getNodeData().hCost > b->getNodeData().hCost;
-			}
-			return a->getNodeData().fCost > b->getNodeData().fCost;
-		}
-	};
-
 	BattleScene(const std::shared_ptr<Player>& _player, const std::shared_ptr<Enemy>& _enemy) : playerRef(_player), enemyRef(_enemy)
 	{
 		UIInterface = std::make_unique<BattleActionUI>();
@@ -56,7 +44,8 @@ public:
 
 	void createMoveableArea(const std::shared_ptr<PirateUnit>& _unit);
 	void aStarPathFind(const std::shared_ptr<BattleGridNode>& _start, const std::shared_ptr<BattleGridNode>& end);
-	void createVectors(const std::shared_ptr<BattleGridNode>& end);
+
+	bool projectileCollisionCheck();
 
 	void initialiseStartArea();
 

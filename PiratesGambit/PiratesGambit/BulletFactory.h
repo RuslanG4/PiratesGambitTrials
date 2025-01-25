@@ -43,18 +43,7 @@ public:
         }
     }
 
-    bool checkCollision(const sf::FloatRect& target) {
-        for (auto it = projectiles.begin(); it != projectiles.end();) {
-            if ((*it) && (*it)->getBounds().intersects(target)) {
-                it = projectiles.erase(it); 
-                return true;              
-            }
-            else {
-                ++it; 
-            }
-        }
-        return false;
-    }
+    std::vector<std::unique_ptr<Projectile>>& GetProjectiles() { return projectiles; }
 
 private:
     std::vector<std::unique_ptr<Projectile>> projectiles;

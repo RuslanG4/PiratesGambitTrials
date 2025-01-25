@@ -58,6 +58,7 @@ enum UnitName
 
 enum UnitAllegiance
 {
+	NONE,
 	RED_PLAYER,
 	BLUE_PLAYER,
 	GREEN_PLAYER,
