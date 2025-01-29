@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AnimatedCharacterIcon.cpp" />
     <ClCompile Include="Animator.cpp" />
     <ClCompile Include="Army.cpp" />
     <ClCompile Include="Barrel.cpp" />
@@ -164,6 +165,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Gunner.cpp" />
+    <ClCompile Include="GunnerIcon.cpp" />
     <ClCompile Include="Harpoon.cpp" />
     <ClCompile Include="Harpooner.cpp" />
     <ClCompile Include="HireRecruitUI.cpp" />
@@ -193,6 +195,7 @@
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnimatedCharacterIcon.h" />
     <ClInclude Include="Animator.h" />
     <ClInclude Include="Army.h" />
     <ClInclude Include="Barrel.h" />
@@ -220,6 +223,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Gunner.h" />
+    <ClInclude Include="GunnerIcon.h" />
     <ClInclude Include="Harpoon.h" />
     <ClInclude Include="Harpooner.h" />
     <ClInclude Include="HireRecruitUI.h" />

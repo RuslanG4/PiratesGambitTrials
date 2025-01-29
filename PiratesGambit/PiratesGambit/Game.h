@@ -44,7 +44,7 @@ private:
 	void handleKeyInput();
 
 	void interactWithObjects();
-	void interactWithBuildings();
+	bool interactWithBuildings();
 
 	void transferInventoryItems();
 

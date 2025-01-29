@@ -8,11 +8,11 @@ void Island::render(const std::unique_ptr<sf::RenderWindow>& window) const
 	}
 }
 
-void Island::update() const
+void Island::update(float _dt) const
 {
-	for(auto& gameObject : gameObjects)
+	for(auto& gameObject : buildings)
 	{
-		gameObject->update();
+		gameObject->Update(_dt);
 	}
 }
 

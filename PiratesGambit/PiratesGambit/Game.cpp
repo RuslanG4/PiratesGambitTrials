@@ -93,7 +93,7 @@ void Game::processEvents()
 		if (sf::Event::MouseButtonPressed == newEvent.type) //user pressed mouse
 		{
 			Mouse::getInstance().processMouse(newEvent);
-			if (!battle) {
+			if (!battle && currentObjectInteract.lock()) {
 				transferInventoryItems();
 			}
 		}
@@ -141,7 +141,7 @@ void Game::update(double t_deltaTime)
 		findCurrentNode();
 
 		handleKeyInput();
-		myMap->getChunks()[myPlayer->getCurrentChunkID()]->updateIslands();
+		myMap->getChunks()[myPlayer->getCurrentChunkID()]->updateIslands(t_deltaTime);
 		//
 		if (myPlayer->isOnBoat())
 		{
@@ -208,7 +208,7 @@ void Game::findCurrentChunk()
 
 void Game::handleKeyInput()
 {
-	if (!Inventory::isInventoryOpen()) {
+	if (!Inventory::isInventoryOpen() && !HireRecruitUI::IsUIOpen()) {
 		sf::Vector2f desiredVelocity{ 0,0 };
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 		{
@@ -286,7 +286,9 @@ void Game::handleKeyInput()
 	{
 		interactWithObject = true;
 		interactWithObjects();
-		interactWithBuildings();
+		if (interactWithBuildings()) {
+			myPlayer->getPlayerController()->setLandVelocity(sf::Vector2f(0, 0));
+		}
 	}
 }
 
@@ -308,7 +310,7 @@ void Game::interactWithObjects()
 	}
 }
 
-void Game::interactWithBuildings()
+bool Game::interactWithBuildings()
 {
 	for (auto& node : myPlayer->getUpdateableArea()->getUpdateableNodes())
 	{
@@ -322,11 +324,13 @@ void Game::interactWithBuildings()
 					{
 						building->Interact();
 						currentBuildingInteract = building;
+						return true;
 					}
 				}
 			}
 		}
 	}
+	return false;
 }
 
 void Game::transferInventoryItems()
@@ -350,11 +354,13 @@ void Game::findCurrentNode()
 {
 	for (auto& node : myMap->getChunks()[myPlayer->getCurrentChunkID()]->nodeGrid)
 	{
-		if (Utility::collisionWithPoint(myPlayer->getPlayerController()->getPosition(), node->getPosition(), sf::Vector2f(node->getPosition().x + node->getSize(), node->getPosition().y + node->getSize())))
+		if (Utility::collisionWithPoint(myPlayer->getPlayerController()->getPosition(), node->getPosition(), sf::Vector2f(node->getSize() , node->getSize())))
 		{
 			if (myPlayer->getCurrentNode() != node)
 			{
+				
 				myPlayer->setCurrentNode(node);
+				auto a = myPlayer->getCurrentNode()->getID();
 				myPlayer->updateUpdateableArea(node, 1);
 				std::cout << myPlayer->getCurrentNode()->getID() << "\n";
 			}

@@ -5,7 +5,7 @@
 class InfoBoxUI
 {
 public:
-	InfoBoxUI();
+	InfoBoxUI(float _width, float _height);
 
 	void Render(const std::unique_ptr<sf::RenderWindow>& _window) const;
 	void Update();
@@ -19,12 +19,14 @@ public:
 	void UpdateLayout();
 
 private:
-	sf::RectangleShape Border;
+	std::unique_ptr<sf::RectangleShape> Border;
 
 	sf::Sprite icon;
 
 	sf::Text topText;
 	sf::Text bottomText;
+
+	float width, height;
 
 	bool hasIcon{ false };
 };

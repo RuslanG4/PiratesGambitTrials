@@ -8,7 +8,7 @@ class Building
 {
 public:
 	void Render(const std::unique_ptr<sf::RenderWindow>& _window) const;
-	void Update();
+	void Update(float _dt);
 
 	void Interact();
 

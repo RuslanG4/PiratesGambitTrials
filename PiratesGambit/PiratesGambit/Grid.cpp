@@ -41,11 +41,11 @@ void Grid::drawGameObject(const std::unique_ptr<sf::RenderWindow>& window) const
 /// <summary>
 /// updates islands
 /// </summary>
-void Grid::updateIslands() const
+void Grid::updateIslands(float _dt) const
 {
 	for (auto& island : islands)
 	{
-		island->update();
+		island->update(_dt);
 	}
 }
 

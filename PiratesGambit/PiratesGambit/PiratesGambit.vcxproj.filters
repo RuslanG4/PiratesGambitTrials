@@ -115,6 +115,15 @@
     <Filter Include="Source Files\GameObjects\Buildings">
       <UniqueIdentifier>{4558a994-8304-45d7-870e-4be9effc9edd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\UI\Building Menus">
+      <UniqueIdentifier>{c56e6f60-a3c6-4dd6-a7fe-5fca9c63df14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI\Building Menus">
+      <UniqueIdentifier>{9693b611-d73a-44de-9efd-a475b589e088}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI\Building Menus\Icons">
+      <UniqueIdentifier>{cf1e1082-d0d6-4169-b607-be00ffe38250}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -271,6 +280,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="InfoBoxUI.cpp">
+      <Filter>Source Files\UI\Building Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimatedCharacterIcon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GunnerIcon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -447,7 +462,13 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="InfoBoxUI.h">
+      <Filter>Header Files\UI\Building Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimatedCharacterIcon.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GunnerIcon.h">
+      <Filter>Header Files\UI\Building Menus\Icons</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

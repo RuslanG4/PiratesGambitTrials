@@ -19,7 +19,7 @@ public:
 	};
 
 	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
-	void update() const;
+	void update(float _dt) const;
 
 	void positionGameObjects();
 

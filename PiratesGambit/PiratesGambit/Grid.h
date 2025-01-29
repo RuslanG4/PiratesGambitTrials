@@ -16,7 +16,7 @@ public:
 	void drawGrid(const std::unique_ptr<sf::RenderWindow>& window) const;
 	void drawGameObject(const std::unique_ptr<sf::RenderWindow>& window) const;
 
-	void updateIslands() const;
+	void updateIslands(float _dt) const;
 	const std::vector<std::unique_ptr<Island>>& getIslands() const { return islands; }
 
 	void setChunkID(int id_) { chunkID = id_; }

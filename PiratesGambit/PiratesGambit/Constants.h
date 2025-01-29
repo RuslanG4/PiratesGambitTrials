@@ -33,6 +33,7 @@ const char* const BARREL = "ASSETS\\IMAGES\\GameObjects\\BARREL.png";
 const char* const CANNON_BALL_ICON = "ASSETS\\IMAGES\\ICONS\\CANNON_BALL.png";
 const char* const SWORD_ICON = "ASSETS\\IMAGES\\ICONS\\FIGHT.png";
 const char* const SHOOT_ICON = "ASSETS\\IMAGES\\ICONS\\SHOOT.png";
+const char* const MONEY_ICON = "ASSETS\\IMAGES\\ICONS\\MONEY.png";
 
 
 //Borders

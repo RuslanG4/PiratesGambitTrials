@@ -9,6 +9,11 @@ void Building::Render(const std::unique_ptr<sf::RenderWindow>& _window) const
 	}
 }
 
+void Building::Update(float _dt)
+{
+	buildingUI->Update(_dt);
+}
+
 void Building::Interact()
 {
 	if (!buildingUI->IsUIOpen())
