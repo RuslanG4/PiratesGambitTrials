@@ -10,5 +10,5 @@ BuccaneerBuilding::BuccaneerBuilding()
 	buildingSprite.setOrigin(24, 24); //half of 48
 	buildingSprite.setScale(2, 2);
 
-	buildingUI = std::make_unique<HireRecruitUI>();
+	buildingUI = std::make_unique<HireRecruitUI>(BUCCANEER);
 }

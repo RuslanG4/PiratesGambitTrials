@@ -288,6 +288,12 @@
     <ClCompile Include="GunnerIcon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BuccaneerIcon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Slider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -469,6 +475,12 @@
     </ClInclude>
     <ClInclude Include="GunnerIcon.h">
       <Filter>Header Files\UI\Building Menus\Icons</Filter>
+    </ClInclude>
+    <ClInclude Include="BuccaneerIcon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Slider.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

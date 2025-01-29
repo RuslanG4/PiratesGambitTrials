@@ -17,7 +17,7 @@ class GunnerIcon :
 			rectSourceSprite.top = 0;
 			sprite.setTextureRect(rectSourceSprite);
 
-			sprite.setScale(10, 10);
+			sprite.setScale(9, 9);
 			sprite.setOrigin(16, 24);
 
 			sprite.setPosition(_pos);

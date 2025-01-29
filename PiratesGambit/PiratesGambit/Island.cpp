@@ -28,9 +28,11 @@ void Island::positionGameObjects()
 				object->SetPosition(node->getMidPoint());
 				//
 				object->AddToOccupiedNodes(node->getID());
+				node->isOccupied = true;
 				for(auto& neighbourID : node->getNeighbours())
 				{
 					object->AddToOccupiedNodes(neighbourID->getID());
+					neighbourID->isOccupied = true;
 				}
 				//object->setNodeId(node->getID());
 				condition = true;

@@ -3,11 +3,16 @@
 #include"Includes.h"
 #include "Structs.h"
 #include"InfoBoxUI.h"
+#include "BuccaneerIcon.h"
+#include "GunnerIcon.h"
+#include "Slider.h"
 
 class HireRecruitUI
 {
 public:
-	HireRecruitUI();
+	HireRecruitUI(UnitName _type);
+
+	void SetCharacter(UnitName _type);
 
 	void Render(const std::unique_ptr<sf::RenderWindow>& _window) const;
 	void Update(float _dt);
@@ -24,8 +29,13 @@ private:
 	sf::Sprite unit;
 	AnimationState animationState;
 
-	std::vector<std::unique_ptr<InfoBoxUI>> InformationBoxes;
+	std::unique_ptr<InfoBoxUI> costPerTroop;
+	std::unique_ptr<InfoBoxUI> totalCost;
+	std::unique_ptr<InfoBoxUI> available;
+	std::unique_ptr<InfoBoxUI> recruit;
 
 	std::unique_ptr<AnimatedCharacterIcon> unitIcon;
+
+	std::unique_ptr<Slider> amountSlider;
 };
 

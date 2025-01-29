@@ -152,6 +152,7 @@
     <ClCompile Include="BoatController.cpp" />
     <ClCompile Include="Buccaneer.cpp" />
     <ClCompile Include="BuccaneerBuilding.cpp" />
+    <ClCompile Include="BuccaneerIcon.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="BulletFactory.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -188,6 +189,7 @@
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="RenderableIventory.cpp" />
     <ClCompile Include="ShotParticle.cpp" />
+    <ClCompile Include="Slider.cpp" />
     <ClCompile Include="TacticsArmySlot.cpp" />
     <ClCompile Include="TacticsArmyUI.cpp" />
     <ClCompile Include="UnitAmount.cpp" />
@@ -208,6 +210,7 @@
     <ClInclude Include="BoatController.h" />
     <ClInclude Include="Buccaneer.h" />
     <ClInclude Include="BuccaneerBuilding.h" />
+    <ClInclude Include="BuccaneerIcon.h" />
     <ClInclude Include="Building.h" />
     <ClInclude Include="BulletFactory.h" />
     <ClInclude Include="Camera.h" />
@@ -247,6 +250,7 @@
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="RenderableIventory.h" />
     <ClInclude Include="ShotParticle.h" />
+    <ClInclude Include="Slider.h" />
     <ClInclude Include="Structs.h" />
     <ClInclude Include="TacticsArmySlot.h" />
     <ClInclude Include="TacticsArmyUI.h" />

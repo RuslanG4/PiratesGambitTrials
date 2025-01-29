@@ -54,6 +54,11 @@ void InfoBoxUI::setPosition(sf::Vector2f _pos)
 	}
 }
 
+void InfoBoxUI::UpdateText(const std::string& _text)
+{
+	bottomText.setString(_text);
+}
+
 void InfoBoxUI::RemoveIcon()
 {
 	hasIcon = false;

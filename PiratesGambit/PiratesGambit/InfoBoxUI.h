@@ -14,6 +14,8 @@ public:
 	void SetIcon(const sf::Texture& _texture);
 	void setPosition(sf::Vector2f _pos);
 
+	void UpdateText(const std::string& _text);
+
 	void RemoveIcon();
 
 	void UpdateLayout();
