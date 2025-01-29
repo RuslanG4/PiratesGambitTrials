@@ -92,6 +92,9 @@ private:
         //bg
         loadTexture("background", BACKGROUND);
 
+        //Buildings
+        loadTexture("BUILDINGS", BUILDINGS);
+
         
     }
 

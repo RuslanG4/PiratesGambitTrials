@@ -109,6 +109,12 @@
     <Filter Include="Source Files\Projectile">
       <UniqueIdentifier>{e14abfce-aeca-4bbf-9320-bca3a0cb4032}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GameObjects\Buildings">
+      <UniqueIdentifier>{70f23ab7-4521-438f-9ec6-ba3b38070200}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObjects\Buildings">
+      <UniqueIdentifier>{4558a994-8304-45d7-870e-4be9effc9edd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -254,6 +260,18 @@
     </ClCompile>
     <ClCompile Include="Harpoon.cpp">
       <Filter>Source Files\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="Building.cpp">
+      <Filter>Source Files\GameObjects\Buildings</Filter>
+    </ClCompile>
+    <ClCompile Include="BuccaneerBuilding.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HireRecruitUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InfoBoxUI.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -418,6 +436,18 @@
     </ClInclude>
     <ClInclude Include="Harpoon.h">
       <Filter>Header Files\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="Building.h">
+      <Filter>Header Files\GameObjects\Buildings</Filter>
+    </ClInclude>
+    <ClInclude Include="BuccaneerBuilding.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HireRecruitUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InfoBoxUI.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

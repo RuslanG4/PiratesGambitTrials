@@ -286,6 +286,7 @@ void Game::handleKeyInput()
 	{
 		interactWithObject = true;
 		interactWithObjects();
+		interactWithBuildings();
 	}
 }
 
@@ -301,6 +302,27 @@ void Game::interactWithObjects()
 				{
 					gameObject->interact();
 					currentObjectInteract = gameObject;
+				}
+			}
+		}
+	}
+}
+
+void Game::interactWithBuildings()
+{
+	for (auto& node : myPlayer->getUpdateableArea()->getUpdateableNodes())
+	{
+		for (auto& island : myMap->getChunks()[myPlayer->getCurrentChunkID()]->getIslands())
+		{
+			for (auto& building : island->getBuildings())
+			{
+				for(auto& nodeId : building->GetOccupiedNodeIds())
+				{
+					if(nodeId == node->getID())
+					{
+						building->Interact();
+						currentBuildingInteract = building;
+					}
 				}
 			}
 		}

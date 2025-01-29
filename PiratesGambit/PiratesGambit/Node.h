@@ -80,6 +80,8 @@ public:
 	//Resetters
 	void resetMarked() { visited = false; };
 
+	bool isOccupied{ false };
+
 private:
 	int m_id;
 	int m_chunkId;

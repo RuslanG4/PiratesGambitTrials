@@ -44,6 +44,7 @@ private:
 	void handleKeyInput();
 
 	void interactWithObjects();
+	void interactWithBuildings();
 
 	void transferInventoryItems();
 
@@ -72,10 +73,11 @@ private:
 	Camera myCamera;
 
 	std::weak_ptr<GameObject> currentObjectInteract;
+	std::shared_ptr<Building> currentBuildingInteract;
 
 	//battle scene
 	std::unique_ptr<BattleScene> battleScene;
-	bool battle = true;
+	bool battle = false;
 
 };
 

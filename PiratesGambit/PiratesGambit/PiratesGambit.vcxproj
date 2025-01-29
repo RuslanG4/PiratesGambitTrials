@@ -150,6 +150,8 @@
     <ClCompile Include="Boat.cpp" />
     <ClCompile Include="BoatController.cpp" />
     <ClCompile Include="Buccaneer.cpp" />
+    <ClCompile Include="BuccaneerBuilding.cpp" />
+    <ClCompile Include="Building.cpp" />
     <ClCompile Include="BulletFactory.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CannonBall.cpp" />
@@ -164,7 +166,9 @@
     <ClCompile Include="Gunner.cpp" />
     <ClCompile Include="Harpoon.cpp" />
     <ClCompile Include="Harpooner.cpp" />
+    <ClCompile Include="HireRecruitUI.cpp" />
     <ClCompile Include="HitBox.cpp" />
+    <ClCompile Include="InfoBoxUI.cpp" />
     <ClCompile Include="InitiativeSystem.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="InventoryItem.cpp" />
@@ -200,6 +204,8 @@
     <ClInclude Include="Boat.h" />
     <ClInclude Include="BoatController.h" />
     <ClInclude Include="Buccaneer.h" />
+    <ClInclude Include="BuccaneerBuilding.h" />
+    <ClInclude Include="Building.h" />
     <ClInclude Include="BulletFactory.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CannonBall.h" />
@@ -216,8 +222,10 @@
     <ClInclude Include="Gunner.h" />
     <ClInclude Include="Harpoon.h" />
     <ClInclude Include="Harpooner.h" />
+    <ClInclude Include="HireRecruitUI.h" />
     <ClInclude Include="HitBox.h" />
     <ClInclude Include="Includes.h" />
+    <ClInclude Include="InfoBoxUI.h" />
     <ClInclude Include="InitiativeSystem.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="InventoryItem.h" />
