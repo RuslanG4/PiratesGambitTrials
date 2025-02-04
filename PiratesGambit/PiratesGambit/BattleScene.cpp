@@ -39,7 +39,7 @@ void BattleScene::update(float _dt)
 		else {
 			if (currentSelectedUnit->unitInformation.unitType == RANGED)
 			{
-				if (hasAttacked && projectileCollisionCheck()) {
+				if (projectileCollisionCheck()) {
 					ParticleManager::getInstance().CreateBloodParticle(currentDefendingUnit->getPosition());
 					calculateDamage(currentSelectedUnit, currentDefendingUnit); // Damage calculation
 					startEnemyTurnTimer = true;
@@ -184,17 +184,21 @@ void BattleScene::aStarPathFind(const std::shared_ptr<BattleGridNode>& _start, c
 
 bool BattleScene::projectileCollisionCheck()
 {
-	for (auto it = BulletFactory::getInstance().GetProjectiles().begin();
-		it != BulletFactory::getInstance().GetProjectiles().end();)
+	auto& projectiles = BulletFactory::getInstance().GetProjectiles();
+
+	for (auto it = projectiles.begin(); it != projectiles.end(); )
 	{
-		if ((*it)->getBounds().intersects(currentDefendingUnit->getGlobalBounds())) {
-			it = BulletFactory::getInstance().GetProjectiles().erase(it);
+		if ((*it)->getBounds().intersects(currentDefendingUnit->getGlobalBounds()))
+		{
+			it = projectiles.erase(it);
 			return true;
 		}
-		else {
-			++it; 
+		else
+		{
+			++it;
 		}
 	}
+
 	return false;
 }
 

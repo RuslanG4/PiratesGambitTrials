@@ -19,7 +19,9 @@ public:
 	sf::Vector2f getPosition() const { return hitbox.getPosition(); }
 	sf::Vector2f getSize() const { return hitbox.getSize(); }
 
-	sf::Vector2f getTopLeftCorner() const { return sf::Vector2f(getPosition().x - getSize().x / 2, getPosition().y - getSize().y / 2); }
+	sf::FloatRect GetGlobalBounds() const { return hitbox.getGlobalBounds(); }
+
+	sf::Vector2f getTopLeftCorner() const { return { getPosition().x - getSize().x / 2, getPosition().y - getSize().y / 2 }; }
 private:
 	sf::RectangleShape hitbox;
 };

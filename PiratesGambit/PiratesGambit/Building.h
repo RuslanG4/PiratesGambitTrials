@@ -21,5 +21,7 @@ protected:
 
 	std::vector<int> OccupiedNodes;
 	std::unique_ptr<HireRecruitUI> buildingUI;
+
+	int unitsAmount = 0;
 };
 

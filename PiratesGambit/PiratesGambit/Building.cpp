@@ -29,5 +29,4 @@ void Building::Interact()
 void Building::SetPosition(sf::Vector2f _pos)
 {
 	buildingSprite.setPosition(_pos);
-	
 }

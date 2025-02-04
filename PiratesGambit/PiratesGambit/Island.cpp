@@ -16,6 +16,11 @@ void Island::update(float _dt) const
 	}
 }
 
+bool Island::CanPlaceObject()
+{
+	return false;
+}
+
 void Island::positionGameObjects()
 {
 	bool condition = false;
@@ -41,6 +46,19 @@ void Island::positionGameObjects()
 		}
 		if(condition)
 		{
+			break;
+		}
+	}
+}
+
+void Island::PlaceEnemy(const std::shared_ptr<Enemy>& _enemy)
+{
+	for (auto& node : landNodes)
+	{
+		if (node->getParentTileType() == LAND && !node->isOccupied)
+		{
+			_enemy->updatePosition(node->getMidPoint());
+			_enemy->setCurrentNode(node->getID());
 			break;
 		}
 	}

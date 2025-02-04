@@ -5,7 +5,7 @@ class BuccaneerBuilding :
     public Building
 {
 public:
-    BuccaneerBuilding();
+    BuccaneerBuilding(const std::shared_ptr<Player>& _playerRef);
 private:
 
 };

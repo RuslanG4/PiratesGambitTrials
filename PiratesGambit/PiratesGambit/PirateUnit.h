@@ -40,7 +40,7 @@ public:
 	virtual ~PirateUnit() = default;
 	PirateUnit() = default;
 
-	void addToCurrentStack(int _amount) { unitStats.stackSize += _amount; }
+	void addToCurrentStack(int _amount);
 	int getStackSize() const { return unitStats.stackSize; }
 
 	virtual void update(float _dt) = 0;

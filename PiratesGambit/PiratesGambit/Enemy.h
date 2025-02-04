@@ -10,20 +10,18 @@
 #include"Army.h"
 #include"Structs.h"
 
+class Boat; //forward ref
+
 class Enemy
 {
 public:
 	Enemy(sf::Vector2f _pos)
 	{
-		//controller = new PlayerController(_pos);
-		inventory = std::make_unique<Inventory>();
-		///updateableArea = std::make_unique<UpdateableArea>();
 		army = std::make_unique<Army>();
 
-		army->addUnit(std::move(std::make_unique<Buccaneer>(23,YELLOW_PLAYER)));
-		army->addUnit(std::move(std::make_unique<Gunner>(16,YELLOW_PLAYER)));
+		army->addUnit(std::make_shared<Buccaneer>(23,YELLOW_PLAYER));
+		army->addUnit(std::make_shared<Gunner>(16,YELLOW_PLAYER));
 
-		//inventory = new Inventory();
 
 		body.setTexture(TextureManager::getInstance().getTexture("PIRATE_CAPTAIN"));
 
@@ -42,62 +40,51 @@ public:
 	~Enemy() = default;
 
 	void update(double dt);
-	void render(sf::RenderWindow& window) const;
+	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
 
 	//animation
-	void handlePlayerStates(double dt);
-	void updatePlayerState();
+	void handleAnimationStates(double dt);
 
-	//Current Node + chunk
-	void setCurrentChunkID(int id_) { currentChunkId = id_; }
-	void setCurrentNode(const std::shared_ptr<Node>& node_) { currentNode = node_; }
-	int getCurrentChunkID() const { return currentChunkId; }
-	const std::shared_ptr<Node>& getCurrentNode() const { return currentNode; }
+	//Global Bounds;
+	sf::FloatRect GetGlobalBounds() const { return body.getGlobalBounds(); }
 
+	//Updating position
 	void updatePosition(const sf::Vector2f& _pos) { body.setPosition(_pos); }
+	void setCurrentNode(int _id) { currentNodeId = _id; }
 
-	//Inventory
-	//const std::unique_ptr<Inventory>& getInventory() const { return inventory; }
-
-	//update area
-	//void updateUpdateableArea(const std::shared_ptr<Node>& _startNode, int depth) const;
-	//const std::unique_ptr<UpdateableArea>& getUpdateableArea() const { return updateableArea; }
-
-	//land collision
-	bool checkCollision(const std::shared_ptr<Node>& _node, sf::Vector2f& _pos);
+	//
+	int GetCurrentNodeID() const { return currentNodeId; }
 
 	//boat interaction functions
-	//void boardBoat(const std::shared_ptr<Boat>& _boat);
-	//void disembarkBoat(const std::shared_ptr<Node>& _node);
-	//bool isOnBoat() const { return onBoat; }
+	void boardBoat(const std::shared_ptr<Boat>& _boat);
+	void disembarkBoat(const std::shared_ptr<Node>& _node);
+	bool isOnBoat() const { return onBoat; }
 
 	//Army
 	const std::unique_ptr<Army>& getArmy() const { return army; }
 
 private:
 	sf::Sprite body;
+
 	AnimationState animationState;
-
 	UnitState currentState = UnitState::IDLE; //animation state
-
-	std::unique_ptr<Inventory> inventory; //player inventory
 
 	HitBox* myHitbox; //hitbox for collisions
 
-	//std::unique_ptr<UpdateableArea> updateableArea; //update area around player
 	std::shared_ptr<Node> currentNode{ nullptr };
 
 	std::unique_ptr<Army> army;
 
 	int currentChunkId{ -99 };
+	int currentNodeId{ 0 };
 
 	//animation
-	int animateTime = 0;
-	int currentFrame = 0;
+	bool idleAnimation{ false };
+	bool walkAnimation{ false };
 
 	//Boat
-	//std::weak_ptr<Boat> currentBoat;
-	//bool onBoat{ true };
+	std::weak_ptr<Boat> currentBoat;
+	bool onBoat{ false };
 
 };
 

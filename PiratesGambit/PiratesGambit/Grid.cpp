@@ -1,7 +1,8 @@
 #include "Grid.h"
 
-Grid::Grid(const std::vector<std::shared_ptr<Node>>& gridNodes_) : nodeGrid(gridNodes_)
+Grid::Grid(const std::vector<std::shared_ptr<Node>>& gridNodes_, const std::shared_ptr<Player>& _playerRef) : nodeGrid(gridNodes_)
 {
+	playerRef = _playerRef;
 	chunkStartX = nodeGrid[0]->getPosition().x;
 	chunkEndX = nodeGrid[nodeGrid.size() - 1]->getPosition().x + (nodeGrid[0]->getSize());
 
@@ -290,7 +291,7 @@ void Grid::MapIsland(int _startIndex,bool saveIslandData, const std::unique_ptr<
 	}
 	if(saveIslandData)
 	{
-		islands.push_back(std::move(std::make_unique<Island>(currentIsland)));
+		islands.push_back(std::move(std::make_unique<Island>(currentIsland, playerRef)));
 	}
 	
 }

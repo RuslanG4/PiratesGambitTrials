@@ -10,7 +10,10 @@ public:
 		
 	}
 
-	void addUnit(std::unique_ptr<PirateUnit> _unit);
+	void addUnit(std::shared_ptr<PirateUnit> _unit);
+
+	bool combineUnits(std::shared_ptr<PirateUnit> _unit);
+
 	void removeUnit();
 
 	const std::vector<std::shared_ptr<PirateUnit>>& getArmy() const { return army; }

@@ -3,6 +3,7 @@
 #include"Node.h"
 #include"Barrel.h"
 #include"BuccaneerBuilding.h"
+#include "Enemy.h"
 
 /// <summary>
 /// Holds individual Islands inside a given chunk and holds game objects on those islands
@@ -11,17 +12,20 @@ class Island
 {
 public:
 	Island() {}
-	Island(const std::vector<std::shared_ptr<Node>>& _land) : landNodes(_land)
+	Island(const std::vector<std::shared_ptr<Node>>& _land, const std::shared_ptr<Player>& _playerRef) : landNodes(_land)
 	{
 		gameObjects.push_back(std::make_shared<Barrel>());
-		buildings.push_back(std::make_shared<BuccaneerBuilding>());
+		buildings.push_back(std::make_shared<BuccaneerBuilding>(_playerRef));
 		positionGameObjects();
 	};
 
 	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
 	void update(float _dt) const;
 
+	bool CanPlaceObject();
 	void positionGameObjects();
+
+	void PlaceEnemy(const std::shared_ptr<Enemy>& _enemy);
 
 	bool allNeighboursAreLand(const std::shared_ptr<Node>&);
 

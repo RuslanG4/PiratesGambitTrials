@@ -11,9 +11,9 @@ Game::Game()
 	m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode( SCREEN_WIDTH,SCREEN_HEIGHT), 32U );
 	initialise();
 
-	myMap = std::make_unique<FullMap>(m_window, 1); //keep 1x1, 2x2
-
 	myPlayer = std::make_shared<Player>(sf::Vector2f(25, 25));
+
+	myMap = std::make_unique<FullMap>(m_window, 1, myPlayer); //keep 1x1, 2x2
 
 	enemy = std::make_shared<Enemy>(sf::Vector2f(25, 25));
 
@@ -26,6 +26,8 @@ Game::Game()
 	findCurrentChunk();
 
 	battleScene = std::make_unique<BattleScene>(myPlayer, enemy);
+
+	myMap->getChunks()[0]->getIslands()[0]->PlaceEnemy(enemy);
 
 	//myPlayer->setSprite(textureManager.getTexture("PLAYER_BOAT"));
 }
@@ -152,6 +154,10 @@ void Game::update(double t_deltaTime)
 			myPlayer->update(t_deltaTime);
 		}
 
+		enemy->update(t_deltaTime);
+
+		transitionToBattleMode();
+
 		myCamera.setCameraCenter(myPlayer->getPlayerController()->getPosition());
 	}
 	else {
@@ -179,6 +185,8 @@ void Game::render()
 
 		myPlayer->render(m_window);
 		playerBoat->render(m_window);
+
+		enemy->render(m_window);
 
 		myMap->getChunks()[myPlayer->getCurrentChunkID()]->drawGameObject(m_window);
 	}else
@@ -288,6 +296,20 @@ void Game::handleKeyInput()
 		interactWithObjects();
 		if (interactWithBuildings()) {
 			myPlayer->getPlayerController()->setLandVelocity(sf::Vector2f(0, 0));
+		}
+	}
+}
+
+void Game::transitionToBattleMode()
+{
+	for (auto& node : myPlayer->getUpdateableArea()->getUpdateableNodes())
+	{
+		if(node->getID() == enemy->GetCurrentNodeID())
+		{
+			if(enemy->GetGlobalBounds().intersects(myPlayer->GetHitBox()))
+			{
+				battle = true;
+			}
 		}
 	}
 }

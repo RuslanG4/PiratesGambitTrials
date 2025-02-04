@@ -43,6 +43,8 @@ private:
 
 	void handleKeyInput();
 
+	void transitionToBattleMode();
+
 	void interactWithObjects();
 	bool interactWithBuildings();
 

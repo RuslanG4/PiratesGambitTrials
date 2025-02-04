@@ -83,6 +83,7 @@ private:
         loadTexture("SWORD_ICON", SWORD_ICON);
         loadTexture("SHOOT_ICON", SHOOT_ICON);
         loadTexture("MONEY_ICON", MONEY_ICON);
+        loadTexture("COIN_ICON", COIN_ICON);
         //BORDERS
         loadTexture("ACTION_BORDER", ACTION_BORDER);
         loadTexture("BULKY_BORDER", BULKY_BORDER);

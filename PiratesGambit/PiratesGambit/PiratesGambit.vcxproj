@@ -171,6 +171,7 @@
     <ClCompile Include="Harpooner.cpp" />
     <ClCompile Include="HireRecruitUI.cpp" />
     <ClCompile Include="HitBox.cpp" />
+    <ClCompile Include="IconButton.cpp" />
     <ClCompile Include="InfoBoxUI.cpp" />
     <ClCompile Include="InitiativeSystem.cpp" />
     <ClCompile Include="Inventory.cpp" />
@@ -231,6 +232,7 @@
     <ClInclude Include="Harpooner.h" />
     <ClInclude Include="HireRecruitUI.h" />
     <ClInclude Include="HitBox.h" />
+    <ClInclude Include="IconButton.h" />
     <ClInclude Include="Includes.h" />
     <ClInclude Include="InfoBoxUI.h" />
     <ClInclude Include="InitiativeSystem.h" />

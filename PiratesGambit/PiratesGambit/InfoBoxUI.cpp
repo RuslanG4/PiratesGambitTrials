@@ -47,11 +47,7 @@ void InfoBoxUI::SetIcon(const sf::Texture& _texture)
 void InfoBoxUI::setPosition(sf::Vector2f _pos)
 {
 	Border->setPosition(_pos);
-	topText.setPosition(_pos.x + (Border->getSize().x / 2 - topText.getLocalBounds().width / 2), _pos.y + 5);
-	bottomText.setPosition(_pos.x + (Border->getSize().x / 2 - bottomText.getLocalBounds().width / 2), _pos.y + Border->getSize().y - 30);
-	if (hasIcon) {
-		icon.setPosition(_pos.x + (Border->getSize().x / 2 - icon.getGlobalBounds().width / 2), _pos.y + Border->getSize().y / 2 - 20);
-	}
+    UpdateLayout();
 }
 
 void InfoBoxUI::UpdateText(const std::string& _text)
@@ -67,14 +63,40 @@ void InfoBoxUI::RemoveIcon()
 
 void InfoBoxUI::UpdateLayout()
 {
-	//float width = std::max(topText.getLocalBounds().width, bottomText.getLocalBounds().width) + 20;
-	//float height = 80; // Minimum height
+    // Get the size of the border
+    sf::Vector2f borderSize = Border->getSize();
 
-	if (hasIcon) {
-		height += 40; // Extra space for icon
-		icon.setPosition(width / 2 - icon.getGlobalBounds().width / 2, height / 2 - 20);
-	}
+    // Scale and position the top text
+    float topTextMaxWidth = borderSize.x * 0.9f; // Leave some padding
+    float topTextScaleFactor = topTextMaxWidth / topText.getGlobalBounds().width;
+    if (topTextScaleFactor < 1.0f) {
+        topText.setCharacterSize(static_cast<unsigned int>(topText.getCharacterSize() * topTextScaleFactor));
+    }
+    topText.setPosition(
+        Border->getPosition().x + (borderSize.x / 2 - topText.getLocalBounds().width / 2),
+        Border->getPosition().y + 5
+    );
 
-	topText.setPosition(width / 2 - topText.getLocalBounds().width / 2, 5);
-	bottomText.setPosition(width / 2 - bottomText.getLocalBounds().width / 2, height - 30);
+    // Scale and position the bottom text
+    float bottomTextMaxWidth = borderSize.x * 0.9f; // Leave some padding
+    float bottomTextScaleFactor = bottomTextMaxWidth / bottomText.getGlobalBounds().width;
+    if (bottomTextScaleFactor < 1.0f) {
+        bottomText.setCharacterSize(static_cast<unsigned int>(bottomText.getCharacterSize() * bottomTextScaleFactor));
+    }
+    bottomText.setPosition(
+        Border->getPosition().x + (borderSize.x / 2 - bottomText.getLocalBounds().width / 2),
+        Border->getPosition().y + borderSize.y - 30
+    );
+
+    // If there is an icon, scale and position it
+    if (hasIcon) {
+        float iconMaxSize = std::min(borderSize.x * 0.8f, borderSize.y * 0.6f); // Limit the icon size
+        float iconScaleFactor = iconMaxSize / std::max(icon.getTextureRect().width, icon.getTextureRect().height);
+        icon.setScale(iconScaleFactor, iconScaleFactor);
+
+        icon.setPosition(
+            Border->getPosition().x + (borderSize.x / 2 - icon.getGlobalBounds().width / 2),
+            Border->getPosition().y + (borderSize.y / 2 - icon.getGlobalBounds().height / 2)
+        );
+    }
 }

@@ -17,6 +17,8 @@ public:
         knob.setPosition(x, y - (knob.getSize().y - height) / 2);
     }
 
+    void updateMaxValue(int _newValue) { maxValue = _newValue; }
+
     void Update();
 
     int getValue() const;

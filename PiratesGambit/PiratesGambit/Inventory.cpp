@@ -40,7 +40,7 @@ void Inventory::closeInventory()
 	inventoryOpen = false;
 }
 
-void Inventory::combineItems(const std::unique_ptr<InventoryItem>& _item)
+bool Inventory::combineItems(const std::unique_ptr<InventoryItem>& _item)
 {
 	auto it = std::find_if(inventory.begin(), inventory.end(), [&](const std::unique_ptr<InventoryItem>& item) {
 		return item->getItemName() == _item->getItemName();
@@ -51,7 +51,10 @@ void Inventory::combineItems(const std::unique_ptr<InventoryItem>& _item)
 		std::unique_ptr<InventoryItem> removedItem = std::move(*it);
 		_item->addToCurrentStack(removedItem->getStackSize());
 		inventory.erase(it);
+		return true;
 	}
+
+	return false;
 }
 
 void Inventory::update()

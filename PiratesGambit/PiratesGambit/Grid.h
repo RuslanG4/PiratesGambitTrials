@@ -11,7 +11,7 @@
 class Grid
 {
 public:
-	Grid(const std::vector<std::shared_ptr<Node>>& gridNodes_);
+	Grid(const std::vector<std::shared_ptr<Node>>& gridNodes_, const std::shared_ptr<Player>& _playerRef);
 
 	void drawGrid(const std::unique_ptr<sf::RenderWindow>& window) const;
 	void drawGameObject(const std::unique_ptr<sf::RenderWindow>& window) const;
@@ -57,7 +57,7 @@ public:
 	std::vector<std::shared_ptr<Node>> nodeGrid;
 
 private:
-	//std::vector<std::vector<Node*>> islandsGrid;
+	std::shared_ptr<Player> playerRef;
 
 	std::vector<std::unique_ptr<Island>> islands;
 

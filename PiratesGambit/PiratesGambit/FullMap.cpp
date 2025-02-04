@@ -1,7 +1,8 @@
 #include "FullMap.h"
 
-FullMap::FullMap(const std::unique_ptr<sf::RenderWindow>& window, const int& mapSize_)
+FullMap::FullMap(const std::unique_ptr<sf::RenderWindow>& window, const int& mapSize_, const std::shared_ptr<Player>& _playerRef)
 {
+	playerRef = _playerRef;
 	initMap(mapSize_);
 	initChunks(window);
 }
@@ -48,7 +49,7 @@ void FullMap::initChunks(const std::unique_ptr<sf::RenderWindow>& window)
 
 			std::vector<std::shared_ptr<Node>> chunkNodes = populateChunk(chunkX, chunkY, 70); //populate start chunk to apply cellular later
 			//Grid* chunk = new Grid(chunkNodes);
-			std::unique_ptr<Grid> chunk = std::make_unique<Grid>(chunkNodes);
+			std::unique_ptr<Grid> chunk = std::make_unique<Grid>(chunkNodes, playerRef);
 			chunk->ApplyCellular(7, window);
 			chunk->setChunkID(chunkIndex);
 			chunks_.push_back(std::move(chunk));

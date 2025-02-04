@@ -24,9 +24,9 @@ public:
 		updateableArea = std::make_unique<UpdateableArea>();
 		playerArmy = std::make_unique<Army>();
 
-		playerArmy->addUnit(std::move(std::make_unique<Buccaneer>(12,RED_PLAYER)));
-		playerArmy->addUnit(std::move(std::make_unique<Gunner>(26, RED_PLAYER)));
-		playerArmy->addUnit(std::move(std::make_unique<Harpooner>(6, RED_PLAYER)));
+		playerArmy->addUnit(std::make_shared<Buccaneer>(12,RED_PLAYER));
+		playerArmy->addUnit(std::make_shared<Gunner>(26, RED_PLAYER));
+		playerArmy->addUnit(std::make_shared<Harpooner>(6, RED_PLAYER));
 
 		//inventory = new Inventory();
 
@@ -80,6 +80,9 @@ public:
 
 	//Army
 	const std::unique_ptr<Army>& getArmy() const { return playerArmy; }
+
+	//HitBox
+	sf::FloatRect GetHitBox() const { return myHitbox->GetGlobalBounds(); }
 
 private:
 	sf::Sprite body;

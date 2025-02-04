@@ -2,6 +2,12 @@
 
 #include "DamageCalculations.h"
 
+void PirateUnit::addToCurrentStack(int _amount)
+{
+	unitStats.stackSize += _amount;
+	unitAmount.updateAmount(unitStats.stackSize);
+}
+
 void PirateUnit::updateUnitAmount(int _amount)
 {
 	unitAmount.updateAmount(_amount);
