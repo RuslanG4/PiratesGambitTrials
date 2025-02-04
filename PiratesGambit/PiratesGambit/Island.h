@@ -4,6 +4,7 @@
 #include"Barrel.h"
 #include"BuccaneerBuilding.h"
 #include "Enemy.h"
+#include "GunnerBuilding.h"
 
 /// <summary>
 /// Holds individual Islands inside a given chunk and holds game objects on those islands
@@ -15,7 +16,7 @@ public:
 	Island(const std::vector<std::shared_ptr<Node>>& _land, const std::shared_ptr<Player>& _playerRef) : landNodes(_land)
 	{
 		gameObjects.push_back(std::make_shared<Barrel>());
-		buildings.push_back(std::make_shared<BuccaneerBuilding>(_playerRef));
+		buildings.push_back(std::make_shared<GunnerBuilding>(_playerRef));
 		positionGameObjects();
 	};
 

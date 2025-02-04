@@ -159,6 +159,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CannonBall.cpp" />
     <ClCompile Include="CannonBallItem.cpp" />
+    <ClCompile Include="Coins.cpp" />
     <ClCompile Include="DamageCalculations.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyMoveConditions.cpp" />
@@ -167,6 +168,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Gunner.cpp" />
+    <ClCompile Include="GunnerBuilding.cpp" />
     <ClCompile Include="GunnerIcon.cpp" />
     <ClCompile Include="Harpoon.cpp" />
     <ClCompile Include="Harpooner.cpp" />
@@ -219,6 +221,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CannonBall.h" />
     <ClInclude Include="CannonBallItem.h" />
+    <ClInclude Include="Coins.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="DamageCalculations.h" />
     <ClInclude Include="Enemy.h" />
@@ -229,6 +232,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Gunner.h" />
+    <ClInclude Include="GunnerBuilding.h" />
     <ClInclude Include="GunnerIcon.h" />
     <ClInclude Include="Harpoon.h" />
     <ClInclude Include="Harpooner.h" />

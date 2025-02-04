@@ -37,7 +37,7 @@ HireRecruitUI::HireRecruitUI(const std::shared_ptr<Player>& _playerRef, UnitName
 	recruit->setText("Recruit", "0");
 	recruit->setPosition(sf::Vector2f(background.getPosition().x  - 180, background.getPosition().y));
 
-	amountSlider = std::make_unique<Slider>(background.getPosition().x - 180, background.getPosition().y + 80,360, 40, 1, 14);
+	amountSlider = std::make_unique<Slider>(background.getPosition().x - 180, background.getPosition().y + 80,360, 40, 1, unitsLeftReference);
 
 	purchase = std::make_unique<IconButton>(75, 75, 
 		sf::Vector2f(background.getPosition().x + 60, background.getPosition().y + 150),
@@ -116,11 +116,22 @@ void HireRecruitUI::Update(float _dt)
 
 	if(purchase->IsTriggered() && unitsLeftReference > 0)
 	{
-		unitsLeftReference -= amountSlider->getValue();
-		available->setText("Available", std::to_string(unitsLeftReference));
-		AddCharacterToPlayer();
-		amountSlider->updateMaxValue(unitsLeftReference);
-		purchase->ResetTrigger();
+		auto it = std::ranges::find_if(playerRef->getInventory()->getItems(), [&](const std::unique_ptr<InventoryItem>& item) {
+			return item->getItemName() == "Coins";
+			});
+
+		if (it != playerRef->getInventory()->getItems().end()) {
+			if ((it->get()->getStackSize() - amountSlider->getValue() * 500) >= 0) {
+				std::cout << "prev stack size : " << it->get()->getStackSize() << "\n";
+				it->get()->removeFromCurrentStack(amountSlider->getValue() * 500);
+				std::cout << "new stack size : " << it->get()->getStackSize() << "\n";
+				unitsLeftReference -= amountSlider->getValue();
+				available->setText("Available", std::to_string(unitsLeftReference));
+				AddCharacterToPlayer();
+				amountSlider->updateMaxValue(unitsLeftReference);
+				purchase->ResetTrigger();
+			}
+		}
 	}
 }
 

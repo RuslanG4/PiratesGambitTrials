@@ -9,6 +9,7 @@
 #include "Animator.h"
 #include "Enums.h"
 #include"Army.h"
+#include "Coins.h"
 #include"Structs.h"
 
 
@@ -27,6 +28,8 @@ public:
 		playerArmy->addUnit(std::make_shared<Buccaneer>(12,RED_PLAYER));
 		playerArmy->addUnit(std::make_shared<Gunner>(26, RED_PLAYER));
 		playerArmy->addUnit(std::make_shared<Harpooner>(6, RED_PLAYER));
+
+		inventory->addItem(std::make_unique<Coins>(5000));
 
 		//inventory = new Inventory();
 

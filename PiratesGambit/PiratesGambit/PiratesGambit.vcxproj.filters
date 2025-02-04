@@ -303,6 +303,12 @@
     <ClCompile Include="BattleSceneTransition.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Coins.cpp">
+      <Filter>Source Files\Inventory\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="GunnerBuilding.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -482,9 +488,6 @@
     <ClInclude Include="BuccaneerBuilding.h">
       <Filter>Header Files\GameObjects\Buildings</Filter>
     </ClInclude>
-    <ClInclude Include="BuccaneerIcon.h">
-      <Filter>Header Files\GameObjects\Buildings\BuildingUI</Filter>
-    </ClInclude>
     <ClInclude Include="HireRecruitUI.h">
       <Filter>Header Files\GameObjects\Buildings\BuildingUI</Filter>
     </ClInclude>
@@ -496,6 +499,15 @@
     </ClInclude>
     <ClInclude Include="Slider.h">
       <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Coins.h">
+      <Filter>Header Files\Inventory\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="GunnerBuilding.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BuccaneerIcon.h">
+      <Filter>Header Files\UI\Building Menus\Icons</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
