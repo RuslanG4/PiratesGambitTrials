@@ -48,4 +48,6 @@ void UnitAmount::updateAmount(int _amount)
 
 	background.setSize(sf::Vector2f(textBounds.width * 2, textBounds.height * 2));
 
+	centerText();
+
 }

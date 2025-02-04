@@ -26,6 +26,8 @@ public:
 	bool CanPlaceObject();
 	void positionGameObjects();
 
+	void PlaceBarrels();
+
 	void PlaceEnemy(const std::shared_ptr<Enemy>& _enemy);
 
 	bool allNeighboursAreLand(const std::shared_ptr<Node>&);

@@ -17,16 +17,12 @@ public:
 	bool combineItems(const std::unique_ptr<InventoryItem>& _item);
 
 	void update();
-	void checkMousePosition();
 
 	const std::vector<std::unique_ptr<InventoryItem>>& getItems() const { return inventory; }
-	RenderableInventory* getRenderableInventory() const { return renderableInventory; }
-
 	static bool isInventoryOpen() { return inventoryOpen; }
 
 private:
 	std::vector<std::unique_ptr<InventoryItem>> inventory;
-	RenderableInventory* renderableInventory;
 
 	static bool inventoryOpen;
 };

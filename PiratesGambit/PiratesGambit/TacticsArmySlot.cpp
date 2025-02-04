@@ -23,6 +23,8 @@ TacticsArmySlot::TacticsArmySlot(UnitName _type, sf::Vector2f _pos)
 	unitSprite.setPosition(boxBorder.getPosition());
 	unitSprite.setScale(4, 4);
 
+	unitAmountUI.setPosition(sf::Vector2f(boxBorder.getPosition().x - 32, boxBorder.getPosition().y + 32));
+
 }
 
 void TacticsArmySlot::init()
@@ -41,6 +43,8 @@ void TacticsArmySlot::init()
 	teamColor.setSize(sf::Vector2f(48, 48));
 	teamColor.setOrigin(24, 24);
 	teamColor.setFillColor(sf::Color::Black);
+
+	unitAmountUI.renderUnitAmount = false;
 }
 
 void TacticsArmySlot::updateSlots(UnitName _type)
@@ -57,6 +61,12 @@ void TacticsArmySlot::updateSlots(UnitName _type)
 		unitSprite.setTexture(TextureManager::getInstance().getTexture("HARPOONER"));
 		break;
 	}
+}
+
+void TacticsArmySlot::updateUnitAmount(int _amount)
+{
+	unitAmountUI.renderUnitAmount = true;
+	unitAmountUI.updateAmount(_amount);
 }
 
 void TacticsArmySlot::updateAllegianceColor(UnitAllegiance _allegiance)
@@ -83,4 +93,5 @@ void TacticsArmySlot::render(const std::unique_ptr<sf::RenderWindow>& _win) cons
 	_win->draw(teamColor);
 	_win->draw(boxBorder);
 	_win->draw(unitSprite);
+	unitAmountUI.render(_win);
 }

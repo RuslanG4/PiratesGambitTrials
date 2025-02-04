@@ -6,6 +6,10 @@ void Island::render(const std::unique_ptr<sf::RenderWindow>& window) const
 	{
 		object->Render(window);
 	}
+	for (auto& gameObject : gameObjects)
+	{
+		gameObject->render(window);
+	}
 }
 
 void Island::update(float _dt) const
@@ -13,6 +17,10 @@ void Island::update(float _dt) const
 	for(auto& gameObject : buildings)
 	{
 		gameObject->Update(_dt);
+	}
+	for (auto& gameObject : gameObjects)
+	{
+		gameObject->update();
 	}
 }
 
@@ -45,6 +53,31 @@ void Island::positionGameObjects()
 			}
 		}
 		if(condition)
+		{
+			break;
+		}
+	}
+
+	PlaceBarrels();
+}
+
+void Island::PlaceBarrels()
+{
+	bool condition = false;
+	for (auto& node : landNodes)
+	{
+		if (node->getParentTileType() == LAND && !node->isOccupied)
+		{
+			for(auto& object : gameObjects)
+			{
+				object->setPosition(node->getMidPoint());
+				object->setNodeId(node->getID());
+				node->isOccupied = true;
+				condition = true;
+				break;
+			}
+		}
+		if (condition)
 		{
 			break;
 		}

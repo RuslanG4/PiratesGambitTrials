@@ -18,10 +18,6 @@ TacticsArmyUI::TacticsArmyUI(const std::unique_ptr<Army>& _army)
 	}
 }
 
-void TacticsArmyUI::AddArmy(const std::unique_ptr<Army>& _army)
-{
-}
-
 void TacticsArmyUI::extend()
 {
 	for (int i = 0; i < 3; i++)

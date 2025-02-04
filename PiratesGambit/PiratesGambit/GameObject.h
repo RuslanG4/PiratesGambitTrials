@@ -13,9 +13,12 @@ public:
 	void setNodeId(int _id) { currentNodeId = _id; }
 	int getID() const { return currentNodeId; }
 	const std::unique_ptr<Inventory>& getInventory() const { return inventory; }
+	std::unique_ptr<RenderableInventory>& GetRenderableInventory() { return renderableInventory; }
+
 protected:
 	sf::Sprite sprite;
 	std::unique_ptr<Inventory> inventory;
 	int currentNodeId;
+	std::unique_ptr<RenderableInventory> renderableInventory;
 };
 

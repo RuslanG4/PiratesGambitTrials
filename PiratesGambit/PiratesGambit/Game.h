@@ -20,6 +20,8 @@
 
 #include"BattleSceneTransition.h"
 
+#include"PlayerTabMenu.h"
+
 
 class Game
 {
@@ -70,6 +72,7 @@ private:
 	
 	std::unique_ptr<FullMap> myMap;
 	std::shared_ptr<Player> myPlayer;
+	std::unique_ptr<PlayerTabMenu> playerMenu;
 	std::shared_ptr<Boat> playerBoat;
 
 	std::shared_ptr<Enemy> enemy;

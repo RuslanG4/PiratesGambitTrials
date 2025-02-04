@@ -13,6 +13,8 @@ Game::Game()
 
 	myPlayer = std::make_shared<Player>(sf::Vector2f(25, 25));
 
+	playerMenu = std::make_unique<PlayerTabMenu>(myPlayer->getArmy());
+
 	myMap = std::make_unique<FullMap>(m_window, 1, myPlayer); //keep 1x1, 2x2
 
 	enemy = std::make_shared<Enemy>(sf::Vector2f(25, 25));
@@ -126,6 +128,10 @@ void Game::processKeyUp(sf::Event t_event)
 	{
 		interactWithObject = false;
 	}
+	if (t_event.key.code == sf::Keyboard::Tab)
+	{
+		interactWithObject = false;
+	}
 }
 
 /// <summary>
@@ -153,6 +159,8 @@ void Game::update(double t_deltaTime)
 		{
 			myPlayer->update(t_deltaTime);
 		}
+
+		playerMenu->Update();
 
 		enemy->update(t_deltaTime);
 
@@ -193,11 +201,13 @@ void Game::render()
 		}
 
 		myPlayer->render(m_window);
+		
 		playerBoat->render(m_window);
 
 		enemy->render(m_window);
 
 		myMap->getChunks()[myPlayer->getCurrentChunkID()]->drawGameObject(m_window);
+		playerMenu->Render(m_window);
 	}else
 	{
 		battleScene->render(m_window);
@@ -309,6 +319,12 @@ void Game::handleKeyInput()
 			myPlayer->getPlayerController()->setLandVelocity(sf::Vector2f(0, 0));
 		}
 	}
+
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Tab) && !interactWithObject)
+	{
+		interactWithObject = true;
+		playerMenu->Interact(myPlayer->getArmy());
+	}
 }
 
 void Game::transitionToBattleMode()
@@ -320,7 +336,6 @@ void Game::transitionToBattleMode()
 			if(enemy->GetGlobalBounds().intersects(myPlayer->GetHitBox()))
 			{
 				battleTransition.startTransition(1);
-				//battle = true;
 			}
 		}
 	}
@@ -370,7 +385,7 @@ bool Game::interactWithBuildings()
 void Game::transferInventoryItems()
 {
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(Mouse::getInstance().getMousePosition());
-	for (auto& slot : currentObjectInteract.lock()->getInventory()->getRenderableInventory()->getSlots())
+	for (auto& slot : currentObjectInteract.lock()->GetRenderableInventory()->getSlots())
 	{
 		if (Mouse::getInstance().LeftClicked() && slot->getIsOccupied())
 		{

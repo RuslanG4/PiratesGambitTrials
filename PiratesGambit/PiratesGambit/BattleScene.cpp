@@ -309,6 +309,7 @@ void BattleScene::TakeUnitAction(const std::shared_ptr<BattleGridNode>& _targetN
 			_targetNode->getCurrentAllegiance() != currentSelectedUnit->unitInformation.allegiance) {
 			if (currentDefendingUnit) {
 				processMovement(attackNode); // Attack node
+				hasAttacked = true;
 			}
 		}
 		else if (!_targetNode->isOccupied()) { // Move to hover node

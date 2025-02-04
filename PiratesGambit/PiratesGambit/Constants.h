@@ -57,7 +57,7 @@ const char* const BUILDINGS = "ASSETS\\IMAGES\\Buildings\\Buildings.png";
 
 const char* const BACKGROUND = "ASSETS\\IMAGES\\export.png";
 
-const char* const FONT = "ASSETS\\FONTS\\ComicNeueSansID.ttf";
+const char* const FONT = "ASSETS\\FONTS\\VarsityTeam-Bold.otf";
 
 const sf::Color GRAY = sf::Color(21, 21, 21);
 

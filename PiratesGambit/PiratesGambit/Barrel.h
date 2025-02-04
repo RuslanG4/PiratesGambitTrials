@@ -3,6 +3,7 @@
 #include"Inventory.h"
 #include"CannonBallItem.h"
 #include "GameObject.h"
+#include"Mouse.h"
 
 class Barrel : public GameObject
 {
@@ -15,6 +16,8 @@ public:
 
 	void update() override;
 
+	void checkMousePosition();
 private:
+	
 };
 

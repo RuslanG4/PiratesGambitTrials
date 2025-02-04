@@ -6,7 +6,7 @@ bool Inventory::inventoryOpen = false;
 
 Inventory::Inventory()
 {
-	renderableInventory = new RenderableInventory(2,4);
+	
 }
 
 void Inventory::addItem(std::unique_ptr<InventoryItem> _item)
@@ -32,7 +32,6 @@ std::unique_ptr<InventoryItem> Inventory::removeItem(std::string _name)
 void Inventory::openInventory()
 {
 	inventoryOpen = true;
-	renderableInventory->passItems(inventory);
 }
 
 void Inventory::closeInventory()
@@ -65,17 +64,4 @@ void Inventory::update()
 	}
 }
 
-void Inventory::checkMousePosition()
-{
-	sf::Vector2f mousePos = static_cast<sf::Vector2f>(Mouse::getInstance().getMousePosition());
-	for(auto& slot : renderableInventory->getSlots())
-	{
-		if(Mouse::getInstance().LeftClicked() && slot->getIsOccupied())
-		{
-			if (slot->getBackgroundSprite().getGlobalBounds().contains(mousePos))
-			{
-				std::unique_ptr<InventoryItem> item = removeItem(slot->getOccupiedBy());
-			}
-		}
-	}
-}
+
