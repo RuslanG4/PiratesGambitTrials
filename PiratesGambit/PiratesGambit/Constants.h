@@ -35,6 +35,7 @@ const char* const SWORD_ICON = "ASSETS\\IMAGES\\ICONS\\FIGHT.png";
 const char* const SHOOT_ICON = "ASSETS\\IMAGES\\ICONS\\SHOOT.png";
 const char* const MONEY_ICON = "ASSETS\\IMAGES\\ICONS\\MONEY.png";
 const char* const COIN_ICON = "ASSETS\\IMAGES\\ICONS\\COIN.png";
+const char* const SKULL_ICON = "ASSETS\\IMAGES\\ICONS\\SKULL.png";
 
 
 //Borders

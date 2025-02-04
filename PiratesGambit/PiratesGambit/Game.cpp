@@ -137,7 +137,7 @@ void Game::update(double t_deltaTime)
 	Mouse::getInstance().update(m_window);
 	ParticleManager::getInstance().update(t_deltaTime);
 	BulletFactory::getInstance().update();
-	if (!battle) {
+	if (!battle && !battleTransition.IsTransitionActive()) {
 		updateVisableNodes();
 		findCurrentChunk();
 		findCurrentNode();
@@ -159,6 +159,15 @@ void Game::update(double t_deltaTime)
 		transitionToBattleMode();
 
 		myCamera.setCameraCenter(myPlayer->getPlayerController()->getPosition());
+	}
+	else if(battleTransition.IsTransitionActive())
+	{
+		battleTransition.Update();
+		if(battleTransition.IsTransitionActive() == false)
+		{
+			battle = true;
+		}
+
 	}
 	else {
 		battleScene->update(t_deltaTime);
@@ -195,6 +204,8 @@ void Game::render()
 	}
 
 	ParticleManager::getInstance().render(m_window);
+
+	battleTransition.Render(m_window);
 	m_window->display();
 }
 
@@ -308,7 +319,8 @@ void Game::transitionToBattleMode()
 		{
 			if(enemy->GetGlobalBounds().intersects(myPlayer->GetHitBox()))
 			{
-				battle = true;
+				battleTransition.startTransition(1);
+				//battle = true;
 			}
 		}
 	}

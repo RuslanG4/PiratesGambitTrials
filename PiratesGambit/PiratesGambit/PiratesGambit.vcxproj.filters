@@ -124,6 +124,9 @@
     <Filter Include="Header Files\UI\Building Menus\Icons">
       <UniqueIdentifier>{cf1e1082-d0d6-4169-b607-be00ffe38250}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GameObjects\Buildings\BuildingUI">
+      <UniqueIdentifier>{fdeff755-48b7-4c22-8f3c-ea85aff94950}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -297,6 +300,9 @@
     <ClCompile Include="IconButton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BattleSceneTransition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -464,29 +470,32 @@
     <ClInclude Include="Building.h">
       <Filter>Header Files\GameObjects\Buildings</Filter>
     </ClInclude>
-    <ClInclude Include="BuccaneerBuilding.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HireRecruitUI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InfoBoxUI.h">
-      <Filter>Header Files\UI\Building Menus</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimatedCharacterIcon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GunnerIcon.h">
       <Filter>Header Files\UI\Building Menus\Icons</Filter>
     </ClInclude>
-    <ClInclude Include="BuccaneerIcon.h">
+    <ClInclude Include="BattleSceneTransition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Slider.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="AnimatedCharacterIcon.h">
+      <Filter>Header Files\GameObjects\Buildings\BuildingUI</Filter>
+    </ClInclude>
+    <ClInclude Include="BuccaneerBuilding.h">
+      <Filter>Header Files\GameObjects\Buildings</Filter>
+    </ClInclude>
+    <ClInclude Include="BuccaneerIcon.h">
+      <Filter>Header Files\GameObjects\Buildings\BuildingUI</Filter>
+    </ClInclude>
+    <ClInclude Include="HireRecruitUI.h">
+      <Filter>Header Files\GameObjects\Buildings\BuildingUI</Filter>
     </ClInclude>
     <ClInclude Include="IconButton.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="InfoBoxUI.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Slider.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -18,6 +18,8 @@
 
 #include"ParticleManager.h"
 
+#include"BattleSceneTransition.h"
+
 
 class Game
 {
@@ -78,6 +80,7 @@ private:
 	std::shared_ptr<Building> currentBuildingInteract;
 
 	//battle scene
+	BattleSceneTransition battleTransition;
 	std::unique_ptr<BattleScene> battleScene;
 	bool battle = false;
 

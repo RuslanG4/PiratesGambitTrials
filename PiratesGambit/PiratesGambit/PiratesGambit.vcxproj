@@ -147,6 +147,7 @@
     <ClCompile Include="BattleActionUI.cpp" />
     <ClCompile Include="BattleGridNode.cpp" />
     <ClCompile Include="BattleScene.cpp" />
+    <ClCompile Include="BattleSceneTransition.cpp" />
     <ClCompile Include="BloodParticle.cpp" />
     <ClCompile Include="Boat.cpp" />
     <ClCompile Include="BoatController.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="BattleActionUI.h" />
     <ClInclude Include="BattleGridNode.h" />
     <ClInclude Include="BattleScene.h" />
+    <ClInclude Include="BattleSceneTransition.h" />
     <ClInclude Include="BloodParticle.h" />
     <ClInclude Include="Boat.h" />
     <ClInclude Include="BoatController.h" />
