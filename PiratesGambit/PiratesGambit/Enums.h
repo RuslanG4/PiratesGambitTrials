@@ -56,6 +56,13 @@ enum UnitName
 	HARPOONER
 };
 
+enum ItemName
+{
+	NO_ITEM,
+	COINS,
+	CANNONBALLS
+};
+
 enum UnitAllegiance
 {
 	NONE,

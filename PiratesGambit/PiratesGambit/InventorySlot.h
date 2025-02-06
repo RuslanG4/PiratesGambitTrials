@@ -1,5 +1,6 @@
 #pragma once
 #include"Includes.h"
+#include "Enums.h"
 
 class InventorySlot
 {
@@ -11,8 +12,8 @@ public:
 	sf::Text getTest() const { return stackSize; }
 	void setSprite(const sf::Sprite& _sprite) { ItemSprite = _sprite; }
 	void configureSprite(int _stackSize);
-	void setOccupiedBy(std::string _who) { occupiedBy = _who; }
-	std::string getOccupiedBy() const { return occupiedBy; }
+	void setOccupiedBy(ItemName _who) { occupiedBy = _who; }
+	ItemName getOccupiedBy() const { return occupiedBy; }
 
 	void updateSlot(bool _status) { isOccupied = _status; }
 	void clearSlot();
@@ -22,7 +23,7 @@ private:
 	sf::Sprite ItemSprite;
 	int m_id;
 
-	std::string occupiedBy;
+	ItemName occupiedBy;
 	bool isOccupied{ false };
 
 	sf::Vector2f midPoint;

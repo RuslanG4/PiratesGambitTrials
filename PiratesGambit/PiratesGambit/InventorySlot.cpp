@@ -32,5 +32,5 @@ void InventorySlot::clearSlot()
 	setSprite(emptySprite);
 
 	isOccupied = false;
-	occupiedBy = "";
+	occupiedBy = NO_ITEM;
 }

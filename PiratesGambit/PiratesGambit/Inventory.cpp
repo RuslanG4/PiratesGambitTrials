@@ -15,7 +15,7 @@ void Inventory::addItem(std::unique_ptr<InventoryItem> _item)
 	inventory.push_back(std::move(_item));
 }
 
-std::unique_ptr<InventoryItem> Inventory::removeItem(std::string _name)
+std::unique_ptr<InventoryItem> Inventory::removeItem(ItemName _name)
 {
 	auto it = std::find_if(inventory.begin(), inventory.end(), [&](const std::unique_ptr<InventoryItem>& item) {
 		return item->getItemName() == _name;

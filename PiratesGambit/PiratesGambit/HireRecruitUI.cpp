@@ -106,7 +106,7 @@ void HireRecruitUI::Update(float _dt)
 	totalCost->UpdateText(std::to_string(amountSlider->getValue() * 500));
 
 	cancel->Update();
-	if(cancel->IsTriggered())
+	if(cancel->IsTriggered() || sf::Keyboard::isKeyPressed((sf::Keyboard::Escape)))
 	{
 		cancel->ResetTrigger();
 		CloseUI();
@@ -117,7 +117,7 @@ void HireRecruitUI::Update(float _dt)
 	if(purchase->IsTriggered() && unitsLeftReference > 0)
 	{
 		auto it = std::ranges::find_if(playerRef->getInventory()->getItems(), [&](const std::unique_ptr<InventoryItem>& item) {
-			return item->getItemName() == "Coins";
+			return item->getItemName() == COINS;
 			});
 
 		if (it != playerRef->getInventory()->getItems().end()) {

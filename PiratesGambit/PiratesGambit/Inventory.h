@@ -9,7 +9,7 @@ public:
 	Inventory();
 
 	void addItem(std::unique_ptr<InventoryItem> _item);
-	std::unique_ptr<InventoryItem> removeItem(std::string _name);
+	std::unique_ptr<InventoryItem> removeItem(ItemName _name);
 
 	void openInventory();
 	void closeInventory();

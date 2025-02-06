@@ -13,7 +13,7 @@ Game::Game()
 
 	myPlayer = std::make_shared<Player>(sf::Vector2f(25, 25));
 
-	playerMenu = std::make_unique<PlayerTabMenu>(myPlayer->getArmy());
+	playerMenu = std::make_unique<PlayerTabMenu>(myPlayer->getArmy(), myPlayer->getInventory());
 
 	myMap = std::make_unique<FullMap>(m_window, 1, myPlayer); //keep 1x1, 2x2
 
@@ -311,7 +311,8 @@ void Game::handleKeyInput()
 		}
 	}
 
-	if (sf::Keyboard::isKeyPressed((sf::Keyboard::E)) && !interactWithObject)
+	//Chnage this to general boolean to look clanaer
+	if (sf::Keyboard::isKeyPressed((sf::Keyboard::E)) && !interactWithObject && !Inventory::isInventoryOpen() && !HireRecruitUI::IsUIOpen() && !PlayerTabMenu::isMenuOpen() )
 	{
 		interactWithObject = true;
 		interactWithObjects();
@@ -320,10 +321,10 @@ void Game::handleKeyInput()
 		}
 	}
 
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Tab) && !interactWithObject)
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Tab) && !interactWithObject && !Inventory::isInventoryOpen() && !HireRecruitUI::IsUIOpen() && !PlayerTabMenu::isMenuOpen())
 	{
 		interactWithObject = true;
-		playerMenu->Interact(myPlayer->getArmy());
+		playerMenu->Interact(myPlayer);
 	}
 }
 

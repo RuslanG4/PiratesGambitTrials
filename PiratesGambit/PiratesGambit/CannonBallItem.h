@@ -10,7 +10,7 @@ public:
 		itemSprite.setTexture(TextureManager::getInstance().getTexture("CANNON_BALL_ICON"));
 		itemSprite.setScale(2, 2);
 		currentStack = _stackCount;
-		itemName = "CannonBall";
+		itemName = CANNONBALLS;
 	}
 private:
 };

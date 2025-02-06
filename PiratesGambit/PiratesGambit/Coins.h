@@ -10,7 +10,7 @@ public:
 		itemSprite.setTexture(TextureManager::getInstance().getTexture("COIN_ICON"));
 		itemSprite.setScale(2, 2);
 		currentStack = _stackCount;
-		itemName = "Coins";
+		itemName = COINS;
 	}
 private:
 };

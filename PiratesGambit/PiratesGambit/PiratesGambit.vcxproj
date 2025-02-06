@@ -196,6 +196,8 @@
     <ClCompile Include="PlayerTabMenu.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="RenderableIventory.cpp" />
+    <ClCompile Include="ResourceSlotUI.cpp" />
+    <ClCompile Include="Resources_TabMenu.cpp" />
     <ClCompile Include="ShotParticle.cpp" />
     <ClCompile Include="Slider.cpp" />
     <ClCompile Include="TacticsArmySlot.cpp" />
@@ -265,6 +267,8 @@
     <ClInclude Include="PlayerTabMenu.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="RenderableIventory.h" />
+    <ClInclude Include="ResourceSlotUI.h" />
+    <ClInclude Include="Resources_TabMenu.h" />
     <ClInclude Include="ShotParticle.h" />
     <ClInclude Include="Slider.h" />
     <ClInclude Include="Structs.h" />

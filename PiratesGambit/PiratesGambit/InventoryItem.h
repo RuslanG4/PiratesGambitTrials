@@ -1,5 +1,6 @@
 #pragma once
 #include"Includes.h"
+#include"Enums.h"
 
 class InventoryItem
 {
@@ -12,10 +13,10 @@ public:
 
 	sf::Sprite getSprite() const { return itemSprite; }
 	int getStackSize() const { return currentStack; }
-	std::string getItemName() const { return itemName; }
+	ItemName getItemName() const { return itemName; }
 protected:
 	sf::Sprite itemSprite;
 	int currentStack;
-	std::string itemName;
+	ItemName itemName;
 };
 
