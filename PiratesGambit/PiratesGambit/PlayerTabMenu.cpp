@@ -16,7 +16,7 @@ void PlayerTabMenu::Update()
 	if(isOpen)
 	{
 		armyMenu->Update();
-		if (sf::Keyboard::isKeyPressed((sf::Keyboard::Escape)) || sf::Keyboard::isKeyPressed((sf::Keyboard::Escape)))
+		if (sf::Keyboard::isKeyPressed((sf::Keyboard::Escape)) || sf::Keyboard::isKeyPressed((sf::Keyboard::Tab)))
 		{
 			CloseMenu();
 		}
