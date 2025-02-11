@@ -30,15 +30,15 @@ void UpdateableArea::updateVisibleNodes(const std::shared_ptr<Node>& _startNode,
 		auto neighbours = currentNode->getNeighbours();
 		for (auto& neighbour : neighbours) {
 			//add node if it's not already in my area and i haven't reached my limit of iterations of neighbours
-			if (std::ranges::find(updateArea.begin(), updateArea.end(), neighbour) == updateArea.end() && iterCount < iterations) {
+			if (std::ranges::find(updateArea.begin(), updateArea.end(), neighbour.first) == updateArea.end() && iterCount < iterations) {
 
 				//debug
-				neighbour->debugShape->setFillColor(sf::Color(123, 123, 123, 180));
+				neighbour.first->debugShape->setFillColor(sf::Color(123, 123, 123, 180));
 
 				iterCount++;
 
-				updateArea.push_back(neighbour);
-				nodeQueue.push(neighbour);
+				updateArea.push_back(neighbour.first);
+				nodeQueue.push(neighbour.first);
 			}
 		}
 	}

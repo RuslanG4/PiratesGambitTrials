@@ -546,4 +546,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="PathFinding.inl">
+      <Filter>Header Files\Map</Filter>
+    </None>
+  </ItemGroup>
 </Project>

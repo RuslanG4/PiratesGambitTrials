@@ -9,14 +9,17 @@ public:
 	BaseNode(const NodeData& _data) : nodeData(_data){}
 
 	virtual void addNeighbour(const std::shared_ptr<BaseNode>& t_cellId, int _neighbourPos) = 0;
-	virtual void setPrevious(const std::shared_ptr<BaseNode>& _previous) = 0;
+	virtual void setPrevious(const std::shared_ptr<BaseNode>& _previous) { previousNode = _previous; }
+
+	void clearPrevious() { previousNode = nullptr; }
 
 	//Getters
 	int getID() const { return  nodeData.m_id; }
 	bool isOccupied() const { return  nodeData.occupied; }
 	bool hasBeenTraversed() const { return  nodeData.traversed; }
 	sf::Vector2f getMovementVector() const { return movementVector; }
-	NodeData getNodeData() const { return nodeData; }
+	NodeData& getNodeData() { return nodeData; }
+	const std::shared_ptr<BaseNode>& getPrevious() { return previousNode; };
 
 	sf::Vector2f getPosition() const { return { static_cast<float>(nodeData.gridX), static_cast<float>(nodeData.gridY) }; }
 	sf::Vector2f getMidPoint() const { return  { static_cast<float>(nodeData.gridX + (nodeData.size / 2)), static_cast<float>(nodeData.gridY + (nodeData.size / 2)) }; }
@@ -33,10 +36,11 @@ public:
 	void setHCost(int _cost) { nodeData.hCost = _cost; }
 
 	//Resetters
-	void resetMarked() { nodeData.occupied = false; };
+	void resetMarked() { nodeData.occupied = false; }
 protected:
 	~BaseNode() = default;
 	NodeData nodeData;
+	std::shared_ptr<BaseNode> previousNode;
 	sf::Vector2f movementVector{0,0};
 private:
 };

@@ -57,7 +57,7 @@ void Boat::update(double dt)
 bool Boat::checkCollision(const std::shared_ptr<Node>& _node, sf::Vector2f& _pos)
 {
 	if (_node->getIsLand()) {
-		if (Utility::collisionWithPoint(myHitbox->getPosition() + _pos, _node->getPosition(), sf::Vector2f(_node->getSize(), _node->getSize())))
+		if (Utility::collisionWithPoint(myHitbox->getPosition() + _pos, _node->getPosition(), sf::Vector2f(_node->getNodeData().size, _node->getNodeData().size)))
 		{
 			controller->deflect();
 			boatSprite.setPosition(controller->getPosition());

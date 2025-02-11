@@ -9,6 +9,7 @@
 #include "Enums.h"
 #include"Army.h"
 #include"Structs.h"
+#include"PathFindingFunctions.h"
 
 class Boat; //forward ref
 
@@ -18,6 +19,7 @@ public:
 	Enemy(sf::Vector2f _pos)
 	{
 		army = std::make_unique<Army>();
+		updateableArea = std::make_unique<UpdateableArea>();
 
 		army->addUnit(std::make_shared<Buccaneer>(23,YELLOW_PLAYER));
 		army->addUnit(std::make_shared<Gunner>(16,YELLOW_PLAYER));
@@ -42,23 +44,36 @@ public:
 	void update(double dt);
 	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
 
+	void MoveUnit(const std::vector<std::shared_ptr<Node>>& _grid);
+
+
+	void setCurrentChunkID(int id_) { currentChunkId = id_; }
+
 	//animation
 	void handleAnimationStates(double dt);
 
 	//Global Bounds;
-	sf::FloatRect GetGlobalBounds() const { return body.getGlobalBounds(); }
+	sf::FloatRect GetGlobalBounds() const { return myHitbox->GetGlobalBounds(); }
 
 	//Updating position
-	void updatePosition(const sf::Vector2f& _pos) { body.setPosition(_pos); }
-	void setCurrentNode(int _id) { currentNodeId = _id; }
-
+	void updatePosition(const sf::Vector2f& _pos);
+	void setCurrentNode(const std::shared_ptr<Node>& node_) { currentNode = node_; }
+	void updateUpdateableArea(const std::shared_ptr<Node>& _startNode, int depth) const; 
 	//
+
+	sf::Vector2f GetPosition() const { return body.getPosition(); }
 	int GetCurrentNodeID() const { return currentNodeId; }
+	int getCurrentChunkID() const { return currentChunkId; }
+	const std::shared_ptr<Node>& getCurrentNode() const { return currentNode; }
+	const std::unique_ptr<UpdateableArea>& getUpdateableArea() const { return updateableArea; }
 
 	//boat interaction functions
 	void boardBoat(const std::shared_ptr<Boat>& _boat);
 	void disembarkBoat(const std::shared_ptr<Node>& _node);
 	bool isOnBoat() const { return onBoat; }
+
+	void PassPath(const std::vector<int>& _path);
+	std::vector<int> getPath() const { return path; }
 
 	//Army
 	const std::unique_ptr<Army>& getArmy() const { return army; }
@@ -71,9 +86,17 @@ private:
 
 	HitBox* myHitbox; //hitbox for collisions
 
+	std::unique_ptr<UpdateableArea> updateableArea; 
+
 	std::shared_ptr<Node> currentNode{ nullptr };
 
+	std::vector<int> path;
+
 	std::unique_ptr<Army> army;
+
+	int currentNodeInPath;
+
+
 
 	int currentChunkId{ -99 };
 	int currentNodeId{ 0 };

@@ -4,10 +4,10 @@ Grid::Grid(const std::vector<std::shared_ptr<Node>>& gridNodes_, const std::shar
 {
 	playerRef = _playerRef;
 	chunkStartX = nodeGrid[0]->getPosition().x;
-	chunkEndX = nodeGrid[nodeGrid.size() - 1]->getPosition().x + (nodeGrid[0]->getSize());
+	chunkEndX = nodeGrid[nodeGrid.size() - 1]->getPosition().x + (nodeGrid[0]->getNodeData().size);
 
 	chunkStartY = nodeGrid[0]->getPosition().y;
-	chunkEndY = nodeGrid[nodeGrid.size() - 1]->getPosition().y + (nodeGrid[0]->getSize());
+	chunkEndY = nodeGrid[nodeGrid.size() - 1]->getPosition().y + (nodeGrid[0]->getNodeData().size);
 }
 
 /// <summary>
@@ -60,7 +60,7 @@ void Grid::FilterTiles(std::shared_ptr<Node>& _currentNode) const
 	{
 		replaceUndesiredLand(_currentNode);
 	}
-	if (_currentNode->getNeighbours().size() < 8)
+	if (_currentNode->getNodeData().neighbourIDs.size() < 8)
 	{
 		removeWorldEdges(_currentNode);
 	}
@@ -113,8 +113,8 @@ bool Grid::CheckPattern(const std::shared_ptr<Node>& _currentNode, const std::ve
 	int patternCount = 0;
 	for (int i = 0; i < _pattern.size(); i++)
 	{
-		if (_currentNode->getNeighbours().size() > 5) {
-			if (_currentNode->getNeighbours()[_pattern[i].first]->getIsLand() == _pattern[i].second)
+		if (_currentNode->getNodeData().neighbourIDs.size() > 5) {
+			if (nodeGrid[_currentNode->getNodeData().neighbourIDs[_pattern[i].first].first]->getIsLand() == _pattern[i].second)
 			{
 				patternCount++;
 				if (patternCount == _pattern.size())
@@ -172,9 +172,9 @@ void Grid::ApplyCellular(int _interations, const std::unique_ptr<sf::RenderWindo
 		{
 			int landCount = 0;
 
-			for(auto& neighbour : node->getNeighbours())
+			for(auto& neighbour : node->getNodeData().neighbourIDs)
 			{
-				if(neighbour->getIsLand())
+				if(nodeGrid[neighbour.first]->getIsLand())
 				{
 					landCount++;
 				}
@@ -199,11 +199,6 @@ void Grid::ApplyCellular(int _interations, const std::unique_ptr<sf::RenderWindo
 			nodeGrid[j]->setLand(tempGrid[j]->getIsLand());
 			nodeGrid[j]->drawableNode->setTexture(*tempGrid[j]->drawableNode->getTexture());
 			nodeGrid[j]->setTileType(tempGrid[j]->getTileType());
-
-			//Uncomment for debug
-			/*drawGrid(m_window);
-			m_window.display();
-			wait(1);*/
 		}
 		// delete temp deep copied nodes 
 		for (Node* node : tempGrid)
@@ -227,13 +222,14 @@ void Grid::FindLand(const std::unique_ptr<sf::RenderWindow>& window)
 		wait(1);*/
 		//node->debugShape.setFillColor(sf::Color(123, 123, 123, 123));
 
-		if(node->getMarked() == false && node->getIsLand())
+		if(!node->hasBeenTraversed() && node->getIsLand())
 		{
 			MapIsland(node->getChunkId(),false ,window); //start island mapping
 		}
 	}
 	UnMarkNodes();
 	SaveIslandData(window);
+	UnMarkNodes();
 }
 
 /// <summary>
@@ -248,7 +244,7 @@ void Grid::MapIsland(int _startIndex,bool saveIslandData, const std::unique_ptr<
 	std::queue<std::shared_ptr<Node>> nodeQueue;
 
 	nodeQueue.push(nodeGrid[_startIndex]);
-	nodeQueue.front()->setMarked();
+	nodeQueue.front()->updateTraversed(true);
 
 	currentIsland.push_back(nodeQueue.front());
 
@@ -265,17 +261,17 @@ void Grid::MapIsland(int _startIndex,bool saveIslandData, const std::unique_ptr<
 		window.display();
 		wait(1);*/
 
-		auto neighbours = nodeQueue.front()->getNeighbours();
-		for (auto neighbour : neighbours)
+		auto neighbours = nodeQueue.front()->getNodeData().neighbourIDs;
+		for (auto& ID : neighbours)
 		{
-			if (neighbour->getMarked() == false)
+			if (!nodeGrid[ID.first]->hasBeenTraversed())
 			{
-				neighbour->setMarked();
-				if (neighbour->getIsLand()) 
+				nodeGrid[ID.first]->updateTraversed(true);
+				if (nodeGrid[ID.first]->getIsLand())
 				{
-					currentIsland.push_back(neighbour);
-					nodeQueue.push(neighbour);
-					FilterTiles(neighbour);
+					currentIsland.push_back(nodeGrid[ID.first]);
+					nodeQueue.push(nodeGrid[ID.first]);
+					FilterTiles(nodeGrid[ID.first]);
 
 		/*			if (saveIslandData) {
 						neighbour->debugShape->setFillColor(sf::Color(23, 23, 23, 66));
@@ -291,7 +287,7 @@ void Grid::MapIsland(int _startIndex,bool saveIslandData, const std::unique_ptr<
 	}
 	if(saveIslandData)
 	{
-		islands.push_back(std::move(std::make_unique<Island>(currentIsland, playerRef)));
+		islands.push_back((std::make_shared<Island>(currentIsland, playerRef)));
 	}
 	
 }
@@ -303,7 +299,7 @@ void Grid::SaveIslandData(const std::unique_ptr<sf::RenderWindow>& window)
 {
 	for (auto& node : nodeGrid)
 	{
-		if (node->getMarked() == false && node->getIsLand())
+		if (!node->hasBeenTraversed() && node->getIsLand())
 		{
 			MapIsland(node->getChunkId(),true, window);
 		}
@@ -329,7 +325,7 @@ void Grid::UnMarkNodes() const
 {
 	for (auto& node : nodeGrid)
 	{
-		node->resetMarked();
+		node->updateTraversed(false);
 		//node->debugShape->setFillColor(sf::Color::Transparent);
 	}
 }
@@ -345,9 +341,9 @@ void Grid::replaceUndesiredLand(std::shared_ptr<Node>& _node) const
 	_node->setParentTileType(WATER);
 	_node->setTileType(DEFAULT_WATER);
 	determineTileTexture(_node);
-	for (auto& neigh : _node->getNeighbours())
+	for (auto& ID : _node->getNodeData().neighbourIDs)
 	{
-		neigh->resetMarked();
+		nodeGrid[ID.first]->updateTraversed(false);
 		_node->setLand(false);
 		_node->setParentTileType(WATER);
 		_node->setTileType(DEFAULT_WATER);

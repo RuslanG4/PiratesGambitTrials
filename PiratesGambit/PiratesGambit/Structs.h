@@ -11,10 +11,11 @@ struct NodeData
 	int gridX; 
 	int gridY; 
 
-	int fCost = 0;
-	int gCost = 0;
-	int hCost = 0;
+	float fCost = 0;
+	float gCost = 0;
+	float hCost = 0;
 
+	std::vector<std::pair<int, int>> neighbourIDs;
 };
 
 struct AnimationState

@@ -44,12 +44,12 @@ void Player::render(const std::unique_ptr<sf::RenderWindow>& window) const
 	}
 
 	//debug
-	for (auto& node : updateableArea->getUpdateableNodes())
+	/*for (auto& node : updateableArea->getUpdateableNodes())
 	{
 		if (node != nullptr) {
 			window->draw(*(node->debugShape));
 		}
-	}
+	}*/
 }
 
 /// <summary>
@@ -97,9 +97,9 @@ void Player::updateUpdateableArea(const std::shared_ptr<Node>& _startNode, int d
 ///</summary>
 bool Player::checkCollision(const std::shared_ptr<Node>& _node, sf::Vector2f& _pos)
 {
-	if (!_node->getIsLand() || _node->isOccupied)
+	if (!_node->getIsLand() || _node->isOccupied())
 	{
-		if (Utility::collisionWithNode(myHitbox->getTopLeftCorner() + _pos, myHitbox->getSize(), _node->getPosition(), _node->getSize()))
+		if (Utility::collisionWithNode(myHitbox->getTopLeftCorner() + _pos, myHitbox->getSize(), _node->getPosition(), _node->getNodeData().size))
 		{
 			controller->deflect(); //put player back
 			myHitbox->setPosition(controller->getPosition());

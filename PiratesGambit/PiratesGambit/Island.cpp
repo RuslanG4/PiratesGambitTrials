@@ -41,11 +41,11 @@ void Island::positionGameObjects()
 				object->SetPosition(node->getMidPoint());
 				//
 				object->AddToOccupiedNodes(node->getID());
-				node->isOccupied = true;
+				node->updateOccupied(true);
 				for(auto& neighbourID : node->getNeighbours())
 				{
-					object->AddToOccupiedNodes(neighbourID->getID());
-					neighbourID->isOccupied = true;
+					object->AddToOccupiedNodes(neighbourID.first->getID());
+					neighbourID.first->updateOccupied(true);
 				}
 				//object->setNodeId(node->getID());
 				condition = true;
@@ -66,13 +66,13 @@ void Island::PlaceBarrels()
 	bool condition = false;
 	for (auto& node : landNodes)
 	{
-		if (node->getParentTileType() == LAND && !node->isOccupied)
+		if (node->getParentTileType() == LAND && !node->isOccupied())
 		{
 			for(auto& object : gameObjects)
 			{
 				object->setPosition(node->getMidPoint());
 				object->setNodeId(node->getID());
-				node->isOccupied = true;
+				node->updateOccupied(true);
 				condition = true;
 				break;
 			}
@@ -88,10 +88,9 @@ void Island::PlaceEnemy(const std::shared_ptr<Enemy>& _enemy)
 {
 	for (auto& node : landNodes)
 	{
-		if (node->getParentTileType() == LAND && !node->isOccupied)
+		if (node->getParentTileType() == LAND && !node->isOccupied())
 		{
 			_enemy->updatePosition(node->getMidPoint());
-			_enemy->setCurrentNode(node->getID());
 			break;
 		}
 	}
@@ -102,6 +101,6 @@ bool Island::allNeighboursAreLand(const std::shared_ptr<Node>& node)
 	int parentTileType = node->getParentTileType();
 
 	return std::ranges::all_of(node->getNeighbours(), [parentTileType](const auto& neighbour) {
-		return neighbour->getParentTileType() == parentTileType;
+		return neighbour.first->getParentTileType() == parentTileType;
 		});
 }

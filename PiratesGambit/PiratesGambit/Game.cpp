@@ -25,7 +25,7 @@ Game::Game()
 
 	playerBoat->addCannonBall();
 
-	findCurrentChunk();
+	FindCurrentChunk();
 
 	battleScene = std::make_unique<BattleScene>(myPlayer, enemy);
 
@@ -145,8 +145,8 @@ void Game::update(double t_deltaTime)
 	BulletFactory::getInstance().update();
 	if (!battle && !battleTransition.IsTransitionActive()) {
 		updateVisableNodes();
-		findCurrentChunk();
-		findCurrentNode();
+		FindCurrentChunk();
+		FindCurrentNode();
 
 		handleKeyInput();
 		myMap->getChunks()[myPlayer->getCurrentChunkID()]->updateIslands(t_deltaTime);
@@ -160,9 +160,17 @@ void Game::update(double t_deltaTime)
 			myPlayer->update(t_deltaTime);
 		}
 
+		if (detectPlayerClock.getElapsedTime().asSeconds() >= 1.0f)
+		{
+			DetectPlayer();  
+
+			detectPlayerClock.restart();  
+		}
+
 		playerMenu->Update();
 
 		enemy->update(t_deltaTime);
+		enemy->MoveUnit(myMap->getChunks()[enemy->getCurrentChunkID()]->nodeGrid);
 
 		transitionToBattleMode();
 
@@ -224,7 +232,7 @@ void Game::initialise()
 
 }
 
-void Game::findCurrentChunk()
+void Game::FindCurrentChunk()
 {
 	for (auto& chunk : myMap->getChunks())
 	{
@@ -232,8 +240,80 @@ void Game::findCurrentChunk()
 		{
 			myPlayer->setCurrentChunkID(chunk->getChunkID());
 		}
+		if(Utility::collisionWithPoint(enemy->GetPosition(), chunk->getMinVector(), chunk->getMaxVector())) 
+		{
+			enemy->setCurrentChunkID(chunk->getChunkID());
+		}
 	}
 }
+
+void Game::FindCurrentNodeInSameChunk(int _id, const std::shared_ptr<Enemy>& _enemy) const
+{
+	for (auto& node : myMap->getChunks()[_id]->nodeGrid)
+	{
+		if (Utility::collisionWithPoint(myPlayer->getPlayerController()->getPosition(), node->getPosition(), sf::Vector2f(node->getNodeData().size, node->getNodeData().size)))
+		{
+			if (myPlayer->getCurrentNode() != node)
+			{
+				myPlayer->setCurrentNode(node);
+				myPlayer->updateUpdateableArea(node, 1);
+			}
+		}
+		if (Utility::collisionWithPoint(_enemy->GetPosition(), node->getPosition(), sf::Vector2f(node->getNodeData().size, node->getNodeData().size)))
+		{
+			if (_enemy->getCurrentNode() != node)
+			{
+				_enemy->setCurrentNode(node);
+				_enemy->updateUpdateableArea(node, 5);
+			}
+		}
+	}
+}
+
+void Game::FindCurrentNode() const
+{
+	if(myPlayer->getCurrentChunkID() == enemy->GetCurrentNodeID())
+	{
+		FindCurrentNodeInSameChunk(myPlayer->getCurrentChunkID(), enemy);
+	}
+	else
+	{
+		FindPlayerCurrentNode();
+		FindEnemyCurrentNode(enemy);
+	}
+	
+}
+
+void Game::FindPlayerCurrentNode() const
+{
+	for (auto& node : myMap->getChunks()[myPlayer->getCurrentChunkID()]->nodeGrid)
+	{
+		if (Utility::collisionWithPoint(myPlayer->getPlayerController()->getPosition(), node->getPosition(), sf::Vector2f(node->getNodeData().size, node->getNodeData().size)))
+		{
+			if (myPlayer->getCurrentNode() != node)
+			{
+				myPlayer->setCurrentNode(node);
+				myPlayer->updateUpdateableArea(node, 1);
+			}
+		}
+	}
+}
+
+void Game::FindEnemyCurrentNode(const std::shared_ptr<Enemy>& _enemy) const
+{
+	for (auto& node : myMap->getChunks()[_enemy->getCurrentChunkID()]->nodeGrid)
+	{
+		if (Utility::collisionWithPoint(_enemy->GetPosition(), node->getPosition(), sf::Vector2f(node->getNodeData().size, node->getNodeData().size)))
+		{
+			if (_enemy->getCurrentNode() != node)
+			{
+				_enemy->setCurrentNode(node);
+				_enemy->updateUpdateableArea(node, 5);
+			}
+		}
+	}
+}
+
 
 void Game::handleKeyInput()
 {
@@ -332,7 +412,7 @@ void Game::transitionToBattleMode()
 {
 	for (auto& node : myPlayer->getUpdateableArea()->getUpdateableNodes())
 	{
-		if(node->getID() == enemy->GetCurrentNodeID())
+		if(node->getID() == enemy->getCurrentNode()->getID())
 		{
 			if(enemy->GetGlobalBounds().intersects(myPlayer->GetHitBox()))
 			{
@@ -400,23 +480,6 @@ void Game::transferInventoryItems()
 	}
 }
 
-void Game::findCurrentNode()
-{
-	for (auto& node : myMap->getChunks()[myPlayer->getCurrentChunkID()]->nodeGrid)
-	{
-		if (Utility::collisionWithPoint(myPlayer->getPlayerController()->getPosition(), node->getPosition(), sf::Vector2f(node->getSize() , node->getSize())))
-		{
-			if (myPlayer->getCurrentNode() != node)
-			{
-				
-				myPlayer->setCurrentNode(node);
-				auto a = myPlayer->getCurrentNode()->getID();
-				myPlayer->updateUpdateableArea(node, 1);
-				std::cout << myPlayer->getCurrentNode()->getID() << "\n";
-			}
-		}
-	}
-}
 
 void Game::updateVisableNodes()
 {
@@ -438,4 +501,46 @@ void Game::updateVisableNodes()
 
 	visibleNodes = std::move(newVisibleNodes);
 }
+
+void Game::DetectPlayer()
+{
+	for (auto& node : enemy->getUpdateableArea()->getUpdateableNodes())
+	{
+		if (node == myPlayer->getCurrentNode() && !myPlayer->isOnBoat())
+		{
+			std::vector<int> path;
+
+			auto islands = myMap->getChunks()[enemy->getCurrentChunkID()]->getIslands();
+			std::shared_ptr<Island> searchIsland;  // Using shared pointer instead of unique pointer
+
+			// Iterate through the islands in the chunk
+			for (auto& island : islands) {
+				// Iterate through the land nodes of the island
+				for (auto& node : island->getLandNodes()) {
+					// Check if the node is the one we're searching for (e.g., the enemy's current node)
+					if (node == enemy->getCurrentNode()) {
+						searchIsland = island;  // Assign the shared pointer directly
+						break;  // Break out of the loop once the island is found
+					}
+				}
+
+				// If the island is found, no need to continue checking further islands
+				if (searchIsland) {
+					break;
+				}
+			}
+
+			path = PathFindingFunctions<Node>::aStarPathFind(searchIsland->getLandNodes(), enemy->getCurrentNode(), node);
+			enemy->PassPath(path);
+			if (!path.empty()) {
+				for (auto& node : myMap->getChunks()[enemy->getCurrentChunkID()]->nodeGrid)
+				{
+					node->updateTraversed(false);
+				}
+			}
+
+		}
+	}
+}
+
 

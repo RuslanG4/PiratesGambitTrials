@@ -280,6 +280,9 @@
     <ClInclude Include="UpdateableArea.h" />
     <ClInclude Include="Utility.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="PathFinding.inl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

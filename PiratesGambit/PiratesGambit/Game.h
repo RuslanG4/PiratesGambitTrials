@@ -42,8 +42,13 @@ private:
 	void render();
 	void initialise();
 
-	void findCurrentNode();
-	void findCurrentChunk();
+	void FindCurrentChunk();
+
+	void FindCurrentNodeInSameChunk(int _id, const std::shared_ptr<Enemy>& _enemy) const;
+
+	void FindCurrentNode() const;
+	void FindPlayerCurrentNode() const;
+	void FindEnemyCurrentNode(const std::shared_ptr<Enemy>& _enemy) const;
 
 	void handleKeyInput();
 
@@ -55,6 +60,11 @@ private:
 	void transferInventoryItems();
 
 	void updateVisableNodes();
+
+	void DetectPlayer();
+
+	void CalculateEnemyMovement();
+
 	std::set<int> visibleNodes;
 
 	bool keyUp = true;
@@ -81,6 +91,8 @@ private:
 
 	std::weak_ptr<GameObject> currentObjectInteract;
 	std::shared_ptr<Building> currentBuildingInteract;
+
+	sf::Clock detectPlayerClock;
 
 	//battle scene
 	BattleSceneTransition battleTransition;

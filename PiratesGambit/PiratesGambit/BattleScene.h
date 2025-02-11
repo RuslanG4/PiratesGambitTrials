@@ -7,7 +7,7 @@
 #include"Mouse.h"
 #include"BattleActionUI.h"
 #include"TacticsArmyUI.h"
-#include"PathFindingFunctions.h"
+#include "PathFindingFunctions.h"
 #include "DamageCalculations.h"
 #include "EnemyMoveConditions.h"
 #include "ParticleManager.h"
@@ -64,7 +64,8 @@ public:
 
 	void preGameStartUpPlacement(sf::Vector2f _mousePos);
 
-	static void clearArea(std::vector<std::shared_ptr<BattleGridNode>>& _vector);
+	void clearArea(std::vector<int> _ids);
+	static void clearNodeArea(std::vector<std::shared_ptr<BattleGridNode>>& _vector);
 
 	void TriggerAttack();
 
@@ -88,11 +89,11 @@ private:
 	std::vector<std::shared_ptr<BattleGridNode>> startArea;
 	std::vector<std::shared_ptr<BattleGridNode>> enemyStartArea;
 
-	std::vector<std::shared_ptr<BattleGridNode>> walkableNodes;
+	std::vector<int> walkableNodesIDs;
 
 	//bug clicking on other enemy shows attack button
 
-	std::vector<std::shared_ptr<BattleGridNode>> path;
+	std::vector<int> path;
 
 	std::unique_ptr<BattleActionUI> UIInterface;
 

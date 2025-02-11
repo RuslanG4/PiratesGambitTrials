@@ -152,16 +152,21 @@ void BattleScene::addNeighbours(int _currentNodeId) const
 		if (n_row >= 0 && n_row < rowAmount && n_col >= 0 && n_col < colAmount) {
 			neighbourIndex = n_row * colAmount + n_col;
 			battleGrid[_currentNodeId]->addNeighbour(battleGrid[neighbourIndex], direction);
+			battleGrid[_currentNodeId]->getNodeData().neighbourIDs.emplace_back(neighbourIndex, direction);
 		}
 	}
 }
 
 void BattleScene::createMoveableArea(const std::shared_ptr<PirateUnit>& _unit)
 {
-	walkableNodes = PathFindingFunctions::BreathSearchEuclydianNodes(battleGrid[_unit->getCurrentNodeId()], _unit->getSpeed());
+	walkableNodesIDs = PathFindingFunctions<BattleGridNode>::BreathSearchEuclydianNodes(battleGrid ,battleGrid[_unit->getCurrentNodeId()], _unit->getSpeed());
 	for (auto& node : battleGrid)
 	{
 		node->updateTraversed(false);
+	}
+	for (auto& ID : walkableNodesIDs)
+	{
+		battleGrid[ID]->setAsWalkable();
 	}
 	newAreaSet = true;
 	canAttack = true;
@@ -169,8 +174,7 @@ void BattleScene::createMoveableArea(const std::shared_ptr<PirateUnit>& _unit)
 
 void BattleScene::aStarPathFind(const std::shared_ptr<BattleGridNode>& _start, const std::shared_ptr<BattleGridNode>& end)
 {
-	path.clear();
-	path = PathFindingFunctions::aStarPathFind(_start, end);
+	path = PathFindingFunctions<BattleGridNode>::aStarPathFind(battleGrid, _start, end);
 
 	if (!path.empty()) {
 		for (auto& node : battleGrid)
@@ -179,7 +183,7 @@ void BattleScene::aStarPathFind(const std::shared_ptr<BattleGridNode>& _start, c
 		}
 	}
 
-	clearArea(walkableNodes);
+	clearArea(walkableNodesIDs);
 }
 
 bool BattleScene::projectileCollisionCheck()
@@ -236,7 +240,7 @@ void BattleScene::detectMouse()
 			tacticsArmyUI->extend();
 			currentSelectedUnit = tacticsArmyUI->initiativeSystem.getNextUnit();
 			UIInterface->updateModeString("Battle Mode");
-			clearArea(startArea);
+			clearNodeArea(startArea);
 			createMoveableArea(currentSelectedUnit);
 		}
 		sf::Vector2f mousePos = static_cast<sf::Vector2f>(Mouse::getInstance().getMousePosition());
@@ -273,15 +277,15 @@ void BattleScene::detectMouse()
 
 void BattleScene::TakeUnitAction(const std::shared_ptr<BattleGridNode>& _targetNode)
 {
-	auto findNodeByID = [](const auto& nodes, int nodeID) {
-		return std::ranges::find_if(nodes, [nodeID](const auto& node) {
-			return node->getID() == nodeID;
+	auto findNodeByID = [](const auto& nodeIDs, int nodeID) {
+		return std::ranges::find_if(nodeIDs, [nodeID](const auto& ID) {
+			return ID == nodeID;
 			});
 		};
 
 	auto processMovement = [&](int targetNodeID) {
-		auto it = findNodeByID(walkableNodes, targetNodeID);
-		if (it != walkableNodes.end() && _targetNode->getCurrentAllegiance() != currentSelectedUnit->unitInformation.allegiance) {
+		auto it = findNodeByID(walkableNodesIDs, targetNodeID);
+		if (it != walkableNodesIDs.end() && _targetNode->getCurrentAllegiance() != currentSelectedUnit->unitInformation.allegiance) {
 			aStarPathFind(battleGrid[currentSelectedUnit->getCurrentNodeId()], battleGrid[targetNodeID]);
 			move = true;
 			canAttack = false;
@@ -294,7 +298,7 @@ void BattleScene::TakeUnitAction(const std::shared_ptr<BattleGridNode>& _targetN
 		if (_targetNode->isOccupied() &&
 			_targetNode->getCurrentAllegiance() != currentSelectedUnit->unitInformation.allegiance) {
 			if (currentDefendingUnit) {
-				clearArea(walkableNodes);
+				clearArea(walkableNodesIDs);
 				TriggerAttack();
 				Mouse::getInstance().SetToDefault();
 			}
@@ -361,6 +365,7 @@ void BattleScene::hoverMouseOnNode()
 	// Handle logic for RANGED units
 	else if (currentSelectedUnit->unitInformation.unitType == RANGED) {
 		// Check if the hovered node contains an enemy
+		attackNode = -1;
 		bool defaultIcon = true;
 		for (auto& enemyUnit : enemyRef->getArmy()->getArmy()) {
 			if (enemyUnit->getCurrentNodeId() == currentHoverNodeID && enemyUnit->unitStats.isActive) {
@@ -435,12 +440,12 @@ void BattleScene::adjustAttackIcon(int _pinPointID)
 		break;
 	}
 	if (nodeID >= 0 && nodeID < rowAmount * colAmount) {
-		auto it = std::ranges::find_if(walkableNodes,
-			[nodeID](const auto& node) {
-				return node->getID() == nodeID;
+		auto it = std::ranges::find_if(walkableNodesIDs,
+			[nodeID](const auto& ID) {
+				return ID == nodeID;
 			});
 
-		if (it != walkableNodes.end() && !battleGrid[nodeID]->isOccupied() || currentSelectedUnit->getCurrentNodeId() == nodeID) {
+		if (it != walkableNodesIDs.end() && !battleGrid[nodeID]->isOccupied() || currentSelectedUnit->getCurrentNodeId() == nodeID) {
 				attackNode = nodeID;
 				attackIcon.setPosition(battleGrid[nodeID]->getMidPoint());
 		}
@@ -448,7 +453,7 @@ void BattleScene::adjustAttackIcon(int _pinPointID)
 		//Puts icon on first neighbour of unit to attack if on edge of area
 		{
 			for (auto& node : battleGrid[currentHoverNodeID]->getNeighbours()) {
-				if (std::find(walkableNodes.begin(), walkableNodes.end(), node.first) != walkableNodes.end()) {
+				if (std::find(walkableNodesIDs.begin(), walkableNodesIDs.end(), node.second) != walkableNodesIDs.end()) {
 					attackNode = node.first->getID();
 					attackIcon.setPosition(node.first->getMidPoint());
 					break;
@@ -464,7 +469,7 @@ bool BattleScene::isNodeInRangeOfUnit()
 	for (auto& unit : enemyRef->getArmy()->getArmy())
 	{
 		for (auto& node : battleGrid[unit->getCurrentNodeId()]->getNeighbours()) {
-			if (std::ranges::find(walkableNodes.begin(), walkableNodes.end(), node.first) != walkableNodes.end()) {
+			if (std::ranges::find(walkableNodesIDs.begin(), walkableNodesIDs.end(), node.first->getID()) != walkableNodesIDs.end()) {
 				if (currentHoverNodeID == battleGrid[unit->getCurrentNodeId()]->getID() && unit->unitStats.isActive) {
 					currentDefendingUnit = unit;
 					return true;
@@ -483,7 +488,7 @@ void BattleScene::moveUnit()
 	}
 
 	//distance to next node in path
-	sf::Vector2f distance = path[currentNodeInPath]->getMidPoint() - currentSelectedUnit->getPosition();
+	sf::Vector2f distance = battleGrid[path[currentNodeInPath]]->getMidPoint() - currentSelectedUnit->getPosition();
 	float magnitude = Utility::magnitude(distance.x, distance.y);
 
 	if (magnitude < 2.0f) {
@@ -496,7 +501,7 @@ void BattleScene::moveUnit()
 		}
 
 		//updated distance for next node
-		distance = path[currentNodeInPath]->getMidPoint() - currentSelectedUnit->getPosition();
+		distance = battleGrid[path[currentNodeInPath]]->getMidPoint() - currentSelectedUnit->getPosition();
 	}
 
 	currentSelectedUnit->moveUnit(Utility::unitVector2D(distance));
@@ -514,7 +519,7 @@ void BattleScene::finalizeMoveUnit()
 	battleGrid[currentSelectedUnit->getCurrentNodeId()]->updateOccupied(false);
 	battleGrid[currentSelectedUnit->getCurrentNodeId()]->updateAllegiance(NONE);
 	if (currentNodeInPath != 0) {
-		currentSelectedUnit->setCurrentNodeId(path[currentNodeInPath - 1]->getID());
+		currentSelectedUnit->setCurrentNodeId(path[currentNodeInPath - 1]);
 	}
 	battleGrid[currentSelectedUnit->getCurrentNodeId()]->updateOccupied(true);
 	battleGrid[currentSelectedUnit->getCurrentNodeId()]->updateAllegiance(currentSelectedUnit->unitInformation.allegiance);
@@ -552,9 +557,18 @@ void BattleScene::preGameStartUpPlacement(sf::Vector2f _mousePos)
 	}
 }
 
-void BattleScene::clearArea(std::vector<std::shared_ptr<BattleGridNode>>& _vector)
+void BattleScene::clearArea(std::vector<int> _ids)
 {
-	for(auto& node : _vector)
+	for(auto& ID : _ids)
+	{
+		battleGrid[ID]->setTransparent();
+	}
+	_ids.clear();
+}
+
+void BattleScene::clearNodeArea(std::vector<std::shared_ptr<BattleGridNode>>& _vector)
+{
+	for (auto& node : _vector)
 	{
 		node->setTransparent();
 	}
@@ -574,7 +588,7 @@ void BattleScene::EnemyTurn()
 	//Ranged Unit Attack
 	if (currentSelectedUnit->unitInformation.unitType == RANGED)
 	{
-		clearArea(walkableNodes);
+		clearArea(walkableNodesIDs);
 
 		currentDefendingUnit = PickUnitToAttack(playerRef->getArmy()->getArmy());
 		TriggerAttack();
@@ -667,12 +681,12 @@ int BattleScene::SelectNodeToWalkTo()
 {
 	int shortestDistance = 100;
 	int selectedID = -1;
-	for (auto& node : walkableNodes)
+	for (auto& ID : walkableNodesIDs)
 	{
-		if (EnemyMoveConditions::distanceToEnemy(node->getMidPoint(), PickUnitToAttack(playerRef->getArmy()->getArmy())->getPosition()) < shortestDistance)
+		if (EnemyMoveConditions::distanceToEnemy(battleGrid[ID]->getMidPoint(), PickUnitToAttack(playerRef->getArmy()->getArmy())->getPosition()) < shortestDistance)
 		{
-			shortestDistance = EnemyMoveConditions::distanceToEnemy(node->getMidPoint(), PickUnitToAttack(playerRef->getArmy()->getArmy())->getPosition());
-			selectedID = node->getID();
+			shortestDistance = EnemyMoveConditions::distanceToEnemy(battleGrid[ID]->getMidPoint(), PickUnitToAttack(playerRef->getArmy()->getArmy())->getPosition());
+			selectedID = ID;
 			canAttack = false;
 		}
 	}
@@ -684,18 +698,25 @@ int BattleScene::SelectAttackNodeToWalkTo(const std::vector<std::shared_ptr<Pira
 	float shortestDistance = 100.f;
 	int selectedID = -1;
 	auto enemyNode = battleGrid[PickUnitToAttack(_possibleUnits)->getCurrentNodeId()];
-	auto possibleAttackNodes = PathFindingFunctions::BreathSearchNodes(enemyNode, 1); //nodes neighbouring enemy position
+
+	auto possibleAttackNodes = PathFindingFunctions<BattleGridNode>::BreathSearchNodes(battleGrid, enemyNode, 1); //nodes neighbouring enemy position
+
+	for (auto& ID : possibleAttackNodes)
+	{
+		battleGrid[ID]->updateTraversed(false);
+	}
+
 	for (auto& node : battleGrid)
 	{
 		node->updateTraversed(false);
 	}
 
-	for (auto& node : possibleAttackNodes)
+	for (auto& ID : possibleAttackNodes)
 	{
-		if (EnemyMoveConditions::distanceToEnemy(node->getMidPoint(), currentSelectedUnit->getPosition()) < shortestDistance)
+		if (EnemyMoveConditions::distanceToEnemy(battleGrid[ID]->getMidPoint(), currentSelectedUnit->getPosition()) < shortestDistance)
 		{
-			shortestDistance = EnemyMoveConditions::distanceToEnemy(node->getMidPoint(), currentSelectedUnit->getPosition());
-			selectedID = node->getID();
+			shortestDistance = EnemyMoveConditions::distanceToEnemy(battleGrid[ID]->getMidPoint(), currentSelectedUnit->getPosition());
+			selectedID = ID;
 		}
 	}
 

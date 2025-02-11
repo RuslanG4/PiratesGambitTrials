@@ -23,7 +23,11 @@ void FullMap::initMap(const int& mapSize_)
 	{
 		for (int x = 0; x < cols; x++)
 		{
-			fullMapGrid.push_back(std::make_shared<Node>(x * nodeSize, y * nodeSize, nodeSize, false));
+			NodeData data;
+			data.gridX = x * nodeSize;
+			data.gridY = y * nodeSize;
+			data.size = nodeSize;
+			fullMapGrid.push_back(std::make_shared<Node>(data));
 		}
 	}
 	//Setup id's first
@@ -103,7 +107,9 @@ void FullMap::addNeighbours(int _currentNodeId) const
 		// Check the bounds:
 		if (n_row >= 0 && n_row < MAX_ROWS && n_col >= 0 && n_col < MAX_COLS) {
 			neighbourIndex = n_row * MAX_COLS + n_col;
-			fullMapGrid[_currentNodeId]->addNeighbour(fullMapGrid[neighbourIndex]);
+
+			fullMapGrid[_currentNodeId]->addNeighbour(fullMapGrid[neighbourIndex], direction);
+			fullMapGrid[_currentNodeId]->getNodeData().neighbourIDs.emplace_back(neighbourIndex,direction);
 		}
 	}
 }

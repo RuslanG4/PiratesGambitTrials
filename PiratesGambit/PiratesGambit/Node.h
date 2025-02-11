@@ -1,20 +1,17 @@
 #pragma once
+#include "BaseNode.h"
 #include"Includes.h"
 #include"TextureManager.h"
 
 /// <summary>
 /// Handles individual grid nodes inside tile-map
 /// </summary>
-class Node
+class Node : public BaseNode
 {
 public:
-	//copy constructor
-	Node(const Node& other) :
-		gridX(other.gridX),
-		gridY(other.gridY),
-		isLand(other.isLand),
-		size(other.size),
-		m_neighbours(other.getNeighbours())
+	//copy
+	Node(const Node& other, bool island) :
+		BaseNode(other.nodeData), isLand(island)
 	{
 		if (other.drawableNode) {
 			drawableNode = std::make_shared<sf::Sprite>(*other.drawableNode);
@@ -26,78 +23,56 @@ public:
 			debugShape = std::make_shared<sf::RectangleShape>(*other.debugShape);
 		}
 	}
-	//
-	Node(int _gridX, int _gridY, int size_, bool _isLand) :
-		gridX(_gridX),
-		gridY(_gridY),
-		isLand(_isLand),
-		size(size_)
+
+	Node(const NodeData& _data) :
+		BaseNode(_data)
 	{
 		drawableNode = std::make_shared<sf::Sprite>();
 		waterBackSprite = std::make_shared<sf::Sprite>();
 		debugShape = std::make_shared<sf::RectangleShape>();
 
-		drawableNode->setPosition(sf::Vector2f(gridX, gridY));
-		drawableNode->setScale(size / 64.f, size / 64.f); //64x64 is size of texture
+		drawableNode->setPosition(sf::Vector2f(nodeData.gridX, nodeData.gridY));
+		drawableNode->setScale(nodeData.size / 64.f, nodeData.size / 64.f); //64x64 is size of texture
 
-		waterBackSprite->setPosition(sf::Vector2f(gridX, gridY));
-		waterBackSprite->setScale(size / 64.f, size / 64.f); //64x64 is size of texture
+		waterBackSprite->setPosition(sf::Vector2f(nodeData.gridX, nodeData.gridY));
+		waterBackSprite->setScale(nodeData.size / 64.f, nodeData.size / 64.f); //64x64 is size of texture
 
-		debugShape->setPosition(sf::Vector2f(gridX, gridY));
-		debugShape->setSize(sf::Vector2f(size, size));
+		debugShape->setPosition(sf::Vector2f(nodeData.gridX, nodeData.gridY));
+		debugShape->setSize(sf::Vector2f(nodeData.size, nodeData.size));
 		debugShape->setFillColor(sf::Color(123,123,123,46));
-	};
+	}
 
-	void addNeighbour(const std::shared_ptr<Node>& t_cellId);
+	void addNeighbour(const std::shared_ptr<BaseNode>& t_cellId, int _neighbourPos) override;
+
+	const std::vector<std::pair<std::shared_ptr<Node>, int>>& getNeighbours();
 
 	std::shared_ptr<sf::Sprite> drawableNode; //sfml render
 	std::shared_ptr<sf::Sprite> waterBackSprite; //back texture of water
 	std::shared_ptr<sf::RectangleShape> debugShape;
 
 	//Getters
-	int getChunkId() const { return m_chunkId; };
-	int getID() const { return m_id; };
-	const std::vector<std::shared_ptr<Node>>& getNeighbours() const { return m_neighbours; };
-	bool getMarked() const{ return visited; };
-	bool getIsLand() const { return isLand; };
-	int getSize() const { return size; };
-	sf::Vector2f getPosition() const { return { static_cast<float>(gridX), static_cast<float>(gridY)}; }
-	sf::Vector2f getMidPoint() const { return  { static_cast<float>(gridX + (size / 2)), static_cast<float>(gridY + (size / 2)) }; }
+	int getChunkId() const { return m_chunkId; }
+	bool getIsLand() const { return isLand; }
 
 	//Tiles
 	TileType getTileType() const { return m_currentTileType; };
 	ParentTileType getParentTileType() const { return m_currentParentTileType; };
 
 	//Setters
-	void setID(int _id) { m_id = _id; };
-	void setChunkID(int _id) { m_chunkId = _id; };
-	void setMarked() { visited = !visited; };
-	void setLand(bool _land) { isLand = _land; };
-	void setTileType(TileType _type) { m_currentTileType = _type; };
-	void setParentTileType(ParentTileType _type) { m_currentParentTileType = _type; };
-	void setWaterTexture(const sf::Texture& _texture) const { waterBackSprite->setTexture(_texture); };
+	void setChunkID(int _id) { m_chunkId = _id; }
+	void setLand(bool _land) { isLand = _land; }
 
-	//Resetters
-	void resetMarked() { visited = false; };
-
-	bool isOccupied{ false };
+	void setTileType(TileType _type) { m_currentTileType = _type; }
+	void setParentTileType(ParentTileType _type) { m_currentParentTileType = _type; }
+	void setWaterTexture(const sf::Texture& _texture) const { waterBackSprite->setTexture(_texture); }
 
 private:
-	int m_id;
-	int m_chunkId;
+	std::vector<std::pair<std::shared_ptr<Node>, int>> m_neighbours;
 
-	int size;
-	bool visited{ false };
+	int m_chunkId;
 	bool isLand{ false };
 
-	std::vector<std::shared_ptr<Node>> m_neighbours;
-	//							  0 3 5	
-	// structure of neighbours -> 1 X 6
-	//							  2 4 7
 	TileType m_currentTileType;
 	ParentTileType m_currentParentTileType;
-
-	int gridX; //position x
-	int gridY; //position y
 };
 

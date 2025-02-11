@@ -24,12 +24,9 @@ public:
 		walkableArea->setFillColor(sf::Color(123, 123, 123, 46));
 		walkableArea->setOutlineThickness(1);
 		walkableArea->setOutlineColor(sf::Color(0,0,0,10));
-	};
+	}
 
 	void addNeighbour(const std::shared_ptr<BaseNode>& t_cellId, int _neighbourPos) override;
-	void setPrevious(const std::shared_ptr<BaseNode>& _previous) override;
-
-	void clearPrevious() { previousNode = nullptr; }
 
 	void setAsWalkable();
 	void setTransparent();
@@ -38,13 +35,11 @@ public:
 
 	UnitAllegiance getCurrentAllegiance() const { return occupiedUnitAllegiance; }
 	const std::vector<std::pair<std::shared_ptr<BattleGridNode>, int>>& getNeighbours();
-	const std::shared_ptr<BattleGridNode>& getPrevious();
 
 	std::unique_ptr<sf::RectangleShape> debugShape;
 	std::unique_ptr<sf::RectangleShape> walkableArea;
 
 private:
-	std::shared_ptr<BattleGridNode> previousNode;
 	std::vector<std::pair<std::shared_ptr<BattleGridNode>, int>> m_neighbours;
 
 	UnitAllegiance occupiedUnitAllegiance;

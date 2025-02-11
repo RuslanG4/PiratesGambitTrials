@@ -10,16 +10,6 @@ void BattleGridNode::addNeighbour(const std::shared_ptr<BaseNode>& t_cellId, int
     }
 }
 
-void BattleGridNode::setPrevious(const std::shared_ptr<BaseNode>& _previous)
-{
-    if (auto battlePrevious = std::dynamic_pointer_cast<BattleGridNode>(_previous)) {
-        previousNode = battlePrevious;
-    }
-    else {
-        std::cout << "Error wrong node passed in";
-    }
-}
-
 void BattleGridNode::setAsWalkable()
 {
     debugShape->setFillColor(sf::Color(76, 138, 14, 128));
@@ -42,7 +32,3 @@ const std::vector<std::pair<std::shared_ptr<BattleGridNode>, int>>& BattleGridNo
     return m_neighbours;
 }
 
-const std::shared_ptr<BattleGridNode>& BattleGridNode::getPrevious()
-{
-    return previousNode;
-}

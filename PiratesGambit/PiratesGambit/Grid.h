@@ -17,7 +17,7 @@ public:
 	void drawGameObject(const std::unique_ptr<sf::RenderWindow>& window) const;
 
 	void updateIslands(float _dt) const;
-	const std::vector<std::unique_ptr<Island>>& getIslands() const { return islands; }
+	const std::vector<std::shared_ptr<Island>>& getIslands() const { return islands; }
 
 	void setChunkID(int id_) { chunkID = id_; }
 	int getChunkID() const { return chunkID; }
@@ -59,7 +59,7 @@ public:
 private:
 	std::shared_ptr<Player> playerRef;
 
-	std::vector<std::unique_ptr<Island>> islands;
+	std::vector<std::shared_ptr<Island>> islands;
 
 	int chunkID;
 
