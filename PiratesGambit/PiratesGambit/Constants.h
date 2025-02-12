@@ -27,7 +27,10 @@ const char* const PLAYER_PLASTERED = "ASSETS\\IMAGES\\PLAYER\\PLAYER_PLASTERED.p
 const char* const CANNON_BALL = "ASSETS\\IMAGES\\Pirates\\MiniCannonBall.png";
 const char* const HARPOON = "ASSETS\\IMAGES\\Pirates\\MiniHarpoon.png";
 
+//GameObjects
 const char* const BARREL = "ASSETS\\IMAGES\\GameObjects\\BARREL.png";
+const char* const TREE0 = "ASSETS\\IMAGES\\GameObjects\\TREE0.png";
+const char* const TREE1 = "ASSETS\\IMAGES\\GameObjects\\TREE1.png";
 
 //icons
 const char* const CANNON_BALL_ICON = "ASSETS\\IMAGES\\ICONS\\CANNON_BALL.png";

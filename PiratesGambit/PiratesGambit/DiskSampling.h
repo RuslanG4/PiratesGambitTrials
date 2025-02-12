@@ -1,63 +1,86 @@
 #pragma once
-
 #include"Includes.h"
 #include "Node.h"
 
-class DiskSampling
-{
+class PoissonDiskSampling {
 public:
-    static std::vector<std::shared_ptr<Node>> BreathFindNodes(const std::vector<std::shared_ptr<Node>>& _island, const std::shared_ptr<Node>& _startNode, int _depth)
-    {
-        std::queue<std::pair<std::shared_ptr<Node>, int>> nodeQueue;
-        std::vector<std::shared_ptr<Node>> BreathArea;
+    static PoissonDiskSampling& getInstance() {
+        static PoissonDiskSampling instance;
+        return instance;
+    }
 
-        sf::Vector2f startPos = _startNode->getPosition();
-        nodeQueue.emplace(_startNode, 0);
-        _startNode->updateTraversed(true);
+    static std::vector<sf::Vector2f> generate(const std::vector<std::shared_ptr<Node>>& availableNodes) {
+        PoissonDiskSampling& instance = getInstance();
+        int size = availableNodes[0]->getNodeData().size;
+        instance.radius = (size * std::numbers::sqrt2) / 2.f;
+        instance.availableNodes = availableNodes;
+        return instance.generatePoints();
+    }
 
-        bool collecting = false; // Flag to start collecting nodes at the required depth
+    PoissonDiskSampling(const PoissonDiskSampling&) = delete;
+    PoissonDiskSampling& operator=(const PoissonDiskSampling&) = delete;
+private:
+    PoissonDiskSampling() = default;
 
-        while (!nodeQueue.empty())
-        {
-            auto [currentNode, currentDistance] = nodeQueue.front();
-            nodeQueue.pop();
+    float radius;
+    std::vector<std::shared_ptr<Node>> availableNodes;
+    const int k = 30; // Number of attempts per point
 
-            if (currentDistance == _depth)
-            {
-                collecting = true; // Start collecting nodes at this depth
-                BreathArea.push_back(currentNode);
-                continue;
-            }
+    std::vector<sf::Vector2f> generatePoints() {
+        std::vector<sf::Vector2f> points;
+        std::queue<sf::Vector2f> processQueue;
+        std::random_device rd;
+        std::mt19937 gen(rd());
 
-            if (collecting) break; // Exit the loop once all nodes at _depth have been collected
+        sf::Vector2f firstPoint = availableNodes[rand() % availableNodes.size()]->getMidPoint();
 
-            auto neighbours = currentNode->getNeighbours();
-            for (auto& neighbour : neighbours)
-            {
-                if (!neighbour.first->hasBeenTraversed() && neighbour.second % 2 != 0)
-                {
-                    neighbour.first->updateTraversed(true);
+        points.push_back(firstPoint);
+        processQueue.push(firstPoint);
 
-                    float dx = static_cast<float>(neighbour.first->getPosition().x - startPos.x);
-                    float dy = static_cast<float>(neighbour.first->getPosition().y - startPos.y);
+        while (!processQueue.empty() && points.size() < 30) {
+            sf::Vector2f point = processQueue.front();
+            processQueue.pop();
 
-                    float distance = std::hypotf(dx / neighbour.first->getNodeData().size, dy / neighbour.first->getNodeData().size);
+            for (int i = 0; i < k && points.size() < 30; ++i) {
 
-                    int roundedDistance = static_cast<int>(std::ceil(distance));
+                sf::Vector2f newPoint = generateRandomPointAround(point, gen);
 
-                    nodeQueue.emplace(neighbour.first, roundedDistance);
 
-                    if (roundedDistance == _depth)
-                    {
-                        BreathArea.push_back(neighbour.first);
-                    }
+                if (isValid(newPoint, points) && IsPointValid(newPoint)) {
+                    points.push_back(newPoint);
+                    processQueue.push(newPoint);
+                    break;
                 }
             }
         }
-
-        return BreathArea;
+        return points;
     }
 
+    bool isValid(const sf::Vector2f& p, const std::vector<sf::Vector2f>& points) {
+        return !std::ranges::any_of(points, [&](const sf::Vector2f& existing) {
+            float distSq = (p.x - existing.x) * (p.x - existing.x) + (p.y - existing.y) * (p.y - existing.y);
+            return distSq < radius * radius;
+            });
+    }
 
-private:
+    bool IsPointValid(const sf::Vector2f& _point)
+    {
+        return std::ranges::any_of(availableNodes, [&_point](const auto& node) {
+            return Utility::collisionWithPoint(_point, node->getPosition(), sf::Vector2f(32, 32)) &&
+                node->getParentTileType() == LAND; 
+            });
+    }
+
+    sf::Vector2f generateRandomPointAround(const sf::Vector2f& p, std::mt19937& gen) {
+        std::uniform_real_distribution<float> distRadius(radius, 2 * radius);
+        std::uniform_real_distribution<float> distAngle(0, 2 * Utility::PI); //0-360
+
+        float r = distRadius(gen);
+
+        float theta = distAngle(gen);
+
+        sf::Vector2f newPoint = { p.x + r * std::cos(theta), p.y + r * std::sin(theta) };
+
+        return newPoint;
+    }
 };

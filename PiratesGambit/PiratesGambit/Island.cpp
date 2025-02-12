@@ -45,69 +45,81 @@ void Island::PlaceBuildings(const std::shared_ptr<Node>& _startNode, int range)
 {
 	UnmarkNodes();
 
-	std::vector<std::shared_ptr<Node>> PossibleNodes = DiskSampling::BreathFindNodes(landNodes, _startNode, range);
+	//std::vector<std::shared_ptr<Node>> PossibleNodes = DiskSampling::BreathFindNodes(landNodes, _startNode, range);
 
-	while (!PossibleNodes.empty())
-	{
-		// Select a random index
-		int randomIndex = rand() % PossibleNodes.size();
-		auto node = PossibleNodes[randomIndex];
+	//while (!PossibleNodes.empty())
+	//{
+	//	// Select a random index
+	//	int randomIndex = rand() % PossibleNodes.size();
+	//	auto node = PossibleNodes[randomIndex];
 
-		// Remove the selected node from the list to avoid duplicate checks
-		PossibleNodes.erase(PossibleNodes.begin() + randomIndex);
+	//	// Remove the selected node from the list to avoid duplicate checks
+	//	PossibleNodes.erase(PossibleNodes.begin() + randomIndex);
 
-		if (allNeighboursAreLand(node))
-		{
-			buildings[currentBuildingIndex]->SetPosition(node->getMidPoint());
-			buildings[currentBuildingIndex]->AddToOccupiedNodes(node->getID());
-			buildings[currentBuildingIndex]->AddParentNode(node);
-			node->updateOccupied(true);
+	//	if (allNeighboursAreLand(node))
+	//	{
+	//		buildings[currentBuildingIndex]->SetPosition(node->getMidPoint());
+	//		buildings[currentBuildingIndex]->AddToOccupiedNodes(node->getID());
+	//		buildings[currentBuildingIndex]->AddParentNode(node);
+	//		node->updateOccupied(true);
 
-			for (auto& neighbourNode : node->getNeighbours() | std::views::keys)
-			{
-				buildings[currentBuildingIndex]->AddToOccupiedNodes(neighbourNode->getID());
-				neighbourNode->updateOccupied(true);
-			}
+	//		for (auto& neighbourNode : node->getNeighbours() | std::views::keys)
+	//		{
+	//			buildings[currentBuildingIndex]->AddToOccupiedNodes(neighbourNode->getID());
+	//			neighbourNode->updateOccupied(true);
+	//		}
 
 
-			auto currentBuilding = buildings[currentBuildingIndex];
+	//		auto currentBuilding = buildings[currentBuildingIndex];
 
-			currentBuildingIndex++;
+	//		currentBuildingIndex++;
 
-			if (currentBuildingIndex >= buildings.size())
-			{
-				break;
-			}
+	//		if (currentBuildingIndex >= buildings.size())
+	//		{
+	//			break;
+	//		}
 
-			PlaceBuildings(currentBuilding->GetParentNode(), range);
+	//		PlaceBuildings(currentBuilding->GetParentNode(), range);
 
-			break;
-		}
-	}
+	//		break;
+	//	}
+	//}
 
 }
 
 void Island::PlaceBarrels()
 {
-	bool condition = false;
-	for (auto& node : landNodes)
+	std::vector<sf::Vector2f> possiblePositions = PoissonDiskSampling::generate(landNodes);
+
+	for(auto& point : possiblePositions)
 	{
-		if (node->getParentTileType() == LAND && !node->isOccupied())
-		{
-			for(auto& object : gameObjects)
-			{
-				object->setPosition(node->getMidPoint());
-				object->setNodeId(node->getID());
-				node->updateOccupied(true);
-				condition = true;
-				break;
-			}
-		}
-		if (condition)
-		{
-			break;
-		}
+		gameObjects.push_back(std::make_shared<Tree>());
+		gameObjects.back()->setPosition(point);
 	}
+
+	std::ranges::sort(gameObjects, [](const std::shared_ptr<GameObject>& obj1, const std::shared_ptr<GameObject>& obj2) {
+		return obj1->GetPosition().y < obj2->GetPosition().y;
+		});
+
+	//bool condition = false;
+	//for (auto& node : landNodes)
+	//{
+	//	if (node->getParentTileType() == LAND && !node->isOccupied())
+	//	{
+	//		for(auto& object : gameObjects)
+	//		{
+	//			object->setPosition(node->getMidPoint());
+	//			object->setNodeId(node->getID());
+	//			node->updateOccupied(true);
+	//			condition = true;
+	//			break;
+	//		}
+	//	}
+	//	if (condition)
+	//	{
+	//		break;
+	//	}
+	//}
 }
 
 void Island::UnmarkNodes()

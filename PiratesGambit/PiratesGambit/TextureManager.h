@@ -78,6 +78,8 @@ private:
         loadTexture("HARPOONER", HARPOONER_SPRITE);
         //
         loadTexture("BARREL", BARREL);
+        loadTexture("TREEA", TREE0);
+        loadTexture("TREEB", TREE1);
         //ICONS
     	loadTexture("CANNON_BALL_ICON", CANNON_BALL_ICON);
         loadTexture("SWORD_ICON", SWORD_ICON);

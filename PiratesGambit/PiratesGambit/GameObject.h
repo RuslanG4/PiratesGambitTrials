@@ -16,6 +16,7 @@ public:
 	int getID() const { return currentNodeId; }
 	const std::unique_ptr<Inventory>& getInventory() const { return inventory; }
 	std::unique_ptr<RenderableInventory>& GetRenderableInventory() { return renderableInventory; }
+	virtual sf::Vector2f GetPosition() const = 0;
 
 protected:
 	sf::Sprite sprite;

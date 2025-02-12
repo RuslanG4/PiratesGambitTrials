@@ -327,6 +327,9 @@
     <ClCompile Include="ResourceSlotUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Tree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -449,12 +452,6 @@
     <ClInclude Include="UnitAmount.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="PathFindingFunctions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DamageCalculations.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BulletFactory.h">
       <Filter>Header Files\Globals</Filter>
     </ClInclude>
@@ -521,31 +518,40 @@
     <ClInclude Include="Coins.h">
       <Filter>Header Files\Inventory\Items</Filter>
     </ClInclude>
-    <ClInclude Include="GunnerBuilding.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BuccaneerIcon.h">
       <Filter>Header Files\UI\Building Menus\Icons</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerInventory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BarrelInventory.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerArmy_TabMenu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerTabMenu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Resources_TabMenu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ResourceSlotUI.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="GunnerBuilding.h">
+      <Filter>Header Files\GameObjects\Buildings</Filter>
     </ClInclude>
     <ClInclude Include="DiskSampling.h">
+      <Filter>Header Files\Singletons</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingFunctions.h">
+      <Filter>Header Files\Singletons</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerArmy_TabMenu.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerTabMenu.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources_TabMenu.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="DamageCalculations.h">
+      <Filter>Header Files\Globals</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceSlotUI.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerInventory.h">
+      <Filter>Header Files\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
