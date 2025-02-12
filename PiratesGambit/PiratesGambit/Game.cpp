@@ -143,6 +143,8 @@ void Game::update(double t_deltaTime)
 	Mouse::getInstance().update(m_window);
 	ParticleManager::getInstance().update(t_deltaTime);
 	BulletFactory::getInstance().update();
+	Camera::getInstance().setCameraCenter(myPlayer->getPlayerController()->getPosition());
+
 	if (!battle && !battleTransition.IsTransitionActive()) {
 		updateVisableNodes();
 		FindCurrentChunk();
@@ -174,7 +176,7 @@ void Game::update(double t_deltaTime)
 
 		transitionToBattleMode();
 
-		myCamera.setCameraCenter(myPlayer->getPlayerController()->getPosition());
+		
 	}
 	else if(battleTransition.IsTransitionActive())
 	{
@@ -199,7 +201,7 @@ void Game::render()
 {
 	m_window->clear(sf::Color::Black);
 	if (!battle) {
-		m_window->setView(myCamera.getCamera());
+		m_window->setView(Camera::getInstance().getCamera());
 
 		for (int index : visibleNodes) {
 			std::shared_ptr<Node> node = myMap->getFullMap()[index];
@@ -453,7 +455,7 @@ bool Game::interactWithBuildings()
 					if(nodeId == node->getID())
 					{
 						building->Interact();
-						currentBuildingInteract = building;
+						//currentBuildingInteract = building;
 						return true;
 					}
 				}
@@ -483,7 +485,7 @@ void Game::transferInventoryItems()
 
 void Game::updateVisableNodes()
 {
-	sf::FloatRect viewBounds(myCamera.getCamera().getCenter() - myCamera.getCamera().getSize() / 2.0f, myCamera.getCamera().getSize());
+	sf::FloatRect viewBounds(Camera::getInstance().getCamera().getCenter() - Camera::getInstance().getCamera().getSize() / 2.0f, Camera::getInstance().getCamera().getSize());
 
 	int minX = std::max(0, static_cast<int>(viewBounds.left / 32));
 	int maxX = std::min(32 * 1 - 1, static_cast<int>((viewBounds.left + viewBounds.width) / 32));

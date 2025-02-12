@@ -231,6 +231,7 @@
     <ClInclude Include="Coins.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="DamageCalculations.h" />
+    <ClInclude Include="DiskSampling.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyMoveConditions.h" />
     <ClInclude Include="Enums.h" />

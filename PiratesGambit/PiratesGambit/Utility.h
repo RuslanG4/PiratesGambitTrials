@@ -19,6 +19,8 @@ namespace Utility
 		}
 	};
 
+	float distance(const sf::Vector2f& a, const sf::Vector2f& b);
+
 	float dotProduct(sf::Vector2f v1, sf::Vector2f v2);
 
 	bool collisionWithNode(sf::Vector2f v1, sf::Vector2f v1Size , sf::Vector2f nodePos, int nodeSize);

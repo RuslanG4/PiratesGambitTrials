@@ -1,6 +1,7 @@
 #include "Barrel.h"
 
 #include "BarrelInventory.h"
+#include "Camera.h"
 #include "Coins.h"
 
 Barrel::Barrel()
@@ -16,11 +17,8 @@ Barrel::Barrel()
 
 void Barrel::render(const std::unique_ptr<sf::RenderWindow>& window)
 {
+	window->setView(Camera::getInstance().getCamera());
 	window->draw(sprite);
-	if(inventory->isInventoryOpen())
-	{
-		renderableInventory->render(window);
-	}
 }
 
 void Barrel::interact()
@@ -56,5 +54,11 @@ void Barrel::checkMousePosition()
 			}
 		}
 	}
+}
+
+void Barrel::RenderUI(const std::unique_ptr<sf::RenderWindow>& _window)
+{
+	_window->setView(_window->getDefaultView());
+	renderableInventory->render(_window);
 }
 

@@ -1,9 +1,17 @@
 #include "Building.h"
 
+#include "Camera.h"
+
 void Building::Render(const std::unique_ptr<sf::RenderWindow>& _window) const
 {
+	_window->setView(Camera::getInstance().getCamera());
 	_window->draw(buildingSprite);
-	if(buildingUI->IsUIOpen())
+}
+
+void Building::RenderUI(const std::unique_ptr<sf::RenderWindow>& _window) const
+{
+	_window->setView(_window->getDefaultView());
+	if (buildingUI->IsMenuOpen())
 	{
 		buildingUI->Render(_window);
 	}
@@ -16,7 +24,7 @@ void Building::Update(float _dt)
 
 void Building::Interact()
 {
-	if (!buildingUI->IsUIOpen())
+	if (!buildingUI->IsMenuOpen())
 	{
 		buildingUI->OpenUI();
 	}

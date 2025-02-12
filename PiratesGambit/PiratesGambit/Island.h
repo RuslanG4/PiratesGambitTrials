@@ -5,6 +5,7 @@
 #include"BuccaneerBuilding.h"
 #include "Enemy.h"
 #include "GunnerBuilding.h"
+#include "DiskSampling.h"
 
 /// <summary>
 /// Holds individual Islands inside a given chunk and holds game objects on those islands
@@ -17,16 +18,31 @@ public:
 	{
 		gameObjects.push_back(std::make_shared<Barrel>());
 		buildings.push_back(std::make_shared<GunnerBuilding>(_playerRef));
-		positionGameObjects();
+		buildings.push_back(std::make_shared<BuccaneerBuilding>(_playerRef));
+
+		auto randNode = landNodes[rand() % landNodes.size()];
+		while(!allNeighboursAreLand(randNode))
+		{
+			randNode = landNodes[rand() % landNodes.size()];
+		}
+
+			
+		PlaceBuildings(randNode, 16);
+
+		PlaceBarrels();
+		MarkNodes();
 	};
 
 	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
 	void update(float _dt) const;
 
 	bool CanPlaceObject();
-	void positionGameObjects();
+	void PlaceBuildings(const std::shared_ptr<Node>& _startNode, int range);
 
 	void PlaceBarrels();
+
+	void UnmarkNodes();
+	void MarkNodes();
 
 	void PlaceEnemy(const std::shared_ptr<Enemy>& _enemy);
 
@@ -42,6 +58,9 @@ private:
 	std::vector<std::shared_ptr<GameObject>> gameObjects;
 	//buildings
 	std::vector<std::shared_ptr<Building>> buildings;
+
+
+	int currentBuildingIndex = 0;
 
 };
 

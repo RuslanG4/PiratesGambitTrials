@@ -24,12 +24,16 @@ public:
 	void CloseUI();
 
 	static bool IsUIOpen(){ return uiOpen; }
+
+	bool IsMenuOpen() const { return isMenuOpen; }
 private:
 	std::shared_ptr<Player> playerRef;
 
 	UnitName nameOfUnitSelling;
 
 	static bool uiOpen;
+
+	bool isMenuOpen{false};
 
 	int unitsLeftReference;
 

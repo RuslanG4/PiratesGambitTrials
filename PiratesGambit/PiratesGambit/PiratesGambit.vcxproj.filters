@@ -545,6 +545,9 @@
     <ClInclude Include="ResourceSlotUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DiskSampling.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="PathFinding.inl">

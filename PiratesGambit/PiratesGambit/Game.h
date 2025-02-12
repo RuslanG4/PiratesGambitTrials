@@ -87,8 +87,6 @@ private:
 
 	std::shared_ptr<Enemy> enemy;
 
-	Camera myCamera;
-
 	std::weak_ptr<GameObject> currentObjectInteract;
 	std::shared_ptr<Building> currentBuildingInteract;
 

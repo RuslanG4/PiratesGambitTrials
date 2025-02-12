@@ -17,6 +17,8 @@ public:
 	void update() override;
 
 	void checkMousePosition();
+	void RenderUI(const std::unique_ptr<sf::RenderWindow>& _window) override;
+
 private:
 	
 };

@@ -99,37 +99,39 @@ void HireRecruitUI::Render(const std::unique_ptr<sf::RenderWindow>& _window) con
 
 void HireRecruitUI::Update(float _dt)
 {
-	unitIcon->Update(_dt);
-	amountSlider->Update();
+	if (IsMenuOpen()) {
+		unitIcon->Update(_dt);
+		amountSlider->Update();
 
-	recruit->UpdateText(std::to_string(amountSlider->getValue()));
-	totalCost->UpdateText(std::to_string(amountSlider->getValue() * 500));
+		recruit->UpdateText(std::to_string(amountSlider->getValue()));
+		totalCost->UpdateText(std::to_string(amountSlider->getValue() * 500));
 
-	cancel->Update();
-	if(cancel->IsTriggered() || sf::Keyboard::isKeyPressed((sf::Keyboard::Escape)))
-	{
-		cancel->ResetTrigger();
-		CloseUI();
-	}
+		cancel->Update();
+		if (cancel->IsTriggered() || sf::Keyboard::isKeyPressed((sf::Keyboard::Escape)))
+		{
+			cancel->ResetTrigger();
+			CloseUI();
+		}
 
-	purchase->Update();
+		purchase->Update();
 
-	if(purchase->IsTriggered() && unitsLeftReference > 0)
-	{
-		auto it = std::ranges::find_if(playerRef->getInventory()->getItems(), [&](const std::unique_ptr<InventoryItem>& item) {
-			return item->getItemName() == COINS;
-			});
+		if (purchase->IsTriggered() && unitsLeftReference > 0)
+		{
+			auto it = std::ranges::find_if(playerRef->getInventory()->getItems(), [&](const std::unique_ptr<InventoryItem>& item) {
+				return item->getItemName() == COINS;
+				});
 
-		if (it != playerRef->getInventory()->getItems().end()) {
-			if ((it->get()->getStackSize() - amountSlider->getValue() * 500) >= 0) {
-				std::cout << "prev stack size : " << it->get()->getStackSize() << "\n";
-				it->get()->removeFromCurrentStack(amountSlider->getValue() * 500);
-				std::cout << "new stack size : " << it->get()->getStackSize() << "\n";
-				unitsLeftReference -= amountSlider->getValue();
-				available->setText("Available", std::to_string(unitsLeftReference));
-				AddCharacterToPlayer();
-				amountSlider->updateMaxValue(unitsLeftReference);
-				purchase->ResetTrigger();
+			if (it != playerRef->getInventory()->getItems().end()) {
+				if ((it->get()->getStackSize() - amountSlider->getValue() * 500) >= 0) {
+					std::cout << "prev stack size : " << it->get()->getStackSize() << "\n";
+					it->get()->removeFromCurrentStack(amountSlider->getValue() * 500);
+					std::cout << "new stack size : " << it->get()->getStackSize() << "\n";
+					unitsLeftReference -= amountSlider->getValue();
+					available->setText("Available", std::to_string(unitsLeftReference));
+					AddCharacterToPlayer();
+					amountSlider->updateMaxValue(unitsLeftReference);
+					purchase->ResetTrigger();
+				}
 			}
 		}
 	}
@@ -138,9 +140,11 @@ void HireRecruitUI::Update(float _dt)
 void HireRecruitUI::OpenUI()
 {
 	uiOpen = true;
+	isMenuOpen = true;
 }
 
 void HireRecruitUI::CloseUI()
 {
 	uiOpen = false;
+	isMenuOpen = false;
 }

@@ -14,3 +14,4 @@
 #include"Constants.h"
 #include"Utility.h"
 #include"Enums.h"
+#include <ranges>

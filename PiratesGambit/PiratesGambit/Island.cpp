@@ -2,13 +2,25 @@
 
 void Island::render(const std::unique_ptr<sf::RenderWindow>& window) const
 {
-	for (auto& object : buildings)
+	for (const auto& building : buildings)
 	{
-		object->Render(window);
+		building->Render(window);  // Draw buildings with camera view
 	}
 	for (auto& gameObject : gameObjects)
 	{
 		gameObject->render(window);
+	}
+	// Render UI after the game objects (building sprites)
+	for (const auto& building : buildings)
+	{
+		building->RenderUI(window);  // Draw UI elements on top
+	}
+	for (auto& gameObject : gameObjects)
+	{
+		if (gameObject->getInventory()->isInventoryOpen())
+		{
+			gameObject->RenderUI(window);
+		}
 	}
 }
 
@@ -29,36 +41,50 @@ bool Island::CanPlaceObject()
 	return false;
 }
 
-void Island::positionGameObjects()
+void Island::PlaceBuildings(const std::shared_ptr<Node>& _startNode, int range)
 {
-	bool condition = false;
-	for (auto& node : landNodes)
+	UnmarkNodes();
+
+	std::vector<std::shared_ptr<Node>> PossibleNodes = DiskSampling::BreathFindNodes(landNodes, _startNode, range);
+
+	while (!PossibleNodes.empty())
 	{
-		if (node->getParentTileType() == LAND && allNeighboursAreLand(node))
-		{ 
-			for (auto& object : buildings)
+		// Select a random index
+		int randomIndex = rand() % PossibleNodes.size();
+		auto node = PossibleNodes[randomIndex];
+
+		// Remove the selected node from the list to avoid duplicate checks
+		PossibleNodes.erase(PossibleNodes.begin() + randomIndex);
+
+		if (allNeighboursAreLand(node))
+		{
+			buildings[currentBuildingIndex]->SetPosition(node->getMidPoint());
+			buildings[currentBuildingIndex]->AddToOccupiedNodes(node->getID());
+			buildings[currentBuildingIndex]->AddParentNode(node);
+			node->updateOccupied(true);
+
+			for (auto& neighbourNode : node->getNeighbours() | std::views::keys)
 			{
-				object->SetPosition(node->getMidPoint());
-				//
-				object->AddToOccupiedNodes(node->getID());
-				node->updateOccupied(true);
-				for(auto& neighbourID : node->getNeighbours())
-				{
-					object->AddToOccupiedNodes(neighbourID.first->getID());
-					neighbourID.first->updateOccupied(true);
-				}
-				//object->setNodeId(node->getID());
-				condition = true;
+				buildings[currentBuildingIndex]->AddToOccupiedNodes(neighbourNode->getID());
+				neighbourNode->updateOccupied(true);
+			}
+
+
+			auto currentBuilding = buildings[currentBuildingIndex];
+
+			currentBuildingIndex++;
+
+			if (currentBuildingIndex >= buildings.size())
+			{
 				break;
 			}
-		}
-		if(condition)
-		{
+
+			PlaceBuildings(currentBuilding->GetParentNode(), range);
+
 			break;
 		}
 	}
 
-	PlaceBarrels();
 }
 
 void Island::PlaceBarrels()
@@ -81,6 +107,22 @@ void Island::PlaceBarrels()
 		{
 			break;
 		}
+	}
+}
+
+void Island::UnmarkNodes()
+{
+	for(auto& node : landNodes)
+	{
+		node->updateTraversed(false);
+	}
+}
+
+void Island::MarkNodes()
+{
+	for (auto& node : landNodes)
+	{
+		node->updateTraversed(true);
 	}
 }
 
