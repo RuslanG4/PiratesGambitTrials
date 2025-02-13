@@ -25,7 +25,7 @@ void Enemy::render(const std::unique_ptr<sf::RenderWindow>& window) const
 void Enemy::MoveUnit(const std::vector<std::shared_ptr<Node>>& _grid)
 {
 	if (!path.empty()) {
-		sf::Vector2f distance = _grid[path[currentNodeInPath]]->getMidPoint() - body.getPosition();
+		sf::Vector2f distance = path[currentNodeInPath]->getMidPoint() - body.getPosition();
 		float magnitude = Utility::magnitude(distance.x, distance.y);
 
 		if (magnitude < 2.0f) {
@@ -37,7 +37,7 @@ void Enemy::MoveUnit(const std::vector<std::shared_ptr<Node>>& _grid)
 				return;
 			}
 
-			distance = _grid[path[currentNodeInPath]]->getMidPoint() - body.getPosition();
+			distance = path[currentNodeInPath]->getMidPoint() - body.getPosition();
 		}
 
 		distance = Utility::unitVector2D(distance);
@@ -77,7 +77,7 @@ void Enemy::updateUpdateableArea(const std::shared_ptr<Node>& _startNode, int de
 	updateableArea->updateVisibleNodes(_startNode, depth);
 }
 
-void Enemy::PassPath(const std::vector<int>& _path)
+void Enemy::PassPath(const std::vector<std::shared_ptr<Node>>& _path)
 {
 	path.clear();
 	path = _path;

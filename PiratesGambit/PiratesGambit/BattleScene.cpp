@@ -488,7 +488,7 @@ void BattleScene::moveUnit()
 	}
 
 	//distance to next node in path
-	sf::Vector2f distance = battleGrid[path[currentNodeInPath]]->getMidPoint() - currentSelectedUnit->getPosition();
+	sf::Vector2f distance = path[currentNodeInPath]->getMidPoint() - currentSelectedUnit->getPosition();
 	float magnitude = Utility::magnitude(distance.x, distance.y);
 
 	if (magnitude < 2.0f) {
@@ -501,7 +501,7 @@ void BattleScene::moveUnit()
 		}
 
 		//updated distance for next node
-		distance = battleGrid[path[currentNodeInPath]]->getMidPoint() - currentSelectedUnit->getPosition();
+		distance = path[currentNodeInPath]->getMidPoint() - currentSelectedUnit->getPosition();
 	}
 
 	currentSelectedUnit->moveUnit(Utility::unitVector2D(distance));
@@ -519,7 +519,7 @@ void BattleScene::finalizeMoveUnit()
 	battleGrid[currentSelectedUnit->getCurrentNodeId()]->updateOccupied(false);
 	battleGrid[currentSelectedUnit->getCurrentNodeId()]->updateAllegiance(NONE);
 	if (currentNodeInPath != 0) {
-		currentSelectedUnit->setCurrentNodeId(path[currentNodeInPath - 1]);
+		currentSelectedUnit->setCurrentNodeId(path[currentNodeInPath - 1]->getID());
 	}
 	battleGrid[currentSelectedUnit->getCurrentNodeId()]->updateOccupied(true);
 	battleGrid[currentSelectedUnit->getCurrentNodeId()]->updateAllegiance(currentSelectedUnit->unitInformation.allegiance);

@@ -97,6 +97,8 @@ private:
 	std::unique_ptr<BattleScene> battleScene;
 	bool battle = false;
 
+	int mapSize = 1;
+
 };
 
 #endif // !GAME_HPP

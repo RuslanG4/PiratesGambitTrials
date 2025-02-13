@@ -93,7 +93,7 @@ private:
 
 	//bug clicking on other enemy shows attack button
 
-	std::vector<int> path;
+	std::vector<std::shared_ptr<BattleGridNode>> path;
 
 	std::unique_ptr<BattleActionUI> UIInterface;
 

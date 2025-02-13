@@ -26,7 +26,7 @@ public:
 		return instance;
 	}
 
-	static std::vector<int> aStarPathFind(const std::vector<std::shared_ptr<NodeType>>& _area, const std::shared_ptr<NodeType>& _start, const std::shared_ptr<BaseNode>& end);
+	static std::vector<std::shared_ptr<NodeType>> aStarPathFind(const std::vector<std::shared_ptr<NodeType>>& _area, const std::shared_ptr<NodeType>& _start, const std::shared_ptr<NodeType>& end);
 	static std::vector<int> BreathSearchNodes(const std::vector<std::shared_ptr<NodeType>>& _area, const std::shared_ptr<NodeType>& _startNode, int _depth);
 	static std::vector<int> BreathSearchEuclydianNodes(const std::vector<std::shared_ptr<NodeType>>& _area, const std::shared_ptr<NodeType>& _startNode, int _depth);
 private:

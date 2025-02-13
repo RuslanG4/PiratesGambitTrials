@@ -15,7 +15,7 @@ Game::Game()
 
 	playerMenu = std::make_unique<PlayerTabMenu>(myPlayer->getArmy(), myPlayer->getInventory());
 
-	myMap = std::make_unique<FullMap>(m_window, 1, myPlayer); //keep 1x1, 2x2
+	myMap = std::make_unique<FullMap>(m_window, mapSize, myPlayer); //keep 1x1, 2x2
 
 	enemy = std::make_shared<Enemy>(sf::Vector2f(25, 25));
 
@@ -266,7 +266,7 @@ void Game::FindCurrentNodeInSameChunk(int _id, const std::shared_ptr<Enemy>& _en
 			if (_enemy->getCurrentNode() != node)
 			{
 				_enemy->setCurrentNode(node);
-				_enemy->updateUpdateableArea(node, 5);
+				_enemy->updateUpdateableArea(node, 4);
 			}
 		}
 	}
@@ -488,15 +488,15 @@ void Game::updateVisableNodes()
 	sf::FloatRect viewBounds(Camera::getInstance().getCamera().getCenter() - Camera::getInstance().getCamera().getSize() / 2.0f, Camera::getInstance().getCamera().getSize());
 
 	int minX = std::max(0, static_cast<int>(viewBounds.left / 32));
-	int maxX = std::min(32 * 1 - 1, static_cast<int>((viewBounds.left + viewBounds.width) / 32));
+	int maxX = std::min(32 * mapSize - 1, static_cast<int>((viewBounds.left + viewBounds.width) / 32));
 	int minY = std::max(0, static_cast<int>(viewBounds.top / 32));
-	int maxY = std::min(32 * 1 - 1, static_cast<int>((viewBounds.top + viewBounds.height) / 32));
+	int maxY = std::min(32 * mapSize - 1, static_cast<int>((viewBounds.top + viewBounds.height) / 32));
 
 	std::set<int> newVisibleNodes;
 
 	for (int y = minY; y <= maxY; ++y) {
 		for (int x = minX; x <= maxX; ++x) {
-			int index = y * (32 * 1) + x;
+			int index = y * (32 * mapSize) + x;
 			newVisibleNodes.insert(index);
 		}
 	}
@@ -510,29 +510,25 @@ void Game::DetectPlayer()
 	{
 		if (node == myPlayer->getCurrentNode() && !myPlayer->isOnBoat())
 		{
-			std::vector<int> path;
+			std::vector<std::shared_ptr<Node>> path;
 
 			auto islands = myMap->getChunks()[enemy->getCurrentChunkID()]->getIslands();
-			std::shared_ptr<Island> searchIsland;  // Using shared pointer instead of unique pointer
+			std::shared_ptr<Island> searchIsland; 
 
-			// Iterate through the islands in the chunk
 			for (auto& island : islands) {
-				// Iterate through the land nodes of the island
 				for (auto& node : island->getLandNodes()) {
-					// Check if the node is the one we're searching for (e.g., the enemy's current node)
 					if (node == enemy->getCurrentNode()) {
-						searchIsland = island;  // Assign the shared pointer directly
-						break;  // Break out of the loop once the island is found
+						searchIsland = island;
+						break;
 					}
 				}
 
-				// If the island is found, no need to continue checking further islands
 				if (searchIsland) {
 					break;
 				}
 			}
 
-			path = PathFindingFunctions<Node>::aStarPathFind(searchIsland->getLandNodes(), enemy->getCurrentNode(), node);
+			path = PathFindingFunctions<Node>::aStarPathFind(searchIsland->getLandNodes(), enemy->getCurrentNode(), myPlayer->getCurrentNode());
 			enemy->PassPath(path);
 			if (!path.empty()) {
 				for (auto& node : myMap->getChunks()[enemy->getCurrentChunkID()]->nodeGrid)

@@ -3,13 +3,13 @@
 #include "PathFindingFunctions.h"  // Make sure the header is included
 
 template <typename NodeType>
-std::vector<int> PathFindingFunctions<NodeType>::aStarPathFind(
+std::vector<std::shared_ptr<NodeType>> PathFindingFunctions<NodeType>::aStarPathFind(
     const std::vector<std::shared_ptr<NodeType>>& _area,
     const std::shared_ptr<NodeType>& _start,
-    const std::shared_ptr<BaseNode>& end)
+    const std::shared_ptr<NodeType>& end)
 {
 	std::priority_queue<std::shared_ptr<NodeType>, std::vector<std::shared_ptr<NodeType>>, Compare<NodeType>> nodeQueue;
-	std::vector<int> path;
+	std::vector<std::shared_ptr<NodeType>> path;
 	std::cout << "start" << _start->getID()<<"\n";
 	std::cout << "end" << end->getID() << "\n";
 	nodeQueue.push(_start);
@@ -28,48 +28,40 @@ std::vector<int> PathFindingFunctions<NodeType>::aStarPathFind(
 		if (!currentTop->hasBeenTraversed()) {
 			currentTop->updateTraversed(true);
 
-			auto neighbours = currentTop->getNodeData().neighbourIDs;
+			auto neighbours = currentTop->getNeighbours();
 
-			for (auto& neighbourID : neighbours) {
-				auto it = std::ranges::find_if(_area, [&neighbourID](const std::shared_ptr<NodeType>& node) {
-					return node->getID() == neighbourID.first; // Match by ID
-					});
+			for (auto& neighbourNode : neighbours) {
 
-				// If a matching node is found
-				if (it != _area.end()) {
-					auto& neighbourNode = *it;
-
-					float movementCost = (neighbourID.second == 1) ? 1.0f : 1.4f; // 1.0 for straight, 1.4 for diagonal
+					float movementCost = (neighbourNode.second == 1) ? 1.0f : 1.4f; // 1.0 for straight, 1.4 for diagonal
 					float newGCost = currentTop->getNodeData().gCost + movementCost;
 
 
-					if ((!neighbourNode->hasBeenTraversed() || newGCost < neighbourNode->getNodeData().gCost ) && !neighbourNode->isOccupied()) {
-						neighbourNode->setPrevious(currentTop);
-						neighbourNode->setGCost(newGCost);
+					if ((!neighbourNode.first->hasBeenTraversed() || newGCost < neighbourNode.first->getNodeData().gCost ) && !neighbourNode.first->isOccupied()) {
+						neighbourNode.first->setPrevious(currentTop);
+						neighbourNode.first->setGCost(newGCost);
 
 						// Calculate the heuristic (keep division by 80)
-						float dx = static_cast<float>(neighbourNode->getPosition().x - end->getPosition().x);
-						float dy = static_cast<float>(neighbourNode->getPosition().y - end->getPosition().y);
+						float dx = static_cast<float>(neighbourNode.first->getPosition().x - end->getPosition().x);
+						float dy = static_cast<float>(neighbourNode.first->getPosition().y - end->getPosition().y);
 				
 						float hCost = (std::abs(dx) + std::abs(dy)) / _start->getNodeData().size;
 
-						neighbourNode->setHCost(hCost);
-						neighbourNode->setFCost(neighbourNode->getNodeData().gCost + neighbourNode->getNodeData().hCost);
+						neighbourNode.first->setHCost(hCost);
+						neighbourNode.first->setFCost(neighbourNode.first->getNodeData().gCost + neighbourNode.first->getNodeData().hCost);
 
-						nodeQueue.push(neighbourNode);
+						nodeQueue.push(neighbourNode.first);
 					}
-				}
+				
 			}
 		}
 	}
 
-	std::shared_ptr<BaseNode> current = end;
+	std::shared_ptr<NodeType> current = end;
 	while (current->getPrevious() != nullptr)
 	{
-		path.push_back(current->getID());
-		current = current->getPrevious();  // Ensure this is allowed with const
+		path.push_back(current);
+		current = std::static_pointer_cast<NodeType>(current->getPrevious());
 	}
-
 
 	std::ranges::reverse(path.begin(), path.end());
 

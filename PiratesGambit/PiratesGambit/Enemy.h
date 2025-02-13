@@ -72,8 +72,8 @@ public:
 	void disembarkBoat(const std::shared_ptr<Node>& _node);
 	bool isOnBoat() const { return onBoat; }
 
-	void PassPath(const std::vector<int>& _path);
-	std::vector<int> getPath() const { return path; }
+	void PassPath(const std::vector<std::shared_ptr<Node>>& _path);
+	std::vector<std::shared_ptr<Node>> getPath() const { return path; }
 
 	//Army
 	const std::unique_ptr<Army>& getArmy() const { return army; }
@@ -90,7 +90,7 @@ private:
 
 	std::shared_ptr<Node> currentNode{ nullptr };
 
-	std::vector<int> path;
+	std::vector<std::shared_ptr<Node>> path;
 
 	std::unique_ptr<Army> army;
 
