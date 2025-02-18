@@ -53,6 +53,7 @@ private:
                 auto newNode = IsPointValid(newPoint);
 
                 if (isNodeValid(newNode)) {
+                    newNode->updateOccupied(true);
                     nodes.push_back(newNode);
                     processQueue.push(newPoint);
                     break;
@@ -63,18 +64,13 @@ private:
     }
     bool isNodeValid(const std::shared_ptr<Node>& _node) const
     {
-	    if(_node->getParentTileType() ==LAND && !_node->IsInBuildingArea() && !_node->isOccupied())
-	    {
-            return true;
-	    }
+        if (_node) {
+            if (_node->getParentTileType() == LAND && !_node->IsInBuildingArea() && !_node->isOccupied())
+            {
+                return true;
+            }
+        }
         return false;
-    }
-
-    bool isValid(const sf::Vector2f& p, const std::vector<sf::Vector2f>& points) {
-        return !std::ranges::any_of(points, [&](const sf::Vector2f& existing) {
-            float distSq = (p.x - existing.x) * (p.x - existing.x) + (p.y - existing.y) * (p.y - existing.y);
-            return distSq < radius * radius;
-            });
     }
 
     std::shared_ptr<Node> IsPointValid(const sf::Vector2f& _point)

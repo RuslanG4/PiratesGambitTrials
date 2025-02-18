@@ -46,7 +46,7 @@ void Island::GenerateTrees(int _clumps)
 	{
 		std::vector<std::shared_ptr<Node>> PossibleNodes = PoissonDiskSampling::generateObjects(landNodes, 5);
 
-		for (size_t i = 0; i < PossibleNodes.size(); ++i)
+		for (int i = 0; i < PossibleNodes.size(); ++i)
 		{
 			gameObjects.push_back(std::make_shared<Tree>());
 			PossibleNodes[i]->updateOccupied(true);
@@ -82,7 +82,7 @@ void Island::GenerateBuildings(int buildingCount)
 		int attempts = 0;
 		const int maxAttempts = 100;
 
-		while (TownArea.size() < 20 && attempts < maxAttempts) {
+		while (TownArea.size() < 16 && attempts < maxAttempts) {
 			attempts++;
 			std::shared_ptr<Node> startNode = landNodes[rand() % landNodes.size()];
 			// Find a valid start node if the current one is not LAND
@@ -96,9 +96,10 @@ void Island::GenerateBuildings(int buildingCount)
 		}
 
 		// If attempts reached maxAttempts, the loop will exit
-		if (TownArea.size() < 20) {
+		if (TownArea.size() < 16) {
 			// Handle failure case here (e.g., logging, default fallback, etc.)
 			std::cout << "Failed to generate town area within 100 attempts.";
+			TownArea.clear();
 		}
 		else {
 			bool placed = false;
@@ -113,7 +114,7 @@ void Island::GenerateBuildings(int buildingCount)
 				if (allNeighboursAreLand && !placed) {
 					auto building = std::make_shared<GunnerBuilding>(playerRef);
 					building->SetPosition(node->getMidPoint());
-					Mark3x3Area(node);
+					Mark3x3Area(node, building);
 					buildings.push_back(std::move(building));
 					placed = true;
 				}
@@ -127,12 +128,14 @@ void Island::GenerateBuildings(int buildingCount)
 	GenerateTrees(5);
 }
 
-void Island::Mark3x3Area(const std::shared_ptr<Node>& _startNode) const
+void Island::Mark3x3Area(const std::shared_ptr<Node>& _startNode, const std::shared_ptr<Building>& _building) const
 {
 	_startNode->updateOccupied(true);
+	_building->AddParentNode(_startNode);
 	for(auto& neighbour : _startNode->getNeighbours())
 	{
 		neighbour.first->updateOccupied(true);
+		_building->AddToOccupiedNodes(neighbour.first->getID());
 	}
 }
 

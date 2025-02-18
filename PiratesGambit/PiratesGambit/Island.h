@@ -19,7 +19,7 @@ public:
 	{
 		playerRef = _playerRef;
 
-		GenerateBuildings(2);
+		GenerateBuildings(3);
 	}
 
 	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
@@ -31,7 +31,7 @@ public:
 	void MarkNodes();
 
 	void GenerateBuildings(int buildingCount);
-	void Mark3x3Area(const std::shared_ptr<Node>& _startNode) const;
+	void Mark3x3Area(const std::shared_ptr<Node>& _startNode, const std::shared_ptr<Building>& _building) const;
 
 	void PlaceEnemy(const std::shared_ptr<Enemy>& _enemy);
 
