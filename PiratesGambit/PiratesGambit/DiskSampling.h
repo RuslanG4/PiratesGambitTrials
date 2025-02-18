@@ -9,12 +9,12 @@ public:
         return instance;
     }
 
-    static std::vector<sf::Vector2f> generate(const std::vector<std::shared_ptr<Node>>& availableNodes) {
+    static std::vector<std::shared_ptr<Node>> generateObjects(const std::vector<std::shared_ptr<Node>>& availableNodes, int amount) {
         PoissonDiskSampling& instance = getInstance();
         int size = availableNodes[0]->getNodeData().size;
-        instance.radius = (size * std::numbers::sqrt2) / 2.f;
+        instance.radius = (size * std::numbers::sqrt2);
         instance.availableNodes = availableNodes;
-        return instance.generatePoints();
+        return instance.generatePoints(amount);
     }
 
     PoissonDiskSampling(const PoissonDiskSampling&) = delete;
@@ -24,36 +24,50 @@ private:
 
     float radius;
     std::vector<std::shared_ptr<Node>> availableNodes;
-    const int k = 30; // Number of attempts per point
+    const int k = 100; // Number of attempts per point
 
-    std::vector<sf::Vector2f> generatePoints() {
-        std::vector<sf::Vector2f> points;
+
+    std::vector<std::shared_ptr<Node>> generatePoints(int amount) {
+        std::vector<std::shared_ptr<Node>> nodes;
         std::queue<sf::Vector2f> processQueue;
         std::random_device rd;
         std::mt19937 gen(rd());
 
-        sf::Vector2f firstPoint = availableNodes[rand() % availableNodes.size()]->getMidPoint();
+        std::shared_ptr<Node> firstNode = availableNodes[rand() % availableNodes.size()];
 
-        points.push_back(firstPoint);
-        processQueue.push(firstPoint);
+        while(!isNodeValid(firstNode))
+        {
+            firstNode = availableNodes[rand() % availableNodes.size()];
+        }
 
-        while (!processQueue.empty() && points.size() < 30) {
+        nodes.push_back(firstNode);
+        processQueue.push(firstNode->getMidPoint());
+
+        while (!processQueue.empty() && nodes.size() < amount) {
             sf::Vector2f point = processQueue.front();
             processQueue.pop();
 
-            for (int i = 0; i < k && points.size() < 30; ++i) {
+            for (int i = 0; i < k && nodes.size() < amount; ++i) {
 
                 sf::Vector2f newPoint = generateRandomPointAround(point, gen);
+                auto newNode = IsPointValid(newPoint);
 
-
-                if (isValid(newPoint, points) && IsPointValid(newPoint)) {
-                    points.push_back(newPoint);
+                if (isNodeValid(newNode)) {
+                    nodes.push_back(newNode);
                     processQueue.push(newPoint);
                     break;
                 }
             }
         }
-        return points;
+        return nodes;
+    }
+    bool isNodeValid(const std::shared_ptr<Node>& _node) const
+    {
+	    if(_node->getParentTileType() ==LAND && !_node->IsInBuildingArea() && !_node->isOccupied())
+	    {
+            return true;
+	    }
+        return false;
     }
 
     bool isValid(const sf::Vector2f& p, const std::vector<sf::Vector2f>& points) {
@@ -63,12 +77,18 @@ private:
             });
     }
 
-    bool IsPointValid(const sf::Vector2f& _point)
+    std::shared_ptr<Node> IsPointValid(const sf::Vector2f& _point)
     {
-        return std::ranges::any_of(availableNodes, [&_point](const auto& node) {
-            return Utility::collisionWithPoint(_point, node->getPosition(), sf::Vector2f(32, 32)) &&
-                node->getParentTileType() == LAND; 
-            });
+        // Loop through available nodes and check the conditions
+        for (const auto& node : availableNodes) {
+            if (Utility::collisionWithPoint(_point, node->getPosition(), sf::Vector2f(32, 32))) {
+                // Return the node if it satisfies the conditions
+                return node;
+            }
+        }
+
+        // Return nullptr if no valid node was found
+        return nullptr;
     }
 
     sf::Vector2f generateRandomPointAround(const sf::Vector2f& p, std::mt19937& gen) {

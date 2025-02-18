@@ -10,6 +10,7 @@
 #include "Enums.h"
 #include"Army.h"
 #include "Coins.h"
+#include "GameObject.h"
 #include"Structs.h"
 
 

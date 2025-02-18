@@ -17,37 +17,24 @@ public:
 	Island() {}
 	Island(const std::vector<std::shared_ptr<Node>>& _land, const std::shared_ptr<Player>& _playerRef) : landNodes(_land)
 	{
-		
-		buildings.push_back(std::make_shared<GunnerBuilding>(_playerRef));
-		buildings.push_back(std::make_shared<BuccaneerBuilding>(_playerRef));
+		playerRef = _playerRef;
 
-		auto randNode = landNodes[rand() % landNodes.size()];
-		while(!allNeighboursAreLand(randNode))
-		{
-			randNode = landNodes[rand() % landNodes.size()];
-		}
-
-			
-		//PlaceBuildings(randNode, 16);
-
-		PlaceBarrels();
-		MarkNodes();
-	};
+		GenerateBuildings(2);
+	}
 
 	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
 	void update(float _dt) const;
 
-	bool CanPlaceObject();
-	void PlaceBuildings(const std::shared_ptr<Node>& _startNode, int range);
-
-	void PlaceBarrels();
+	void GenerateTrees(int _clumps);
 
 	void UnmarkNodes();
 	void MarkNodes();
 
+	void GenerateBuildings(int buildingCount);
+	void Mark3x3Area(const std::shared_ptr<Node>& _startNode) const;
+
 	void PlaceEnemy(const std::shared_ptr<Enemy>& _enemy);
 
-	bool allNeighboursAreLand(const std::shared_ptr<Node>&);
 
 	const std::vector<std::shared_ptr<Node>>& getLandNodes() const { return landNodes; }
 	const std::vector<std::shared_ptr<GameObject>>& getGameObjects() const { return gameObjects; }
@@ -60,8 +47,7 @@ private:
 	//buildings
 	std::vector<std::shared_ptr<Building>> buildings;
 
-
-	int currentBuildingIndex = 0;
-
+	//
+	std::shared_ptr<Player> playerRef;
 };
 

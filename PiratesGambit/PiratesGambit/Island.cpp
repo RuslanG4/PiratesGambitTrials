@@ -2,6 +2,10 @@
 
 void Island::render(const std::unique_ptr<sf::RenderWindow>& window) const
 {
+	for(auto& node:landNodes)
+	{
+		//window->draw(*(node->debugShape));
+	}
 	for (const auto& building : buildings)
 	{
 		building->Render(window);  // Draw buildings with camera view
@@ -36,90 +40,22 @@ void Island::update(float _dt) const
 	}
 }
 
-bool Island::CanPlaceObject()
+void Island::GenerateTrees(int _clumps)
 {
-	return false;
-}
-
-void Island::PlaceBuildings(const std::shared_ptr<Node>& _startNode, int range)
-{
-	UnmarkNodes();
-
-	//std::vector<std::shared_ptr<Node>> PossibleNodes = DiskSampling::BreathFindNodes(landNodes, _startNode, range);
-
-	//while (!PossibleNodes.empty())
-	//{
-	//	// Select a random index
-	//	int randomIndex = rand() % PossibleNodes.size();
-	//	auto node = PossibleNodes[randomIndex];
-
-	//	// Remove the selected node from the list to avoid duplicate checks
-	//	PossibleNodes.erase(PossibleNodes.begin() + randomIndex);
-
-	//	if (allNeighboursAreLand(node))
-	//	{
-	//		buildings[currentBuildingIndex]->SetPosition(node->getMidPoint());
-	//		buildings[currentBuildingIndex]->AddToOccupiedNodes(node->getID());
-	//		buildings[currentBuildingIndex]->AddParentNode(node);
-	//		node->updateOccupied(true);
-
-	//		for (auto& neighbourNode : node->getNeighbours() | std::views::keys)
-	//		{
-	//			buildings[currentBuildingIndex]->AddToOccupiedNodes(neighbourNode->getID());
-	//			neighbourNode->updateOccupied(true);
-	//		}
-
-
-	//		auto currentBuilding = buildings[currentBuildingIndex];
-
-	//		currentBuildingIndex++;
-
-	//		if (currentBuildingIndex >= buildings.size())
-	//		{
-	//			break;
-	//		}
-
-	//		PlaceBuildings(currentBuilding->GetParentNode(), range);
-
-	//		break;
-	//	}
-	//}
-
-}
-
-void Island::PlaceBarrels()
-{
-	std::vector<sf::Vector2f> possiblePositions = PoissonDiskSampling::generate(landNodes);
-
-	for(auto& point : possiblePositions)
+	for(int i =0; i< _clumps; i++)
 	{
-		gameObjects.push_back(std::make_shared<Tree>());
-		gameObjects.back()->setPosition(point);
-	}
+		std::vector<std::shared_ptr<Node>> PossibleNodes = PoissonDiskSampling::generateObjects(landNodes, 5);
 
+		for (size_t i = 0; i < PossibleNodes.size(); ++i)
+		{
+			gameObjects.push_back(std::make_shared<Tree>());
+			PossibleNodes[i]->updateOccupied(true);
+			gameObjects.back()->setPosition(PossibleNodes[i]->getMidPoint());
+		}
+	}
 	std::ranges::sort(gameObjects, [](const std::shared_ptr<GameObject>& obj1, const std::shared_ptr<GameObject>& obj2) {
 		return obj1->GetPosition().y < obj2->GetPosition().y;
 		});
-
-	//bool condition = false;
-	//for (auto& node : landNodes)
-	//{
-	//	if (node->getParentTileType() == LAND && !node->isOccupied())
-	//	{
-	//		for(auto& object : gameObjects)
-	//		{
-	//			object->setPosition(node->getMidPoint());
-	//			object->setNodeId(node->getID());
-	//			node->updateOccupied(true);
-	//			condition = true;
-	//			break;
-	//		}
-	//	}
-	//	if (condition)
-	//	{
-	//		break;
-	//	}
-	//}
 }
 
 void Island::UnmarkNodes()
@@ -138,6 +74,68 @@ void Island::MarkNodes()
 	}
 }
 
+void Island::GenerateBuildings(int buildingCount)
+{
+	for (int i = 0; i < buildingCount; i++) {
+		std::vector<std::shared_ptr<Node>> TownArea;
+
+		int attempts = 0;
+		const int maxAttempts = 100;
+
+		while (TownArea.size() < 20 && attempts < maxAttempts) {
+			attempts++;
+			std::shared_ptr<Node> startNode = landNodes[rand() % landNodes.size()];
+			// Find a valid start node if the current one is not LAND
+			while (startNode->getParentTileType() != LAND && startNode->IsInBuildingArea() && attempts < maxAttempts) {
+				startNode = landNodes[rand() % landNodes.size()];
+			}
+
+			UnmarkNodes();
+			TownArea = PathFindingFunctions<Node>::BreathSearchEuclydianIslands(startNode, 2);
+			
+		}
+
+		// If attempts reached maxAttempts, the loop will exit
+		if (TownArea.size() < 20) {
+			// Handle failure case here (e.g., logging, default fallback, etc.)
+			std::cout << "Failed to generate town area within 100 attempts.";
+		}
+		else {
+			bool placed = false;
+			for (auto& node : TownArea)
+			{
+				node->UpdateIsBuildingArea(true);
+				bool allNeighboursAreLand = std::ranges::all_of(node->getNeighbours(),
+					[](const auto& neighbour) {
+						return neighbour.first->getParentTileType() == LAND;
+					});
+
+				if (allNeighboursAreLand && !placed) {
+					auto building = std::make_shared<GunnerBuilding>(playerRef);
+					building->SetPosition(node->getMidPoint());
+					Mark3x3Area(node);
+					buildings.push_back(std::move(building));
+					placed = true;
+				}
+
+			}
+			MarkNodes();
+		}
+	}
+
+	
+	GenerateTrees(5);
+}
+
+void Island::Mark3x3Area(const std::shared_ptr<Node>& _startNode) const
+{
+	_startNode->updateOccupied(true);
+	for(auto& neighbour : _startNode->getNeighbours())
+	{
+		neighbour.first->updateOccupied(true);
+	}
+}
+
 void Island::PlaceEnemy(const std::shared_ptr<Enemy>& _enemy)
 {
 	for (auto& node : landNodes)
@@ -150,11 +148,4 @@ void Island::PlaceEnemy(const std::shared_ptr<Enemy>& _enemy)
 	}
 }
 
-bool Island::allNeighboursAreLand(const std::shared_ptr<Node>& node)
-{
-	int parentTileType = node->getParentTileType();
 
-	return std::ranges::all_of(node->getNeighbours(), [parentTileType](const auto& neighbour) {
-		return neighbour.first->getParentTileType() == parentTileType;
-		});
-}

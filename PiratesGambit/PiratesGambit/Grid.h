@@ -37,6 +37,8 @@ public:
 	void removeWorldEdges(std::shared_ptr<Node>& _currentNode) const;
 	void UnMarkNodes() const;
 
+
+
 	//Tile rules
 	void FilterTiles(std::shared_ptr<Node>& _currentNode) const;
 	int FollowsPatterns(const std::shared_ptr<Node>& _currentNode, const std::vector<std::vector<std::pair<int, bool>>>& _pattern) const;

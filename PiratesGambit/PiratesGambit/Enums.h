@@ -4,7 +4,8 @@ enum ParentTileType
 {
 	WATER,
 	LAND,
-	SAND
+	SAND,
+	ROAD
 };
 enum TileType
 {

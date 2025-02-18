@@ -131,7 +131,6 @@ void Player::disembarkBoat(const std::shared_ptr<Node>& _node)
 	controller->setCurrentPosition(_node->getMidPoint());
 	myHitbox->setPosition(controller->getPosition());
 	body.setPosition(controller->getPosition());
-
 }
 
 

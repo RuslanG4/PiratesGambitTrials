@@ -262,7 +262,6 @@ void Grid::MapIsland(int _startIndex,bool saveIslandData, const std::unique_ptr<
 		//wait(1);
 
 		auto neighbours = nodeQueue.front()->getNeighbours();
-		std::cout << neighbours.size() << "\n";
 		for (auto& neighbour : neighbours)
 		{
 			if (!neighbour.first->hasBeenTraversed())

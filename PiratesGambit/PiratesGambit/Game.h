@@ -43,12 +43,15 @@ private:
 	void initialise();
 
 	void FindCurrentChunk();
+	void FindCurrentIsland();
 
 	void FindCurrentNodeInSameChunk(int _id, const std::shared_ptr<Enemy>& _enemy) const;
 
 	void FindCurrentNode() const;
 	void FindPlayerCurrentNode() const;
 	void FindEnemyCurrentNode(const std::shared_ptr<Enemy>& _enemy) const;
+
+	void HandleGameObjectCollision();
 
 	void handleKeyInput();
 
@@ -79,7 +82,9 @@ private:
 	std::set<Node*> updateArea{nullptr};
 
 	Node* currentNode;
-	
+
+	std::shared_ptr<Island> currentIsland;
+
 	std::unique_ptr<FullMap> myMap;
 	std::shared_ptr<Player> myPlayer;
 	std::unique_ptr<PlayerTabMenu> playerMenu;

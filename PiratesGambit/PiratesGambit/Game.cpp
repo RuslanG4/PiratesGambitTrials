@@ -169,6 +169,11 @@ void Game::update(double t_deltaTime)
 			detectPlayerClock.restart();  
 		}
 
+		if(currentIsland)
+		{
+			HandleGameObjectCollision();
+		}
+
 		playerMenu->Update();
 
 		enemy->update(t_deltaTime);
@@ -249,6 +254,21 @@ void Game::FindCurrentChunk()
 	}
 }
 
+void Game::FindCurrentIsland()
+{
+	auto currentPlayerNode = myPlayer->getCurrentNode();
+
+	for (auto& island : myMap->getChunks()[myPlayer->getCurrentChunkID()]->getIslands()) {
+
+		for(auto& node : island->getLandNodes())
+		{
+			if (node == currentPlayerNode) {
+				currentIsland = island;
+			}
+		}
+	}
+}
+
 void Game::FindCurrentNodeInSameChunk(int _id, const std::shared_ptr<Enemy>& _enemy) const
 {
 	for (auto& node : myMap->getChunks()[_id]->nodeGrid)
@@ -312,6 +332,17 @@ void Game::FindEnemyCurrentNode(const std::shared_ptr<Enemy>& _enemy) const
 				_enemy->setCurrentNode(node);
 				_enemy->updateUpdateableArea(node, 5);
 			}
+		}
+	}
+}
+
+void Game::HandleGameObjectCollision()
+{
+	for(auto& object : currentIsland->getGameObjects())
+	{
+		if(object->GetHitBox().intersects(myPlayer->GetHitBox()))
+		{
+			myPlayer->getPlayerController()->deflect();
 		}
 	}
 }
@@ -387,6 +418,8 @@ void Game::handleKeyInput()
 					{
 						myPlayer->disembarkBoat(node);
 						playerBoat->setDockedNode(node);
+						FindCurrentNode();
+						FindCurrentIsland();
 					}
 				}
 			}

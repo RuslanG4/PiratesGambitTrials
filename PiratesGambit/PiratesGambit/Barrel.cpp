@@ -13,6 +13,8 @@ Barrel::Barrel()
 	renderableInventory = std::make_unique<BarrelInventory>(4, 2);
 
 	sprite.setTexture(TextureManager::getInstance().getTexture("BARREL"));
+
+	myHitbox = std::make_unique<HitBox>(sf::Vector2f(8, 5));
 }
 
 void Barrel::render(const std::unique_ptr<sf::RenderWindow>& window)

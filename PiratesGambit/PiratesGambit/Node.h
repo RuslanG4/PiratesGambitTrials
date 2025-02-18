@@ -56,11 +56,14 @@ public:
 
 	//Tiles
 	TileType getTileType() const { return m_currentTileType; };
-	ParentTileType getParentTileType() const { return m_currentParentTileType; };
+	ParentTileType getParentTileType() const { return m_currentParentTileType; }
 
 	//Setters
 	void setChunkID(int _id) { m_chunkId = _id; }
 	void setLand(bool _land) { isLand = _land; }
+
+	void UpdateIsBuildingArea(bool _bool) { isBuildingArea = _bool; }
+	bool IsInBuildingArea() const { return isBuildingArea; }
 
 	void setTileType(TileType _type) { m_currentTileType = _type; }
 	void setParentTileType(ParentTileType _type) { m_currentParentTileType = _type; }
@@ -69,8 +72,11 @@ public:
 private:
 	std::vector<std::pair<std::shared_ptr<Node>, int>> m_neighbours;
 
+	std::vector<std::pair<std::shared_ptr<Node>, int>> subDividedNodes;
+
 	int m_chunkId;
 	bool isLand{ false };
+	bool isBuildingArea{ false };
 
 	TileType m_currentTileType;
 	ParentTileType m_currentParentTileType;
