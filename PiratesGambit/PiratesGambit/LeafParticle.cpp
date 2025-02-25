@@ -8,14 +8,14 @@ LeafParticle::LeafParticle(sf::Vector2f _pos)
 
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> speedDist(0.01f, 0.04f);
+    std::uniform_real_distribution<float> speedDist(0.01f, 0.03f);
     std::uniform_real_distribution<float> swayDist(0.1f, 0.5f);
     std::uniform_real_distribution<float> rotationDist(-0.01f, 0.06f);
 
     fallSpeed = speedDist(gen);
     swayAmount = swayDist(gen);
     rotationSpeed = rotationDist(gen);
-    lifetime = static_cast<float>(rand() % 100) / 50.0f; // Random lifespan
+    lifetime = 0.4f + static_cast<float>(rand() % 100) / 50.0f; // Random lifespan
 
     timeAlive = 0.0f;
 }

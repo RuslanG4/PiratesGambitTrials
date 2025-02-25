@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "LeafParticle.h"
 
 class Tree :
     public GameObject
@@ -23,5 +24,7 @@ public:
 	}
 private:
 	float scale, animationTime;
+
+	std::vector<LeafParticle> leafParticles;
 };
 

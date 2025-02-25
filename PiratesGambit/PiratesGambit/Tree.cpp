@@ -39,6 +39,10 @@ void Tree::render(const std::unique_ptr<sf::RenderWindow>& window)
 {
 	window->setView(Camera::getInstance().getCamera());
 	window->draw(sprite);
+	for (auto& leaf : leafParticles)
+	{
+		leaf.Render(window);
+	}
 	//myHitbox->render(window);
 }
 
@@ -58,15 +62,25 @@ void Tree::update(float _dt)
 	if (chance(gen) < 0.001f) // 0.1% chance per frame
 	{
 		sf::Vector2f leafPos = sprite.getPosition();
-		leafPos.y -= 32; 
-		leafPos.x += (rand() % 10 - 5) * scale; 
-		ParticleManager::getInstance().CreateLeafParticle(leafPos);
+		leafPos.y -= (rand() % 20) + 30;
+		leafPos.x += (rand() % 10 - 5) * scale;
+		leafParticles.emplace_back(leafPos);
 	}
+
+	for(auto& leaf : leafParticles)
+	{
+		leaf.Update(_dt);
+	}
+
+	std::erase_if(leafParticles, [](const Particle& particle) {
+		return particle.isMarkedForDeletion();
+		});
+
 }
 
 void Tree::animateRandomizedTreeSway(float _dt)
 {
-	float swayAmount = 0.04f;  // Max sway variation (4%)
+	float swayAmount = 0.02f;  // Max sway variation (2%)
 	float swaySpeed = 2.0f;
 
 	float offset = static_cast<float>(sprite.getPosition().x) * 0.1f;
