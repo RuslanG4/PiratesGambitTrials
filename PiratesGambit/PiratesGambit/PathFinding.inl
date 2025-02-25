@@ -176,14 +176,16 @@ inline std::vector<std::shared_ptr<NodeType>> PathFindingFunctions<NodeType>::Br
 		auto neighbours = currentNode->getNeighbours();
 		for (auto& neighbour : neighbours)
 		{
-			if (!neighbour.first->hasBeenTraversed() && neighbour.second % 2 != 0 && neighbour.first->getParentTileType() == LAND)
+			if (!neighbour.first->hasBeenTraversed() && neighbour.second % 2 != 0 && neighbour.first->getParentTileType() == LAND && !neighbour.first->IsInBuildingArea())
 			{
+				if(neighbour.first->isOccupied())
+					continue;
 				neighbour.first->updateTraversed(true);
 
 				float dx = static_cast<float>(neighbour.first->getPosition().x - startPos.x);
 				float dy = static_cast<float>(neighbour.first->getPosition().y - startPos.y);
 
-				float distance = std::hypotf(dx / 80, dy / 80);
+				float distance = std::hypotf(dx / 32, dy / 32);
 
 				nodeQueue.emplace(neighbour.first, std::ceil(distance)); // std::ceil for rounding up
 

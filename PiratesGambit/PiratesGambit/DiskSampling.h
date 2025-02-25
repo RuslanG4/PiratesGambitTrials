@@ -14,7 +14,7 @@ public:
         return instance.findValidAreas(availableNodes, treeAmount);
     }
 
-    static std::shared_ptr<Node> placeBarrel(const std::vector<std::shared_ptr<Node>>& availableNodes) {
+    static std::shared_ptr<Node> placeBarrel(std::vector<std::shared_ptr<Node>>& availableNodes) {
         ObjectPlacement& instance = getInstance();
         return instance.findBarrelArea(availableNodes);
     }
@@ -25,29 +25,33 @@ public:
 private:
     ObjectPlacement() = default;
 
-    std::shared_ptr<Node> findBarrelArea(const std::vector<std::shared_ptr<Node>>& availableNodes)
+    std::shared_ptr<Node> findBarrelArea(std::vector<std::shared_ptr<Node>>& availableNodes)
     {
         std::random_device rd;
         std::mt19937 gen(rd());
-        int randomIndex = rand() % availableNodes.size();
-        std::shared_ptr<Node> startNode = availableNodes[randomIndex];
 
         while (!availableNodes.empty()) {
+            int randomIndex = std::rand() % availableNodes.size();
+            std::shared_ptr<Node> startNode = availableNodes[randomIndex];
+
             for (auto& node : availableNodes) {
                 node->updateTraversed(false);
             }
 
             std::vector<std::shared_ptr<Node>> area = PathFindingFunctions<Node>::BreathSearchEuclydianIslands(startNode, 2);
 
-            if (area.size() >= 23 && !startNode->isOccupied() && !startNode->IsInBuildingArea() && startNode->getParentTileType() != SAND) {
-                return startNode; 
+            if (area.size() >= 9 && isAreaValid(area)) {
+                for (auto& node : area) {
+                    //node->debugShape->setFillColor(sf::Color::Yellow);
+                    node->UpdateIsBuildingArea(true);
+                }
+                return startNode;
             }
 
-            randomIndex = rand() % availableNodes.size();
-            startNode = availableNodes[randomIndex];
+            availableNodes.erase(availableNodes.begin() + randomIndex);
         }
 
-        return nullptr; 
+        return nullptr;
     }
 
 
@@ -57,56 +61,49 @@ private:
         std::mt19937 gen(rd());
 
         while (!availableNodes.empty() && placedTrees.size() < treeAmount) {
-
-            int randomIndex = rand() % availableNodes.size();
-
+            int randomIndex = std::rand() % availableNodes.size();
             std::shared_ptr<Node> startNode = availableNodes[randomIndex];
 
-               while (startNode->getParentTileType() != LAND)
-               {
-                   availableNodes.erase(availableNodes.begin() + randomIndex);
+            while (startNode->getParentTileType() != LAND) {
+                availableNodes.erase(availableNodes.begin() + randomIndex);
+                if (availableNodes.empty()) {
+                    return placedTrees;
+                }
+                randomIndex = std::rand() % availableNodes.size();
+                startNode = availableNodes[randomIndex];
+            }
 
-                   randomIndex = rand() % availableNodes.size();
-                   startNode = availableNodes[randomIndex];
-               }
-              if(availableNodes.empty())
-              {
-                  return placedTrees;
-              }
-
-                
-
-            for(auto& node : availableNodes)
-            {
+            for (auto& node : availableNodes) {
                 node->updateTraversed(false);
             }
 
-            std::vector<std::shared_ptr<Node>> area = PathFindingFunctions<Node>::BreathSearchEuclydianIslands(startNode, 2);
+            std::vector<std::shared_ptr<Node>> area = PathFindingFunctions<Node>::BreathSearchEuclydianIslands(startNode, 3);
 
-            if (area.size() > 10 && isAreaValid(area)) {
+            if (area.size() >= 15 && isAreaValid(area)) {
+                for (auto& node : area) {
+                    node->UpdateIsBuildingArea(true);
+                }
 
-                std::vector<std::shared_ptr<Node>> sampledNodes = samplePoints(area, treeAmount - placedTrees.size(), gen);
-
+                std::vector<std::shared_ptr<Node>> sampledNodes = samplePoints(area, treeAmount, gen);
                 placedTrees.insert(placedTrees.end(), sampledNodes.begin(), sampledNodes.end());
 
-                for (const auto& node : sampledNodes) {
-                    auto it = std::find(availableNodes.begin(), availableNodes.end(), node);
-                    if (it != availableNodes.end()) {
-                        availableNodes.erase(it);
-                    }
-                }
+                availableNodes.erase(
+                    std::ranges::remove_if(availableNodes, [&sampledNodes](const std::shared_ptr<Node>& node) {
+                        return std::ranges::find(sampledNodes, node) != sampledNodes.end();
+                        }).begin(), availableNodes.end()
+                        );
             }
             else {
                 availableNodes.erase(availableNodes.begin() + randomIndex);
             }
-
         }
+
         return placedTrees;
     }
 
     bool isAreaValid(const std::vector<std::shared_ptr<Node>>& area) const {
         for (const auto& node : area) {
-            if (node->isOccupied()) {
+            if (node->isOccupied() || node->IsInBuildingArea()) {
                 return false;
             }
         }

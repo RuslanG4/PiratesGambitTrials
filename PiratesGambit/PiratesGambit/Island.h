@@ -19,14 +19,17 @@ public:
 	{
 		playerRef = _playerRef;
 
-		GenerateBuildings(3);
+		GenerateIsland();
 	}
 
 	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
 	void update(float _dt) const;
 
+	void GenerateIsland();
 	void GenerateTrees(std::vector<std::shared_ptr<Node>>& _nodes);
+	void GenerateBuildings(int buildingCount, std::vector<std::shared_ptr<Node>>& _nodes);
 	void GenerateBarrels(std::vector<std::shared_ptr<Node>>& _nodes);
+
 
 	int CalculateTreeCount(int landNodes);
 	std::vector<int> DistributeTreesIntoClumps(int totalTrees);
@@ -35,8 +38,9 @@ public:
 
 	void UnmarkNodes();
 	void MarkNodes();
+	void MarkAreaAroundTrees();
+	void ClearIslandNodeConditions();
 
-	void GenerateBuildings(int buildingCount);
 	void Mark3x3Area(const std::shared_ptr<Node>& _startNode, const std::shared_ptr<Building>& _building) const;
 
 	void PlaceEnemy(const std::shared_ptr<Enemy>& _enemy);

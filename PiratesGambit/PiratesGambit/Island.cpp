@@ -40,6 +40,22 @@ void Island::update(float _dt) const
 	}
 }
 
+void Island::GenerateIsland()
+{
+	std::vector<std::shared_ptr<Node>> validNodes = landNodes;
+
+	GenerateTrees(validNodes);
+	validNodes = landNodes;
+	GenerateBuildings(3, validNodes);
+	validNodes = landNodes;
+	GenerateBarrels(validNodes);
+	MarkNodes(); //for other chunks
+
+	std::ranges::sort(gameObjects, [](const std::shared_ptr<GameObject>& obj1, const std::shared_ptr<GameObject>& obj2) {
+		return obj1->GetPosition().y < obj2->GetPosition().y;
+		});
+}
+
 void Island::GenerateTrees(std::vector<std::shared_ptr<Node>>& _nodes)
 {
 	int totalTrees = CalculateTreeCount(_nodes.size());
@@ -54,45 +70,60 @@ void Island::GenerateTrees(std::vector<std::shared_ptr<Node>>& _nodes)
 		{
 			gameObjects.push_back(std::make_shared<Tree>());
 			node->updateOccupied(true);
+			gameObjects.back()->setNodeId(node->getID());
 			gameObjects.back()->setPosition(node->getMidPoint());
 		}
 	}
 
-	GenerateBarrels(_nodes);
+	ClearIslandNodeConditions();
+	MarkAreaAroundTrees();
+}
 
-	std::ranges::sort(gameObjects, [](const std::shared_ptr<GameObject>& obj1, const std::shared_ptr<GameObject>& obj2) {
-		return obj1->GetPosition().y < obj2->GetPosition().y;
-		});
+void Island::MarkAreaAroundTrees()
+{
+	for (auto& gameObject : gameObjects) {
+		auto it = std::ranges::find_if(landNodes, [&gameObject](const std::shared_ptr<Node>& node) {
+			return node->getID() == gameObject->getID();
+			});
+
+		if (it != landNodes.end()) {
+			auto& node = *it;
+			for (auto& neighbour : node->getNeighbours()) {
+				neighbour.first->UpdateIsBuildingArea(true);
+				//neighbour.first->debugShape->setFillColor(sf::Color::Red);
+			}
+		}
+	}
+
 }
 
 void Island::GenerateBarrels(std::vector<std::shared_ptr<Node>>& _nodes)
 {
 	int totalBarrels = CalculateBarrelCount(_nodes.size());
 
-	for(int i =0; i< 2; i++)
+	for(int i =0; i< totalBarrels; i++)
 	{
 		auto node = ObjectPlacement::placeBarrel(_nodes);
 
-		gameObjects.push_back(std::make_shared<Barrel>());
-		node->updateOccupied(true);
-		gameObjects.back()->setNodeId(node->getID());
-		gameObjects.back()->setPosition(node->getMidPoint());
+		if (node) {
+			gameObjects.push_back(std::make_shared<Barrel>());
+			node->updateOccupied(true);
+			gameObjects.back()->setNodeId(node->getID());
+			gameObjects.back()->setPosition(node->getMidPoint());
+		}
 	}
 
 }
 
 int Island::CalculateTreeCount(int landNodes)
 {
-	if (landNodes < 30) return 0;  // No trees if island is too small
-	if (landNodes > 1000) landNodes = 1000;  // Cap at 1000 land nodes
+	if (landNodes < 30) return 0;
 
-	// Adjust the density factor based on the size of the island
-	double densityFactor = 0.20 * (1.0 - (landNodes - 30) / 970.0);
-	int treeCount = static_cast<int>(landNodes * densityFactor);
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<double> dist(0.08, 0.12); 
 
-	// Ensure tree count doesn't exceed 25% of the land nodes
-	treeCount = std::min(treeCount, static_cast<int>(landNodes * 0.25));
-
+	int treeCount = static_cast<int>(landNodes * dist(gen));
 	return treeCount;
 }
 
@@ -108,7 +139,7 @@ std::vector<int> Island::DistributeTreesIntoClumps(int totalTrees)
 	int remainingTrees = totalTrees;
 
 	while (remainingTrees >= 5) {
-		int clumpSize = std::min(remainingTrees, std::uniform_int_distribution<int>(4, 7)(gen));
+		int clumpSize = std::min(remainingTrees, std::uniform_int_distribution<int>(3, 5)(gen));
 		clumps.push_back(clumpSize);
 		remainingTrees -= clumpSize;
 	}
@@ -126,15 +157,12 @@ std::vector<int> Island::DistributeTreesIntoClumps(int totalTrees)
 
 int Island::CalculateBarrelCount(int islandSize)
 {
-	// Minimum and maximum barrel count
 	const int minBarrels = 1;
 	const int maxBarrels = 4;
 
-	// Set the thresholds for island sizes
-	const int minIslandSize = 50;  // Size below which 1 barrel is placed
-	const int maxIslandSize = 500; // Size above which 4 barrels can be placed
+	const int minIslandSize = 50;  
+	const int maxIslandSize = 500; 
 
-	// Clamp island size to be between minIslandSize and maxIslandSize
 	islandSize = std::max(minIslandSize, std::min(islandSize, maxIslandSize));
 
 	// Calculate the barrel count based on the island size, mapped to 1-4 range
@@ -161,10 +189,16 @@ void Island::MarkNodes()
 	}
 }
 
-void Island::GenerateBuildings(int buildingCount)
+void Island::ClearIslandNodeConditions()
 {
-	std::vector<std::shared_ptr<Node>> validLandNodes = landNodes;
-	std::vector<std::shared_ptr<Node>> remainingNodes = landNodes;
+	for (auto& node : landNodes)
+	{
+		node->UpdateIsBuildingArea(false);
+	}
+}
+
+void Island::GenerateBuildings(int buildingCount, std::vector<std::shared_ptr<Node>>& _nodes)
+{
 	for (int i = 0; i < buildingCount; i++) {
 		std::vector<std::shared_ptr<Node>> TownArea;
 		std::shared_ptr<Node> startNode = nullptr;
@@ -172,41 +206,36 @@ void Island::GenerateBuildings(int buildingCount)
 		int attempts = 0;
 		const int maxAttempts = 100;
 
-		while (!validLandNodes.empty() && attempts < maxAttempts)
+		while (!_nodes.empty() && attempts < maxAttempts)
 		{
-			int randomIndex = rand() % validLandNodes.size();
-			startNode = validLandNodes[randomIndex];
+			int randomIndex = rand() % _nodes.size();
+			startNode = _nodes[randomIndex];
 
 			if (startNode->getParentTileType() == LAND && !startNode->IsInBuildingArea()) {
 				UnmarkNodes();
-				TownArea = PathFindingFunctions<Node>::BreathSearchEuclydianIslands(startNode, 2);
+				TownArea = PathFindingFunctions<Node>::BreathSearchEuclydianIslands(startNode, 3);
 
-				if (TownArea.size() >= 30) {
+				if (TownArea.size() >= 17) {
 					break;
 				}
 			}
 
-			validLandNodes.erase(validLandNodes.begin() + randomIndex);
+			_nodes.erase(_nodes.begin() + randomIndex);
 			attempts++;
 		}
 
-		if (TownArea.size() < 30) {
+		if (TownArea.size() < 17) {
 			std::cout << "Failed to generate town area within 100 attempts.\n";
 			TownArea.clear();
 			continue; 
 		}
-
+		
 			bool placed = false;
 			for (auto& node : TownArea)
 			{
+				//node->debugShape->setFillColor(sf::Color::Blue);
 				node->UpdateIsBuildingArea(true);
-				node->debugShape->setFillColor(sf::Color::Red);
-				bool allNeighboursAreLand = std::ranges::all_of(node->getNeighbours(),
-					[](const auto& neighbour) {
-						return neighbour.first->getParentTileType() == LAND;
-					});
-
-				if (allNeighboursAreLand && !placed) {
+				if (!placed) {
 					auto building = std::make_shared<GunnerBuilding>(playerRef);
 					building->SetPosition(node->getMidPoint());
 					Mark3x3Area(node, building);
@@ -216,18 +245,7 @@ void Island::GenerateBuildings(int buildingCount)
 
 			}
 
-			std::erase_if(remainingNodes, [&](const std::shared_ptr<Node>& node) {
-				return std::ranges::any_of(TownArea, [&](const std::shared_ptr<Node>& townNode) {
-					return node == townNode;
-					});
-				});
 	}
-
-
-	GenerateTrees(remainingNodes);
-
-
-	MarkNodes();
 }
 
 void Island::Mark3x3Area(const std::shared_ptr<Node>& _startNode, const std::shared_ptr<Building>& _building) const
@@ -245,7 +263,7 @@ void Island::PlaceEnemy(const std::shared_ptr<Enemy>& _enemy)
 {
 	for (auto& node : landNodes)
 	{
-		if (node->getParentTileType() == LAND && !node->isOccupied())
+		if (!node->isOccupied())
 		{
 			_enemy->updatePosition(node->getMidPoint());
 			break;

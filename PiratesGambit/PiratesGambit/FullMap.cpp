@@ -51,7 +51,7 @@ void FullMap::initChunks(const std::unique_ptr<sf::RenderWindow>& window)
 		{
 			int chunkIndex = chunkY * mapSize + chunkX;
 
-			std::vector<std::shared_ptr<Node>> chunkNodes = populateChunk(chunkX, chunkY, 67); //populate start chunk to apply cellular later
+			std::vector<std::shared_ptr<Node>> chunkNodes = populateChunk(chunkX, chunkY, 69); //populate start chunk to apply cellular later
 			//Grid* chunk = new Grid(chunkNodes);
 			std::unique_ptr<Grid> chunk = std::make_unique<Grid>(chunkNodes, playerRef);
 			chunk->ApplyCellular(7, window);

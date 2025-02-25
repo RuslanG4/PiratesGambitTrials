@@ -59,7 +59,7 @@ void Tree::update(float _dt)
 	static std::mt19937 gen(rd());
 	std::uniform_real_distribution<float> chance(0.f, 1.f);
 
-	if (chance(gen) < 0.001f) // 0.1% chance per frame
+	if (chance(gen) < 0.002f) // 0.1% chance per frame
 	{
 		sf::Vector2f leafPos = sprite.getPosition();
 		leafPos.y -= (rand() % 20) + 30;
@@ -80,7 +80,7 @@ void Tree::update(float _dt)
 
 void Tree::animateRandomizedTreeSway(float _dt)
 {
-	float swayAmount = 0.02f;  // Max sway variation (2%)
+	float swayAmount = 0.03f;  // Max sway variation (2%)
 	float swaySpeed = 2.0f;
 
 	float offset = static_cast<float>(sprite.getPosition().x) * 0.1f;
