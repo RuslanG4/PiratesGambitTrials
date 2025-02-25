@@ -248,6 +248,12 @@ void Island::GenerateBuildings(int buildingCount, std::vector<std::shared_ptr<No
 	}
 }
 
+
+/// <summary>
+/// Marks a 3x3 area for a building so that the nodes can be interacted with
+/// </summary>
+/// <param name="_startNode">Start node</param>
+/// <param name="_building">Building to hold node IDs</param>
 void Island::Mark3x3Area(const std::shared_ptr<Node>& _startNode, const std::shared_ptr<Building>& _building) const
 {
 	_startNode->updateOccupied(true);
