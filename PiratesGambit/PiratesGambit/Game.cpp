@@ -221,7 +221,7 @@ void Game::render()
 		playerBoat->render(m_window);
 
 		enemy->render(m_window);
-		ParticleManager::getInstance().render(m_window);
+		
 		myMap->getChunks()[myPlayer->getCurrentChunkID()]->drawGameObject(m_window);
 		playerMenu->Render(m_window);
 	}else
@@ -229,8 +229,8 @@ void Game::render()
 		battleScene->render(m_window);
 	}
 
+	ParticleManager::getInstance().render(m_window);
 	m_window->setView(Camera::getInstance().getCamera());
-	
 
 	battleTransition.Render(m_window);
 	m_window->display();
