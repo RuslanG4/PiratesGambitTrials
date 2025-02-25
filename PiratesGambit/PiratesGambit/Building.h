@@ -20,8 +20,11 @@ public:
 
 	std::vector<int> GetOccupiedNodeIds() { return OccupiedNodes; }
 	std::shared_ptr<Node> GetParentNode() const { return parentNode; }
+
+	sf::FloatRect GetHitBox()const { return myHitbox->GetGlobalBounds(); }
 protected:
 	sf::Sprite buildingSprite;
+	std::unique_ptr<HitBox> myHitbox;
 
 	std::shared_ptr<Node> parentNode;
 

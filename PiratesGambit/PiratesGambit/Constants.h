@@ -45,6 +45,10 @@ const char* const SKULL_ICON = "ASSETS\\IMAGES\\ICONS\\SKULL.png";
 const char* const ACTION_BORDER = "ASSETS\\IMAGES\\Borders\\ActionButton.png";
 const char* const BULKY_BORDER = "ASSETS\\IMAGES\\Borders\\BulkyBorder.png";
 
+//UI
+const char* const PLAYER_MENU_UI = "ASSETS\\IMAGES\\UI\\RectangleBox_96x96.png";
+const char* const ARMY_MENU_UI = "ASSETS\\IMAGES\\UI\\CharacterBox_56x57.png";
+
 
 const char* const PIRATE_CAPTAIN = "ASSETS\\IMAGES\\Pirates\\MiniPirateCaptain.png";
 const char* const BUCCANEER_SPRITE = "ASSETS\\IMAGES\\Pirates\\MiniPirateCrew.png";
@@ -54,6 +58,7 @@ const char* const HARPOONER_SPRITE = "ASSETS\\IMAGES\\Pirates\\MiniPirateHarpoon
 //PARTICLES
 const char* const BLOOD_PARTICLES = "ASSETS\\IMAGES\\Particles\\BLOOD_PARTICLES.png";
 const char* const SHOOT_PARTICLES = "ASSETS\\IMAGES\\Particles\\848.png";
+const char* const LEAF_PARTICLE = "ASSETS\\IMAGES\\Particles\\leaf.png";
 
 //BUILDINGS
 const char* const BUILDINGS = "ASSETS\\IMAGES\\Buildings\\Buildings.png";

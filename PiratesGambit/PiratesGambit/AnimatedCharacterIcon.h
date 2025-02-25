@@ -13,6 +13,7 @@ public:
 
 protected:
 	sf::Sprite sprite;
+	sf::Sprite background;
 
 	AnimationState animationState;
 };

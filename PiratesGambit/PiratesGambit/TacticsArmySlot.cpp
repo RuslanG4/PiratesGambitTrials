@@ -39,10 +39,11 @@ void TacticsArmySlot::init()
 
 	boxBorder.setTexture(TextureManager::getInstance().getTexture("BULKY_BORDER"));
 	boxBorder.setOrigin(24, 24);
+	boxBorder.setColor(sf::Color(194, 159, 106)); //border color
 
 	teamColor.setSize(sf::Vector2f(48, 48));
 	teamColor.setOrigin(24, 24);
-	teamColor.setFillColor(sf::Color::Black);
+	teamColor.setFillColor(sf::Color(84, 76, 84));
 
 	unitAmountUI.renderUnitAmount = false;
 }

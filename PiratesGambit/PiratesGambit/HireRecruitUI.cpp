@@ -10,41 +10,41 @@ HireRecruitUI::HireRecruitUI(const std::shared_ptr<Player>& _playerRef, UnitName
 	nameOfUnitSelling = _type;
 
 	sf::Vector2f size = { SCREEN_WIDTH - 600, SCREEN_HEIGHT - 300 };
-	background.setSize(size);
-	background.setOrigin(size.x / 2, size.y / 2);
-	background.setFillColor(sf::Color::Red);
+	background.setTexture(TextureManager::getInstance().getTexture("PLAYER_MENU_UI"));
+	background.setScale(14,10);
+	background.setOrigin(48,48);
 	background.setPosition(sf::Vector2f(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
 
-	costPerTroop = std::make_unique<InfoBoxUI>(200, 150);
+	costPerTroop = std::make_unique<InfoBoxUI>(4, 3);
 
 	costPerTroop->setText("Cost Per Troop", "500");
 	costPerTroop->SetIcon(TextureManager::getInstance().getTexture("COIN_ICON"));
 	costPerTroop->setPosition(sf::Vector2f(background.getPosition().x - 400, background.getPosition().y));
 
-	totalCost = std::make_unique<InfoBoxUI>(200, 150);
+	totalCost = std::make_unique<InfoBoxUI>(4, 3);
 
 	totalCost->setText("Total Cost", "0");
 	totalCost->SetIcon(TextureManager::getInstance().getTexture("COIN_ICON"));
 	totalCost->setPosition(sf::Vector2f(background.getPosition().x + 200, background.getPosition().y));
 
-	available = std::make_unique<InfoBoxUI>(150,75);
+	available = std::make_unique<InfoBoxUI>(3, 1.5);
 
 	available->setText("Available", std::to_string(unitsLeftReference));
-	available->setPosition(sf::Vector2f(background.getPosition().x + 30, background.getPosition().y));
+	available->setPosition(sf::Vector2f(background.getPosition().x + 24, background.getPosition().y));
 
-	recruit = std::make_unique<InfoBoxUI>(150, 75);
+	recruit = std::make_unique<InfoBoxUI>(3,1.5);
 
 	recruit->setText("Recruit", "0");
-	recruit->setPosition(sf::Vector2f(background.getPosition().x  - 180, background.getPosition().y));
+	recruit->setPosition(sf::Vector2f(background.getPosition().x  - 170, background.getPosition().y));
 
-	amountSlider = std::make_unique<Slider>(background.getPosition().x - 180, background.getPosition().y + 80,360, 40, 1, unitsLeftReference);
+	amountSlider = std::make_unique<Slider>(background.getPosition().x - 170, background.getPosition().y + 95,360, 40, 1, unitsLeftReference);
 
-	purchase = std::make_unique<IconButton>(75, 75, 
-		sf::Vector2f(background.getPosition().x + 60, background.getPosition().y + 150),
+	purchase = std::make_unique<IconButton>(1.5, 1.5,
+		sf::Vector2f(background.getPosition().x + 60, background.getPosition().y + 200),
 		TextureManager::getInstance().getTexture("MONEY_ICON"));
 
-	cancel = std::make_unique<IconButton>(75, 75,
-		sf::Vector2f(background.getPosition().x - 120, background.getPosition().y + 150),
+	cancel = std::make_unique<IconButton>(1.5, 1.5,
+		sf::Vector2f(background.getPosition().x - 60, background.getPosition().y + 200),
 		TextureManager::getInstance().getTexture("MONEY_ICON"));
 
 	SetCharacter();

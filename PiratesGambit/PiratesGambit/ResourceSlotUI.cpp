@@ -4,28 +4,30 @@
 
 ResourceSlotUI::ResourceSlotUI(const sf::Texture& _icon, int _amount)
 {
-	boundingBox.setSize(sf::Vector2f(96, 32));
-	boundingBox.setOutlineColor(sf::Color::Black);
-	boundingBox.setFillColor(sf::Color::Transparent);
-	boundingBox.setOutlineThickness(3);
+	//boundingBox.setSize(sf::Vector2f(96, 32));
+	//boundingBox.setOutlineColor(sf::Color::Black);
+	//boundingBox.setFillColor(sf::Color::Transparent);
+	//boundingBox.setOutlineThickness(3);
 
-	textBoundingBox.setSize(sf::Vector2f(62, 32));
-	textBoundingBox.setOutlineColor(sf::Color::Black);
-	textBoundingBox.setFillColor(sf::Color::Transparent);
-	textBoundingBox.setOutlineThickness(3);
+	//textBoundingBox.setSize(sf::Vector2f(62, 32));
+	//textBoundingBox.setOutlineColor(sf::Color::Black);
+	//textBoundingBox.setFillColor(sf::Color::Transparent);
+	//textBoundingBox.setOutlineThickness(3);
 
 	amountText.setFont(TextureManager::getInstance().getFont());
-	amountText.setCharacterSize(32U);
+	amountText.setCharacterSize(30U);
 	amountText.setString(std::to_string(_amount));
 
 	iconSprite.setTexture(_icon);
+	iconSprite.setScale(2, 2);
 }
 
 void ResourceSlotUI::SetPosition(sf::Vector2f _pos)
 {
 	boundingBox.setPosition(_pos);
 	iconSprite.setPosition(boundingBox.getPosition());
-	textBoundingBox.setPosition(sf::Vector2f(iconSprite.getGlobalBounds().left + iconSprite.getGlobalBounds().width, boundingBox.getPosition().y));
+	textBoundingBox.setPosition(sf::Vector2f(iconSprite.getGlobalBounds().left + iconSprite.getGlobalBounds().width + 50,
+		iconSprite.getPosition().y+ iconSprite.getGlobalBounds().height / 2));
 	CenterText();
 }
 

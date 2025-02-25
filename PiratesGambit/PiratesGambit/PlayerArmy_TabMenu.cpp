@@ -1,14 +1,14 @@
 #include "PlayerArmy_TabMenu.h"
 
-PlayerArmy_TabMenu::PlayerArmy_TabMenu(const std::unique_ptr<Army>& _army, sf::RectangleShape _pos)
+PlayerArmy_TabMenu::PlayerArmy_TabMenu(const std::unique_ptr<Army>& _army, sf::Sprite _pos)
 {
-	background.setSize(sf::Vector2f(520, 280));
-	background.setFillColor(sf::Color::Red);
+	background.setTexture(TextureManager::getInstance().getTexture("ARMY_MENU_UI"));
+	background.setScale(9, 5);
 
-	sf::Vector2f position = sf::Vector2f(_pos.getPosition().x + 50, _pos.getGlobalBounds().height - 280);
+	sf::Vector2f position = sf::Vector2f(_pos.getPosition().x + 84, _pos.getGlobalBounds().height - 280);
 	background.setPosition(position);
 
-	position = background.getPosition() + sf::Vector2f(80,80);
+	position = background.getPosition() + sf::Vector2f(74,80);
 
 	for (int i = 0; i < 7; i++) //7 is max
 	{

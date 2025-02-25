@@ -11,7 +11,7 @@ class Node : public BaseNode
 public:
 	//copy
 	Node(const Node& other, bool island) :
-		BaseNode(other.nodeData), isLand(island)
+		BaseNode(other.nodeData)
 	{
 		if (other.drawableNode) {
 			drawableNode = std::make_shared<sf::Sprite>(*other.drawableNode);
@@ -52,7 +52,7 @@ public:
 
 	//Getters
 	int getChunkId() const { return m_chunkId; }
-	bool getIsLand() const { return isLand; }
+
 
 	//Tiles
 	TileType getTileType() const { return m_currentTileType; };
@@ -60,7 +60,6 @@ public:
 
 	//Setters
 	void setChunkID(int _id) { m_chunkId = _id; }
-	void setLand(bool _land) { isLand = _land; }
 
 	void UpdateIsBuildingArea(bool _bool) { isBuildingArea = _bool; }
 	bool IsInBuildingArea() const { return isBuildingArea; }
@@ -75,7 +74,7 @@ private:
 	std::vector<std::pair<std::shared_ptr<Node>, int>> subDividedNodes;
 
 	int m_chunkId;
-	bool isLand{ false };
+
 	bool isBuildingArea{ false };
 
 	TileType m_currentTileType;

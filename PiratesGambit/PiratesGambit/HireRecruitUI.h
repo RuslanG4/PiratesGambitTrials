@@ -37,7 +37,7 @@ private:
 
 	int unitsLeftReference;
 
-	sf::RectangleShape background;
+	sf::Sprite background;
 
 	sf::Sprite unit;
 	AnimationState animationState;

@@ -19,7 +19,10 @@ public:
 	bool hasBeenTraversed() const { return  nodeData.traversed; }
 	sf::Vector2f getMovementVector() const { return movementVector; }
 	NodeData& getNodeData() { return nodeData; }
-	const std::shared_ptr<BaseNode>& getPrevious() { return previousNode; };
+	const std::shared_ptr<BaseNode>& getPrevious() { return previousNode; }
+
+	bool getIsLand() const { return nodeData.isLand; }
+	void setLand(bool _land) { nodeData.isLand = _land; }
 
 	sf::Vector2f getPosition() const { return { static_cast<float>(nodeData.gridX), static_cast<float>(nodeData.gridY) }; }
 	sf::Vector2f getMidPoint() const { return  { static_cast<float>(nodeData.gridX + (nodeData.size / 2)), static_cast<float>(nodeData.gridY + (nodeData.size / 2)) }; }

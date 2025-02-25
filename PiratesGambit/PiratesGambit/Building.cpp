@@ -6,6 +6,7 @@ void Building::Render(const std::unique_ptr<sf::RenderWindow>& _window) const
 {
 	_window->setView(Camera::getInstance().getCamera());
 	_window->draw(buildingSprite);
+	//myHitbox->render(_window);
 }
 
 void Building::RenderUI(const std::unique_ptr<sf::RenderWindow>& _window) const
@@ -37,4 +38,5 @@ void Building::Interact()
 void Building::SetPosition(sf::Vector2f _pos)
 {
 	buildingSprite.setPosition(_pos);
+	myHitbox->setPosition(_pos);
 }

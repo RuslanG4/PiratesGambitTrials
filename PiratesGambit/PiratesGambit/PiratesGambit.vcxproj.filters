@@ -330,6 +330,9 @@
     <ClCompile Include="Tree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LeafParticle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -552,6 +555,9 @@
       <Filter>Header Files\Player</Filter>
     </ClInclude>
     <ClInclude Include="Tree.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="LeafParticle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

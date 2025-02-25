@@ -12,13 +12,13 @@ void Enemy::render(const std::unique_ptr<sf::RenderWindow>& window) const
 	if (!onBoat)
 	{
 		window->draw(body);
-		myHitbox->render(window);
-		for (auto& node : updateableArea->getUpdateableNodes())
-		{
-			if (node != nullptr) {
-				window->draw(*(node->debugShape));
-			}
-		}
+		//myHitbox->render(window);
+		//for (auto& node : updateableArea->getUpdateableNodes())
+		//{
+		//	if (node != nullptr) {
+		//		window->draw(*(node->debugShape));
+		//	}
+		//}
 	}
 }
 

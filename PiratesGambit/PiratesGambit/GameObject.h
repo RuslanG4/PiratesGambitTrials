@@ -10,7 +10,7 @@ public:
 	virtual void render(const std::unique_ptr<sf::RenderWindow>& window) = 0;
 	virtual void RenderUI(const std::unique_ptr<sf::RenderWindow>& _window) = 0;
 	virtual void interact() = 0;
-	virtual void update() = 0;
+	virtual void update(float _dt) = 0;
 
 	void setPosition(sf::Vector2f _pos) { sprite.setPosition(_pos); myHitbox->setPosition(_pos); }
 	void setNodeId(int _id) { currentNodeId = _id; }
@@ -23,8 +23,9 @@ public:
 
 protected:
 	sf::Sprite sprite;
-	std::unique_ptr<Inventory> inventory;
 	int currentNodeId;
+
+	std::unique_ptr<Inventory> inventory;
 	std::unique_ptr<RenderableInventory> renderableInventory;
 
 	std::unique_ptr<HitBox> myHitbox;

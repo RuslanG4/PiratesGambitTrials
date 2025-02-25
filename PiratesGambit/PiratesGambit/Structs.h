@@ -7,6 +7,7 @@ struct NodeData
 
 	bool occupied{ false };
 	bool traversed{ false };
+	bool isLand{ false };
 
 	int gridX; 
 	int gridY; 

@@ -14,7 +14,7 @@ public:
 	
 	void interact() override;
 
-	void update() override;
+	void update(float _dt) override;
 
 	void checkMousePosition();
 	void RenderUI(const std::unique_ptr<sf::RenderWindow>& _window) override;

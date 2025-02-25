@@ -12,4 +12,7 @@ GunnerBuilding::GunnerBuilding(const std::shared_ptr<Player>& _playerRef)
 
 	unitsAmount = 7;
 	buildingUI = std::make_unique<HireRecruitUI>(_playerRef, GUNNER, unitsAmount);
+
+	myHitbox = std::make_unique<HitBox>(sf::Vector2f(80, 80));
+
 }

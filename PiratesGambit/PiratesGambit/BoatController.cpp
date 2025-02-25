@@ -13,7 +13,7 @@ void BoatController::decreaseSpeed()
 void BoatController::increaseRotation()
 {
 	previousRotation = m_rotation;
-	m_rotation += 0.25;
+	m_rotation += 5.25;
 	if (m_rotation >= 360.0)
 	{
 		m_rotation = 0;
@@ -23,7 +23,7 @@ void BoatController::increaseRotation()
 void BoatController::decreaseRotation()
 {
 	previousRotation = m_rotation;
-	m_rotation -= 0.25;
+	m_rotation -= 5.25;
 	if (m_rotation <= 0.0)
 	{
 		m_rotation = 359.0;

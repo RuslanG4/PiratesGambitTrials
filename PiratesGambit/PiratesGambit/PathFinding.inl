@@ -36,11 +36,10 @@ std::vector<std::shared_ptr<NodeType>> PathFindingFunctions<NodeType>::aStarPath
 					float newGCost = currentTop->getNodeData().gCost + movementCost;
 
 
-					if ((!neighbourNode.first->hasBeenTraversed() || newGCost < neighbourNode.first->getNodeData().gCost ) && !neighbourNode.first->isOccupied()) {
+					if ((!neighbourNode.first->hasBeenTraversed() || newGCost < neighbourNode.first->getNodeData().gCost ) && !neighbourNode.first->isOccupied() && neighbourNode.first->getIsLand()) {
 						neighbourNode.first->setPrevious(currentTop);
 						neighbourNode.first->setGCost(newGCost);
 
-						// Calculate the heuristic (keep division by 80)
 						float dx = static_cast<float>(neighbourNode.first->getPosition().x - end->getPosition().x);
 						float dy = static_cast<float>(neighbourNode.first->getPosition().y - end->getPosition().y);
 				

@@ -21,9 +21,12 @@ public:
 	const std::vector<std::unique_ptr<InventoryItem>>& getItems() const { return inventory; }
 	static bool isInventoryOpen() { return inventoryOpen; }
 
+	bool IsPersonalOpen() const { return personalOpen; }
+
 private:
 	std::vector<std::unique_ptr<InventoryItem>> inventory;
 
+	bool personalOpen{ false };
 	static bool inventoryOpen;
 };
 

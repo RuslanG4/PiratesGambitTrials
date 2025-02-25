@@ -25,7 +25,13 @@ public:
 	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
 	void update(float _dt) const;
 
-	void GenerateTrees(int _clumps);
+	void GenerateTrees(std::vector<std::shared_ptr<Node>>& _nodes);
+	void GenerateBarrels(std::vector<std::shared_ptr<Node>>& _nodes);
+
+	int CalculateTreeCount(int landNodes);
+	std::vector<int> DistributeTreesIntoClumps(int totalTrees);
+
+	int CalculateBarrelCount(int islandSize);
 
 	void UnmarkNodes();
 	void MarkNodes();

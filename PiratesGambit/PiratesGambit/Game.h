@@ -52,6 +52,7 @@ private:
 	void FindEnemyCurrentNode(const std::shared_ptr<Enemy>& _enemy) const;
 
 	void HandleGameObjectCollision();
+	void HandleBuildingCollision();
 
 	void handleKeyInput();
 

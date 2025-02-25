@@ -502,7 +502,7 @@ void Grid::determineLandTileType(const std::shared_ptr<Node>& _node) const
 	{
 	case 0:
 		_node->setParentTileType(LAND);
-		if(random < 70)
+		if(random < 40)
 		{
 			_node->setTileType(GRASSY_LAND);
 		}

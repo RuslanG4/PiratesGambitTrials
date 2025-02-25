@@ -1,102 +1,128 @@
 #pragma once
-#include"Includes.h"
+#include "Includes.h"
 #include "Node.h"
 
-class PoissonDiskSampling {
+class ObjectPlacement {
 public:
-    static PoissonDiskSampling& getInstance() {
-        static PoissonDiskSampling instance;
+    static ObjectPlacement& getInstance() {
+        static ObjectPlacement instance;
         return instance;
     }
 
-    static std::vector<std::shared_ptr<Node>> generateObjects(const std::vector<std::shared_ptr<Node>>& availableNodes, int amount) {
-        PoissonDiskSampling& instance = getInstance();
-        int size = availableNodes[0]->getNodeData().size;
-        instance.radius = (size * std::numbers::sqrt2);
-        instance.availableNodes = availableNodes;
-        return instance.generatePoints(amount);
+    static std::vector<std::shared_ptr<Node>> placeTrees(std::vector<std::shared_ptr<Node>>& availableNodes, int treeAmount) {
+        ObjectPlacement& instance = getInstance();
+        return instance.findValidAreas(availableNodes, treeAmount);
     }
 
-    PoissonDiskSampling(const PoissonDiskSampling&) = delete;
-    PoissonDiskSampling& operator=(const PoissonDiskSampling&) = delete;
+    static std::shared_ptr<Node> placeBarrel(const std::vector<std::shared_ptr<Node>>& availableNodes) {
+        ObjectPlacement& instance = getInstance();
+        return instance.findBarrelArea(availableNodes);
+    }
+
+    ObjectPlacement(const ObjectPlacement&) = delete;
+    ObjectPlacement& operator=(const ObjectPlacement&) = delete;
+
 private:
-    PoissonDiskSampling() = default;
+    ObjectPlacement() = default;
 
-    float radius;
-    std::vector<std::shared_ptr<Node>> availableNodes;
-    const int k = 100; // Number of attempts per point
+    std::shared_ptr<Node> findBarrelArea(const std::vector<std::shared_ptr<Node>>& availableNodes)
+    {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        int randomIndex = rand() % availableNodes.size();
+        std::shared_ptr<Node> startNode = availableNodes[randomIndex];
+
+        while (!availableNodes.empty()) {
+            for (auto& node : availableNodes) {
+                node->updateTraversed(false);
+            }
+
+            std::vector<std::shared_ptr<Node>> area = PathFindingFunctions<Node>::BreathSearchEuclydianIslands(startNode, 2);
+
+            if (area.size() >= 23 && !startNode->isOccupied() && !startNode->IsInBuildingArea() && startNode->getParentTileType() != SAND) {
+                return startNode; 
+            }
+
+            randomIndex = rand() % availableNodes.size();
+            startNode = availableNodes[randomIndex];
+        }
+
+        return nullptr; 
+    }
 
 
-    std::vector<std::shared_ptr<Node>> generatePoints(int amount) {
-        std::vector<std::shared_ptr<Node>> nodes;
-        std::queue<sf::Vector2f> processQueue;
+    std::vector<std::shared_ptr<Node>> findValidAreas(std::vector<std::shared_ptr<Node>>& availableNodes, int treeAmount) {
+        std::vector<std::shared_ptr<Node>> placedTrees;
         std::random_device rd;
         std::mt19937 gen(rd());
 
-        std::shared_ptr<Node> firstNode = availableNodes[rand() % availableNodes.size()];
+        while (!availableNodes.empty() && placedTrees.size() < treeAmount) {
 
-        while(!isNodeValid(firstNode))
-        {
-            firstNode = availableNodes[rand() % availableNodes.size()];
-        }
+            int randomIndex = rand() % availableNodes.size();
 
-        nodes.push_back(firstNode);
-        processQueue.push(firstNode->getMidPoint());
+            std::shared_ptr<Node> startNode = availableNodes[randomIndex];
 
-        while (!processQueue.empty() && nodes.size() < amount) {
-            sf::Vector2f point = processQueue.front();
-            processQueue.pop();
+               while (startNode->getParentTileType() != LAND)
+               {
+                   availableNodes.erase(availableNodes.begin() + randomIndex);
 
-            for (int i = 0; i < k && nodes.size() < amount; ++i) {
+                   randomIndex = rand() % availableNodes.size();
+                   startNode = availableNodes[randomIndex];
+               }
+              if(availableNodes.empty())
+              {
+                  return placedTrees;
+              }
 
-                sf::Vector2f newPoint = generateRandomPointAround(point, gen);
-                auto newNode = IsPointValid(newPoint);
+                
 
-                if (isNodeValid(newNode)) {
-                    newNode->updateOccupied(true);
-                    nodes.push_back(newNode);
-                    processQueue.push(newPoint);
-                    break;
+            for(auto& node : availableNodes)
+            {
+                node->updateTraversed(false);
+            }
+
+            std::vector<std::shared_ptr<Node>> area = PathFindingFunctions<Node>::BreathSearchEuclydianIslands(startNode, 2);
+
+            if (area.size() > 10 && isAreaValid(area)) {
+
+                std::vector<std::shared_ptr<Node>> sampledNodes = samplePoints(area, treeAmount - placedTrees.size(), gen);
+
+                placedTrees.insert(placedTrees.end(), sampledNodes.begin(), sampledNodes.end());
+
+                for (const auto& node : sampledNodes) {
+                    auto it = std::find(availableNodes.begin(), availableNodes.end(), node);
+                    if (it != availableNodes.end()) {
+                        availableNodes.erase(it);
+                    }
                 }
             }
+            else {
+                availableNodes.erase(availableNodes.begin() + randomIndex);
+            }
+
         }
-        return nodes;
+        return placedTrees;
     }
-    bool isNodeValid(const std::shared_ptr<Node>& _node) const
-    {
-        if (_node) {
-            if (_node->getParentTileType() == LAND && !_node->IsInBuildingArea() && !_node->isOccupied())
-            {
-                return true;
+
+    bool isAreaValid(const std::vector<std::shared_ptr<Node>>& area) const {
+        for (const auto& node : area) {
+            if (node->isOccupied()) {
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
-    std::shared_ptr<Node> IsPointValid(const sf::Vector2f& _point)
-    {
-        // Loop through available nodes and check the conditions
-        for (const auto& node : availableNodes) {
-            if (Utility::collisionWithPoint(_point, node->getPosition(), sf::Vector2f(32, 32))) {
-                // Return the node if it satisfies the conditions
-                return node;
-            }
+    std::vector<std::shared_ptr<Node>> samplePoints(std::vector<std::shared_ptr<Node>>& area, int maxSamples, std::mt19937& gen) {
+        std::vector<std::shared_ptr<Node>> sampledNodes;
+        std::ranges::shuffle(area.begin(), area.end(), gen);
+
+        for (auto& node : area) {
+            if (sampledNodes.size() >= maxSamples) break;
+            node->updateOccupied(true);
+            sampledNodes.push_back(node);
         }
 
-        // Return nullptr if no valid node was found
-        return nullptr;
-    }
-
-    sf::Vector2f generateRandomPointAround(const sf::Vector2f& p, std::mt19937& gen) {
-        std::uniform_real_distribution<float> distRadius(radius, 2 * radius);
-        std::uniform_real_distribution<float> distAngle(0, 2 * Utility::PI); //0-360
-
-        float r = distRadius(gen);
-
-        float theta = distAngle(gen);
-
-        sf::Vector2f newPoint = { p.x + r * std::cos(theta), p.y + r * std::sin(theta) };
-
-        return newPoint;
+        return sampledNodes;
     }
 };

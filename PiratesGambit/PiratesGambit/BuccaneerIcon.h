@@ -7,6 +7,7 @@ public:
 	BuccaneerIcon(sf::Vector2f _pos)
 	{
 		sprite.setTexture(TextureManager::getInstance().getTexture("BUCCANEER"));
+		background.setTexture(TextureManager::getInstance().getTexture("ARMY_MENU_UI"));
 
 		sf::IntRect rectSourceSprite;
 		rectSourceSprite.height = 32;
@@ -19,6 +20,10 @@ public:
 		sprite.setOrigin(16, 24);
 
 		sprite.setPosition(_pos);
+
+		background.setOrigin(28, 28);
+		background.setScale(4, 4);
+		background.setPosition(_pos);
 	}
 	void Update(float _dt) override;
 

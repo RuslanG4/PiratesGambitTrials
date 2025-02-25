@@ -32,11 +32,13 @@ std::unique_ptr<InventoryItem> Inventory::removeItem(ItemName _name)
 void Inventory::openInventory()
 {
 	inventoryOpen = true;
+	personalOpen = true;
 }
 
 void Inventory::closeInventory()
 {
 	inventoryOpen = false;
+	personalOpen = false;
 }
 
 bool Inventory::combineItems(const std::unique_ptr<InventoryItem>& _item)
@@ -58,7 +60,7 @@ bool Inventory::combineItems(const std::unique_ptr<InventoryItem>& _item)
 
 void Inventory::update()
 {
-	if (sf::Keyboard::isKeyPressed((sf::Keyboard::Escape)) && inventoryOpen)
+	if (sf::Keyboard::isKeyPressed((sf::Keyboard::Escape)) && IsPersonalOpen())
 	{
 		closeInventory();
 	}

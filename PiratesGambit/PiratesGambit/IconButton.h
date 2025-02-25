@@ -5,7 +5,7 @@
 class IconButton
 {
 public:
-	IconButton(float _width, float _height, sf::Vector2f _pos, const sf::Texture& _texture);
+	IconButton(float _scaleX, float _scaleY, sf::Vector2f _pos, const sf::Texture& _texture);
 
 	void Render(const std::unique_ptr<sf::RenderWindow>& _window) const;
 	void Update();
@@ -19,8 +19,10 @@ public:
 	void ResetTrigger();
 
 private:
-	std::unique_ptr<sf::RectangleShape> Border;
+	sf::Sprite backGround;
 	sf::Sprite icon;
+
+	float scaleX, scaleY;
 
 	sf::Clock buttonTimer;
 	bool waitPeriod{ false };

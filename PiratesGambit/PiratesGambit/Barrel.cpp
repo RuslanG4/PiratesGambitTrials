@@ -7,20 +7,25 @@
 Barrel::Barrel()
 {
 	inventory = std::make_unique<Inventory>();
+
 	inventory->addItem(std::make_unique<CannonBallItem>(6));
 	inventory->addItem(std::make_unique<Coins>(6000));
 
 	renderableInventory = std::make_unique<BarrelInventory>(4, 2);
 
 	sprite.setTexture(TextureManager::getInstance().getTexture("BARREL"));
+	sprite.setScale(1.15f, 1.15f);
+	sprite.setOrigin(12, 12);
 
-	myHitbox = std::make_unique<HitBox>(sf::Vector2f(8, 5));
+	myHitbox = std::make_unique<HitBox>(sf::Vector2f(8, 15));
+	myHitbox->setPosition(sprite.getPosition());
 }
 
 void Barrel::render(const std::unique_ptr<sf::RenderWindow>& window)
 {
 	window->setView(Camera::getInstance().getCamera());
 	window->draw(sprite);
+	//myHitbox->render(window);
 }
 
 void Barrel::interact()
@@ -37,10 +42,12 @@ void Barrel::interact()
 	
 }
 
-void Barrel::update()
+void Barrel::update(float _dt)
 {
 	inventory->update();
-	checkMousePosition();
+	if (inventory->IsPersonalOpen()) {
+		checkMousePosition();
+	}
 }
 
 void Barrel::checkMousePosition()
@@ -60,7 +67,6 @@ void Barrel::checkMousePosition()
 
 void Barrel::RenderUI(const std::unique_ptr<sf::RenderWindow>& _window)
 {
-	_window->setView(_window->getDefaultView());
 	renderableInventory->render(_window);
 }
 

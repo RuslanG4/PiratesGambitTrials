@@ -92,8 +92,12 @@ private:
         loadTexture("BULKY_BORDER", BULKY_BORDER);
         //Particles
         loadTexture("BLOOD_PARTICLES", BLOOD_PARTICLES);
-        loadTexture("SHOOT_PARTICLES", SHOOT_PARTICLES);
+        loadTexture("SHOOT_PARTICLES", SHOOT_PARTICLES); 
+    	loadTexture("LEAF_PARTICLE", LEAF_PARTICLE);
 
+        //UI 
+        loadTexture("PLAYER_MENU_UI", PLAYER_MENU_UI);
+        loadTexture("ARMY_MENU_UI", ARMY_MENU_UI);
         //bg
         loadTexture("background", BACKGROUND);
 

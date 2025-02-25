@@ -4,6 +4,10 @@
 
 void RenderableInventory::passItems(const std::vector<std::unique_ptr<InventoryItem>>& _currentItems)
 {
+	for(auto& slot : inventorySlots)
+	{
+		slot->clearSlot();
+	}
 	for(int i =0; i < _currentItems.size(); i++)
 	{
 		inventorySlots[i]->updateSlot(true);

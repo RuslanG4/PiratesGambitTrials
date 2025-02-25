@@ -40,7 +40,7 @@ void Player::render(const std::unique_ptr<sf::RenderWindow>& window) const
 	if (!onBoat)
 	{
 		window->draw(body);
-		myHitbox->render(window);
+		//myHitbox->render(window);
 	}
 
 	//debug

@@ -172,6 +172,7 @@ void Game::update(double t_deltaTime)
 		if(currentIsland)
 		{
 			HandleGameObjectCollision();
+			HandleBuildingCollision();
 		}
 
 		playerMenu->Update();
@@ -228,6 +229,7 @@ void Game::render()
 		battleScene->render(m_window);
 	}
 
+	m_window->setView(Camera::getInstance().getCamera());
 	ParticleManager::getInstance().render(m_window);
 
 	battleTransition.Render(m_window);
@@ -347,12 +349,23 @@ void Game::HandleGameObjectCollision()
 	}
 }
 
+void Game::HandleBuildingCollision()
+{
+	for (auto& building : currentIsland->getBuildings())
+	{
+		if (building->GetHitBox().intersects(myPlayer->GetHitBox()))
+		{
+			myPlayer->getPlayerController()->deflect();
+		}
+	}
+}
+
 
 void Game::handleKeyInput()
 {
 	if (!Inventory::isInventoryOpen() && !HireRecruitUI::IsUIOpen()) {
 		sf::Vector2f desiredVelocity{ 0,0 };
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		{
 			if (myPlayer->isOnBoat())
 			{
@@ -363,7 +376,7 @@ void Game::handleKeyInput()
 				desiredVelocity.y--;
 			}
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		{
 			if (myPlayer->isOnBoat())
 			{
@@ -374,7 +387,7 @@ void Game::handleKeyInput()
 				desiredVelocity.y++;
 			}
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
 			if (myPlayer->isOnBoat())
 			{
@@ -385,7 +398,7 @@ void Game::handleKeyInput()
 				desiredVelocity.x--;
 			}
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
 			if (myPlayer->isOnBoat())
 			{
@@ -469,6 +482,7 @@ void Game::interactWithObjects()
 				{
 					gameObject->interact();
 					currentObjectInteract = gameObject;
+					break;
 				}
 			}
 		}

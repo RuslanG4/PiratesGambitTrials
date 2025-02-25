@@ -18,7 +18,7 @@ void Boat::processKeyUp(sf::Event t_event)
 void Boat::render(const std::unique_ptr<sf::RenderWindow>& window) const
 {
 	window->draw(boatSprite);
-	myHitbox->render(window);
+	//myHitbox->render(window);
 	for (auto& cannonball : cannonBalls) {
 		cannonball->render(window);
 	}

@@ -182,6 +182,7 @@
     <ClCompile Include="InventoryItem.cpp" />
     <ClCompile Include="InventorySlot.cpp" />
     <ClCompile Include="Island.cpp" />
+    <ClCompile Include="LeafParticle.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Node.cpp" />
@@ -255,6 +256,7 @@
     <ClInclude Include="InventoryItem.h" />
     <ClInclude Include="InventorySlot.h" />
     <ClInclude Include="Island.h" />
+    <ClInclude Include="LeafParticle.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Particle.h" />

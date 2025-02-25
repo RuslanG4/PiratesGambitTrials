@@ -9,6 +9,7 @@ public:
 	BattleGridNode(const NodeData& _data) :
 		 BaseNode(_data)
 	{
+		nodeData.isLand = true;
 		debugShape = std::make_unique<sf::RectangleShape>();
 		walkableArea = std::make_unique<sf::RectangleShape>();
 

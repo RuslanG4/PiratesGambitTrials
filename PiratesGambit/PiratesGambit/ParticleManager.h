@@ -3,6 +3,7 @@
 #include"Includes.h"
 #include "Particle.h"
 #include "ShotParticle.h"
+#include"LeafParticle.h"
 
 class ParticleManager
 {
@@ -23,6 +24,11 @@ public:
     void CreateShootParticle(sf::Vector2f _pos)
     {
         particles.push_back(std::make_unique<ShotParticle>(_pos));
+    }
+
+    void CreateLeafParticle(sf::Vector2f _pos)
+    {
+        particles.push_back(std::make_unique<LeafParticle>(_pos));
     }
 
     void update(float _dt) {

@@ -21,9 +21,11 @@ public:
 	static bool isMenuOpen() { return isOpen; }
 
 private:
-	sf::RectangleShape background;
+	sf::Sprite background;
 	std::unique_ptr<PlayerArmy_TabMenu> armyMenu;
 	std::unique_ptr<Resources_TabMenu> resourcesMenu;
+
+	sf::Clock buttonClock;
 
 	static bool isOpen;
 };

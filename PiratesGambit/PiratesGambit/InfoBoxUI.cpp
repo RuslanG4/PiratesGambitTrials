@@ -1,6 +1,6 @@
 #include "InfoBoxUI.h"
 
-InfoBoxUI::InfoBoxUI(float _width, float _height) : width(_width), height(_height)
+InfoBoxUI::InfoBoxUI(float _scaleX, float _scaleY)
 {
 	topText.setFont(TextureManager::getInstance().getFont());
 	topText.setCharacterSize(20);
@@ -8,17 +8,14 @@ InfoBoxUI::InfoBoxUI(float _width, float _height) : width(_width), height(_heigh
 	bottomText.setFont(TextureManager::getInstance().getFont());
 	bottomText.setCharacterSize(20);
 
-	Border = std::make_unique<sf::RectangleShape>(sf::Vector2f(width, height));
-
-	Border->setFillColor(sf::Color::Transparent);
-	Border->setOutlineColor(sf::Color::Black);
-	Border->setOutlineThickness(3);
+    backgroundSprite.setTexture(TextureManager::getInstance().getTexture("ARMY_MENU_UI"));
+    backgroundSprite.setScale(_scaleX, _scaleY);
 
 }
 
 void InfoBoxUI::Render(const std::unique_ptr<sf::RenderWindow>& _window) const
 {
-	_window->draw(*Border);
+	_window->draw(backgroundSprite);
 	_window->draw(topText);
 	if (hasIcon && icon.getTexture() != nullptr) {
 		_window->draw(icon);
@@ -46,7 +43,7 @@ void InfoBoxUI::SetIcon(const sf::Texture& _texture)
 
 void InfoBoxUI::setPosition(sf::Vector2f _pos)
 {
-	Border->setPosition(_pos);
+    backgroundSprite.setPosition(_pos);
     UpdateLayout();
 }
 
@@ -64,7 +61,7 @@ void InfoBoxUI::RemoveIcon()
 void InfoBoxUI::UpdateLayout()
 {
     // Get the size of the border
-    sf::Vector2f borderSize = Border->getSize();
+    sf::Vector2f borderSize = backgroundSprite.getGlobalBounds().getSize();
 
     // Scale and position the top text
     float topTextMaxWidth = borderSize.x * 0.9f; // Leave some padding
@@ -73,8 +70,8 @@ void InfoBoxUI::UpdateLayout()
         topText.setCharacterSize(static_cast<unsigned int>(topText.getCharacterSize() * topTextScaleFactor));
     }
     topText.setPosition(
-        Border->getPosition().x + (borderSize.x / 2 - topText.getLocalBounds().width / 2),
-        Border->getPosition().y + 5
+        backgroundSprite.getPosition().x + (borderSize.x / 2 - topText.getLocalBounds().width / 2),
+        backgroundSprite.getPosition().y + 5
     );
 
     // Scale and position the bottom text
@@ -84,8 +81,8 @@ void InfoBoxUI::UpdateLayout()
         bottomText.setCharacterSize(static_cast<unsigned int>(bottomText.getCharacterSize() * bottomTextScaleFactor));
     }
     bottomText.setPosition(
-        Border->getPosition().x + (borderSize.x / 2 - bottomText.getLocalBounds().width / 2),
-        Border->getPosition().y + borderSize.y - 30
+        backgroundSprite.getPosition().x + (borderSize.x / 2 - bottomText.getLocalBounds().width / 2),
+        backgroundSprite.getPosition().y + borderSize.y - 30
     );
 
     // If there is an icon, scale and position it
@@ -95,8 +92,8 @@ void InfoBoxUI::UpdateLayout()
         icon.setScale(iconScaleFactor, iconScaleFactor);
 
         icon.setPosition(
-            Border->getPosition().x + (borderSize.x / 2 - icon.getGlobalBounds().width / 2),
-            Border->getPosition().y + (borderSize.y / 2 - icon.getGlobalBounds().height / 2)
+            backgroundSprite.getPosition().x + (borderSize.x / 2 - icon.getGlobalBounds().width / 2),
+            backgroundSprite.getPosition().y + (borderSize.y / 2 - icon.getGlobalBounds().height / 2)
         );
     }
 }

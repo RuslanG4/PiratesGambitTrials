@@ -4,8 +4,9 @@ bool PlayerTabMenu::isOpen = false;
 
 PlayerTabMenu::PlayerTabMenu(const std::unique_ptr<Army>& _army, const std::unique_ptr<Inventory>& _inventory)
 {
-	background.setSize(sf::Vector2f(620, 800));
-	background.setFillColor(sf::Color::Blue);
+	background.setTexture(TextureManager::getInstance().getTexture("PLAYER_MENU_UI"));
+	background.setScale(7, 8);
+
 	background.setPosition(100, 100);
 	armyMenu = std::make_unique<PlayerArmy_TabMenu>(_army, background);
 	resourcesMenu = std::make_unique<Resources_TabMenu>(_inventory, background);
@@ -16,7 +17,7 @@ void PlayerTabMenu::Update()
 	if(isOpen)
 	{
 		armyMenu->Update();
-		if (sf::Keyboard::isKeyPressed((sf::Keyboard::Escape)))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		{
 			CloseMenu();
 		}
@@ -55,3 +56,4 @@ void PlayerTabMenu::UpdateResourcesUI(const std::unique_ptr<Inventory>& _invento
 {
 	resourcesMenu->UpdateMenu(_inventory, background);
 }
+
