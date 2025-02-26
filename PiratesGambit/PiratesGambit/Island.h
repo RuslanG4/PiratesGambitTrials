@@ -78,11 +78,6 @@ public:
 	int CalculateBarrelCount(int islandSize);
 
 	/// <summary>
-	/// Clears nodes for Breath search
-	/// </summary>
-	void UnmarkNodes();
-
-	/// <summary>
 	/// Marks nodes for continuation of chunk generations as there may be more islands
 	/// </summary>
 	void MarkNodes();

@@ -17,7 +17,7 @@ Game::Game()
 
 	myMap = std::make_unique<FullMap>(m_window, mapSize, myPlayer); //keep 1x1, 2x2
 
-	enemy = std::make_shared<Enemy>(sf::Vector2f(25, 25));
+	enemy = std::make_shared<Enemy>(sf::Vector2f(25, 25), myPlayer);
 
 	playerBoat = std::make_shared<Boat>(sf::Vector2f(25, 25), myPlayer);
 
@@ -162,13 +162,6 @@ void Game::update(double t_deltaTime)
 			myPlayer->update(t_deltaTime);
 		}
 
-		if (detectPlayerClock.getElapsedTime().asSeconds() >= 1.0f)
-		{
-			DetectPlayer();  
-
-			detectPlayerClock.restart();  
-		}
-
 		if(currentIsland)
 		{
 			HandleGameObjectCollision();
@@ -178,11 +171,8 @@ void Game::update(double t_deltaTime)
 		playerMenu->Update();
 
 		enemy->update(t_deltaTime);
-		enemy->MoveUnit(myMap->getChunks()[enemy->getCurrentChunkID()]->nodeGrid);
 
 		transitionToBattleMode();
-
-		
 	}
 	else if(battleTransition.IsTransitionActive())
 	{
@@ -549,43 +539,6 @@ void Game::updateVisableNodes()
 	}
 
 	visibleNodes = std::move(newVisibleNodes);
-}
-
-void Game::DetectPlayer()
-{
-	for (auto& node : enemy->getUpdateableArea()->getUpdateableNodes())
-	{
-		if (node == myPlayer->getCurrentNode() && !myPlayer->isOnBoat())
-		{
-			std::vector<std::shared_ptr<Node>> path;
-
-			auto islands = myMap->getChunks()[enemy->getCurrentChunkID()]->getIslands();
-			std::shared_ptr<Island> searchIsland; 
-
-			for (auto& island : islands) {
-				for (auto& node : island->getLandNodes()) {
-					if (node == enemy->getCurrentNode()) {
-						searchIsland = island;
-						break;
-					}
-				}
-
-				if (searchIsland) {
-					break;
-				}
-			}
-
-			path = PathFindingFunctions<Node>::aStarPathFind(searchIsland->getLandNodes(), enemy->getCurrentNode(), myPlayer->getCurrentNode());
-			enemy->PassPath(path);
-			if (!path.empty()) {
-				for (auto& node : myMap->getChunks()[enemy->getCurrentChunkID()]->nodeGrid)
-				{
-					node->updateTraversed(false);
-				}
-			}
-
-		}
-	}
 }
 
 

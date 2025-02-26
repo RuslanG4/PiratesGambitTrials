@@ -172,15 +172,6 @@ int Island::CalculateBarrelCount(int islandSize)
 	return barrelCount;
 }
 
-
-void Island::UnmarkNodes()
-{
-	for(auto& node : landNodes)
-	{
-		node->updateTraversed(false);
-	}
-}
-
 void Island::MarkNodes()
 {
 	for (auto& node : landNodes)
@@ -212,7 +203,6 @@ void Island::GenerateBuildings(int buildingCount, std::vector<std::shared_ptr<No
 			startNode = _nodes[randomIndex];
 
 			if (startNode->getParentTileType() == LAND && !startNode->IsInBuildingArea()) {
-				UnmarkNodes();
 				TownArea = PathFindingFunctions<Node>::BreathSearchEuclydianIslands(startNode, 3);
 
 				if (TownArea.size() >= 17) {

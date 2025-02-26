@@ -160,10 +160,6 @@ void BattleScene::addNeighbours(int _currentNodeId) const
 void BattleScene::createMoveableArea(const std::shared_ptr<PirateUnit>& _unit)
 {
 	walkableNodesIDs = PathFindingFunctions<BattleGridNode>::BreathSearchEuclydianNodes(battleGrid ,battleGrid[_unit->getCurrentNodeId()], _unit->getSpeed());
-	for (auto& node : battleGrid)
-	{
-		node->updateTraversed(false);
-	}
 	for (auto& ID : walkableNodesIDs)
 	{
 		battleGrid[ID]->setAsWalkable();
@@ -174,15 +170,7 @@ void BattleScene::createMoveableArea(const std::shared_ptr<PirateUnit>& _unit)
 
 void BattleScene::aStarPathFind(const std::shared_ptr<BattleGridNode>& _start, const std::shared_ptr<BattleGridNode>& end)
 {
-	path = PathFindingFunctions<BattleGridNode>::aStarPathFind(battleGrid, _start, end);
-
-	if (!path.empty()) {
-		for (auto& node : battleGrid)
-		{
-			node->updateTraversed(false);
-		}
-	}
-
+	path = PathFindingFunctions<BattleGridNode>::aStarPathFind(_start, end);
 	clearArea(walkableNodesIDs);
 }
 
@@ -700,16 +688,6 @@ int BattleScene::SelectAttackNodeToWalkTo(const std::vector<std::shared_ptr<Pira
 	auto enemyNode = battleGrid[PickUnitToAttack(_possibleUnits)->getCurrentNodeId()];
 
 	auto possibleAttackNodes = PathFindingFunctions<BattleGridNode>::BreathSearchNodes(battleGrid, enemyNode, 1); //nodes neighbouring enemy position
-
-	for (auto& ID : possibleAttackNodes)
-	{
-		battleGrid[ID]->updateTraversed(false);
-	}
-
-	for (auto& node : battleGrid)
-	{
-		node->updateTraversed(false);
-	}
 
 	for (auto& ID : possibleAttackNodes)
 	{

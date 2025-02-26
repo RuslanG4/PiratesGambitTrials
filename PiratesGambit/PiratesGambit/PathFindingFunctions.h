@@ -52,7 +52,6 @@ public:
     /// <param name="end">Destination node.</param>
     /// <returns>A vector of shared pointers representing the shortest path.</returns>
     static std::vector<std::shared_ptr<NodeType>> aStarPathFind(
-        const std::vector<std::shared_ptr<NodeType>>& _area,
         const std::shared_ptr<NodeType>& _start,
         const std::shared_ptr<NodeType>& end
     );
@@ -93,6 +92,8 @@ public:
         const std::shared_ptr<NodeType>& _startNode,
         int _depth
     );
+
+    static void ClearTraversedNodes(const std::vector<std::shared_ptr<NodeType>>& _searchedNodes);
 
 private:
     /// <summary>

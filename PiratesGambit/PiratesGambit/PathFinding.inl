@@ -4,21 +4,20 @@
 
 template <typename NodeType>
 std::vector<std::shared_ptr<NodeType>> PathFindingFunctions<NodeType>::aStarPathFind(
-    const std::vector<std::shared_ptr<NodeType>>& _area,
     const std::shared_ptr<NodeType>& _start,
     const std::shared_ptr<NodeType>& end)
 {
 	std::priority_queue<std::shared_ptr<NodeType>, std::vector<std::shared_ptr<NodeType>>, Compare<NodeType>> nodeQueue;
+	std::vector<std::shared_ptr<NodeType>> allScannedNodes; //used for then clearing
 	std::vector<std::shared_ptr<NodeType>> path;
-	std::cout << "start" << _start->getID()<<"\n";
-	std::cout << "end" << end->getID() << "\n";
+
 	nodeQueue.push(_start);
 	_start->clearPrevious();
 	end->clearPrevious();
 
 	while (!nodeQueue.empty()) {
 		std::shared_ptr<NodeType> currentTop = nodeQueue.top();
-		std::cout << "searched" << currentTop->getID()<<"\n";
+		
 		nodeQueue.pop();
 
 		if (currentTop == end) { //found
@@ -27,6 +26,7 @@ std::vector<std::shared_ptr<NodeType>> PathFindingFunctions<NodeType>::aStarPath
 
 		if (!currentTop->hasBeenTraversed()) {
 			currentTop->updateTraversed(true);
+			allScannedNodes.push_back(currentTop);
 
 			auto neighbours = currentTop->getNeighbours();
 
@@ -55,6 +55,8 @@ std::vector<std::shared_ptr<NodeType>> PathFindingFunctions<NodeType>::aStarPath
 		}
 	}
 
+	ClearTraversedNodes(allScannedNodes);
+
 	std::shared_ptr<NodeType> current = end;
 	while (current->getPrevious() != nullptr)
 	{
@@ -75,11 +77,14 @@ std::vector<int> PathFindingFunctions<NodeType>::BreathSearchNodes(
 {
 	std::queue<std::pair<std::shared_ptr<NodeType>, int>> nodeQueue;
 	std::vector<int> BreathArea;
+	std::vector<std::shared_ptr<NodeType>> allScannedNodes; //used for then clearing
 
 	sf::Vector2f startPos = _startNode->getPosition();
 
 	nodeQueue.emplace(_startNode, 0);
 	nodeQueue.front().first->updateTraversed(true);
+
+	allScannedNodes.push_back(_startNode);
 
 	while (!nodeQueue.empty())
 	{
@@ -95,6 +100,7 @@ std::vector<int> PathFindingFunctions<NodeType>::BreathSearchNodes(
 			if (!_area[neighbourID.first]->hasBeenTraversed())
 			{
 				_area[neighbourID.first]->updateTraversed(true);
+				allScannedNodes.push_back(_area[neighbourID.first]);
 
 				float dx = static_cast<float>(_area[neighbourID.first]->getPosition().x - startPos.x);
 				float dy = static_cast<float>(_area[neighbourID.first]->getPosition().y - startPos.y);
@@ -108,6 +114,8 @@ std::vector<int> PathFindingFunctions<NodeType>::BreathSearchNodes(
 		}
 	}
 
+	ClearTraversedNodes(allScannedNodes);
+
 	return BreathArea;
 }
 
@@ -119,11 +127,14 @@ std::vector<int> PathFindingFunctions<NodeType>::BreathSearchEuclydianNodes(
 {
 	std::queue<std::pair<std::shared_ptr<NodeType>, int>> nodeQueue;
 	std::vector<int> BreathArea;
+	std::vector<std::shared_ptr<NodeType>> allScannedNodes; //used for then clearing
+
 	BreathArea.push_back(_startNode->getID());
 	sf::Vector2f startPos = _startNode->getPosition();
 
 	nodeQueue.emplace(_startNode, 0);
 	nodeQueue.front().first->updateTraversed(true);
+	allScannedNodes.push_back(_startNode);
 
 	while (!nodeQueue.empty())
 	{
@@ -139,6 +150,7 @@ std::vector<int> PathFindingFunctions<NodeType>::BreathSearchEuclydianNodes(
 			if (!_area[neighbourID.first]->hasBeenTraversed() && neighbourID.second % 2 != 0)
 			{
 				_area[neighbourID.first]->updateTraversed(true);
+				allScannedNodes.push_back(_area[neighbourID.first]);
 
 				float dx = static_cast<float>(_area[neighbourID.first]->getPosition().x - startPos.x);
 				float dy = static_cast<float>(_area[neighbourID.first]->getPosition().y - startPos.y);
@@ -151,6 +163,9 @@ std::vector<int> PathFindingFunctions<NodeType>::BreathSearchEuclydianNodes(
 			}
 		}
 	}
+
+	ClearTraversedNodes(allScannedNodes);
+
 	return BreathArea;
 }
 
@@ -159,11 +174,14 @@ inline std::vector<std::shared_ptr<NodeType>> PathFindingFunctions<NodeType>::Br
 {
 	std::queue<std::pair<std::shared_ptr<NodeType>, int>> nodeQueue;
 	std::vector<std::shared_ptr<NodeType>> BreathArea;
+	std::vector<std::shared_ptr<NodeType>> allScannedNodes; //used for then clearing
+
 	BreathArea.push_back(_startNode);
 	sf::Vector2f startPos = _startNode->getPosition();
 
 	nodeQueue.emplace(_startNode, 0);
 	nodeQueue.front().first->updateTraversed(true);
+	allScannedNodes.push_back(_startNode);
 
 	while (!nodeQueue.empty())
 	{
@@ -181,6 +199,7 @@ inline std::vector<std::shared_ptr<NodeType>> PathFindingFunctions<NodeType>::Br
 				if(neighbour.first->isOccupied())
 					continue;
 				neighbour.first->updateTraversed(true);
+				allScannedNodes.push_back(neighbour.first);
 
 				float dx = static_cast<float>(neighbour.first->getPosition().x - startPos.x);
 				float dy = static_cast<float>(neighbour.first->getPosition().y - startPos.y);
@@ -193,6 +212,17 @@ inline std::vector<std::shared_ptr<NodeType>> PathFindingFunctions<NodeType>::Br
 			}
 		}
 	}
+	ClearTraversedNodes(allScannedNodes);
+
 	return BreathArea;
+}
+
+template<typename NodeType>
+inline void PathFindingFunctions<NodeType>::ClearTraversedNodes(const std::vector<std::shared_ptr<NodeType>>& _searchedNodes)
+{
+	for(auto& node : _searchedNodes)
+	{
+		node->updateTraversed(false);
+	}
 }
 

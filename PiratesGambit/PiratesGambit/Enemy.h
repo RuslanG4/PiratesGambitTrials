@@ -8,15 +8,18 @@
 #include "Animator.h"
 #include "Enums.h"
 #include"Army.h"
+#include "EnemyState.h"
+#include "IdleState.h"
 #include"Structs.h"
 #include"PathFindingFunctions.h"
+#include "Player.h"
 
 class Boat; //forward ref
 
 class Enemy
 {
 public:
-	Enemy(sf::Vector2f _pos)
+	Enemy(sf::Vector2f _pos, const std::shared_ptr<Player> _playerRef)
 	{
 		army = std::make_unique<Army>();
 		updateableArea = std::make_unique<UpdateableArea>();
@@ -38,19 +41,19 @@ public:
 		body.setScale(2, 2);
 
 		myHitbox = new HitBox(sf::Vector2f(22, 22));
+
+		ChangeState(new IdleState(_playerRef));
 	}
 	~Enemy() = default;
 
 	void update(double dt);
 	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
 
-	void MoveUnit(const std::vector<std::shared_ptr<Node>>& _grid);
-
-
 	void setCurrentChunkID(int id_) { currentChunkId = id_; }
 
 	//animation
 	void handleAnimationStates(double dt);
+	void SetAnimationState(UnitState _newState) { currentState = _newState; }
 
 	//Global Bounds;
 	sf::FloatRect GetGlobalBounds() const { return myHitbox->GetGlobalBounds(); }
@@ -58,6 +61,15 @@ public:
 	//Updating position
 	void updatePosition(const sf::Vector2f& _pos);
 	void setCurrentNode(const std::shared_ptr<Node>& node_) { currentNode = node_; }
+	void SetPosition(sf::Vector2f _pos)
+	{
+		body.setPosition(_pos);
+		myHitbox->setPosition(_pos);
+	}
+	void FacePlayer(int _direction)
+	{
+		body.setScale(_direction, scaleY);
+	}
 	void updateUpdateableArea(const std::shared_ptr<Node>& _startNode, int depth) const; 
 	//
 
@@ -72,15 +84,15 @@ public:
 	void disembarkBoat(const std::shared_ptr<Node>& _node);
 	bool isOnBoat() const { return onBoat; }
 
-	void PassPath(const std::vector<std::shared_ptr<Node>>& _path);
-	std::vector<std::shared_ptr<Node>> getPath() const { return path; }
-
 	//Army
 	const std::unique_ptr<Army>& getArmy() const { return army; }
+
+	void ChangeState(EnemyState* newState);
 
 private:
 	sf::Sprite body;
 
+	EnemyState* currentActionState;
 	AnimationState animationState;
 	UnitState currentState = UnitState::IDLE; //animation state
 
@@ -94,9 +106,8 @@ private:
 
 	std::unique_ptr<Army> army;
 
-	int currentNodeInPath;
-
-
+	int scaleX = 2;
+	int scaleY = 2;
 
 	int currentChunkId{ -99 };
 	int currentNodeId{ 0 };

@@ -160,10 +160,12 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CannonBall.cpp" />
     <ClCompile Include="CannonBallItem.cpp" />
+    <ClCompile Include="ChaseState.cpp" />
     <ClCompile Include="Coins.cpp" />
     <ClCompile Include="DamageCalculations.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyMoveConditions.cpp" />
+    <ClCompile Include="EnemyState.cpp" />
     <ClCompile Include="FullMap.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -176,6 +178,7 @@
     <ClCompile Include="HireRecruitUI.cpp" />
     <ClCompile Include="HitBox.cpp" />
     <ClCompile Include="IconButton.cpp" />
+    <ClCompile Include="IdleState.cpp" />
     <ClCompile Include="InfoBoxUI.cpp" />
     <ClCompile Include="InitiativeSystem.cpp" />
     <ClCompile Include="Inventory.cpp" />
@@ -230,12 +233,14 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CannonBall.h" />
     <ClInclude Include="CannonBallItem.h" />
+    <ClInclude Include="ChaseState.h" />
     <ClInclude Include="Coins.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="DamageCalculations.h" />
     <ClInclude Include="DiskSampling.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyMoveConditions.h" />
+    <ClInclude Include="EnemyState.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="FullMap.h" />
     <ClInclude Include="Game.h" />
@@ -249,6 +254,7 @@
     <ClInclude Include="HireRecruitUI.h" />
     <ClInclude Include="HitBox.h" />
     <ClInclude Include="IconButton.h" />
+    <ClInclude Include="IdleState.h" />
     <ClInclude Include="Includes.h" />
     <ClInclude Include="InfoBoxUI.h" />
     <ClInclude Include="InitiativeSystem.h" />

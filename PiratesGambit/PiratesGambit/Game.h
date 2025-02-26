@@ -65,10 +65,6 @@ private:
 
 	void updateVisableNodes();
 
-	void DetectPlayer();
-
-	void CalculateEnemyMovement();
-
 	std::set<int> visibleNodes;
 
 	bool keyUp = true;
@@ -95,8 +91,6 @@ private:
 
 	std::weak_ptr<GameObject> currentObjectInteract;
 	std::shared_ptr<Building> currentBuildingInteract;
-
-	sf::Clock detectPlayerClock;
 
 	//battle scene
 	BattleSceneTransition battleTransition;

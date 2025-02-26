@@ -35,9 +35,6 @@ public:
 	void MapIsland(int _startIndex, bool saveIslandData, const std::unique_ptr<sf::RenderWindow>& window);
 	void SaveIslandData(const std::unique_ptr<sf::RenderWindow>& window);
 	void removeWorldEdges(std::shared_ptr<Node>& _currentNode) const;
-	void UnMarkNodes() const;
-
-
 
 	//Tile rules
 	void FilterTiles(std::shared_ptr<Node>& _currentNode) const;

@@ -5,6 +5,8 @@
 void Enemy::update(double dt)
 {
 	handleAnimationStates(dt);
+	if (currentActionState)
+		currentActionState->Update(*this, dt);
 }
 
 void Enemy::render(const std::unique_ptr<sf::RenderWindow>& window) const
@@ -19,37 +21,6 @@ void Enemy::render(const std::unique_ptr<sf::RenderWindow>& window) const
 		//		window->draw(*(node->debugShape));
 		//	}
 		//}
-	}
-}
-
-void Enemy::MoveUnit(const std::vector<std::shared_ptr<Node>>& _grid)
-{
-	if (!path.empty()) {
-		sf::Vector2f distance = path[currentNodeInPath]->getMidPoint() - body.getPosition();
-		float magnitude = Utility::magnitude(distance.x, distance.y);
-
-		if (magnitude < 2.0f) {
-			currentNodeInPath++;
-
-			if(currentNodeInPath >= path.size())
-			{
-				path.clear();
-				return;
-			}
-
-			distance = path[currentNodeInPath]->getMidPoint() - body.getPosition();
-		}
-
-		distance = Utility::unitVector2D(distance);
-
-		body.setPosition(body.getPosition() + distance * 1.f); //2.f is speed
-		myHitbox->setPosition(body.getPosition());
-		if (Utility::magnitude(distance.x, distance.y) <= 0 && currentState != ATTACK) {
-			currentState = IDLE;
-		}else
-		{
-			currentState = WALK;
-		}
 	}
 }
 
@@ -77,12 +48,15 @@ void Enemy::updateUpdateableArea(const std::shared_ptr<Node>& _startNode, int de
 	updateableArea->updateVisibleNodes(_startNode, depth);
 }
 
-void Enemy::PassPath(const std::vector<std::shared_ptr<Node>>& _path)
+void Enemy::ChangeState(EnemyState* newState)
 {
-	path.clear();
-	path = _path;
+	if (currentState)
+		currentActionState->Exit(*this);
 
-	currentNodeInPath = 0;
+	currentActionState = newState;
+
+	if (currentActionState)
+		currentActionState->Enter(*this);
 }
 
 

@@ -48,11 +48,6 @@ private:
             int randomIndex = std::rand() % availableNodes.size();
             std::shared_ptr<Node> startNode = availableNodes[randomIndex]; // random start node
 
-            //reset booleans for area for breath search
-            for (auto& node : availableNodes) {
-                node->updateTraversed(false);
-            }
-
             std::vector<std::shared_ptr<Node>> area = PathFindingFunctions<Node>::BreathSearchEuclydianIslands(startNode, 2);
 
             if (area.size() >= 9 && isAreaValid(area)) {
@@ -92,11 +87,6 @@ private:
                 }
                 randomIndex = std::rand() % availableNodes.size();
                 startNode = availableNodes[randomIndex];
-            }
-
-            //reset for breath search
-            for (auto& node : availableNodes) {
-                node->updateTraversed(false);
             }
 
             std::vector<std::shared_ptr<Node>> area = PathFindingFunctions<Node>::BreathSearchEuclydianIslands(startNode, 3);

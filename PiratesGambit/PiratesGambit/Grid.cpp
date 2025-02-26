@@ -227,9 +227,9 @@ void Grid::FindLand(const std::unique_ptr<sf::RenderWindow>& window)
 			MapIsland(node->getChunkId(),false ,window); //start island mapping
 		}
 	}
-	UnMarkNodes();
+	PathFindingFunctions<Node>::ClearTraversedNodes(nodeGrid);
 	SaveIslandData(window);
-	UnMarkNodes();
+	PathFindingFunctions<Node>::ClearTraversedNodes(nodeGrid);
 }
 
 /// <summary>
@@ -316,18 +316,6 @@ void Grid::removeWorldEdges(std::shared_ptr<Node>& _currentNode) const
 	_currentNode->setTileType(DEFAULT_WATER);
 	_currentNode->setLand(false);
 	determineTileTexture(_currentNode);
-}
-
-///<summary>
-/// unmarks nodes for other graph algorithms
-///</summary>
-void Grid::UnMarkNodes() const
-{
-	for (auto& node : nodeGrid)
-	{
-		node->updateTraversed(false);
-		//node->debugShape->setFillColor(sf::Color::Transparent);
-	}
 }
 
 /// <summary>

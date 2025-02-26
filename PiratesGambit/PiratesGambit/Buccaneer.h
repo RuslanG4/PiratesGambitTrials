@@ -11,7 +11,7 @@ public:
 		unitInformation.unitType = MELEE;
 
 		UnitStats stats = {
-			10,0,true,2,_stackCount,1,2,1,2,10
+			10,0,true,4,_stackCount,1,2,1,2,10
 		};
 
 		unitStats = stats;
