@@ -156,7 +156,7 @@ void Grid::wait(int time)
 /// Celuar Automata algorithm for shape generation
 /// </summary>
 /// <param name="_interations">How many times we do algorithm</param>
-void Grid::ApplyCellular(int _interations, const std::unique_ptr<sf::RenderWindow>& window)
+void Grid::ApplyCellular(int _interations)
 {
 	for(int i =0;i<_interations;i++)
 	{
@@ -207,13 +207,13 @@ void Grid::ApplyCellular(int _interations, const std::unique_ptr<sf::RenderWindo
 		}
 	}
 
-	FindLand(window);
+	FindLand();
 }
 
 ///<summary>
 /// Iterated through chunk to find any land nodes to start island mapping
 ///</summary>
-void Grid::FindLand(const std::unique_ptr<sf::RenderWindow>& window)
+void Grid::FindLand()
 {
 	for(auto& node : nodeGrid)
 	{
@@ -224,11 +224,11 @@ void Grid::FindLand(const std::unique_ptr<sf::RenderWindow>& window)
 
 		if(!node->hasBeenTraversed() && node->getIsLand())
 		{
-			MapIsland(node->getChunkId(),false ,window); //start island mapping
+			MapIsland(node->getChunkId(),false ); //start island mapping
 		}
 	}
 	PathFindingFunctions<Node>::ClearTraversedNodes(nodeGrid);
-	SaveIslandData(window);
+	SaveIslandData();
 	PathFindingFunctions<Node>::ClearTraversedNodes(nodeGrid);
 }
 
@@ -238,7 +238,7 @@ void Grid::FindLand(const std::unique_ptr<sf::RenderWindow>& window)
 /// <param name="_startIndex">Begin node</param>
 /// <param name="saveIslandData">If we want to store in islands vector</param>
 /// <param name="window">sfml window</param>
-void Grid::MapIsland(int _startIndex,bool saveIslandData, const std::unique_ptr<sf::RenderWindow>& window)
+void Grid::MapIsland(int _startIndex,bool saveIslandData)
 {
 	std::vector<std::shared_ptr<Node>> currentIsland;
 	std::queue<std::shared_ptr<Node>> nodeQueue;
@@ -295,13 +295,13 @@ void Grid::MapIsland(int _startIndex,bool saveIslandData, const std::unique_ptr<
 ///<summary>
 /// Saves nodes to island 
 ///</summary>
-void Grid::SaveIslandData(const std::unique_ptr<sf::RenderWindow>& window)
+void Grid::SaveIslandData()
 {
 	for (auto& node : nodeGrid)
 	{
 		if (!node->hasBeenTraversed() && node->getIsLand())
 		{
-			MapIsland(node->getChunkId(),true, window);
+			MapIsland(node->getChunkId(),true);
 		}
 	}
 }

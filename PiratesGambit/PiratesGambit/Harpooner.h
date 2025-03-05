@@ -10,6 +10,8 @@ public:
 		unitInformation.allegiance = _allegiance;
 		unitInformation.unitType = RANGED;
 
+		unitAmount = std::make_unique<UnitAmount>();
+
 		UnitStats stats = {
 		10,0,true,3,_stackCount,9,7,7,12,42
 		};

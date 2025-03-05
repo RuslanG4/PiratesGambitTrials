@@ -28,12 +28,12 @@ public:
 	void wait(int time);
 
 	//Cellular Automata
-	void ApplyCellular(int _interations, const std::unique_ptr<sf::RenderWindow>& window);
+	void ApplyCellular(int _interations);
 
 	//Find + Map Islands
-	void FindLand(const std::unique_ptr<sf::RenderWindow>& window);
-	void MapIsland(int _startIndex, bool saveIslandData, const std::unique_ptr<sf::RenderWindow>& window);
-	void SaveIslandData(const std::unique_ptr<sf::RenderWindow>& window);
+	void FindLand();
+	void MapIsland(int _startIndex, bool saveIslandData);
+	void SaveIslandData();
 	void removeWorldEdges(std::shared_ptr<Node>& _currentNode) const;
 
 	//Tile rules

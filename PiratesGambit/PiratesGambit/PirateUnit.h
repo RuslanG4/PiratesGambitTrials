@@ -84,7 +84,7 @@ protected:
 
 	AnimationState animationState;
 
-	UnitAmount unitAmount;
+	std::unique_ptr<UnitAmount> unitAmount;
 	sf::Vector2f velocity;
 
 	std::vector<std::shared_ptr<CannonBall>> bullets;

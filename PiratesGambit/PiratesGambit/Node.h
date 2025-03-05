@@ -1,7 +1,10 @@
 #pragma once
 #include "BaseNode.h"
+#include "GameObject.h"
 #include "Includes.h"
 #include "TextureManager.h"
+
+class Building;
 
 /// <summary>
 /// Represents an individual grid node inside a tile-based map.
@@ -125,6 +128,20 @@ public:
     /// <param name="_texture">SFML texture reference.</param>
     void setWaterTexture(const sf::Texture& _texture) const { waterBackSprite->setTexture(_texture); }
 
+    void AddPresentObject(const std::shared_ptr<GameObject>& _object)
+    {
+        presentObject = _object;
+    }
+
+    const std::shared_ptr<GameObject>& GetObject() { return presentObject; }
+
+    void AddPresentBuilding(const std::shared_ptr<Building>& _building)
+    {
+        presentBuilding = _building;
+    }
+
+    const std::shared_ptr<Building>& GetBuilding() { return presentBuilding; }
+
 private:
     std::vector<std::pair<std::shared_ptr<Node>, int>> m_neighbours; ///< List of neighboring nodes and their positions.
     std::vector<std::pair<std::shared_ptr<Node>, int>> subDividedNodes; ///< Subdivided nodes for complex structures.
@@ -135,4 +152,7 @@ private:
 
     TileType m_currentTileType; ///< Current tile type of the node.
     ParentTileType m_currentParentTileType; ///< Parent tile type for hierarchical tile representation.
+
+    std::shared_ptr<GameObject> presentObject;
+    std::shared_ptr<Building> presentBuilding;
 };

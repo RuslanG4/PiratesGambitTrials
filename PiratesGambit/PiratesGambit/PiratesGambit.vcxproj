@@ -170,6 +170,7 @@
     <ClCompile Include="FullMap.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GamePlayScene.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Gunner.cpp" />
     <ClCompile Include="GunnerBuilding.cpp" />
@@ -187,7 +188,9 @@
     <ClCompile Include="InventorySlot.cpp" />
     <ClCompile Include="Island.cpp" />
     <ClCompile Include="LeafParticle.cpp" />
+    <ClCompile Include="LoadingScene.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainMenuScene.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Particle.cpp" />
@@ -203,6 +206,8 @@
     <ClCompile Include="RenderableIventory.cpp" />
     <ClCompile Include="ResourceSlotUI.cpp" />
     <ClCompile Include="Resources_TabMenu.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ShotParticle.cpp" />
     <ClCompile Include="Slider.cpp" />
     <ClCompile Include="TacticsArmySlot.cpp" />
@@ -247,6 +252,7 @@
     <ClInclude Include="FullMap.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GamePlayScene.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Gunner.h" />
     <ClInclude Include="GunnerBuilding.h" />
@@ -265,6 +271,8 @@
     <ClInclude Include="InventorySlot.h" />
     <ClInclude Include="Island.h" />
     <ClInclude Include="LeafParticle.h" />
+    <ClInclude Include="LoadingScene.h" />
+    <ClInclude Include="MainMenuScene.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Particle.h" />
@@ -281,6 +289,8 @@
     <ClInclude Include="RenderableIventory.h" />
     <ClInclude Include="ResourceSlotUI.h" />
     <ClInclude Include="Resources_TabMenu.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ShotParticle.h" />
     <ClInclude Include="Slider.h" />
     <ClInclude Include="Structs.h" />

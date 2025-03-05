@@ -5,18 +5,18 @@
 void PirateUnit::addToCurrentStack(int _amount)
 {
 	unitStats.stackSize += _amount;
-	unitAmount.updateAmount(unitStats.stackSize);
+	unitAmount->updateAmount(unitStats.stackSize);
 }
 
 void PirateUnit::updateUnitAmount(int _amount)
 {
-	unitAmount.updateAmount(_amount);
+	unitAmount->updateAmount(_amount);
 }
 
 void PirateUnit::placeUnitAmountText()
 {
 	sf::Vector2f position = { sprite.getPosition().x - 32, sprite.getPosition().y + 14 };
-	unitAmount.setPosition(position);
+	unitAmount->setPosition(position);
 
 	shadow.setPosition(sf::Vector2f(sprite.getPosition().x, sprite.getPosition().y + 18));
 	shadow.setRadius(20);
@@ -84,14 +84,14 @@ void PirateUnit::TakeDamage(int _totalDamage)
 	std::cout << "End stack : " << unitStats.stackSize<< " End health : " << unitStats.health <<"\n";
 
 	// Update the displayed stack size
-	unitAmount.updateAmount(unitStats.stackSize);
+	unitAmount->updateAmount(unitStats.stackSize);
 }
 
 void PirateUnit::render(const std::unique_ptr<sf::RenderWindow>& window) const
 {
 	window->draw(shadow);
 	window->draw(sprite);
-	unitAmount.render(window);
+	unitAmount->render(window);
 }
 
 void PirateUnit::placeUnit(sf::Vector2f _pos)

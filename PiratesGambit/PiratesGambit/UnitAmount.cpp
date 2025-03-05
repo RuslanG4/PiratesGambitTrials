@@ -1,16 +1,5 @@
 #include "UnitAmount.h"
 
-void UnitAmount::init()
-{
-	amountText.setFont(TextureManager::getInstance().getFont());
-	amountText.setCharacterSize(14);
-
-	background.setSize(sf::Vector2f(16, 16));
-	background.setFillColor(sf::Color::Blue);
-	background.setOutlineColor(sf::Color::White);
-	background.setOutlineThickness(1);
-}
-
 void UnitAmount::render(const std::unique_ptr<sf::RenderWindow>& window) const
 {
 	if (renderUnitAmount) {

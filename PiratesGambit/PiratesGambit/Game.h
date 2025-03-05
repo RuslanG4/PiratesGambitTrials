@@ -1,19 +1,11 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 #include <SFML/Graphics.hpp>
-#include<SFML/Audio.hpp>
-#include"Grid.h"
-#include"FullMap.h"
-#include "Player.h"
-#include "Enemy.h"
-#include"Boat.h"
-#include "BattleScene.h"
-#include"Camera.h"
-
-#include"BattleSceneTransition.h"
-
-#include"PlayerTabMenu.h"
-
+#include "MainMenuScene.h"
+#include "SceneManager.h"
+#include "BulletFactory.h"
+#include "ParticleManager.h"
+#include "TextureManager.h"
 
 class Game
 {
@@ -26,72 +18,11 @@ public:
 	void run();
 
 private:
-
 	void processEvents();
-	void processKeys(sf::Event t_event);
-	void processKeyUp(sf::Event t_event);
 	void update(double t_deltaTime);
 	void render();
-	void initialise();
 
-	void FindCurrentChunk();
-	void FindCurrentIsland();
-
-	void FindCurrentNodeInSameChunk(int _id, const std::shared_ptr<Enemy>& _enemy) const;
-
-	void FindCurrentNode() const;
-	void FindPlayerCurrentNode() const;
-	void FindEnemyCurrentNode(const std::shared_ptr<Enemy>& _enemy) const;
-
-	void HandleGameObjectCollision();
-	void HandleBuildingCollision();
-
-	void handleKeyInput();
-
-	void transitionToBattleMode();
-
-	void interactWithObjects();
-	bool interactWithBuildings();
-
-	void transferInventoryItems();
-
-	void updateVisableNodes();
-
-	std::set<int> visibleNodes;
-
-	bool keyUp = true;
-	bool interactWithObject = false;
-
-	sf::Sprite m_appleSprite;
-	sf::Texture m_appleTexture;
-
-	std::unique_ptr<sf::RenderWindow> m_window; // main SFML window
-	sf::Font font;
-
-	std::set<Node*> updateArea{nullptr};
-
-	Node* currentNode;
-
-	std::shared_ptr<Island> currentIsland;
-
-	std::unique_ptr<FullMap> myMap;
-	std::shared_ptr<Player> myPlayer;
-	std::unique_ptr<PlayerTabMenu> playerMenu;
-	std::shared_ptr<Boat> playerBoat;
-
-	std::shared_ptr<Enemy> enemy;
-	std::shared_ptr<EnemyBoat> enemyBoat;
-
-	std::weak_ptr<GameObject> currentObjectInteract;
-	std::shared_ptr<Building> currentBuildingInteract;
-
-	//battle scene
-	BattleSceneTransition battleTransition;
-	std::unique_ptr<BattleScene> battleScene;
-	bool battle = false;
-
-	int mapSize = 1;
-
+	std::unique_ptr<sf::RenderWindow> m_window;
 };
 
 #endif // !GAME_HPP

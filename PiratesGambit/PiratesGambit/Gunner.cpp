@@ -80,7 +80,7 @@ void Gunner::animateSprite(float _dt)
 		if (deathAnimation)
 		{
 			unitStats.isActive = false;
-			unitAmount.renderUnitAmount = false;
+			unitAmount->renderUnitAmount = false;
 			Animator::getInstance().AnimateDeath(sprite, 3, 6);
 		}
 		break;

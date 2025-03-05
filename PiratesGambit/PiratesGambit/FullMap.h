@@ -7,10 +7,10 @@
 class FullMap
 {
 public:
-	FullMap(const std::unique_ptr<sf::RenderWindow> & window, const int& mapSize_, const std::shared_ptr<Player>& _playerRef);
+	FullMap(const int& mapSize_, const std::shared_ptr<Player>& _playerRef);
 
 	void initMap(const int& mapSize_);
-	void initChunks(const std::unique_ptr<sf::RenderWindow>& window);
+	void initChunks();
 	std::vector<std::shared_ptr<Node>> populateChunk(int _chunkX, int _chunkY, int _density) const;
 
 	void addNeighbours(int _currentNodeId) const;

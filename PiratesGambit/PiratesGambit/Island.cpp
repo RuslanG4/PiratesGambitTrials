@@ -1,5 +1,7 @@
 #include "Island.h"
 
+#include "Camera.h"
+
 void Island::render(const std::unique_ptr<sf::RenderWindow>& window) const
 {
 	//for(auto& node:landNodes)
@@ -72,6 +74,7 @@ void Island::GenerateTrees(std::vector<std::shared_ptr<Node>>& _nodes)
 			node->updateOccupied(true);
 			gameObjects.back()->setNodeId(node->getID());
 			gameObjects.back()->setPosition(node->getMidPoint());
+			node->AddPresentObject(gameObjects.back());
 		}
 	}
 
@@ -110,6 +113,7 @@ void Island::GenerateBarrels(std::vector<std::shared_ptr<Node>>& _nodes)
 			node->updateOccupied(true);
 			gameObjects.back()->setNodeId(node->getID());
 			gameObjects.back()->setPosition(node->getMidPoint());
+			node->AddPresentObject(gameObjects.back());
 		}
 	}
 
@@ -248,6 +252,7 @@ void Island::Mark3x3Area(const std::shared_ptr<Node>& _startNode, const std::sha
 {
 	_startNode->updateOccupied(true);
 	_building->AddParentNode(_startNode);
+	_startNode->AddPresentBuilding(_building);
 	for(auto& neighbour : _startNode->getNeighbours())
 	{
 		neighbour.first->updateOccupied(true);
