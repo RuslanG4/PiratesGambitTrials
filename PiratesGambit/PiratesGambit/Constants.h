@@ -40,6 +40,8 @@ const char* const MONEY_ICON = "ASSETS\\IMAGES\\ICONS\\MONEY.png";
 const char* const COIN_ICON = "ASSETS\\IMAGES\\ICONS\\COIN.png";
 const char* const SKULL_ICON = "ASSETS\\IMAGES\\ICONS\\SKULL.png";
 
+//Enemy Ships
+const char* const RED_SHIP_HEALTHY = "ASSETS\\IMAGES\\Enemy\\RedShip.png";
 
 //Borders
 const char* const ACTION_BORDER = "ASSETS\\IMAGES\\Borders\\ActionButton.png";

@@ -342,6 +342,9 @@
     <ClCompile Include="ChaseState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyBoat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -572,11 +575,14 @@
     <ClInclude Include="EnemyState.h">
       <Filter>Header Files\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="IdleState.h">
+    <ClInclude Include="EnemyBoat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IdleState.h">
+      <Filter>Header Files\Enemy</Filter>
+    </ClInclude>
     <ClInclude Include="ChaseState.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

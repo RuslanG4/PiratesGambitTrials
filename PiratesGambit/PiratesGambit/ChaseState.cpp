@@ -2,6 +2,7 @@
 
 #include "Enemy.h"
 #include "IdleState.h"
+#include "PathFindingFunctions.h"
 
 void ChaseState::Enter(Enemy& enemy)
 {

@@ -2,6 +2,7 @@
 #include"Includes.h"
 
 class Enemy;
+class EnemyBoat;
 
 class EnemyState
 {

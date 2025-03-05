@@ -2,21 +2,13 @@
 #define GAME_HPP
 #include <SFML/Graphics.hpp>
 #include<SFML/Audio.hpp>
-#include <iostream>
-#include"Constants.h"
 #include"Grid.h"
 #include"FullMap.h"
 #include "Player.h"
 #include "Enemy.h"
 #include"Boat.h"
-#include"Camera.h"
-
-#include"Barrel.h"
-#include"Mouse.h"
-
 #include "BattleScene.h"
-
-#include"ParticleManager.h"
+#include"Camera.h"
 
 #include"BattleSceneTransition.h"
 
@@ -88,6 +80,7 @@ private:
 	std::shared_ptr<Boat> playerBoat;
 
 	std::shared_ptr<Enemy> enemy;
+	std::shared_ptr<EnemyBoat> enemyBoat;
 
 	std::weak_ptr<GameObject> currentObjectInteract;
 	std::shared_ptr<Building> currentBuildingInteract;

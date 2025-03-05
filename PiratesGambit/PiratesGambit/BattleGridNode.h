@@ -1,7 +1,5 @@
 #pragma once
 #include "BaseNode.h"
-#include"Includes.h"
-#include "Structs.h"
 
 class BattleGridNode : public BaseNode
 {

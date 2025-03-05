@@ -4,17 +4,15 @@
 #include"UpdateableArea.h"
 #include "Node.h"
 #include "HitBox.h"
-#include "Inventory.h"
-#include "Animator.h"
 #include "Enums.h"
 #include"Army.h"
+#include "EnemyBoat.h"
 #include "EnemyState.h"
 #include "IdleState.h"
 #include"Structs.h"
-#include"PathFindingFunctions.h"
 #include "Player.h"
 
-class Boat; //forward ref
+class EnemyBoat; //forward ref
 
 class Enemy
 {
@@ -61,11 +59,7 @@ public:
 	//Updating position
 	void updatePosition(const sf::Vector2f& _pos);
 	void setCurrentNode(const std::shared_ptr<Node>& node_) { currentNode = node_; }
-	void SetPosition(sf::Vector2f _pos)
-	{
-		body.setPosition(_pos);
-		myHitbox->setPosition(_pos);
-	}
+	void SetPosition(sf::Vector2f _pos);
 	void FacePlayer(int _direction)
 	{
 		body.setScale(_direction, scaleY);
@@ -80,7 +74,7 @@ public:
 	const std::unique_ptr<UpdateableArea>& getUpdateableArea() const { return updateableArea; }
 
 	//boat interaction functions
-	void boardBoat(const std::shared_ptr<Boat>& _boat);
+	void boardBoat(const std::shared_ptr<EnemyBoat>& _boat);
 	void disembarkBoat(const std::shared_ptr<Node>& _node);
 	bool isOnBoat() const { return onBoat; }
 
@@ -117,7 +111,7 @@ private:
 	bool walkAnimation{ false };
 
 	//Boat
-	std::weak_ptr<Boat> currentBoat;
+	std::shared_ptr<EnemyBoat> boatRef;
 	bool onBoat{ false };
 
 };

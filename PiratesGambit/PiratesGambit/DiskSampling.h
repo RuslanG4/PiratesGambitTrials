@@ -1,6 +1,7 @@
 #pragma once
 #include "Includes.h"
 #include "Node.h"
+#include "PathFindingFunctions.h"
 
 /// <summary>
 /// Places Objects like barrels and trees depending on a surrounding area

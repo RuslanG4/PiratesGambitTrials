@@ -21,6 +21,10 @@ Game::Game()
 
 	playerBoat = std::make_shared<Boat>(sf::Vector2f(25, 25), myPlayer);
 
+	enemyBoat = std::make_shared<EnemyBoat>(sf::Vector2f(225, 25), enemy, TextureManager::getInstance().getTexture("RED_BOAT"));
+
+	enemy->boardBoat(enemyBoat);
+
 	myPlayer->boardBoat(playerBoat);
 
 	playerBoat->addCannonBall();
@@ -162,6 +166,8 @@ void Game::update(double t_deltaTime)
 			myPlayer->update(t_deltaTime);
 		}
 
+		enemy->update(t_deltaTime);
+
 		if(currentIsland)
 		{
 			HandleGameObjectCollision();
@@ -169,8 +175,6 @@ void Game::update(double t_deltaTime)
 		}
 
 		playerMenu->Update();
-
-		enemy->update(t_deltaTime);
 
 		transitionToBattleMode();
 	}

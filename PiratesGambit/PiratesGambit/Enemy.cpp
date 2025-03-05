@@ -1,5 +1,5 @@
 #include "Enemy.h"
-#include "Boat.h"
+#include "EnemyBoat.h"
 
 
 void Enemy::update(double dt)
@@ -21,6 +21,9 @@ void Enemy::render(const std::unique_ptr<sf::RenderWindow>& window) const
 		//		window->draw(*(node->debugShape));
 		//	}
 		//}
+	}else
+	{
+		boatRef->render(window);
 	}
 }
 
@@ -43,9 +46,32 @@ void Enemy::updatePosition(const sf::Vector2f& _pos)
 	myHitbox->setPosition(_pos);
 }
 
+void Enemy::SetPosition(sf::Vector2f _pos)
+{
+	if (!onBoat) {
+		body.setPosition(_pos);
+	} else
+	{
+		boatRef->setPosition(_pos);
+	}
+	myHitbox->setPosition(_pos);
+}
+
 void Enemy::updateUpdateableArea(const std::shared_ptr<Node>& _startNode, int depth) const
 {
 	updateableArea->updateVisibleNodes(_startNode, depth);
+}
+
+void Enemy::boardBoat(const std::shared_ptr<EnemyBoat>& _boat)
+{
+	onBoat = true;
+	boatRef = _boat;
+}
+
+void Enemy::disembarkBoat(const std::shared_ptr<Node>& _node)
+{
+	onBoat = false;
+	body.setPosition(_node->getMidPoint());
 }
 
 void Enemy::ChangeState(EnemyState* newState)
