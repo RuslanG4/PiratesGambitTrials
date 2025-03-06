@@ -76,7 +76,7 @@ private:
 	std::unique_ptr<BattleScene> battleScene;
 	bool battle = false;
 
-	int mapSize = 2;
+	int mapSize = 3;
 
 
 };

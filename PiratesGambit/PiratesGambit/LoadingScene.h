@@ -27,7 +27,8 @@ private:
     std::atomic<bool> sceneReady{ false };
     Scene* nextScene = nullptr;
 
-    sf::RectangleShape rotatingSquare;
+    sf::Sprite background;
+    sf::Sprite rotatingSquare;
     float rotationSpeed = 100.0f;
 
     std::vector<std::string> toolTips;

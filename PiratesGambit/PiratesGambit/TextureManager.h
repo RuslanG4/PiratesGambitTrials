@@ -58,6 +58,8 @@ public:
         texturesLoaded &= loadTexture("background", BACKGROUND);
         texturesLoaded &= loadTexture("BUILDINGS", BUILDINGS);
         texturesLoaded &= loadTexture("SEA_BG", SEA_BG);
+        texturesLoaded &= loadTexture("BUTTONS", BUTTONS);
+        texturesLoaded &= loadTexture("WHEEL", WHEEL);
 
         return fontsLoaded && texturesLoaded;
     }

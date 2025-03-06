@@ -157,6 +157,7 @@
     <ClCompile Include="BuccaneerIcon.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="BulletFactory.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CannonBall.cpp" />
     <ClCompile Include="CannonBallItem.cpp" />
@@ -236,6 +237,7 @@
     <ClInclude Include="BuccaneerIcon.h" />
     <ClInclude Include="Building.h" />
     <ClInclude Include="BulletFactory.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CannonBall.h" />
     <ClInclude Include="CannonBallItem.h" />

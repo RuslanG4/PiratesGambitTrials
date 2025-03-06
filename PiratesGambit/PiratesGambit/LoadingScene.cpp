@@ -16,15 +16,20 @@ LoadingScene::LoadingScene()
         std::cout << "I wanna die";
     }
 
+    background.setTexture(TextureManager::getInstance().getTexture("SEA_BG"));
+    background.setScale(10, 9);
+
     loadingText.setFont(font);
     loadingText.setString("Loading...");
-    loadingText.setCharacterSize(30);
-    loadingText.setFillColor(sf::Color::White);
+    loadingText.setCharacterSize(70);
+    loadingText.setFillColor(sf::Color(220, 235, 241));
+    loadingText.setOutlineColor(sf::Color(12, 42, 61));
+    loadingText.setOutlineThickness(10.f);
 
-    rotatingSquare.setSize(sf::Vector2f(50, 50));
-    rotatingSquare.setFillColor(sf::Color(100, 250, 100));
-    rotatingSquare.setOrigin(25, 25); // Set origin to center for smooth rotation
+    rotatingSquare.setTexture(TextureManager::getInstance().getTexture("WHEEL"));
+    rotatingSquare.setOrigin(16, 16); // Set origin to center for smooth rotation
     rotatingSquare.setPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2); // Center of screen
+    rotatingSquare.setScale(9, 9);
 
     toolTips = loadTooltips("ASSETS/FILES/toolTips.txt");
 
@@ -32,18 +37,18 @@ LoadingScene::LoadingScene()
 
     toolTipText.setFont(font);
     toolTipText.setString(toolTips[randomToolTip]);
-    toolTipText.setCharacterSize(30);
-    toolTipText.setFillColor(sf::Color::White);
+    toolTipText.setCharacterSize(50);
+    toolTipText.setFillColor(sf::Color(220, 235, 241));
+    toolTipText.setOutlineColor(sf::Color(12, 42, 61));
+    toolTipText.setOutlineThickness(10.f);
 
-    centerText(loadingText, 100);
-    centerText(toolTipText, -100);
+    centerText(loadingText, -300);
+    centerText(toolTipText, 300);
 }
 
 void LoadingScene::handleInput(const std::unique_ptr<sf::RenderWindow>& window, sf::Event newEvent)
 {
     if (sceneReady) {
-        loadingText.setString("Press to continue...");
-        centerText(loadingText, 100);
     	if (newEvent.type == sf::Event::KeyPressed || newEvent.type == sf::Event::MouseButtonPressed) {
     		SceneManager::getInstance().setScene(nextScene);
     	}
@@ -54,11 +59,16 @@ void LoadingScene::update(float dt)
 {
     if (!sceneReady) {
         rotatingSquare.rotate(rotationSpeed * (dt * 0.001f));
+    } else
+    {
+    	loadingText.setString("Press to continue...");
+    	centerText(loadingText, -300);
     }
 }
 
 void LoadingScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 {
+    window->draw(background);
     window->draw(loadingText);
     window->draw(toolTipText);
     if(!sceneReady)

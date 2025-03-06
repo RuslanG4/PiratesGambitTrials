@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene.h"
+#include "Button.h"
 
 class MainMenuScene : public Scene {
 public:
@@ -12,8 +13,9 @@ public:
 private:
     sf::Sprite background;
 
-    sf::Text playButton;
-    sf::Text quitButton;
+    std::unique_ptr<Button> playButton;
+    std::unique_ptr<Button> ExitButton;
+
 
     void centerText(sf::Text& text, float y);
     bool isMouseOver(sf::Text& text, const std::unique_ptr<sf::RenderWindow>& window);

@@ -107,13 +107,20 @@ void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 	if (!battle) {
 		window->setView(Camera::getInstance().getCamera());
 
-	for (int index : visibleNodes) {
-		std::shared_ptr<Node> node = myMap->getFullMap()[index];
+		for (int index : visibleNodes) {
+			std::shared_ptr<Node> node = myMap->getFullMap()[index];
 
-		window->draw(*(node->waterBackSprite));
-		window->draw(*(node->drawableNode));
-		
-	}
+			window->draw(*(node->waterBackSprite));
+			window->draw(*(node->drawableNode));
+
+		}
+	
+	myPlayer->render(window);
+
+	playerBoat->render(window);
+
+	enemy->render(window);
+
 	for (int index : visibleNodes) {
 		std::shared_ptr<Node> node = myMap->getFullMap()[index];
 
@@ -123,14 +130,6 @@ void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 		if (node->GetBuilding())
 			node->GetBuilding()->Render(window);
 	}
-	
-	myPlayer->render(window);
-
-	playerBoat->render(window);
-
-	enemy->render(window);
-
-	//myMap->getChunks()[myPlayer->getCurrentChunkID()]->drawGameObject(window);
 	playerMenu->Render(window);
 }else
 {
@@ -453,7 +452,7 @@ void GamePlayScene::transferInventoryItems()
 
 void GamePlayScene::updateVisableNodes()
 {
-	sf::FloatRect viewBounds(Camera::getInstance().getCamera().getCenter() - (Camera::getInstance().getCamera().getSize() +sf::Vector2f(64,64)) / 2.0f, Camera::getInstance().getCamera().getSize() + sf::Vector2f(64, 64));
+	sf::FloatRect viewBounds(Camera::getInstance().getCamera().getCenter() - (Camera::getInstance().getCamera().getSize() +sf::Vector2f(128, 128)) / 2.0f, Camera::getInstance().getCamera().getSize() + sf::Vector2f(128, 128));
 
 	int minX = std::max(0, static_cast<int>(viewBounds.left / 32));
 	int maxX = std::min(32 * mapSize - 1, static_cast<int>((viewBounds.left + viewBounds.width) / 32));
