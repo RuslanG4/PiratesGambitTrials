@@ -11,9 +11,9 @@ void Building::Render(const std::unique_ptr<sf::RenderWindow>& _window) const
 
 void Building::RenderUI(const std::unique_ptr<sf::RenderWindow>& _window) const
 {
-	_window->setView(_window->getDefaultView());
 	if (buildingUI->IsMenuOpen())
 	{
+		_window->setView(_window->getDefaultView());
 		buildingUI->Render(_window);
 	}
 }

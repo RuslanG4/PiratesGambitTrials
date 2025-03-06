@@ -26,6 +26,9 @@ public:
 	/// <param name="window">RenderWindow</param>
 	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
 
+
+	void RenderUI(const std::unique_ptr<sf::RenderWindow>& window) const;
+
 	/// <summary>
 	/// Updates all objects in island
 	/// </summary>

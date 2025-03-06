@@ -16,6 +16,10 @@ void Island::render(const std::unique_ptr<sf::RenderWindow>& window) const
 	{
 		gameObject->render(window);
 	}
+}
+
+void Island::RenderUI(const std::unique_ptr<sf::RenderWindow>& window) const
+{
 	// Render UI after the game objects (building sprites)
 	for (const auto& building : buildings)
 	{

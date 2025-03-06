@@ -130,6 +130,10 @@ void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 		if (node->GetBuilding())
 			node->GetBuilding()->Render(window);
 	}
+	if (currentIsland) {
+		currentIsland->RenderUI(window);
+	}
+
 	playerMenu->Render(window);
 }else
 {
