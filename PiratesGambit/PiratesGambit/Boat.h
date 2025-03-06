@@ -41,7 +41,11 @@ public:
 
 	void setPosition(sf::Vector2f _pos) { position = _pos; boatSprite.setPosition(position); }
 	void setRotation(float _rotation){ boatSprite.setRotation(_rotation); }
-	void setDockedNode(const std::shared_ptr<Node>& _node) { dockedNode = _node; }
+	void setDockedNode(const std::shared_ptr<Node>& _node)
+	{
+		dockedNode = _node;
+		controller->resetVelocity();
+	}
 private:
 	sf::Vector2f position;
 	sf::Sprite boatSprite;

@@ -45,12 +45,12 @@ void Player::render(const std::unique_ptr<sf::RenderWindow>& window) const
 	}
 
 	//debug
-	/*for (auto& node : updateableArea->getUpdateableNodes())
-	{
-		if (node != nullptr) {
-			window->draw(*(node->debugShape));
-		}
-	}*/
+	//for (auto& node : updateableArea->getUpdateableNodes())
+	//{
+	//	if (node != nullptr) {
+	//		window->draw(*(node->debugShape));
+	//	}
+	//}
 }
 
 /// <summary>

@@ -355,9 +355,10 @@ void GamePlayScene::handleKeyInput()
 					if (node->getIsLand())
 					{
 						myPlayer->disembarkBoat(node);
-						playerBoat->setDockedNode(node);
+						playerBoat->setDockedNode(myPlayer->getCurrentNode());
 						FindCurrentNode();
 						FindCurrentIsland();
+						break;
 					}
 				}
 			}

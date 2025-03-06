@@ -23,6 +23,8 @@ public:
 	void setSpeed(const double& _speed) { m_speed = _speed; }
 	void setCurrentPosition(const sf::Vector2f& _pos) { m_currentPosition = _pos; }
 
+	void resetVelocity() { m_speed = 0; }
+
 private:
 	sf::Vector2f vel;
 	sf::Vector2f m_currentPosition;
