@@ -22,8 +22,8 @@ LoadingScene::LoadingScene()
     loadingText.setFont(font);
     loadingText.setString("Loading...");
     loadingText.setCharacterSize(70);
-    loadingText.setFillColor(sf::Color(220, 235, 241));
-    loadingText.setOutlineColor(sf::Color(12, 42, 61));
+    loadingText.setFillColor(sf::Color(212, 175, 55));
+    loadingText.setOutlineColor(sf::Color::Black);
     loadingText.setOutlineThickness(10.f);
 
     rotatingSquare.setTexture(TextureManager::getInstance().getTexture("WHEEL"));
@@ -38,8 +38,8 @@ LoadingScene::LoadingScene()
     toolTipText.setFont(font);
     toolTipText.setString(toolTips[randomToolTip]);
     toolTipText.setCharacterSize(50);
-    toolTipText.setFillColor(sf::Color(220, 235, 241));
-    toolTipText.setOutlineColor(sf::Color(12, 42, 61));
+    toolTipText.setFillColor(sf::Color(212, 175, 55));
+    toolTipText.setOutlineColor(sf::Color::Black);
     toolTipText.setOutlineThickness(10.f);
 
     centerText(loadingText, -300);
@@ -59,11 +59,23 @@ void LoadingScene::update(float dt)
 {
     if (!sceneReady) {
         rotatingSquare.rotate(rotationSpeed * (dt * 0.001f));
-    } else
-    {
-    	loadingText.setString("Press to continue...");
-    	centerText(loadingText, -300);
     }
+    else {
+        loadingText.setString("Press to continue...");
+        centerText(loadingText, -300);
+
+        float time = clock.getElapsedTime().asSeconds();
+
+        int alpha = static_cast<int>(127.5f * (std::sin(time * 3.0f) + 1.0f)); // Range: 0 to 255
+
+        sf::Color textColor = loadingText.getFillColor();
+        textColor.a = alpha;
+        sf::Color textOutlineColor = loadingText.getOutlineColor();
+        textOutlineColor.a = alpha;
+        loadingText.setFillColor(textColor);
+        loadingText.setOutlineColor(textOutlineColor);
+    }
+
 }
 
 void LoadingScene::render(const std::unique_ptr<sf::RenderWindow>& window)

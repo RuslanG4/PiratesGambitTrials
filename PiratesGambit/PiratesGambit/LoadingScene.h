@@ -33,6 +33,7 @@ private:
 
     std::vector<std::string> toolTips;
 
+    sf::Clock clock;
     sf::Font font;
     sf::Text loadingText;
 
