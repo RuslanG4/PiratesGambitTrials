@@ -7,6 +7,7 @@
 #include<array>
 #include<queue>
 #include<map>
+#include"fstream"
 #include<unordered_set>
 #include<algorithm>
 #include<random>

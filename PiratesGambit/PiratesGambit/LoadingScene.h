@@ -17,6 +17,10 @@ public:
 	void update(float dt) override;
 	void render(const std::unique_ptr<sf::RenderWindow>& window) override;
 
+    std::vector<std::string> loadTooltips(const std::string& filename);
+
+    void centerText(sf::Text& _text, int _y);
+
 	Scene* generateNextScene();
 private:
     std::thread generationThread;
@@ -26,7 +30,11 @@ private:
     sf::RectangleShape rotatingSquare;
     float rotationSpeed = 100.0f;
 
+    std::vector<std::string> toolTips;
+
     sf::Font font;
     sf::Text loadingText;
+
+    sf::Text toolTipText;
 };
 
