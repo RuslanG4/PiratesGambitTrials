@@ -88,6 +88,7 @@ void Game::render()
 {
 	m_window->clear(sf::Color::Black);
 	SceneManager::getInstance().getCurrentScene()->render(m_window);
+	m_window->setView(m_window->getDefaultView());
 	ParticleManager::getInstance().render(m_window);
 	m_window->display();
 }
