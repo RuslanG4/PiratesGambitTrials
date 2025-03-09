@@ -1,9 +1,12 @@
 #include "TacticsArmySlot.h"
 
-TacticsArmySlot::TacticsArmySlot(UnitName _type, sf::Vector2f _pos, bool _mainIcon)
+#include "UnitStatsDisplay.h"
+
+TacticsArmySlot::TacticsArmySlot(UnitName _type, UnitStats _stats, sf::Vector2f _pos, bool _mainIcon)
 {
+	stats = _stats;
 	init();
-	updateSlots(_type);
+	updateSlots(_type, stats);
 	boxBorder.setScale(5, 5);
 	boxBorder.setPosition(_pos);
 	teamColor.setScale(5, 5);
@@ -12,10 +15,11 @@ TacticsArmySlot::TacticsArmySlot(UnitName _type, sf::Vector2f _pos, bool _mainIc
 	unitSprite.setPosition(boxBorder.getPosition());
 }
 
-TacticsArmySlot::TacticsArmySlot(UnitName _type, sf::Vector2f _pos)
+TacticsArmySlot::TacticsArmySlot(UnitName _type, UnitStats _stats, sf::Vector2f _pos)
 {
+	stats = _stats;
 	init();
-	updateSlots(_type);
+	updateSlots(_type, stats);
 	boxBorder.setScale(2.5, 2.5);
 	boxBorder.setPosition(_pos);
 	teamColor.setScale(2.5, 2.5);
@@ -25,6 +29,21 @@ TacticsArmySlot::TacticsArmySlot(UnitName _type, sf::Vector2f _pos)
 
 	unitAmountUI.setPosition(sf::Vector2f(boxBorder.getPosition().x - 32, boxBorder.getPosition().y + 32));
 
+}
+
+void TacticsArmySlot::update()
+{
+	sf::Vector2f mousePos = static_cast<sf::Vector2f>(Mouse::getInstance().getMousePosition());
+	if (boxBorder.getGlobalBounds().contains(mousePos) && Mouse::getInstance().RightClicked() && occupied)
+	{
+		UnitStatsDisplay::getInstance().updateDisplay(stats);
+		UnitStatsDisplay::getInstance().setPosition(boxBorder.getPosition());
+		UnitStatsDisplay::getInstance().OpenMenu();
+	}
+	if(UnitStatsDisplay::getInstance().isDisplayOpen() && !Mouse::getInstance().RightClicked())
+	{
+		UnitStatsDisplay::getInstance().CloseMenu();
+	}
 }
 
 void TacticsArmySlot::init()
@@ -48,20 +67,29 @@ void TacticsArmySlot::init()
 	unitAmountUI.renderUnitAmount = false;
 }
 
-void TacticsArmySlot::updateSlots(UnitName _type)
+void TacticsArmySlot::updateSlots(UnitName _type, UnitStats _stats)
 {
 	switch (_type)
 	{
 	case BUCCANEER:
 		unitSprite.setTexture(TextureManager::getInstance().getTexture("BUCCANEER"));
+		occupied = true;
 		break;
 	case GUNNER:
 		unitSprite.setTexture(TextureManager::getInstance().getTexture("GUNNER"));
+		occupied = true;
 		break;
 	case HARPOONER:
 		unitSprite.setTexture(TextureManager::getInstance().getTexture("HARPOONER"));
+		occupied = true;
+		break;
+	case EMPTY:
+		occupied = false;
 		break;
 	}
+	stats = _stats;
+	UnitStatsDisplay::getInstance().updateDisplay(stats);
+
 }
 
 void TacticsArmySlot::updateUnitAmount(int _amount)

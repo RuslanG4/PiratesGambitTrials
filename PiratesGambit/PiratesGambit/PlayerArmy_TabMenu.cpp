@@ -1,5 +1,7 @@
 #include "PlayerArmy_TabMenu.h"
 
+#include "UnitStatsDisplay.h"
+
 PlayerArmy_TabMenu::PlayerArmy_TabMenu(const std::unique_ptr<Army>& _army, sf::Sprite _pos)
 {
 	background.setTexture(TextureManager::getInstance().getTexture("ARMY_MENU_UI"));
@@ -15,19 +17,29 @@ PlayerArmy_TabMenu::PlayerArmy_TabMenu(const std::unique_ptr<Army>& _army, sf::S
 		if (i == 4)
 		{
 			if (_army->getArmy().size() > i) {
-				armySlots.push_back(std::make_unique<TacticsArmySlot>(_army->getArmy()[i]->unitInformation.unitName, sf::Vector2f(armySlots.front()->getPosition().x + 60, position.y + 120)));
+				armySlots.push_back(std::make_unique<TacticsArmySlot>(_army->getArmy()[i]->unitInformation.unitName,
+					_army->getArmy()[i]->unitStats,
+					sf::Vector2f(armySlots.front()->getPosition().x + 60, position.y + 120)));
 			}else
 			{
-				armySlots.push_back(std::make_unique<TacticsArmySlot>(EMPTY, sf::Vector2f(armySlots.front()->getPosition().x + 60, position.y + 120)));
+				UnitStats temp;
+				armySlots.push_back(std::make_unique<TacticsArmySlot>(EMPTY,
+					temp,
+					sf::Vector2f(armySlots.front()->getPosition().x + 60, position.y + 120)));
 			}
 		}
 		else
 		{
 			if (_army->getArmy().size() > i) {
-				armySlots.push_back(std::make_unique<TacticsArmySlot>(_army->getArmy()[i]->unitInformation.unitName, position));
+				armySlots.push_back(std::make_unique<TacticsArmySlot>(_army->getArmy()[i]->unitInformation.unitName,
+					_army->getArmy()[i]->unitStats, 
+					position));
 			}else
 			{
-				armySlots.push_back(std::make_unique<TacticsArmySlot>(EMPTY, sf::Vector2f(position)));
+				UnitStats temp;
+				armySlots.push_back(std::make_unique<TacticsArmySlot>(EMPTY,
+					temp,
+					sf::Vector2f(position)));
 			}
 		}
 		
@@ -45,6 +57,10 @@ void PlayerArmy_TabMenu::UpdateUnitAmount(const std::unique_ptr<Army>& _army)
 
 void PlayerArmy_TabMenu::Update()
 {
+	for(auto& slot : armySlots)
+	{
+		slot->update();
+	}
 }
 
 void PlayerArmy_TabMenu::Render(const std::unique_ptr<sf::RenderWindow>& _window) const

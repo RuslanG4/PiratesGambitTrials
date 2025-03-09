@@ -23,6 +23,7 @@ void BattleScene::placeUnits(const std::unique_ptr<Army>& _army, bool _isEnemy) 
 
 void BattleScene::update(float _dt)
 {
+	tacticsArmyUI->update();
 	switch (currentState) {
 	case PREP:
 		UIInterface->update();

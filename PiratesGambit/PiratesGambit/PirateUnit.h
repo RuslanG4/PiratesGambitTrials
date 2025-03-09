@@ -16,7 +16,7 @@ struct UnitStats
 	bool isActive = true;
 
 	//movement
-	float speed;
+	int speed;
 
 	//damage calcs
 	int stackSize;

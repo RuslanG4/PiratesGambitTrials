@@ -9,6 +9,7 @@
 #include "EnemyBoat.h"
 #include "PlayerTabMenu.h"
 #include "Camera.h"
+#include "UnitStatsDisplay.h"
 
 class PlayerTabMenu;
 
@@ -74,7 +75,7 @@ private:
 	//battle scene
 	BattleSceneTransition battleTransition;
 	std::unique_ptr<BattleScene> battleScene;
-	bool battle = false;
+	bool battle = true;
 
 	int mapSize = 1;
 

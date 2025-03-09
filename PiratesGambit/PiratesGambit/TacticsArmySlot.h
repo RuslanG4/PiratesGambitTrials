@@ -2,16 +2,18 @@
 #include "Includes.h"
 #include "TextureManager.h"
 #include"Mouse.h"
+#include "PirateUnit.h"
 #include "UnitAmount.h"
 
 class TacticsArmySlot
 {
 public:
-	TacticsArmySlot(UnitName _type, sf::Vector2f _pos, bool _mainIcon);
-	TacticsArmySlot(UnitName _type,sf::Vector2f _pos);
+	TacticsArmySlot(UnitName _type, UnitStats _stats, sf::Vector2f _pos, bool _mainIcon);
+	TacticsArmySlot(UnitName _type, UnitStats _stats, sf::Vector2f _pos);
 
+	void update();
 	void init();
-	void updateSlots(UnitName _type);
+	void updateSlots(UnitName _type, UnitStats _stats);
 	void updateUnitAmount(int _amount);
 	void updateAllegianceColor(UnitAllegiance _allegiance);
 	void render(const std::unique_ptr<sf::RenderWindow>& _win) const;
@@ -21,6 +23,10 @@ public:
 private:
 	sf::Sprite boxBorder;
 	sf::RectangleShape teamColor;
+
+	UnitStats stats;
+
+	bool occupied = true;
 
 	UnitAmount unitAmountUI;
 	

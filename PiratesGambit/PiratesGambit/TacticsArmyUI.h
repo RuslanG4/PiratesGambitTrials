@@ -11,7 +11,7 @@ class TacticsArmyUI
 public:
 	TacticsArmyUI(const std::unique_ptr<Army>& _army);
 
-	void AddArmy(const std::unique_ptr<Army>& _army);
+	void update();
 	void extend();
 	void UpdateToInitiativeView();
 	void render(const std::unique_ptr<sf::RenderWindow>& _win) const;

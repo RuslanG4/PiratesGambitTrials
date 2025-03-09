@@ -25,6 +25,7 @@ GamePlayScene::GamePlayScene()
 	battleScene = std::make_unique<BattleScene>(myPlayer, enemy);
 
 	myMap->getChunks()[0]->getIslands()[0]->PlaceEnemy(enemy);
+
 }
 
 void GamePlayScene::handleInput(const std::unique_ptr<sf::RenderWindow>& window, sf::Event newEvent)
@@ -140,6 +141,7 @@ void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 	battleScene->render(window);
 }
 
+ UnitStatsDisplay::getInstance().Render(window);
 
 window->setView(Camera::getInstance().getCamera());
 
