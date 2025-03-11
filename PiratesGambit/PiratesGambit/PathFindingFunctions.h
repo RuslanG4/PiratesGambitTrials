@@ -50,8 +50,15 @@ public:
     /// <param name="_area">The search area containing all nodes.</param>
     /// <param name="_start">Starting node.</param>
     /// <param name="end">Destination node.</param>
+    /// <param name="isBoatMode">is the unit on a boat</param>
     /// <returns>A vector of shared pointers representing the shortest path.</returns>
     static std::vector<std::shared_ptr<NodeType>> aStarPathFind(
+        const std::shared_ptr<NodeType>& _start,
+        const std::shared_ptr<NodeType>& end,
+        bool isBoatMode
+    );
+
+    static std::vector<std::shared_ptr<NodeType>> generalAStarPathFind(
         const std::shared_ptr<NodeType>& _start,
         const std::shared_ptr<NodeType>& end
     );

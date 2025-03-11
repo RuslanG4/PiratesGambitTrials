@@ -14,17 +14,16 @@ void Enemy::render(const std::unique_ptr<sf::RenderWindow>& window) const
 	if (!onBoat)
 	{
 		window->draw(body);
-		//myHitbox->render(window);
-		//for (auto& node : updateableArea->getUpdateableNodes())
-		//{
-		//	if (node != nullptr) {
-		//		window->draw(*(node->debugShape));
-		//	}
-		//}
-	}else
-	{
-		boatRef->render(window);
+		myHitbox->render(window);
 	}
+	boatRef->render(window);
+
+	for (auto& node : updateableArea->getUpdateableNodes())
+		{
+			if (node != nullptr) {
+				window->draw(*(node->debugShape));
+			}
+		}
 }
 
 void Enemy::handleAnimationStates(double dt)
@@ -48,12 +47,12 @@ void Enemy::updatePosition(const sf::Vector2f& _pos)
 
 void Enemy::SetPosition(sf::Vector2f _pos)
 {
-	if (!onBoat) {
-		body.setPosition(_pos);
-	} else
+	if (isOnBoat())
 	{
+		boatRef->RotateTowardsPlayer(_pos - body.getPosition());
 		boatRef->setPosition(_pos);
 	}
+	body.setPosition(_pos);
 	myHitbox->setPosition(_pos);
 }
 
@@ -64,6 +63,8 @@ void Enemy::updateUpdateableArea(const std::shared_ptr<Node>& _startNode, int de
 
 void Enemy::boardBoat(const std::shared_ptr<EnemyBoat>& _boat)
 {
+	body.setPosition(_boat->getPosition());
+	myHitbox->setPosition(_boat->getPosition());
 	onBoat = true;
 	boatRef = _boat;
 }
@@ -72,6 +73,7 @@ void Enemy::disembarkBoat(const std::shared_ptr<Node>& _node)
 {
 	onBoat = false;
 	body.setPosition(_node->getMidPoint());
+	boatRef->setDockedNode(_node);
 }
 
 void Enemy::ChangeState(EnemyState* newState)

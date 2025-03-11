@@ -14,6 +14,7 @@ public:
 	{
 		enemyRef = _refEnemy;
 
+		position = _pos;
 		boatSprite.setPosition(_pos);
 		boatSprite.setTexture(_shipTexture);
 		boatSprite.setOrigin(56, 33);
@@ -25,6 +26,8 @@ public:
 	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
 	void update(double dt);
 
+	void RotateTowardsPlayer(sf::Vector2f _pos);
+
 	sf::Vector2f getPosition() const { return position; }
 	const std::shared_ptr<Node>& getDockedNode() const { return dockedNode; }
 
@@ -34,6 +37,8 @@ public:
 	void setPosition(sf::Vector2f _pos) { position = _pos; boatSprite.setPosition(position); }
 	void setRotation(float _rotation) { boatSprite.setRotation(_rotation); }
 	void setDockedNode(const std::shared_ptr<Node>& _node) { dockedNode = _node; }
+	std::shared_ptr<Node> GetDockedNode() const { return dockedNode; }
+
 private:
 	sf::Vector2f position;
 	sf::Sprite boatSprite;

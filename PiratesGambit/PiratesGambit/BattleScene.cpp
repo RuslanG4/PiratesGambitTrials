@@ -171,7 +171,7 @@ void BattleScene::createMoveableArea(const std::shared_ptr<PirateUnit>& _unit)
 
 void BattleScene::aStarPathFind(const std::shared_ptr<BattleGridNode>& _start, const std::shared_ptr<BattleGridNode>& end)
 {
-	path = PathFindingFunctions<BattleGridNode>::aStarPathFind(_start, end);
+	path = PathFindingFunctions<BattleGridNode>::aStarPathFind(_start, end, false);
 	clearArea(walkableNodesIDs);
 }
 

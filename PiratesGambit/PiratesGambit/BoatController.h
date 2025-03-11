@@ -34,7 +34,7 @@ private:
 	float m_rotation{ 360 };
 	float previousRotation;
 
-	const double MAX_REVERSE_SPEED = -140; //for movement
-	const double MAX_FORWARD_SPEED = 140;
+	const double MAX_REVERSE_SPEED = -60; //for movement
+	const double MAX_FORWARD_SPEED = 60;
 };
 

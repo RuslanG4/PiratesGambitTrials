@@ -13,9 +13,10 @@ void IdleState::Update(Enemy& enemy, float deltaTime)
 {
 	for (auto& node : enemy.getUpdateableArea()->getUpdateableNodes())
 	{
-		if (node == playerRef->getCurrentNode() && !playerRef->isOnBoat())
+		if (node == playerRef->getCurrentNode())
 		{
 			enemy.ChangeState(new ChaseState(playerRef));
+			break;
 		}
 	}
 }

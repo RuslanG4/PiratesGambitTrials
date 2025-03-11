@@ -168,6 +168,7 @@
     <ClCompile Include="EnemyBoat.cpp" />
     <ClCompile Include="EnemyMoveConditions.cpp" />
     <ClCompile Include="EnemyState.cpp" />
+    <ClCompile Include="FindBoatState.cpp" />
     <ClCompile Include="FullMap.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -252,6 +253,7 @@
     <ClInclude Include="EnemyMoveConditions.h" />
     <ClInclude Include="EnemyState.h" />
     <ClInclude Include="Enums.h" />
+    <ClInclude Include="FindBoatState.h" />
     <ClInclude Include="FullMap.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />

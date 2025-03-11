@@ -75,7 +75,7 @@ private:
 	//battle scene
 	BattleSceneTransition battleTransition;
 	std::unique_ptr<BattleScene> battleScene;
-	bool battle = true;
+	bool battle = false ;
 
 	int mapSize = 1;
 

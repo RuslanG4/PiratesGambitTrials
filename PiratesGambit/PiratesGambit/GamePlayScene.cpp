@@ -8,11 +8,14 @@ GamePlayScene::GamePlayScene()
 
 	myMap = std::make_unique<FullMap>(mapSize, myPlayer); //keep 1x1, 2x2
 
-	enemy = std::make_shared<Enemy>(sf::Vector2f(125, 25), myPlayer);
+	enemy = std::make_shared<Enemy>(myPlayer);
 
 	playerBoat = std::make_shared<Boat>(sf::Vector2f(25, 25), myPlayer);
 
-	enemyBoat = std::make_shared<EnemyBoat>(sf::Vector2f(225, 25), enemy, TextureManager::getInstance().getTexture("RED_BOAT"));
+	enemyBoat = std::make_shared<EnemyBoat>(sf::Vector2f(425, 25), enemy, TextureManager::getInstance().getTexture("RED_BOAT"));
+
+	FindCurrentChunk();
+	FindCurrentNode();
 
 	enemy->boardBoat(enemyBoat);
 
@@ -20,11 +23,9 @@ GamePlayScene::GamePlayScene()
 
 	playerBoat->addCannonBall();
 
-	FindCurrentChunk();
-
 	battleScene = std::make_unique<BattleScene>(myPlayer, enemy);
 
-	myMap->getChunks()[0]->getIslands()[0]->PlaceEnemy(enemy);
+	/*myMap->getChunks()[0]->getIslands()[0]->PlaceEnemy(enemy);*/
 
 }
 
@@ -217,6 +218,7 @@ void GamePlayScene::FindCurrentNodeInSameChunk(int _id, const std::shared_ptr<En
 			{
 				_enemy->setCurrentNode(node);
 				_enemy->updateUpdateableArea(node, 4);
+				break;
 			}
 		}
 	}

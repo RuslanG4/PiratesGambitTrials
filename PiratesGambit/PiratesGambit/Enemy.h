@@ -17,7 +17,7 @@ class EnemyBoat; //forward ref
 class Enemy
 {
 public:
-	Enemy(sf::Vector2f _pos, const std::shared_ptr<Player> _playerRef)
+	Enemy(const std::shared_ptr<Player> _playerRef)
 	{
 		army = std::make_unique<Army>();
 		updateableArea = std::make_unique<UpdateableArea>();
@@ -77,11 +77,13 @@ public:
 	void boardBoat(const std::shared_ptr<EnemyBoat>& _boat);
 	void disembarkBoat(const std::shared_ptr<Node>& _node);
 	bool isOnBoat() const { return onBoat; }
+	std::shared_ptr<EnemyBoat> GetBoat() const { return boatRef; }
 
 	//Army
 	const std::unique_ptr<Army>& getArmy() const { return army; }
 
 	void ChangeState(EnemyState* newState);
+	EnemyState* GetCurrentState() const { return currentActionState; }
 
 private:
 	sf::Sprite body;

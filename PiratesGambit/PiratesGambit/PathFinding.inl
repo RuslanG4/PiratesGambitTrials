@@ -5,7 +5,8 @@
 template <typename NodeType>
 std::vector<std::shared_ptr<NodeType>> PathFindingFunctions<NodeType>::aStarPathFind(
     const std::shared_ptr<NodeType>& _start,
-    const std::shared_ptr<NodeType>& end)
+    const std::shared_ptr<NodeType>& end,
+	bool isBoatMode)
 {
 	std::priority_queue<std::shared_ptr<NodeType>, std::vector<std::shared_ptr<NodeType>>, Compare<NodeType>> nodeQueue;
 	std::vector<std::shared_ptr<NodeType>> allScannedNodes; //used for then clearing
@@ -35,8 +36,13 @@ std::vector<std::shared_ptr<NodeType>> PathFindingFunctions<NodeType>::aStarPath
 					float movementCost = (neighbourNode.second == 1) ? 1.0f : 1.4f; // 1.0 for straight, 1.4 for diagonal
 					float newGCost = currentTop->getNodeData().gCost + movementCost;
 
+					bool isValidNode = (!isBoatMode && neighbourNode.first->getIsLand()) ||
+						(isBoatMode && !neighbourNode.first->getIsLand());
 
-					if ((!neighbourNode.first->hasBeenTraversed() || newGCost < neighbourNode.first->getNodeData().gCost ) && !neighbourNode.first->isOccupied() && neighbourNode.first->getIsLand()) {
+					if ((!neighbourNode.first->hasBeenTraversed() || newGCost < neighbourNode.first->getNodeData().gCost ) 
+						&& !neighbourNode.first->isOccupied()
+						&& isValidNode) 
+					{
 						neighbourNode.first->setPrevious(currentTop);
 						neighbourNode.first->setGCost(newGCost);
 
@@ -51,6 +57,72 @@ std::vector<std::shared_ptr<NodeType>> PathFindingFunctions<NodeType>::aStarPath
 						nodeQueue.push(neighbourNode.first);
 					}
 				
+			}
+		}
+	}
+
+	ClearTraversedNodes(allScannedNodes);
+
+	std::shared_ptr<NodeType> current = end;
+	while (current->getPrevious() != nullptr)
+	{
+		path.push_back(current);
+		current = std::static_pointer_cast<NodeType>(current->getPrevious());
+	}
+
+	std::ranges::reverse(path.begin(), path.end());
+
+	return path;
+}
+
+template<typename NodeType>
+inline std::vector<std::shared_ptr<NodeType>> PathFindingFunctions<NodeType>::generalAStarPathFind(const std::shared_ptr<NodeType>& _start, const std::shared_ptr<NodeType>& end)
+{
+	std::priority_queue<std::shared_ptr<NodeType>, std::vector<std::shared_ptr<NodeType>>, Compare<NodeType>> nodeQueue;
+	std::vector<std::shared_ptr<NodeType>> allScannedNodes; //used for then clearing
+	std::vector<std::shared_ptr<NodeType>> path;
+
+	nodeQueue.push(_start);
+	_start->clearPrevious();
+	end->clearPrevious();
+
+	while (!nodeQueue.empty()) {
+		std::shared_ptr<NodeType> currentTop = nodeQueue.top();
+
+		nodeQueue.pop();
+
+		if (currentTop == end) { //found
+			break;
+		}
+
+		if (!currentTop->hasBeenTraversed()) {
+			currentTop->updateTraversed(true);
+			allScannedNodes.push_back(currentTop);
+
+			auto neighbours = currentTop->getNeighbours();
+
+			for (auto& neighbourNode : neighbours) {
+
+				float movementCost = (neighbourNode.second == 1) ? 1.0f : 1.4f; // 1.0 for straight, 1.4 for diagonal
+				float newGCost = currentTop->getNodeData().gCost + movementCost;
+
+				if ((!neighbourNode.first->hasBeenTraversed() || newGCost < neighbourNode.first->getNodeData().gCost)
+					&& !neighbourNode.first->isOccupied())
+				{
+					neighbourNode.first->setPrevious(currentTop);
+					neighbourNode.first->setGCost(newGCost);
+
+					float dx = static_cast<float>(neighbourNode.first->getPosition().x - end->getPosition().x);
+					float dy = static_cast<float>(neighbourNode.first->getPosition().y - end->getPosition().y);
+
+					float hCost = (std::abs(dx) + std::abs(dy)) / _start->getNodeData().size;
+
+					neighbourNode.first->setHCost(hCost);
+					neighbourNode.first->setFCost(neighbourNode.first->getNodeData().gCost + neighbourNode.first->getNodeData().hCost);
+
+					nodeQueue.push(neighbourNode.first);
+				}
+
 			}
 		}
 	}
