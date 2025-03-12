@@ -17,13 +17,14 @@ void Enemy::render(const std::unique_ptr<sf::RenderWindow>& window) const
 		myHitbox->render(window);
 	}
 	boatRef->render(window);
+	enemyUI->Render(window);
 
-	for (auto& node : updateableArea->getUpdateableNodes())
-		{
-			if (node != nullptr) {
-				window->draw(*(node->debugShape));
-			}
-		}
+	//for (auto& node : updateableArea->getUpdateableNodes())
+	//	{
+	//		if (node != nullptr) {
+	//			window->draw(*(node->debugShape));
+	//		}
+	//	}
 }
 
 void Enemy::handleAnimationStates(double dt)
@@ -39,12 +40,6 @@ void Enemy::handleAnimationStates(double dt)
 	}
 }
 
-void Enemy::updatePosition(const sf::Vector2f& _pos)
-{
-	body.setPosition(_pos);
-	myHitbox->setPosition(_pos);
-}
-
 void Enemy::SetPosition(sf::Vector2f _pos)
 {
 	if (isOnBoat())
@@ -54,6 +49,7 @@ void Enemy::SetPosition(sf::Vector2f _pos)
 	}
 	body.setPosition(_pos);
 	myHitbox->setPosition(_pos);
+	enemyUI->setPosition(sf::Vector2f(_pos.x - 50, _pos.y - 20));
 }
 
 void Enemy::updateUpdateableArea(const std::shared_ptr<Node>& _startNode, int depth) const
@@ -65,6 +61,7 @@ void Enemy::boardBoat(const std::shared_ptr<EnemyBoat>& _boat)
 {
 	body.setPosition(_boat->getPosition());
 	myHitbox->setPosition(_boat->getPosition());
+	enemyUI->setPosition(sf::Vector2f(_boat->getPosition().x - 50, _boat->getPosition().y - 20));
 	onBoat = true;
 	boatRef = _boat;
 }

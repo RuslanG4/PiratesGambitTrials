@@ -270,7 +270,7 @@ void Island::PlaceEnemy(const std::shared_ptr<Enemy>& _enemy)
 	{
 		if (!node->isOccupied())
 		{
-			_enemy->updatePosition(node->getMidPoint());
+			_enemy->SetPosition(node->getMidPoint());
 			break;
 		}
 	}

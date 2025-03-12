@@ -372,6 +372,12 @@
     <ClCompile Include="AllianceDialogueUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerAllegiance.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -636,6 +642,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AllianceDialogueUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerAllegiance.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

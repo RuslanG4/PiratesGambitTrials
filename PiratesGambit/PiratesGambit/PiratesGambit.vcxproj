@@ -169,6 +169,7 @@
     <ClCompile Include="EnemyBoat.cpp" />
     <ClCompile Include="EnemyMoveConditions.cpp" />
     <ClCompile Include="EnemyState.cpp" />
+    <ClCompile Include="EnemyUI.cpp" />
     <ClCompile Include="FindBoatState.cpp" />
     <ClCompile Include="FullMap.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -201,6 +202,7 @@
     <ClCompile Include="PathFindingFunctions.cpp" />
     <ClCompile Include="PirateUnit.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerAllegiance.cpp" />
     <ClCompile Include="PlayerArmy_TabMenu.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="PlayerInventory.cpp" />
@@ -254,6 +256,7 @@
     <ClInclude Include="EnemyBoat.h" />
     <ClInclude Include="EnemyMoveConditions.h" />
     <ClInclude Include="EnemyState.h" />
+    <ClInclude Include="EnemyUI.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="FindBoatState.h" />
     <ClInclude Include="FullMap.h" />
@@ -288,6 +291,7 @@
     <ClInclude Include="PirateUnit.h" />
     <ClInclude Include="PirateUnits.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerAllegiance.h" />
     <ClInclude Include="PlayerArmy_TabMenu.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="PlayerInventory.h" />

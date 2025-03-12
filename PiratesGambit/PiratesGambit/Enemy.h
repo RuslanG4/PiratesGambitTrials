@@ -8,16 +8,18 @@
 #include"Army.h"
 #include "EnemyBoat.h"
 #include "EnemyState.h"
+#include "EnemyUI.h"
 #include "IdleState.h"
 #include"Structs.h"
 #include "Player.h"
+#include "PlayerAllegiance.h"
 
 class EnemyBoat; //forward ref
 
 class Enemy
 {
 public:
-	Enemy(const std::shared_ptr<Player> _playerRef)
+	Enemy(const std::shared_ptr<Player>& _playerRef)
 	{
 		army = std::make_unique<Army>();
 		updateableArea = std::make_unique<UpdateableArea>();
@@ -40,6 +42,9 @@ public:
 
 		myHitbox = new HitBox(sf::Vector2f(22, 22));
 
+		playerAllegiance = std::make_unique<PlayerAllegiance>(-10);
+		enemyUI = std::make_unique<EnemyUI>(100, 5, playerAllegiance);
+
 		ChangeState(new IdleState(_playerRef));
 	}
 	~Enemy() = default;
@@ -57,7 +62,6 @@ public:
 	sf::FloatRect GetGlobalBounds() const { return myHitbox->GetGlobalBounds(); }
 
 	//Updating position
-	void updatePosition(const sf::Vector2f& _pos);
 	void setCurrentNode(const std::shared_ptr<Node>& node_) { currentNode = node_; }
 	void SetPosition(sf::Vector2f _pos);
 	void FacePlayer(int _direction)
@@ -85,8 +89,12 @@ public:
 	void ChangeState(EnemyState* newState);
 	EnemyState* GetCurrentState() const { return currentActionState; }
 
+	std::unique_ptr <PlayerAllegiance>& GetPlayerAllegiance() { return playerAllegiance; }
+
 private:
 	sf::Sprite body;
+	std::unique_ptr <PlayerAllegiance> playerAllegiance;
+	std::unique_ptr<EnemyUI> enemyUI;
 
 	EnemyState* currentActionState;
 	AnimationState animationState;

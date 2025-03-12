@@ -32,28 +32,28 @@ GamePlayScene::GamePlayScene()
 void GamePlayScene::handleInput(const std::unique_ptr<sf::RenderWindow>& window, sf::Event newEvent)
 {
 
-		if (sf::Event::KeyPressed == newEvent.type) //user pressed a key
-		{
-			processKeys(newEvent);
-			if (myPlayer->isOnBoat()) {
-				playerBoat->processKeys(newEvent);
-			}
+	if (sf::Event::KeyPressed == newEvent.type) //user pressed a key
+	{
+		processKeys(newEvent);
+		if (myPlayer->isOnBoat()) {
+			playerBoat->processKeys(newEvent);
 		}
-		if (sf::Event::KeyReleased == newEvent.type)
-		{
-			processKeyUp(newEvent);
-			if (myPlayer->isOnBoat()) {
-				playerBoat->processKeyUp(newEvent);
-			}
+	}
+	if (sf::Event::KeyReleased == newEvent.type)
+	{
+		processKeyUp(newEvent);
+		if (myPlayer->isOnBoat()) {
+			playerBoat->processKeyUp(newEvent);
 		}
-		if (sf::Event::MouseButtonPressed == newEvent.type) //user pressed mouse
-		{
-			Mouse::getInstance().processMouse(newEvent);
-			if (!battle && currentObjectInteract.lock()) {
-				transferInventoryItems();
-			}
+	}
+	if (sf::Event::MouseButtonPressed == newEvent.type) //user pressed mouse
+	{
+		Mouse::getInstance().processMouse(newEvent);
+		if (!battle && currentObjectInteract.lock()) {
+			transferInventoryItems();
 		}
-	
+	}
+
 }
 
 void GamePlayScene::update(float dt)
@@ -64,6 +64,25 @@ void GamePlayScene::update(float dt)
 		updateVisableNodes();
 		FindCurrentChunk();
 		FindCurrentNode();
+
+		for (auto& node : myPlayer->getUpdateableArea()->getUpdateableNodes())
+		{
+			interactWithObjects(node);
+
+			if (sf::Keyboard::isKeyPressed((sf::Keyboard::X)) && !AllianceDialogueUI::getInstance().isMenuOpen()
+				&& enemy->getCurrentNode() == node && !enemy->GetPlayerAllegiance()->isHostile())
+			{
+				AllianceDialogueUI::getInstance().OpenMenu();
+			}
+
+			transitionToBattleMode(node);
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tab) && !interactWithObject && !Inventory::isInventoryOpen() && !HireRecruitUI::IsUIOpen() && !PlayerTabMenu::isMenuOpen())
+		{
+			interactWithObject = true;
+			playerMenu->Interact(myPlayer);
+		}
 
 		handleKeyInput();
 		myMap->getChunks()[myPlayer->getCurrentChunkID()]->updateIslands(dt);
@@ -79,7 +98,7 @@ void GamePlayScene::update(float dt)
 
 		enemy->update(dt);
 
-		if(currentIsland)
+		if (currentIsland)
 		{
 			HandleGameObjectCollision();
 			HandleBuildingCollision();
@@ -87,12 +106,11 @@ void GamePlayScene::update(float dt)
 
 		playerMenu->Update();
 
-		transitionToBattleMode();
 	}
-	else if(battleTransition.IsTransitionActive())
+	else if (battleTransition.IsTransitionActive())
 	{
 		battleTransition.Update();
-		if(battleTransition.IsTransitionActive() == false)
+		if (battleTransition.IsTransitionActive() == false)
 		{
 			battle = true;
 		}
@@ -119,42 +137,43 @@ void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 			window->draw(*(node->drawableNode));
 
 		}
-	
-	myPlayer->render(window);
 
-	playerBoat->render(window);
+		myPlayer->render(window);
 
-	enemy->render(window);
+		playerBoat->render(window);
 
-	for (int index : visibleNodes) {
-		std::shared_ptr<Node> node = myMap->getFullMap()[index];
+		enemy->render(window);
 
-		if (node->GetObject())
-			node->GetObject()->render(window);
+		for (int index : visibleNodes) {
+			std::shared_ptr<Node> node = myMap->getFullMap()[index];
 
-		if (node->GetBuilding())
-			node->GetBuilding()->Render(window);
-	}
-	if (currentIsland) {
-		currentIsland->RenderUI(window);
-	}
+			if (node->GetObject())
+				node->GetObject()->render(window);
 
-	playerMenu->Render(window);
-}else
-{
-	battleScene->render(window);
-}
-
- UnitStatsDisplay::getInstance().Render(window);
-
-window->setView(Camera::getInstance().getCamera());
-
-battleTransition.Render(window);
-
-		if(AllianceDialogueUI::getInstance().isMenuOpen())
-		{
-			AllianceDialogueUI::getInstance().Render(window);
+			if (node->GetBuilding())
+				node->GetBuilding()->Render(window);
 		}
+		if (currentIsland) {
+			currentIsland->RenderUI(window);
+		}
+
+		playerMenu->Render(window);
+	}
+	else
+	{
+		battleScene->render(window);
+	}
+
+	UnitStatsDisplay::getInstance().Render(window);
+
+	window->setView(Camera::getInstance().getCamera());
+
+	battleTransition.Render(window);
+
+	if (AllianceDialogueUI::getInstance().isMenuOpen())
+	{
+		AllianceDialogueUI::getInstance().Render(window);
+	}
 }
 
 void GamePlayScene::processKeys(sf::Event t_event)
@@ -376,78 +395,57 @@ void GamePlayScene::handleKeyInput()
 			}
 		}
 	}
-
-	if (sf::Keyboard::isKeyPressed((sf::Keyboard::X)) && !AllianceDialogueUI::getInstance().isMenuOpen())
-	{
-		AllianceDialogueUI::getInstance().OpenMenu();
-	}
-
-	//Chnage this to general boolean to look clanaer
-	if (sf::Keyboard::isKeyPressed((sf::Keyboard::E)) && !interactWithObject && !Inventory::isInventoryOpen() && !HireRecruitUI::IsUIOpen() && !PlayerTabMenu::isMenuOpen())
-	{
-		interactWithObject = true;
-		interactWithObjects();
-		if (interactWithBuildings()) {
-			myPlayer->getPlayerController()->setLandVelocity(sf::Vector2f(0, 0));
-		}
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tab) && !interactWithObject && !Inventory::isInventoryOpen() && !HireRecruitUI::IsUIOpen() && !PlayerTabMenu::isMenuOpen())
-	{
-		interactWithObject = true;
-		playerMenu->Interact(myPlayer);
-	}
 }
 
-void GamePlayScene::transitionToBattleMode()
+void GamePlayScene::transitionToBattleMode(const std::shared_ptr<Node>& _node)
 {
-	for (auto& node : myPlayer->getUpdateableArea()->getUpdateableNodes())
+	if (_node->getID() == enemy->getCurrentNode()->getID())
 	{
-		if (node->getID() == enemy->getCurrentNode()->getID())
+		if (enemy->GetGlobalBounds().intersects(myPlayer->GetHitBox()))
 		{
-			if (enemy->GetGlobalBounds().intersects(myPlayer->GetHitBox()))
-			{
-				battleTransition.startTransition(1);
-			}
+			battleTransition.startTransition(1);
 		}
 	}
 }
 
-void GamePlayScene::interactWithObjects()
+void GamePlayScene::interactWithObjects(const std::shared_ptr<Node>& _node)
 {
-	for (auto& node : myPlayer->getUpdateableArea()->getUpdateableNodes())
+	if (sf::Keyboard::isKeyPressed((sf::Keyboard::E)) && !interactWithObject && !Inventory::isInventoryOpen() && !HireRecruitUI::IsUIOpen() && !PlayerTabMenu::isMenuOpen())
 	{
 		for (auto& island : myMap->getChunks()[myPlayer->getCurrentChunkID()]->getIslands())
 		{
 			for (auto& gameObject : island->getGameObjects())
 			{
-				if (gameObject->getID() == node->getID())
+				if (gameObject->getID() == _node->getID())
 				{
 					gameObject->interact();
+					myPlayer->getPlayerController()->setLandVelocity(sf::Vector2f(0, 0));
 					currentObjectInteract = gameObject;
+					interactWithObject = true;
 					break;
 				}
 			}
 		}
+		if (interactWithBuildings(_node)) {
+			myPlayer->getPlayerController()->setLandVelocity(sf::Vector2f(0, 0));
+		}
 	}
+	
 }
 
-bool GamePlayScene::interactWithBuildings()
+bool GamePlayScene::interactWithBuildings(const std::shared_ptr<Node>& _node)
 {
-	for (auto& node : myPlayer->getUpdateableArea()->getUpdateableNodes())
+	for (auto& island : myMap->getChunks()[myPlayer->getCurrentChunkID()]->getIslands())
 	{
-		for (auto& island : myMap->getChunks()[myPlayer->getCurrentChunkID()]->getIslands())
+		for (auto& building : island->getBuildings())
 		{
-			for (auto& building : island->getBuildings())
+			for (auto& nodeId : building->GetOccupiedNodeIds())
 			{
-				for (auto& nodeId : building->GetOccupiedNodeIds())
+				if (nodeId == _node->getID())
 				{
-					if (nodeId == node->getID())
-					{
-						building->Interact();
-						//currentBuildingInteract = building;
-						return true;
-					}
+					building->Interact();
+					//currentBuildingInteract = building;
+					return true;
 				}
 			}
 		}
@@ -474,7 +472,7 @@ void GamePlayScene::transferInventoryItems()
 
 void GamePlayScene::updateVisableNodes()
 {
-	sf::FloatRect viewBounds(Camera::getInstance().getCamera().getCenter() - (Camera::getInstance().getCamera().getSize() +sf::Vector2f(128, 128)) / 2.0f, Camera::getInstance().getCamera().getSize() + sf::Vector2f(128, 128));
+	sf::FloatRect viewBounds(Camera::getInstance().getCamera().getCenter() - (Camera::getInstance().getCamera().getSize() + sf::Vector2f(128, 128)) / 2.0f, Camera::getInstance().getCamera().getSize() + sf::Vector2f(128, 128));
 
 	int minX = std::max(0, static_cast<int>(viewBounds.left / 32));
 	int maxX = std::min(32 * mapSize - 1, static_cast<int>((viewBounds.left + viewBounds.width) / 32));

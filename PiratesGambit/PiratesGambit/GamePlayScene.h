@@ -42,10 +42,10 @@ private:
 
 	void handleKeyInput();
 
-	void transitionToBattleMode();
+	void transitionToBattleMode(const std::shared_ptr<Node>& _node);
 
-	void interactWithObjects();
-	bool interactWithBuildings();
+	void interactWithObjects(const std::shared_ptr<Node>& _node);
+	bool interactWithBuildings(const std::shared_ptr<Node>& _node);
 
 	void transferInventoryItems();
 

@@ -11,12 +11,14 @@ void IdleState::Enter(Enemy& enemy)
 
 void IdleState::Update(Enemy& enemy, float deltaTime)
 {
-	for (auto& node : enemy.getUpdateableArea()->getUpdateableNodes())
-	{
-		if (node == playerRef->getCurrentNode())
+	if (enemy.GetPlayerAllegiance()->isHostile()) {
+		for (auto& node : enemy.getUpdateableArea()->getUpdateableNodes())
 		{
-			enemy.ChangeState(new ChaseState(playerRef));
-			break;
+			if (node == playerRef->getCurrentNode())
+			{
+				enemy.ChangeState(new ChaseState(playerRef));
+				break;
+			}
 		}
 	}
 }
