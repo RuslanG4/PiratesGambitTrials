@@ -56,7 +56,10 @@ const char* const ARMY_MENU_UI = "ASSETS\\IMAGES\\UI\\CharacterBox_56x57.png";
 const char* const BUTTONS = "ASSETS\\IMAGES\\UI\\buttons_4x.png";
 const char* const WHEEL = "ASSETS\\IMAGES\\UI\\WHEEL.png";
 
+//Portraits
+const char* const PIRATE_ONE = "ASSETS\\IMAGES\\Portraits\\temp.png";
 
+//Pirates
 const char* const PIRATE_CAPTAIN = "ASSETS\\IMAGES\\Pirates\\MiniPirateCaptain.png";
 const char* const BUCCANEER_SPRITE = "ASSETS\\IMAGES\\Pirates\\MiniPirateCrew.png";
 const char* const GUNNER_SPRITE = "ASSETS\\IMAGES\\Pirates\\MiniPirateGunner.png";

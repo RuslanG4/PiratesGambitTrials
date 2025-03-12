@@ -60,6 +60,7 @@ public:
         texturesLoaded &= loadTexture("SEA_BG", SEA_BG);
         texturesLoaded &= loadTexture("BUTTONS", BUTTONS);
         texturesLoaded &= loadTexture("WHEEL", WHEEL);
+        texturesLoaded &= loadTexture("PIRATE_ONE", PIRATE_ONE);
 
         return fontsLoaded && texturesLoaded;
     }

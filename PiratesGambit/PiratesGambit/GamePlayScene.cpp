@@ -101,7 +101,10 @@ void GamePlayScene::update(float dt)
 	else {
 		battleScene->update(dt);
 	}
-
+	if (AllianceDialogueUI::getInstance().isMenuOpen())
+	{
+		AllianceDialogueUI::getInstance().Update();
+	}
 }
 
 void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
@@ -147,6 +150,11 @@ void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 window->setView(Camera::getInstance().getCamera());
 
 battleTransition.Render(window);
+
+		if(AllianceDialogueUI::getInstance().isMenuOpen())
+		{
+			AllianceDialogueUI::getInstance().Render(window);
+		}
 }
 
 void GamePlayScene::processKeys(sf::Event t_event)
@@ -367,6 +375,11 @@ void GamePlayScene::handleKeyInput()
 				}
 			}
 		}
+	}
+
+	if (sf::Keyboard::isKeyPressed((sf::Keyboard::X)) && !AllianceDialogueUI::getInstance().isMenuOpen())
+	{
+		AllianceDialogueUI::getInstance().OpenMenu();
 	}
 
 	//Chnage this to general boolean to look clanaer

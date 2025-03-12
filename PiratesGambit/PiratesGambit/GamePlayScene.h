@@ -10,6 +10,7 @@
 #include "PlayerTabMenu.h"
 #include "Camera.h"
 #include "UnitStatsDisplay.h"
+#include"AllianceDialogueUI.h"
 
 class PlayerTabMenu;
 
