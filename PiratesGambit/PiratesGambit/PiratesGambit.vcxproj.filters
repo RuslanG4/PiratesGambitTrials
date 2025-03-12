@@ -109,12 +109,6 @@
     <Filter Include="Source Files\Projectile">
       <UniqueIdentifier>{e14abfce-aeca-4bbf-9320-bca3a0cb4032}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\GameObjects\Buildings">
-      <UniqueIdentifier>{70f23ab7-4521-438f-9ec6-ba3b38070200}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GameObjects\Buildings">
-      <UniqueIdentifier>{4558a994-8304-45d7-870e-4be9effc9edd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\UI\Building Menus">
       <UniqueIdentifier>{c56e6f60-a3c6-4dd6-a7fe-5fca9c63df14}</UniqueIdentifier>
     </Filter>
@@ -124,8 +118,20 @@
     <Filter Include="Header Files\UI\Building Menus\Icons">
       <UniqueIdentifier>{cf1e1082-d0d6-4169-b607-be00ffe38250}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\GameObjects\Buildings\BuildingUI">
-      <UniqueIdentifier>{fdeff755-48b7-4c22-8f3c-ea85aff94950}</UniqueIdentifier>
+    <Filter Include="Header Files\Scenes">
+      <UniqueIdentifier>{6cd37b48-4a31-4456-9a68-17098fc079c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scenes">
+      <UniqueIdentifier>{c4b62843-d2da-4ae6-aac0-33401a2a7e68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Buildings">
+      <UniqueIdentifier>{c6b3efc1-3790-42a2-be9f-ff9842ea9c33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Enemy\States">
+      <UniqueIdentifier>{3f869b7e-67ae-40bf-bad5-e639bf1e49bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Buildings">
+      <UniqueIdentifier>{598649b8-1a52-497a-a39e-c167f322dccb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -237,9 +243,6 @@
     <ClCompile Include="DamageCalculations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BulletFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="InitiativeSystem.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
@@ -273,32 +276,8 @@
     <ClCompile Include="Harpoon.cpp">
       <Filter>Source Files\Projectile</Filter>
     </ClCompile>
-    <ClCompile Include="Building.cpp">
-      <Filter>Source Files\GameObjects\Buildings</Filter>
-    </ClCompile>
-    <ClCompile Include="BuccaneerBuilding.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HireRecruitUI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="InfoBoxUI.cpp">
       <Filter>Source Files\UI\Building Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="AnimatedCharacterIcon.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GunnerIcon.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BuccaneerIcon.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Slider.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="IconButton.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BattleSceneTransition.cpp">
       <Filter>Source Files</Filter>
@@ -306,77 +285,104 @@
     <ClCompile Include="Coins.cpp">
       <Filter>Source Files\Inventory\Items</Filter>
     </ClCompile>
-    <ClCompile Include="GunnerBuilding.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerInventory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BarrelInventory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerArmy_TabMenu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerTabMenu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Resources_TabMenu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourceSlotUI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Tree.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LeafParticle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="EnemyState.cpp">
       <Filter>Source Files\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="IdleState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ChaseState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="EnemyBoat.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LoadingScene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GamePlayScene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MainMenuScene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Button.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UnitStatsDisplay.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FindBoatState.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Boat</Filter>
     </ClCompile>
     <ClCompile Include="AllianceDialogueUI.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerAllegiance.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="AnimatedCharacterIcon.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="BarrelInventory.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="BuccaneerBuilding.cpp">
+      <Filter>Source Files\Buildings</Filter>
+    </ClCompile>
+    <ClCompile Include="BuccaneerIcon.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletFactory.cpp">
+      <Filter>Source Files\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="ChaseState.cpp">
+      <Filter>Source Files\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="EnemyUI.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="FindBoatState.cpp">
+      <Filter>Source Files\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePlayScene.cpp">
+      <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="GunnerBuilding.cpp">
+      <Filter>Source Files\Buildings</Filter>
+    </ClCompile>
+    <ClCompile Include="GunnerIcon.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="HireRecruitUI.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="IconButton.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="IdleState.cpp">
+      <Filter>Source Files\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="LeafParticle.cpp">
+      <Filter>Source Files\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadingScene.cpp">
+      <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenuScene.cpp">
+      <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerAllegiance.cpp">
+      <Filter>Source Files\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceSlotUI.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitStatsDisplay.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Tree.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Building.cpp">
+      <Filter>Source Files\Buildings</Filter>
+    </ClCompile>
+    <ClCompile Include="Slider.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Resources_TabMenu.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerTabMenu.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerInventory.cpp">
+      <Filter>Source Files\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerArmy_TabMenu.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -473,9 +479,6 @@
     <ClInclude Include="PirateUnit.h">
       <Filter>Header Files\Army\Units</Filter>
     </ClInclude>
-    <ClInclude Include="PirateUnits.h">
-      <Filter>Header Files\Globals</Filter>
-    </ClInclude>
     <ClInclude Include="BattleScene.h">
       <Filter>Header Files\Battle</Filter>
     </ClInclude>
@@ -499,9 +502,6 @@
     </ClInclude>
     <ClInclude Include="UnitAmount.h">
       <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="BulletFactory.h">
-      <Filter>Header Files\Globals</Filter>
     </ClInclude>
     <ClInclude Include="Enemy.h">
       <Filter>Header Files\Enemy</Filter>
@@ -536,23 +536,11 @@
     <ClInclude Include="Harpoon.h">
       <Filter>Header Files\Projectile</Filter>
     </ClInclude>
-    <ClInclude Include="Building.h">
-      <Filter>Header Files\GameObjects\Buildings</Filter>
-    </ClInclude>
     <ClInclude Include="GunnerIcon.h">
       <Filter>Header Files\UI\Building Menus\Icons</Filter>
     </ClInclude>
     <ClInclude Include="BattleSceneTransition.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimatedCharacterIcon.h">
-      <Filter>Header Files\GameObjects\Buildings\BuildingUI</Filter>
-    </ClInclude>
-    <ClInclude Include="BuccaneerBuilding.h">
-      <Filter>Header Files\GameObjects\Buildings</Filter>
-    </ClInclude>
-    <ClInclude Include="HireRecruitUI.h">
-      <Filter>Header Files\GameObjects\Buildings\BuildingUI</Filter>
     </ClInclude>
     <ClInclude Include="IconButton.h">
       <Filter>Header Files\UI</Filter>
@@ -571,9 +559,6 @@
     </ClInclude>
     <ClInclude Include="BarrelInventory.h">
       <Filter>Header Files\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="GunnerBuilding.h">
-      <Filter>Header Files\GameObjects\Buildings</Filter>
     </ClInclude>
     <ClInclude Include="DiskSampling.h">
       <Filter>Header Files\Singletons</Filter>
@@ -602,53 +587,74 @@
     <ClInclude Include="Tree.h">
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="LeafParticle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyState.h">
-      <Filter>Header Files\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyBoat.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IdleState.h">
-      <Filter>Header Files\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="ChaseState.h">
-      <Filter>Header Files\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LoadingScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GamePlayScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MainMenuScene.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="AllianceDialogueUI.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
     <ClInclude Include="Button.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="UnitStatsDisplay.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FindBoatState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AllianceDialogueUI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerAllegiance.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="EnemyBoat.h">
+      <Filter>Header Files\Boat</Filter>
     </ClInclude>
     <ClInclude Include="EnemyUI.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePlayScene.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="LeafParticle.h">
+      <Filter>Header Files\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadingScene.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitStatsDisplay.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerAllegiance.h">
+      <Filter>Header Files\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenuScene.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="ChaseState.h">
+      <Filter>Header Files\Enemy\States</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyState.h">
+      <Filter>Header Files\Enemy\States</Filter>
+    </ClInclude>
+    <ClInclude Include="FindBoatState.h">
+      <Filter>Header Files\Enemy\States</Filter>
+    </ClInclude>
+    <ClInclude Include="IdleState.h">
+      <Filter>Header Files\Enemy\States</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimatedCharacterIcon.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="HireRecruitUI.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="BuccaneerBuilding.h">
+      <Filter>Header Files\Buildings</Filter>
+    </ClInclude>
+    <ClInclude Include="Building.h">
+      <Filter>Header Files\Buildings</Filter>
+    </ClInclude>
+    <ClInclude Include="GunnerBuilding.h">
+      <Filter>Header Files\Buildings</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletFactory.h">
+      <Filter>Header Files\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="PirateUnits.h">
+      <Filter>Header Files\Army</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
