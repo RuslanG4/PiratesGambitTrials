@@ -384,6 +384,9 @@
     <ClCompile Include="PlayerArmy_TabMenu.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="AllianceStatusUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -655,6 +658,9 @@
     </ClInclude>
     <ClInclude Include="PirateUnits.h">
       <Filter>Header Files\Army</Filter>
+    </ClInclude>
+    <ClInclude Include="AllianceStatusUI.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -42,7 +42,7 @@ public:
 
 		myHitbox = new HitBox(sf::Vector2f(22, 22));
 
-		playerAllegiance = std::make_unique<PlayerAllegiance>(-10);
+		playerAllegiance = std::make_unique<PlayerAllegiance>(0);
 		enemyUI = std::make_unique<EnemyUI>(100, 5, playerAllegiance);
 
 		ChangeState(new IdleState(_playerRef));

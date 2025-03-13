@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AllianceDialogueUI.cpp" />
+    <ClCompile Include="AllianceStatusUI.cpp" />
     <ClCompile Include="AnimatedCharacterIcon.cpp" />
     <ClCompile Include="Animator.cpp" />
     <ClCompile Include="Army.cpp" />
@@ -225,6 +226,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AllianceDialogueUI.h" />
+    <ClInclude Include="AllianceStatusUI.h" />
     <ClInclude Include="AnimatedCharacterIcon.h" />
     <ClInclude Include="Animator.h" />
     <ClInclude Include="Army.h" />

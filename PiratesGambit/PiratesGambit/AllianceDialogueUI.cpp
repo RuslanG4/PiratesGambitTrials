@@ -19,6 +19,8 @@ void AllianceDialogueUI::Init()
     dialogueText.setCharacterSize(36U);
     dialogueText.setFillColor(sf::Color::White);
 
+    costText.setPosition(characterPortrait.getPosition().x + characterPortrait.getGlobalBounds().width + 50, characterPortrait.getPosition().y + 150);
+
     allianceIndicator.setRadius(20);
     allianceIndicator.setPosition(750, 250);
     allianceIndicator.setFillColor(sf::Color::Green);
@@ -30,6 +32,8 @@ void AllianceDialogueUI::Init()
     purchaseButton = std::make_unique<IconButton>(2, 2,
         sf::Vector2f(dialogueBox.getPosition().x + dialogueBox.getGlobalBounds().width - 300, dialogueBox.getPosition().y + 600),
         TextureManager::getInstance().getTexture("MONEY_ICON"));
+
+    allianceStatus = std::make_unique<AllianceStatusUI>(characterPortrait.getPosition() + sf::Vector2f(300, 0));
 
     UpdateText();
 }
@@ -97,6 +101,7 @@ void AllianceDialogueUI::Render(const std::unique_ptr<sf::RenderWindow>& _window
         _window->draw(characterPortrait);
         _window->draw(dialogueText);
         _window->draw(allianceIndicator);
+        allianceStatus->Render(_window);
         purchaseButton->Render(_window);
         exitButton->Render(_window);
     }

@@ -2,6 +2,7 @@
 #include "Button.h"
 #include "IconButton.h"
 #include"Includes.h"
+#include"AllianceStatusUI.h"
 
 class AllianceDialogueUI {
 public:
@@ -42,10 +43,13 @@ private:
     sf::Sprite characterPortrait;
     sf::CircleShape allianceIndicator;
 
+    std::unique_ptr<AllianceStatusUI> allianceStatus;
     std::unique_ptr<IconButton> exitButton;
     std::unique_ptr<IconButton> purchaseButton;
 
     sf::Text dialogueText;
+
+    sf::Text costText;
 
     std::string fullText;
     std::string currentText;
