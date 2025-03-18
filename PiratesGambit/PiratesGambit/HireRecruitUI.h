@@ -8,6 +8,7 @@
 #include "Slider.h"
 #include"IconButton.h"
 #include"Player.h"
+#include "ProgressBar.h"
 
 class HireRecruitUI
 {
@@ -16,6 +17,7 @@ public:
 
 	void SetCharacter();
 	void AddCharacterToPlayer() const;
+	void resetValues();
 
 	void Render(const std::unique_ptr<sf::RenderWindow>& _window) const;
 	void Update(float _dt);
@@ -26,6 +28,7 @@ public:
 	static bool IsUIOpen(){ return uiOpen; }
 
 	bool IsMenuOpen() const { return isMenuOpen; }
+	bool UnitsAvailable() const { return progressBar->canBuyUnits(); }
 private:
 	std::shared_ptr<Player> playerRef;
 
@@ -35,12 +38,18 @@ private:
 
 	bool isMenuOpen{false};
 
+	bool resetValue = false;
+
 	int unitsLeftReference;
+
+	int availableUnits;
 
 	sf::Sprite background;
 
 	sf::Sprite unit;
 	AnimationState animationState;
+
+	std::unique_ptr<ProgressBar> progressBar;
 
 	std::unique_ptr<InfoBoxUI> costPerTroop;
 	std::unique_ptr<InfoBoxUI> totalCost;

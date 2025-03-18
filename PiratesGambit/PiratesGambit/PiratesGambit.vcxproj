@@ -158,6 +158,7 @@
     <ClCompile Include="BuccaneerBuilding.cpp" />
     <ClCompile Include="BuccaneerIcon.cpp" />
     <ClCompile Include="Building.cpp" />
+    <ClCompile Include="BuildingPopUp.cpp" />
     <ClCompile Include="BulletFactory.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -208,6 +209,7 @@
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="PlayerInventory.cpp" />
     <ClCompile Include="PlayerTabMenu.cpp" />
+    <ClCompile Include="ProgressBar.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="RenderableIventory.cpp" />
     <ClCompile Include="ResourceSlotUI.cpp" />
@@ -244,6 +246,7 @@
     <ClInclude Include="BuccaneerBuilding.h" />
     <ClInclude Include="BuccaneerIcon.h" />
     <ClInclude Include="Building.h" />
+    <ClInclude Include="BuildingPopUp.h" />
     <ClInclude Include="BulletFactory.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
@@ -298,6 +301,7 @@
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="PlayerInventory.h" />
     <ClInclude Include="PlayerTabMenu.h" />
+    <ClInclude Include="ProgressBar.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="RenderableIventory.h" />
     <ClInclude Include="ResourceSlotUI.h" />

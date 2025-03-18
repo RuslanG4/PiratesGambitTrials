@@ -387,6 +387,12 @@
     <ClCompile Include="AllianceStatusUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ProgressBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildingPopUp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -660,6 +666,12 @@
       <Filter>Header Files\Army</Filter>
     </ClInclude>
     <ClInclude Include="AllianceStatusUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProgressBar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildingPopUp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

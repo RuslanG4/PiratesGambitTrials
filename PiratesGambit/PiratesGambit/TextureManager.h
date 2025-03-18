@@ -61,6 +61,7 @@ public:
         texturesLoaded &= loadTexture("BUTTONS", BUTTONS);
         texturesLoaded &= loadTexture("WHEEL", WHEEL);
         texturesLoaded &= loadTexture("PIRATE_ONE", PIRATE_ONE);
+        texturesLoaded &= loadTexture("POP_UP", POP_UP);
 
         return fontsLoaded && texturesLoaded;
     }

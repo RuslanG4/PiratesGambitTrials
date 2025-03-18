@@ -6,6 +6,7 @@ bool HireRecruitUI::uiOpen = false;
 HireRecruitUI::HireRecruitUI(const std::shared_ptr<Player>& _playerRef, UnitName _type, int _unitAmount)
 {
 	unitsLeftReference = _unitAmount;
+	availableUnits = unitsLeftReference;
 	playerRef = _playerRef;
 	nameOfUnitSelling = _type;
 
@@ -14,6 +15,9 @@ HireRecruitUI::HireRecruitUI(const std::shared_ptr<Player>& _playerRef, UnitName
 	background.setScale(14,10);
 	background.setOrigin(48,48);
 	background.setPosition(sf::Vector2f(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
+
+
+	progressBar = std::make_unique<ProgressBar>(sf::Vector2f(background.getPosition().x - 150, background.getPosition().y - 50));
 
 	costPerTroop = std::make_unique<InfoBoxUI>(4, 3);
 
@@ -83,6 +87,12 @@ void HireRecruitUI::AddCharacterToPlayer() const
 	}
 }
 
+void HireRecruitUI::resetValues()
+{
+	totalCost->setText("Total Cost", "0");
+	recruit->setText("Recruit", "0");
+}
+
 void HireRecruitUI::Render(const std::unique_ptr<sf::RenderWindow>& _window) const
 {
 	_window->setView(_window->getDefaultView());
@@ -95,16 +105,21 @@ void HireRecruitUI::Render(const std::unique_ptr<sf::RenderWindow>& _window) con
 	purchase->Render(_window);
 	cancel->Render(_window);
 	amountSlider->Render(_window);
+	progressBar->Render(_window);
 }
 
 void HireRecruitUI::Update(float _dt)
 {
+	progressBar->Update();
 	if (IsMenuOpen()) {
 		unitIcon->Update(_dt);
-		amountSlider->Update();
+		if (availableUnits > 0)
+		{
+			amountSlider->Update();
+		}
 
 		recruit->UpdateText(std::to_string(amountSlider->getValue()));
-		totalCost->UpdateText(std::to_string(amountSlider->getValue() * 500));
+		totalCost->UpdateText(std::to_string(amountSlider->getValue() * 500)); //500 is per unit
 
 		cancel->Update();
 		if (cancel->IsTriggered() || sf::Keyboard::isKeyPressed((sf::Keyboard::Escape)))
@@ -113,24 +128,42 @@ void HireRecruitUI::Update(float _dt)
 			CloseUI();
 		}
 
-		purchase->Update();
+		if (progressBar->canBuyUnits()) {
+			if (resetValue)
+			{
+				availableUnits = unitsLeftReference;
+				resetValue = false;
+				available->setText("Available", std::to_string(unitsLeftReference));
+				amountSlider->updateMaxValue(availableUnits);
+			}
+			purchase->Update();
 
-		if (purchase->IsTriggered() && unitsLeftReference > 0)
-		{
-			auto it = std::ranges::find_if(playerRef->getInventory()->getItems(), [&](const std::unique_ptr<InventoryItem>& item) {
-				return item->getItemName() == COINS;
-				});
+			if (purchase->IsTriggered() && availableUnits > 0)
+			{
+				auto it = std::ranges::find_if(playerRef->getInventory()->getItems(), [&](const std::unique_ptr<InventoryItem>& item) {
+					return item->getItemName() == COINS;
+					});
 
-			if (it != playerRef->getInventory()->getItems().end()) {
-				if ((it->get()->getStackSize() - amountSlider->getValue() * 500) >= 0) {
-					std::cout << "prev stack size : " << it->get()->getStackSize() << "\n";
-					it->get()->removeFromCurrentStack(amountSlider->getValue() * 500);
-					std::cout << "new stack size : " << it->get()->getStackSize() << "\n";
-					unitsLeftReference -= amountSlider->getValue();
-					available->setText("Available", std::to_string(unitsLeftReference));
-					AddCharacterToPlayer();
-					amountSlider->updateMaxValue(unitsLeftReference);
-					purchase->ResetTrigger();
+				if (it != playerRef->getInventory()->getItems().end()) {
+					if ((it->get()->getStackSize() - amountSlider->getValue() * 500) >= 0) {
+						std::cout << "prev stack size : " << it->get()->getStackSize() << "\n";
+						it->get()->removeFromCurrentStack(amountSlider->getValue() * 500);
+						std::cout << "new stack size : " << it->get()->getStackSize() << "\n";
+						availableUnits -= amountSlider->getValue();
+						available->setText("Available", std::to_string(availableUnits));
+						AddCharacterToPlayer();
+						amountSlider->updateMaxValue(availableUnits);
+						purchase->ResetTrigger();
+
+						if (availableUnits <= 0)
+						{
+							progressBar->BuyUnits();
+							amountSlider->ResetSlider();
+							resetValues();
+							resetValue = true;
+						}
+
+					}
 				}
 			}
 		}
@@ -147,4 +180,6 @@ void HireRecruitUI::CloseUI()
 {
 	uiOpen = false;
 	isMenuOpen = false;
+
+	amountSlider->ResetSlider();
 }

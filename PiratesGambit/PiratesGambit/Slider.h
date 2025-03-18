@@ -19,6 +19,11 @@ public:
 
     void updateMaxValue(int _newValue) { maxValue = _newValue; }
 
+    void ResetSlider()
+    {
+        knob.setPosition(bar.getPosition().x, bar.getPosition().y - (knob.getSize().y - bar.getLocalBounds().height) / 2);
+    }
+
     void Update();
 
     int getValue() const;

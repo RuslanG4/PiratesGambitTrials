@@ -129,7 +129,7 @@ int Island::CalculateTreeCount(int landNodes)
 
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_real_distribution<double> dist(0.08, 0.12); 
+	std::uniform_real_distribution<double> dist(0.07, 0.11); 
 
 	int treeCount = static_cast<int>(landNodes * dist(gen));
 	return treeCount;

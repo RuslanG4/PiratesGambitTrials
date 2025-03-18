@@ -13,5 +13,7 @@ BuccaneerBuilding::BuccaneerBuilding(const std::shared_ptr<Player>& _playerRef)
 	unitsAmount = 14;
 	buildingUI = std::make_unique<HireRecruitUI>(_playerRef,BUCCANEER, unitsAmount);
 
+	popUp = std::make_unique<BuildingPopUp>();
+
 	myHitbox = std::make_unique<HitBox>(sf::Vector2f(58, 58));
 }

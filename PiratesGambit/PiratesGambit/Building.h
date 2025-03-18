@@ -2,6 +2,7 @@
 #include"Includes.h"
 #include"TextureManager.h"
 #include"HireRecruitUI.h"
+#include"BuildingPopUp.h"
 
 
 class Building
@@ -31,6 +32,7 @@ protected:
 	std::vector<int> OccupiedNodes;
 	std::unique_ptr<HireRecruitUI> buildingUI;
 
+	std::unique_ptr<BuildingPopUp> popUp;
 	int unitsAmount = 0;
 };
 
