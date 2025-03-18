@@ -14,6 +14,9 @@ public:
 	void Exit(Enemy& enemy) override;
 private:
 	std::shared_ptr<Player> playerRef;
+	sf::Clock waitTimer;
+
+	std::random_device rd;
 
 };
 

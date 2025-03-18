@@ -9,13 +9,12 @@ void ChaseState::Enter(Enemy& enemy)
 {
     std::cout << "Enemy is entering chase state." << std::endl;
     enemy.SetAnimationState(UnitState::WALK);
-    detectPlayerClock.restart(); // Reset clock when entering chase
+    detectPlayerClock.restart();
     FindNewPath(enemy);
 }
 
 void ChaseState::Update(Enemy& enemy, float deltaTime)
 {
-    // Only recalculate path if enough time has passed
     if (detectPlayerClock.getElapsedTime().asSeconds() >= 1.0f)
     {
         FindNewPath(enemy);
@@ -41,7 +40,6 @@ void ChaseState::FindNewPath(Enemy& enemy)
 {
     path.clear();
 
-    // Ensure the enemy is within an updatable area
     if (!enemy.getUpdateableArea()) return;
 
     for (auto& node : enemy.getUpdateableArea()->getUpdateableNodes())
@@ -102,19 +100,9 @@ void ChaseState::ChasePlayer(Enemy& enemy)
 
     distance = Utility::unitVector2D(distance);
 
-    FacePlayer(enemy, distance);
+    enemy.FaceDirection(distance);
 
     enemy.SetPosition(enemy.GetPosition() + distance);
 }
 
-void ChaseState::FacePlayer(Enemy& enemy, sf::Vector2f distance)
-{
-    if (distance.x < 0)
-    {
-        enemy.FacePlayer(-2);
-    }
-    else
-    {
-        enemy.FacePlayer(2);
-    }
-}
+

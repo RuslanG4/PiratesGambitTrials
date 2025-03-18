@@ -17,7 +17,6 @@ public:
 	void Exit(Enemy& enemy) override;
 
 	void ChasePlayer(Enemy& enemy);
-	void FacePath(Enemy& enemy, sf::Vector2f distance);
 private:
 	std::shared_ptr<Player> playerRef;
 	std::vector<std::shared_ptr<Node>> path;

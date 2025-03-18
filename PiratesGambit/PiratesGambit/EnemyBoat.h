@@ -15,9 +15,9 @@ public:
 		enemyRef = _refEnemy;
 
 		position = _pos;
-		boatSprite.setPosition(_pos);
 		boatSprite.setTexture(_shipTexture);
 		boatSprite.setOrigin(56, 33);
+		boatSprite.setPosition(_pos);
 		boatSprite.setScale(0.5, 0.5);
 
 		myHitbox = new HitBox(sf::Vector2f(56, 25));

@@ -15,8 +15,6 @@ void EnemyBoat::RotateTowardsPlayer(sf::Vector2f _pos)
     {
         float targetAngle = std::atan2(_pos.y, _pos.x) * 180 / Utility::PI;
 
-        targetAngle -= 90;
-
         float currentAngle = boatSprite.getRotation();
 
         float angleDiff = targetAngle - currentAngle;

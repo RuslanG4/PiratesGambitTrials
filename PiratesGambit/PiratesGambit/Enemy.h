@@ -7,6 +7,7 @@
 #include "Enums.h"
 #include"Army.h"
 #include "EnemyBoat.h"
+#include "EnemyBoatWander.h"
 #include "EnemyState.h"
 #include "EnemyUI.h"
 #include "IdleState.h"
@@ -40,12 +41,14 @@ public:
 		body.setOrigin(16, 24);
 		body.setScale(2, 2);
 
+		currentDirection = EAST;
+
 		myHitbox = new HitBox(sf::Vector2f(22, 22));
 
-		playerAllegiance = std::make_unique<PlayerAllegiance>(0);
+		playerAllegiance = std::make_unique<PlayerAllegiance>(-10);
 		enemyUI = std::make_unique<EnemyUI>(100, 5, playerAllegiance);
 
-		ChangeState(new IdleState(_playerRef));
+		ChangeState(new EnemyBoatWander(_playerRef));
 	}
 	~Enemy() = default;
 
@@ -68,8 +71,13 @@ public:
 	{
 		body.setScale(_direction, scaleY);
 	}
-	void updateUpdateableArea(const std::shared_ptr<Node>& _startNode, int depth) const; 
+	void updateUpdateableArea(const std::shared_ptr<Node>& _startNode, int depth) const;
+	void FaceDirection(sf::Vector2f _pos);
 	//
+
+	void UpdateDirection(sf::Vector2f _direction);
+	EnemyDirection GetDirection() const { return currentDirection; }
+	void ChangeDirection(EnemyDirection _direction) { currentDirection = _direction; }
 
 	sf::Vector2f GetPosition() const { return body.getPosition(); }
 	int GetCurrentNodeID() const { return currentNodeId; }
@@ -109,6 +117,8 @@ private:
 	std::vector<std::shared_ptr<Node>> path;
 
 	std::unique_ptr<Army> army;
+
+	EnemyDirection currentDirection;
 
 	int scaleX = 2;
 	int scaleY = 2;

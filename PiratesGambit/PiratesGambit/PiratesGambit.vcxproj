@@ -169,6 +169,8 @@
     <ClCompile Include="DamageCalculations.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyBoat.cpp" />
+    <ClCompile Include="EnemyBoatWander.cpp" />
+    <ClCompile Include="EnemyLandWander.cpp" />
     <ClCompile Include="EnemyMoveConditions.cpp" />
     <ClCompile Include="EnemyState.cpp" />
     <ClCompile Include="EnemyUI.cpp" />
@@ -259,6 +261,8 @@
     <ClInclude Include="DiskSampling.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyBoat.h" />
+    <ClInclude Include="EnemyBoatWander.h" />
+    <ClInclude Include="EnemyLandWander.h" />
     <ClInclude Include="EnemyMoveConditions.h" />
     <ClInclude Include="EnemyState.h" />
     <ClInclude Include="EnemyUI.h" />

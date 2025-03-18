@@ -7,7 +7,7 @@ void FindBoatState::Enter(Enemy& enemy)
 {
     std::cout << "Enemy is entering find boat state." <<"\n";
     path = PathFindingFunctions<Node>::aStarPathFind(enemy.getCurrentNode(), enemy.GetBoat()->getDockedNode(), enemy.isOnBoat());
-    int x = 0;
+    enemy.SetAnimationState(UnitState::WALK);
 }
 
 void FindBoatState::Update(Enemy& enemy, float deltaTime)
@@ -50,19 +50,8 @@ void FindBoatState::ChasePlayer(Enemy& enemy)
 
     distance = Utility::unitVector2D(distance);
 
-    FacePath(enemy, distance);
+    enemy.FaceDirection(distance);
 
     enemy.SetPosition(enemy.GetPosition() + distance);
 }
 
-void FindBoatState::FacePath(Enemy& enemy, sf::Vector2f distance)
-{
-    if (distance.x < 0)
-    {
-        enemy.FacePlayer(-2);
-    }
-    else
-    {
-        enemy.FacePlayer(2);
-    }
-}

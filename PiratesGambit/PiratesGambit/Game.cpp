@@ -38,18 +38,38 @@ void Game::run()
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	const float fps{ 60.0f };
 	sf::Time timePerFrame = sf::seconds(1.0f / fps); // 60 fps
+	int frameCount = 0;
+	sf::Time fpsTimer = sf::Time::Zero;
+
 	while (m_window->isOpen())
 	{
 		processEvents(); // as many as possible
+
+		// Update time tracking
 		timeSinceLastUpdate += clock.restart();
+
+		// Track frames per second
+		frameCount++;
+		fpsTimer += timeSinceLastUpdate;
+
 		while (timeSinceLastUpdate > timePerFrame)
 		{
 			timeSinceLastUpdate -= timePerFrame;
 			processEvents();
 			update(timePerFrame.asMilliseconds()); //60 fps
 		}
+
+		// Log FPS every second
+		if (fpsTimer.asSeconds() >= 1.0f)
+		{
+			std::cout << "FPS: " << frameCount << "\n";
+			frameCount = 0;  // Reset frame count for the next second
+			fpsTimer = sf::Time::Zero;  // Reset timer
+		}
+
 		render(); // as many as possible
 	}
+
 }
 /// <summary>
 /// handle user and system events/ input

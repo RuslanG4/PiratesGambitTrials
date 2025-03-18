@@ -57,6 +57,28 @@ void Enemy::updateUpdateableArea(const std::shared_ptr<Node>& _startNode, int de
 	updateableArea->updateVisibleNodes(_startNode, depth);
 }
 
+void Enemy::FaceDirection(sf::Vector2f _pos)
+{
+	if (_pos.x < 0)
+	{
+		FacePlayer(-2);
+	}
+	else
+	{
+		FacePlayer(2);
+	}
+}
+
+void Enemy::UpdateDirection(sf::Vector2f _direction)
+{
+	if (std::abs(_direction.x) > std::abs(_direction.y)) {
+		currentDirection = (_direction.x > 0) ? EAST : WEST;
+	}
+	else {
+		currentDirection = (_direction.y > 0) ? SOUTH : NORTH;
+	}
+}
+
 void Enemy::boardBoat(const std::shared_ptr<EnemyBoat>& _boat)
 {
 	body.setPosition(_boat->getPosition());

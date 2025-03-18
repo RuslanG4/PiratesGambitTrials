@@ -27,6 +27,14 @@ enum TileType
 	DEFAULT_WATER
 };
 
+enum EnemyDirection
+{
+	NORTH,
+	SOUTH,
+	EAST,
+	WEST
+};
+
 enum UnitState
 {
 	IDLE,

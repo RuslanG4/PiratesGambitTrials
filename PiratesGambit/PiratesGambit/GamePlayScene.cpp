@@ -73,6 +73,7 @@ void GamePlayScene::update(float dt)
 				&& enemy->getCurrentNode() == node && !enemy->GetPlayerAllegiance()->isHostile())
 			{
 				AllianceDialogueUI::getInstance().OpenMenu();
+				enemy->ChangeState(new IdleState(myPlayer));
 			}
 
 			transitionToBattleMode(node);
