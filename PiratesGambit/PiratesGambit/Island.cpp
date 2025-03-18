@@ -203,7 +203,7 @@ void Island::GenerateBuildings(int buildingCount, std::vector<std::shared_ptr<No
 		std::shared_ptr<Node> startNode = nullptr;
 
 		int attempts = 0;
-		const int maxAttempts = 100;
+		const int maxAttempts = 250;
 
 		while (!_nodes.empty() && attempts < maxAttempts)
 		{
@@ -223,7 +223,7 @@ void Island::GenerateBuildings(int buildingCount, std::vector<std::shared_ptr<No
 		}
 
 		if (TownArea.size() < 17) {
-			std::cout << "Failed to generate town area within 100 attempts.\n";
+			std::cout << "Failed to generate town area within 250 attempts.\n";
 			TownArea.clear();
 			continue; 
 		}

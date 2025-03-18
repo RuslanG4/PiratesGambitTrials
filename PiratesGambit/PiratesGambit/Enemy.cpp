@@ -16,7 +16,6 @@ void Enemy::render(const std::unique_ptr<sf::RenderWindow>& window) const
 		window->draw(body);
 		myHitbox->render(window);
 	}
-	boatRef->render(window);
 	enemyUI->Render(window);
 
 	//for (auto& node : updateableArea->getUpdateableNodes())

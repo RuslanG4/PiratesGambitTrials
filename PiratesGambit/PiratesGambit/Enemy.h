@@ -41,11 +41,13 @@ public:
 		body.setOrigin(16, 24);
 		body.setScale(2, 2);
 
-		currentDirection = EAST;
+		currentDirection = static_cast<EnemyDirection>(rand() % 4);
 
 		myHitbox = new HitBox(sf::Vector2f(22, 22));
 
-		playerAllegiance = std::make_unique<PlayerAllegiance>(-10);
+		int randomValue = (rand() % 3) * 10 - 10;
+		playerAllegiance = std::make_unique<PlayerAllegiance>(randomValue);
+
 		enemyUI = std::make_unique<EnemyUI>(100, 5, playerAllegiance);
 
 		ChangeState(new EnemyBoatWander(_playerRef));

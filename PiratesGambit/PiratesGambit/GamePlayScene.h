@@ -67,8 +67,10 @@ private:
 	std::unique_ptr<PlayerTabMenu> playerMenu;
 	std::shared_ptr<Boat> playerBoat;
 
-	std::shared_ptr<Enemy> enemy;
-	std::shared_ptr<EnemyBoat> enemyBoat;
+	std::vector<std::shared_ptr<Enemy>> enemies;
+	std::vector<std::shared_ptr<EnemyBoat>> enemyBoats;
+	//std::shared_ptr<Enemy> enemy;
+	//std::shared_ptr<EnemyBoat> enemyBoat;
 
 	std::weak_ptr<GameObject> currentObjectInteract;
 	std::shared_ptr<Building> currentBuildingInteract;
@@ -78,7 +80,7 @@ private:
 	std::unique_ptr<BattleScene> battleScene;
 	bool battle = false ;
 
-	int mapSize = 1;
+	int mapSize = 3;
 
 
 };

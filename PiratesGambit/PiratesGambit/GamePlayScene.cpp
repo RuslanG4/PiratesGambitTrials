@@ -8,22 +8,35 @@ GamePlayScene::GamePlayScene()
 
 	myMap = std::make_unique<FullMap>(mapSize, myPlayer); //keep 1x1, 2x2
 
-	enemy = std::make_shared<Enemy>(myPlayer);
+	/*auto enemy = std::make_shared<Enemy>(myPlayer);
+	auto enemy2 = std::make_shared<Enemy>(myPlayer);*/
+
+	for(int i =0;i<4;i++)
+	{
+		auto enemy = std::make_shared<Enemy>(myPlayer);
+
+		FindCurrentChunk();
+		FindCurrentNode();
+
+		auto enemyBoat = std::make_shared<EnemyBoat>(sf::Vector2f(325 + i * 100, 25), enemy, TextureManager::getInstance().getTexture("RED_BOAT"));
+
+		enemy->boardBoat(enemyBoat);
+		enemies.push_back(enemy);
+		enemyBoats.push_back(enemyBoat);
+	}
 
 	playerBoat = std::make_shared<Boat>(sf::Vector2f(25, 25), myPlayer);
-
-	enemyBoat = std::make_shared<EnemyBoat>(sf::Vector2f(425, 25), enemy, TextureManager::getInstance().getTexture("RED_BOAT"));
 
 	FindCurrentChunk();
 	FindCurrentNode();
 
-	enemy->boardBoat(enemyBoat);
+	//enemy->boardBoat(enemyBoat);
 
 	myPlayer->boardBoat(playerBoat);
 
 	playerBoat->addCannonBall();
 
-	battleScene = std::make_unique<BattleScene>(myPlayer, enemy);
+	battleScene = std::make_unique<BattleScene>(myPlayer, enemies[0]);
 
 	/*myMap->getChunks()[0]->getIslands()[0]->PlaceEnemy(enemy);*/
 
@@ -69,11 +82,16 @@ void GamePlayScene::update(float dt)
 		{
 			interactWithObjects(node);
 
-			if (sf::Keyboard::isKeyPressed((sf::Keyboard::X)) && !AllianceDialogueUI::getInstance().isMenuOpen()
-				&& enemy->getCurrentNode() == node && !enemy->GetPlayerAllegiance()->isHostile())
+			if (sf::Keyboard::isKeyPressed((sf::Keyboard::X)) && !AllianceDialogueUI::getInstance().isMenuOpen())
 			{
-				AllianceDialogueUI::getInstance().OpenMenu();
-				enemy->ChangeState(new IdleState(myPlayer));
+				for(auto& enemy: enemies)
+				{
+					if(enemy->getCurrentNode() == node && !enemy->GetPlayerAllegiance()->isHostile())
+					{
+						AllianceDialogueUI::getInstance().OpenMenu();
+						enemy->ChangeState(new IdleState(myPlayer));
+					}
+				}
 			}
 
 			transitionToBattleMode(node);
@@ -97,7 +115,10 @@ void GamePlayScene::update(float dt)
 			myPlayer->update(dt);
 		}
 
-		enemy->update(dt);
+		for (auto& enemy : enemies)
+		{
+			enemy->update(dt);
+		}
 
 		if (currentIsland)
 		{
@@ -143,7 +164,14 @@ void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 
 		playerBoat->render(window);
 
-		enemy->render(window);
+		for (auto& enemy : enemies)
+		{
+			enemy->render(window);
+		}
+		for (auto& boat : enemyBoats)
+		{
+			boat->render(window);
+		}
 
 		for (int index : visibleNodes) {
 			std::shared_ptr<Node> node = myMap->getFullMap()[index];
@@ -206,9 +234,12 @@ void GamePlayScene::FindCurrentChunk()
 		{
 			myPlayer->setCurrentChunkID(chunk->getChunkID());
 		}
-		if (Utility::collisionWithPoint(enemy->GetPosition(), chunk->getMinVector(), chunk->getMaxVector()))
+		for (auto& enemy : enemies)
 		{
-			enemy->setCurrentChunkID(chunk->getChunkID());
+			if (Utility::collisionWithPoint(enemy->GetPosition(), chunk->getMinVector(), chunk->getMaxVector()))
+			{
+				enemy->setCurrentChunkID(chunk->getChunkID());
+			}
 		}
 	}
 }
@@ -254,14 +285,17 @@ void GamePlayScene::FindCurrentNodeInSameChunk(int _id, const std::shared_ptr<En
 
 void GamePlayScene::FindCurrentNode() const
 {
-	if (myPlayer->getCurrentChunkID() == enemy->GetCurrentNodeID())
+	for (auto& enemy : enemies)
 	{
-		FindCurrentNodeInSameChunk(myPlayer->getCurrentChunkID(), enemy);
-	}
-	else
-	{
-		FindPlayerCurrentNode();
-		FindEnemyCurrentNode(enemy);
+		if (myPlayer->getCurrentChunkID() == enemy->GetCurrentNodeID())
+		{
+			FindCurrentNodeInSameChunk(myPlayer->getCurrentChunkID(), enemy);
+		}
+		else
+		{
+			FindPlayerCurrentNode();
+			FindEnemyCurrentNode(enemy);
+		}
 	}
 
 }
@@ -400,11 +434,14 @@ void GamePlayScene::handleKeyInput()
 
 void GamePlayScene::transitionToBattleMode(const std::shared_ptr<Node>& _node)
 {
-	if (_node->getID() == enemy->getCurrentNode()->getID())
+	for (auto& enemy : enemies)
 	{
-		if (enemy->GetGlobalBounds().intersects(myPlayer->GetHitBox()))
+		if (_node->getID() == enemy->getCurrentNode()->getID())
 		{
-			battleTransition.startTransition(1);
+			if (enemy->GetGlobalBounds().intersects(myPlayer->GetHitBox()))
+			{
+				battleTransition.startTransition(1);
+			}
 		}
 	}
 }
