@@ -14,7 +14,7 @@ GamePlayScene::GamePlayScene()
 
 	UpdatePlayerCurrentNode(); // sets player current Node
 
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		auto enemy = std::make_shared<Enemy>(myPlayer);
 		auto enemyBoat = std::make_shared<EnemyBoat>(sf::Vector2f(325 + i * 100, 25), enemy, TextureManager::getInstance().getTexture("RED_BOAT"));
@@ -74,17 +74,16 @@ void GamePlayScene::update(float dt)
 				node->GetBuilding()->Update(dt);
 			if (node->GetObject())
 				node->GetObject()->update(dt);
-
-			for (auto& updateableNode : myPlayer->getUpdateableArea()->getUpdateableNodes())
-			{
-				if (node == updateableNode)
-				{
-					interactWithObjects(node);
-					transitionToBattleMode(node);
-				}
-			}
-
 		}
+
+		for (auto& updateableNode : myPlayer->getUpdateableArea()->getUpdateableNodes())
+		{
+
+				interactWithObjects(updateableNode);
+				transitionToBattleMode(updateableNode);
+			
+		}
+
 
 		if (myPlayer->isOnBoat())
 		{

@@ -53,7 +53,7 @@ void FullMap::initChunks()
 
 			std::random_device rd;
 			std::mt19937 gen(rd());
-			std::uniform_int_distribution<int> dist(65, 70); // Random number between 50 and 64 (inclusive)
+			std::uniform_int_distribution<int> dist(55, 70); // Random number between 50 and 64 (inclusive)
 
 			int amount = dist(gen);
 
