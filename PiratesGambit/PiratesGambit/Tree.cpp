@@ -9,8 +9,6 @@ Tree::Tree()
 {
 	inventory = std::make_unique<Inventory>();
 
-
-	renderableInventory = std::make_unique<BarrelInventory>(4, 2);
 	int randO = rand() % 2;
 	if(randO == 1)
 	{
@@ -89,6 +87,3 @@ void Tree::animateRandomizedTreeSway(float _dt)
 	sprite.setScale(scaleX, scale);  // Keep Y scale consistent
 }
 
-void Tree::RenderUI(const std::unique_ptr<sf::RenderWindow>& _window)
-{
-}

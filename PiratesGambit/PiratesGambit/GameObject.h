@@ -8,7 +8,6 @@ class GameObject
 public:
 	virtual ~GameObject() = default;
 	virtual void render(const std::unique_ptr<sf::RenderWindow>& window) = 0;
-	virtual void RenderUI(const std::unique_ptr<sf::RenderWindow>& _window) = 0;
 	virtual void interact() = 0;
 	virtual void update(float _dt) = 0;
 
@@ -16,7 +15,6 @@ public:
 	void setNodeId(int _id) { currentNodeId = _id; }
 	int getID() const { return currentNodeId; }
 	const std::unique_ptr<Inventory>& getInventory() const { return inventory; }
-	std::unique_ptr<RenderableInventory>& GetRenderableInventory() { return renderableInventory; }
 	virtual sf::Vector2f GetPosition() const = 0;
 
 	sf::FloatRect GetHitBox()const { return myHitbox->GetGlobalBounds(); }
@@ -26,8 +24,6 @@ protected:
 	int currentNodeId;
 
 	std::unique_ptr<Inventory> inventory;
-	std::unique_ptr<RenderableInventory> renderableInventory;
-
 	std::unique_ptr<HitBox> myHitbox;
 };
 

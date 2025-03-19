@@ -33,12 +33,14 @@ void Inventory::openInventory()
 {
 	inventoryOpen = true;
 	personalOpen = true;
+	RenderableInventory::getInstance().OpenMenu();
 }
 
 void Inventory::closeInventory()
 {
 	inventoryOpen = false;
 	personalOpen = false;
+	RenderableInventory::getInstance().CloseMenu();
 }
 
 bool Inventory::combineItems(const std::unique_ptr<InventoryItem>& _item)

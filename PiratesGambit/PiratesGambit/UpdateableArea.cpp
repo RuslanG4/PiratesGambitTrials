@@ -4,11 +4,11 @@
 void UpdateableArea::updateVisibleNodes(const std::shared_ptr<Node>& _startNode, int depth)
 {
 	//debug
-	for (auto& node : updateArea) {
+	/*for (auto& node : updateArea) {
 		if (node != nullptr) {
 			node->debugShape->setFillColor(sf::Color::Transparent);
 		}
-	}
+	}*/
 	//
 	updateArea.clear();
 

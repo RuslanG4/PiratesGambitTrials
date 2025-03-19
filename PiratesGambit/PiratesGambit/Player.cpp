@@ -1,6 +1,7 @@
 #include "Player.h"
 
 #include "Boat.h"
+#include "Building.h"
 
 void Player::update(double dt)
 {
@@ -9,7 +10,7 @@ void Player::update(double dt)
 
 	for (auto& node : updateableArea->getUpdateableNodes())
 	{
-		if (checkCollision(node, desiredPosition))
+		if (checkCollision(node, desiredPosition) || checkCollisionWithObjects(node, desiredPosition))
 		{
 			collision = true;
 			break;
@@ -41,16 +42,16 @@ void Player::render(const std::unique_ptr<sf::RenderWindow>& window) const
 	if (!onBoat)
 	{
 		window->draw(body);
-		//myHitbox->render(window);
+		myHitbox->render(window);
 	}
 
 	//debug
-	//for (auto& node : updateableArea->getUpdateableNodes())
-	//{
-	//	if (node != nullptr) {
-	//		window->draw(*(node->debugShape));
-	//	}
-	//}
+	for (auto& node : updateableArea->getUpdateableNodes())
+	{
+		if (node != nullptr) {
+			window->draw(*(node->debugShape));
+		}
+	}
 }
 
 /// <summary>
@@ -98,15 +99,39 @@ void Player::updateUpdateableArea(const std::shared_ptr<Node>& _startNode, int d
 ///</summary>
 bool Player::checkCollision(const std::shared_ptr<Node>& _node, sf::Vector2f& _pos)
 {
+	myHitbox->setPosition(myHitbox->getPosition() + _pos);
 	if (!_node->getIsLand())
 	{
 		if (Utility::collisionWithNode(myHitbox->getTopLeftCorner() + _pos, myHitbox->getSize(), _node->getPosition(), _node->getNodeData().size))
 		{
-			controller->deflect(); //put player back
+			getPlayerController()->setLandVelocity(sf::Vector2f(0, 0));
 			myHitbox->setPosition(controller->getPosition());
 			return true;
 		}
 	}
+	return false;
+}
+
+bool Player::checkCollisionWithObjects(const std::shared_ptr<Node>& _node, sf::Vector2f& _pos)
+{
+	myHitbox->setPosition(myHitbox->getPosition() + _pos);
+	if (_node->GetObject()) {
+		if (_node->GetObject()->GetHitBox().intersects(myHitbox->GetGlobalBounds()))
+		{
+			myHitbox->setPosition(controller->getPosition());
+			getPlayerController()->setLandVelocity(sf::Vector2f(0, 0));
+			return true;
+		}
+	}
+	if (_node->GetBuilding()) {
+		if (_node->GetBuilding()->GetHitBox().intersects(myHitbox->GetGlobalBounds()))
+		{
+			myHitbox->setPosition(controller->getPosition());
+			getPlayerController()->setLandVelocity(sf::Vector2f(0, 0));
+			return true;
+		}
+	}
+	myHitbox->setPosition(controller->getPosition());
 	return false;
 }
 

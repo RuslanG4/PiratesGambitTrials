@@ -9,7 +9,6 @@ class Building
 {
 public:
 	void Render(const std::unique_ptr<sf::RenderWindow>& _window) const;
-	void RenderUI(const std::unique_ptr<sf::RenderWindow>& _window) const;
 	void Update(float _dt);
 
 	void Interact();
@@ -22,6 +21,9 @@ public:
 	std::vector<int> GetOccupiedNodeIds() { return OccupiedNodes; }
 	std::shared_ptr<Node> GetParentNode() const { return parentNode; }
 
+	UnitName getUnitType()const { return unitType; }
+	int GetMaxUnitAmount() const { return maxUnitAmount; }
+
 	sf::FloatRect GetHitBox()const { return myHitbox->GetGlobalBounds(); }
 protected:
 	sf::Sprite buildingSprite;
@@ -30,7 +32,9 @@ protected:
 	std::shared_ptr<Node> parentNode;
 
 	std::vector<int> OccupiedNodes;
-	std::unique_ptr<HireRecruitUI> buildingUI;
+
+	UnitName unitType;
+	int maxUnitAmount;
 
 	std::unique_ptr<BuildingPopUp> popUp;
 	int unitsAmount = 0;

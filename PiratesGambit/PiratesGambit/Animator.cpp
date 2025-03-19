@@ -4,7 +4,7 @@ void Animator::AnimateSprite(sf::Sprite& _sprite, AnimationState& _state, bool& 
 {
 	const float frameDuration = 0.1f;
 
-	_state.elapsedTime += _dt * 0.001;
+	_state.elapsedTime += _dt / 1000.0f;
 
 	_animationComplete = false;
 

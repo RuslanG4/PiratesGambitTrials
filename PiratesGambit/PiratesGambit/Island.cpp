@@ -18,22 +18,6 @@ void Island::render(const std::unique_ptr<sf::RenderWindow>& window) const
 	}
 }
 
-void Island::RenderUI(const std::unique_ptr<sf::RenderWindow>& window) const
-{
-	// Render UI after the game objects (building sprites)
-	for (const auto& building : buildings)
-	{
-		building->RenderUI(window);  // Draw UI elements on top
-	}
-	for (auto& gameObject : gameObjects)
-	{
-		if (gameObject->getInventory()->IsPersonalOpen())
-		{
-			gameObject->RenderUI(window);
-		}
-	}
-}
-
 void Island::update(float _dt) const
 {
 	for(auto& gameObject : buildings)
@@ -261,6 +245,7 @@ void Island::Mark3x3Area(const std::shared_ptr<Node>& _startNode, const std::sha
 	{
 		neighbour.first->updateOccupied(true);
 		_building->AddToOccupiedNodes(neighbour.first->getID());
+		neighbour.first->AddPresentBuilding(_building);
 	}
 }
 

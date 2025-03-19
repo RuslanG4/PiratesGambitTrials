@@ -3,17 +3,11 @@
 
 bool HireRecruitUI::uiOpen = false;
 
-HireRecruitUI::HireRecruitUI(const std::shared_ptr<Player>& _playerRef, UnitName _type, int _unitAmount)
+void HireRecruitUI::SetUpUi()
 {
-	unitsLeftReference = _unitAmount;
-	availableUnits = unitsLeftReference;
-	playerRef = _playerRef;
-	nameOfUnitSelling = _type;
-
-	sf::Vector2f size = { SCREEN_WIDTH - 600, SCREEN_HEIGHT - 300 };
 	background.setTexture(TextureManager::getInstance().getTexture("PLAYER_MENU_UI"));
-	background.setScale(14,10);
-	background.setOrigin(48,48);
+	background.setScale(14, 10);
+	background.setOrigin(48, 48);
 	background.setPosition(sf::Vector2f(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
 
 
@@ -36,12 +30,12 @@ HireRecruitUI::HireRecruitUI(const std::shared_ptr<Player>& _playerRef, UnitName
 	available->setText("Available", std::to_string(unitsLeftReference));
 	available->setPosition(sf::Vector2f(background.getPosition().x + 24, background.getPosition().y));
 
-	recruit = std::make_unique<InfoBoxUI>(3,1.5);
+	recruit = std::make_unique<InfoBoxUI>(3, 1.5);
 
 	recruit->setText("Recruit", "0");
-	recruit->setPosition(sf::Vector2f(background.getPosition().x  - 170, background.getPosition().y));
+	recruit->setPosition(sf::Vector2f(background.getPosition().x - 170, background.getPosition().y));
 
-	amountSlider = std::make_unique<Slider>(background.getPosition().x - 170, background.getPosition().y + 95,360, 40, 1, unitsLeftReference);
+	amountSlider = std::make_unique<Slider>(background.getPosition().x - 170, background.getPosition().y + 95, 360, 40, 1, unitsLeftReference);
 
 	purchase = std::make_unique<IconButton>(1.5, 1.5,
 		sf::Vector2f(background.getPosition().x + 60, background.getPosition().y + 200),
@@ -50,9 +44,21 @@ HireRecruitUI::HireRecruitUI(const std::shared_ptr<Player>& _playerRef, UnitName
 	cancel = std::make_unique<IconButton>(1.5, 1.5,
 		sf::Vector2f(background.getPosition().x - 60, background.getPosition().y + 200),
 		TextureManager::getInstance().getTexture("MONEY_ICON"));
+}
+
+void HireRecruitUI::PassUI(UnitName _type, int _unitAmount)
+{
+	unitsLeftReference = _unitAmount;
+	nameOfUnitSelling = _type;
+
+	if(availableUnits <=0 && progressBar->canBuyUnits())
+	{
+		availableUnits = unitsLeftReference;
+	}
 
 	SetCharacter();
-	
+	amountSlider->updateMaxValue(availableUnits);
+	available->setText("Available", std::to_string(availableUnits));
 }
 
 void HireRecruitUI::SetCharacter()

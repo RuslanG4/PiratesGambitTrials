@@ -16,8 +16,6 @@ public:
 
 	void animateRandomizedTreeSway(float _dt);
 
-	void RenderUI(const std::unique_ptr<sf::RenderWindow>& _window) override;
-
 	sf::Vector2f GetPosition() const override
 	{
 		return sprite.getPosition();

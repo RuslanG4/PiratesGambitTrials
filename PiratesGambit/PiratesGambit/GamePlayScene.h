@@ -25,22 +25,15 @@ public:
 	void render(const std::unique_ptr<sf::RenderWindow>& window) override;
 
 private:
-	void processKeys(sf::Event t_event);
-	void processKeyUp(sf::Event t_event);
+	void processKeyUp(sf::Event& t_event);
 
-	void FindCurrentChunk();
-	void FindCurrentIsland();
+	void processKeys();
 
-	void FindCurrentNodeInSameChunk(int _id, const std::shared_ptr<Enemy>& _enemy) const;
+	void HandleMovement() const;
 
-	void FindCurrentNode() const;
-	void FindPlayerCurrentNode() const;
-	void FindEnemyCurrentNode(const std::shared_ptr<Enemy>& _enemy) const;
-
-	void HandleGameObjectCollision();
-	void HandleBuildingCollision();
-
-	void handleKeyInput();
+	std::shared_ptr<Node> FindCurrentNode(sf::Vector2f _position) const;
+	void UpdatePlayerCurrentNode() const;
+	void UpdateEnemiesCurrentNode() const;
 
 	void transitionToBattleMode(const std::shared_ptr<Node>& _node);
 
@@ -80,7 +73,7 @@ private:
 	std::unique_ptr<BattleScene> battleScene;
 	bool battle = false ;
 
-	int mapSize = 3;
+	int mapSize = 2;
 
 
 };

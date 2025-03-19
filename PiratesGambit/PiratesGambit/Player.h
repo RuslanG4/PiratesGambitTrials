@@ -74,6 +74,7 @@ public:
 
 	//land collision
 	bool checkCollision(const std::shared_ptr<Node>& _node, sf::Vector2f& _pos);
+	bool checkCollisionWithObjects(const std::shared_ptr<Node>& _node, sf::Vector2f& _pos);
 
 	//boat interaction functions
 	void boardBoat(const std::shared_ptr<Boat>& _boat);

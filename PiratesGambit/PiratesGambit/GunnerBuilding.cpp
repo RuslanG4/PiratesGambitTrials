@@ -10,8 +10,8 @@ GunnerBuilding::GunnerBuilding(const std::shared_ptr<Player>& _playerRef)
 	buildingSprite.setOrigin(24, 24); //half of 48
 	buildingSprite.setScale(2, 2);
 
-	unitsAmount = 7;
-	buildingUI = std::make_unique<HireRecruitUI>(_playerRef, GUNNER, unitsAmount);
+	maxUnitAmount = 7;
+	unitType = GUNNER;
 
 	popUp = std::make_unique<BuildingPopUp>();
 

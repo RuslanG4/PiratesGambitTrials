@@ -41,6 +41,8 @@ public:
     /// <param name="_pos">New position for the camera center.</param>
     void setCameraCenter(sf::Vector2f _pos) { camera.setCenter(_pos); }
 
+    void handleZooming(sf::Event event);
+
 private:
     /// <summary>
     /// Private constructor to enforce the singleton pattern.
@@ -52,4 +54,8 @@ private:
     }
 
     sf::View camera; ///< SFML view representing the camera.
+
+    float zoomLevel = 1.0f;  ///< Current zoom level
+    const float minZoom = 0.5f;  ///< Minimum zoom level (zoomed in)
+    const float maxZoom = 15.0f;  ///< Maximum zoom level (zoomed out)
 };

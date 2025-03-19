@@ -13,54 +13,63 @@
 class HireRecruitUI
 {
 public:
-	HireRecruitUI(const std::shared_ptr<Player>& _playerRef, UnitName _type, int _unitAmount);
+    // Singleton Accessor
+    static HireRecruitUI& getInstance() {
+        static HireRecruitUI instance; 
+        return instance;
+    }
 
-	void SetCharacter();
-	void AddCharacterToPlayer() const;
-	void resetValues();
+    void SetUpUi();
 
-	void Render(const std::unique_ptr<sf::RenderWindow>& _window) const;
-	void Update(float _dt);
+    void PassUI(UnitName _type, int _unitAmount);
+    void PassPlayer(std::shared_ptr<Player>& _playerRef) { playerRef = _playerRef; }
 
-	void OpenUI();
-	void CloseUI();
+    // Delete copy constructor & assignment operator (Singleton Rule)
+    HireRecruitUI(const HireRecruitUI&) = delete;
+    HireRecruitUI& operator=(const HireRecruitUI&) = delete;
 
-	static bool IsUIOpen(){ return uiOpen; }
+    void SetCharacter();
+    void AddCharacterToPlayer() const;
+    void resetValues();
 
-	bool IsMenuOpen() const { return isMenuOpen; }
-	bool UnitsAvailable() const { return progressBar->canBuyUnits(); }
+    void Render(const std::unique_ptr<sf::RenderWindow>& _window) const;
+    void Update(float _dt);
+
+    void OpenUI();
+    void CloseUI();
+
+    static bool IsUIOpen() { return uiOpen; }
+    bool IsMenuOpen() const { return isMenuOpen; }
+    bool UnitsAvailable() const { return progressBar->canBuyUnits(); }
+
 private:
-	std::shared_ptr<Player> playerRef;
+    // Private Constructor (Only accessible via getInstance)
+    HireRecruitUI()
+    {
+        SetUpUi();
+    }
 
-	UnitName nameOfUnitSelling;
+    std::shared_ptr<Player> playerRef;
+    UnitName nameOfUnitSelling;
 
-	static bool uiOpen;
+    static bool uiOpen;
+    bool isMenuOpen{ false };
+    bool resetValue = false;
+    int unitsLeftReference;
+    int availableUnits;
 
-	bool isMenuOpen{false};
+    sf::Sprite background;
+    sf::Sprite unit;
+    AnimationState animationState;
 
-	bool resetValue = false;
-
-	int unitsLeftReference;
-
-	int availableUnits;
-
-	sf::Sprite background;
-
-	sf::Sprite unit;
-	AnimationState animationState;
-
-	std::unique_ptr<ProgressBar> progressBar;
-
-	std::unique_ptr<InfoBoxUI> costPerTroop;
-	std::unique_ptr<InfoBoxUI> totalCost;
-	std::unique_ptr<InfoBoxUI> available;
-	std::unique_ptr<InfoBoxUI> recruit;
-
-	std::unique_ptr<IconButton> purchase;
-	std::unique_ptr<IconButton> cancel;
-
-	std::unique_ptr<AnimatedCharacterIcon> unitIcon;
-
-	std::unique_ptr<Slider> amountSlider;
+    std::unique_ptr<ProgressBar> progressBar;
+    std::unique_ptr<InfoBoxUI> costPerTroop;
+    std::unique_ptr<InfoBoxUI> totalCost;
+    std::unique_ptr<InfoBoxUI> available;
+    std::unique_ptr<InfoBoxUI> recruit;
+    std::unique_ptr<IconButton> purchase;
+    std::unique_ptr<IconButton> cancel;
+    std::unique_ptr<AnimatedCharacterIcon> unitIcon;
+    std::unique_ptr<Slider> amountSlider;
 };
 

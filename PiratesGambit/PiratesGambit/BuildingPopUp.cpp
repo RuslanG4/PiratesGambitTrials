@@ -27,7 +27,7 @@ void BuildingPopUp::Update(float dt)
 	if (!isActive) return;
 
 	static float time = 0.0f;
-	time += dt * 0.005;
+	time += dt * 0.001f;
 
 	float scaleFactor = 0.75 + std::sin(time) * 0.025f;
 	float bgScaleFactor = 0.5 + std::sin(time) * 0.025f;

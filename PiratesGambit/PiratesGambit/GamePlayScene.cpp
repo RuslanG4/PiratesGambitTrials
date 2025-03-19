@@ -3,51 +3,38 @@
 GamePlayScene::GamePlayScene()
 {
 	myPlayer = std::make_shared<Player>(sf::Vector2f(25, 25));
+	playerBoat = std::make_shared<Boat>(sf::Vector2f(25, 25), myPlayer);
+	myPlayer->boardBoat(playerBoat);
 
 	playerMenu = std::make_unique<PlayerTabMenu>(myPlayer->getArmy(), myPlayer->getInventory());
+	RenderableInventory::getInstance().Init();
+	HireRecruitUI::getInstance().PassPlayer(myPlayer);
 
-	myMap = std::make_unique<FullMap>(mapSize, myPlayer); //keep 1x1, 2x2
+	myMap = std::make_unique<FullMap>(mapSize, myPlayer);
 
-	/*auto enemy = std::make_shared<Enemy>(myPlayer);
-	auto enemy2 = std::make_shared<Enemy>(myPlayer);*/
+	UpdatePlayerCurrentNode(); // sets player current Node
 
-	for(int i =0;i<4;i++)
+	for (int i = 0; i < 1; i++)
 	{
 		auto enemy = std::make_shared<Enemy>(myPlayer);
-
-		FindCurrentChunk();
-		FindCurrentNode();
-
 		auto enemyBoat = std::make_shared<EnemyBoat>(sf::Vector2f(325 + i * 100, 25), enemy, TextureManager::getInstance().getTexture("RED_BOAT"));
-
 		enemy->boardBoat(enemyBoat);
 		enemies.push_back(enemy);
 		enemyBoats.push_back(enemyBoat);
 	}
 
-	playerBoat = std::make_shared<Boat>(sf::Vector2f(25, 25), myPlayer);
+	UpdateEnemiesCurrentNode();
 
-	FindCurrentChunk();
-	FindCurrentNode();
-
-	//enemy->boardBoat(enemyBoat);
-
-	myPlayer->boardBoat(playerBoat);
-
-	playerBoat->addCannonBall();
+	//playerBoat->addCannonBall();
 
 	battleScene = std::make_unique<BattleScene>(myPlayer, enemies[0]);
-
-	/*myMap->getChunks()[0]->getIslands()[0]->PlaceEnemy(enemy);*/
-
 }
 
 void GamePlayScene::handleInput(const std::unique_ptr<sf::RenderWindow>& window, sf::Event newEvent)
 {
-
+	Camera::getInstance().handleZooming(newEvent);
 	if (sf::Event::KeyPressed == newEvent.type) //user pressed a key
 	{
-		processKeys(newEvent);
 		if (myPlayer->isOnBoat()) {
 			playerBoat->processKeys(newEvent);
 		}
@@ -75,37 +62,30 @@ void GamePlayScene::update(float dt)
 
 	if (!battle && !battleTransition.IsTransitionActive()) {
 		updateVisableNodes();
-		FindCurrentChunk();
-		FindCurrentNode();
+		HandleMovement();
+		processKeys();
+		UpdatePlayerCurrentNode();
+		UpdateEnemiesCurrentNode();
 
-		for (auto& node : myPlayer->getUpdateableArea()->getUpdateableNodes())
-		{
-			interactWithObjects(node);
+		for (int index : visibleNodes) {
+			std::shared_ptr<Node> node = myMap->getFullMap()[index];
 
-			if (sf::Keyboard::isKeyPressed((sf::Keyboard::X)) && !AllianceDialogueUI::getInstance().isMenuOpen())
+			if (node->GetBuilding())
+				node->GetBuilding()->Update(dt);
+			if (node->GetObject())
+				node->GetObject()->update(dt);
+
+			for (auto& updateableNode : myPlayer->getUpdateableArea()->getUpdateableNodes())
 			{
-				for(auto& enemy: enemies)
+				if (node == updateableNode)
 				{
-					if(enemy->getCurrentNode() == node && !enemy->GetPlayerAllegiance()->isHostile())
-					{
-						AllianceDialogueUI::getInstance().OpenMenu();
-						enemy->ChangeState(new IdleState(myPlayer));
-					}
+					interactWithObjects(node);
+					transitionToBattleMode(node);
 				}
 			}
 
-			transitionToBattleMode(node);
 		}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tab) && !interactWithObject && !Inventory::isInventoryOpen() && !HireRecruitUI::IsUIOpen() && !PlayerTabMenu::isMenuOpen())
-		{
-			interactWithObject = true;
-			playerMenu->Interact(myPlayer);
-		}
-
-		handleKeyInput();
-		myMap->getChunks()[myPlayer->getCurrentChunkID()]->updateIslands(dt);
-		//
 		if (myPlayer->isOnBoat())
 		{
 			playerBoat->update(dt);
@@ -115,18 +95,12 @@ void GamePlayScene::update(float dt)
 			myPlayer->update(dt);
 		}
 
+		playerMenu->Update();
+
 		for (auto& enemy : enemies)
 		{
 			enemy->update(dt);
 		}
-
-		if (currentIsland)
-		{
-			HandleGameObjectCollision();
-			HandleBuildingCollision();
-		}
-
-		playerMenu->Update();
 
 	}
 	else if (battleTransition.IsTransitionActive())
@@ -145,6 +119,7 @@ void GamePlayScene::update(float dt)
 	{
 		AllianceDialogueUI::getInstance().Update();
 	}
+	HireRecruitUI::getInstance().Update(dt);
 }
 
 void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
@@ -176,14 +151,13 @@ void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 		for (int index : visibleNodes) {
 			std::shared_ptr<Node> node = myMap->getFullMap()[index];
 
-			if (node->GetObject())
+			if (node->GetObject()) {
 				node->GetObject()->render(window);
+			}
 
-			if (node->GetBuilding())
+			if (node->GetBuilding()) {
 				node->GetBuilding()->Render(window);
-		}
-		if (currentIsland) {
-			currentIsland->RenderUI(window);
+			}
 		}
 
 		playerMenu->Render(window);
@@ -203,16 +177,19 @@ void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 	{
 		AllianceDialogueUI::getInstance().Render(window);
 	}
+	if(RenderableInventory::getInstance().isOpen())
+	{
+		RenderableInventory::getInstance().render(window);
+	}
+	if(HireRecruitUI::getInstance().IsMenuOpen())
+	{
+		HireRecruitUI::getInstance().Render(window);
+	}
 }
 
-void GamePlayScene::processKeys(sf::Event t_event)
+void GamePlayScene::processKeyUp(sf::Event& t_event)
 {
-	//empty
-}
-
-void GamePlayScene::processKeyUp(sf::Event t_event)
-{
-	if (t_event.key.code == sf::Keyboard::R)
+	if (t_event.key.code == sf::Keyboard::V)
 	{
 		keyUp = true;
 	}
@@ -226,133 +203,61 @@ void GamePlayScene::processKeyUp(sf::Event t_event)
 	}
 }
 
-void GamePlayScene::FindCurrentChunk()
+void GamePlayScene::processKeys()
 {
-	for (auto& chunk : myMap->getChunks())
-	{
-		if (Utility::collisionWithPoint(myPlayer->getPlayerController()->getPosition(), chunk->getMinVector(), chunk->getMaxVector()))
+	if (!Inventory::isInventoryOpen() && !HireRecruitUI::IsUIOpen()) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::V) && keyUp)
 		{
-			myPlayer->setCurrentChunkID(chunk->getChunkID());
-		}
-		for (auto& enemy : enemies)
-		{
-			if (Utility::collisionWithPoint(enemy->GetPosition(), chunk->getMinVector(), chunk->getMaxVector()))
+			keyUp = false;
+			if (!myPlayer->isOnBoat()) {
+				for (auto& node : myPlayer->getUpdateableArea()->getUpdateableNodes())
+				{
+					if (node == playerBoat->getDockedNode())
+					{
+						myPlayer->boardBoat(playerBoat);
+						break;
+					}
+				}
+			}
+			else
 			{
-				enemy->setCurrentChunkID(chunk->getChunkID());
+				std::cout << "R clicked" << "\n";
+				for (auto& node : myPlayer->getUpdateableArea()->getUpdateableNodes())
+				{
+					if (node->getIsLand())
+					{
+						myPlayer->disembarkBoat(node);
+						playerBoat->setDockedNode(myPlayer->getCurrentNode());
+						break;
+					}
+				}
 			}
 		}
 	}
-}
-
-void GamePlayScene::FindCurrentIsland()
-{
-	auto currentPlayerNode = myPlayer->getCurrentNode();
-
-	for (auto& island : myMap->getChunks()[myPlayer->getCurrentChunkID()]->getIslands()) {
-
-		for (auto& node : island->getLandNodes())
-		{
-			if (node == currentPlayerNode) {
-				currentIsland = island;
-			}
-		}
-	}
-}
-
-void GamePlayScene::FindCurrentNodeInSameChunk(int _id, const std::shared_ptr<Enemy>& _enemy) const
-{
-	for (auto& node : myMap->getChunks()[_id]->nodeGrid)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::X) && !AllianceDialogueUI::getInstance().isMenuOpen())
 	{
-		if (Utility::collisionWithPoint(myPlayer->getPlayerController()->getPosition(), node->getPosition(), sf::Vector2f(node->getNodeData().size, node->getNodeData().size)))
+		for (auto& node : myPlayer->getUpdateableArea()->getUpdateableNodes())
 		{
-			if (myPlayer->getCurrentNode() != node)
+			for (auto& enemy : enemies)
 			{
-				myPlayer->setCurrentNode(node);
-				myPlayer->updateUpdateableArea(node, 1);
-			}
-		}
-		if (Utility::collisionWithPoint(_enemy->GetPosition(), node->getPosition(), sf::Vector2f(node->getNodeData().size, node->getNodeData().size)))
-		{
-			if (_enemy->getCurrentNode() != node)
-			{
-				_enemy->setCurrentNode(node);
-				_enemy->updateUpdateableArea(node, 4);
-				break;
+				if (enemy->getCurrentNode() == node && !enemy->GetPlayerAllegiance()->isHostile())
+				{
+					AllianceDialogueUI::getInstance().OpenMenu();
+					enemy->ChangeState(new IdleState(myPlayer));
+				}
 			}
 		}
 	}
-}
 
-void GamePlayScene::FindCurrentNode() const
-{
-	for (auto& enemy : enemies)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tab) && !interactWithObject && !Inventory::isInventoryOpen() && !HireRecruitUI::IsUIOpen() && !PlayerTabMenu::isMenuOpen())
 	{
-		if (myPlayer->getCurrentChunkID() == enemy->GetCurrentNodeID())
-		{
-			FindCurrentNodeInSameChunk(myPlayer->getCurrentChunkID(), enemy);
-		}
-		else
-		{
-			FindPlayerCurrentNode();
-			FindEnemyCurrentNode(enemy);
-		}
+		interactWithObject = true;
+		playerMenu->Interact(myPlayer);
 	}
 
 }
 
-void GamePlayScene::FindPlayerCurrentNode() const
-{
-	for (auto& node : myMap->getChunks()[myPlayer->getCurrentChunkID()]->nodeGrid)
-	{
-		if (Utility::collisionWithPoint(myPlayer->getPlayerController()->getPosition(), node->getPosition(), sf::Vector2f(node->getNodeData().size, node->getNodeData().size)))
-		{
-			if (myPlayer->getCurrentNode() != node)
-			{
-				myPlayer->setCurrentNode(node);
-				myPlayer->updateUpdateableArea(node, 1);
-			}
-		}
-	}
-}
-
-void GamePlayScene::FindEnemyCurrentNode(const std::shared_ptr<Enemy>& _enemy) const
-{
-	for (auto& node : myMap->getChunks()[_enemy->getCurrentChunkID()]->nodeGrid)
-	{
-		if (Utility::collisionWithPoint(_enemy->GetPosition(), node->getPosition(), sf::Vector2f(node->getNodeData().size, node->getNodeData().size)))
-		{
-			if (_enemy->getCurrentNode() != node)
-			{
-				_enemy->setCurrentNode(node);
-				_enemy->updateUpdateableArea(node, 5);
-			}
-		}
-	}
-}
-
-void GamePlayScene::HandleGameObjectCollision()
-{
-	for (auto& object : currentIsland->getGameObjects())
-	{
-		if (object->GetHitBox().intersects(myPlayer->GetHitBox()))
-		{
-			myPlayer->getPlayerController()->deflect();
-		}
-	}
-}
-
-void GamePlayScene::HandleBuildingCollision()
-{
-	for (auto& building : currentIsland->getBuildings())
-	{
-		if (building->GetHitBox().intersects(myPlayer->GetHitBox()))
-		{
-			myPlayer->getPlayerController()->deflect();
-		}
-	}
-}
-
-void GamePlayScene::handleKeyInput()
+void GamePlayScene::HandleMovement() const
 {
 	if (!Inventory::isInventoryOpen() && !HireRecruitUI::IsUIOpen()) {
 		sf::Vector2f desiredVelocity{ 0,0 };
@@ -401,33 +306,51 @@ void GamePlayScene::handleKeyInput()
 			}
 		}
 		myPlayer->getPlayerController()->setLandVelocity(desiredVelocity);
+	}
+}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::R) && keyUp)
-		{
-			keyUp = false;
-			if (!myPlayer->isOnBoat()) {
-				for (auto& node : myPlayer->getUpdateableArea()->getUpdateableNodes())
-				{
-					if (node == playerBoat->getDockedNode())
-					{
-						myPlayer->boardBoat(playerBoat);
-					}
-				}
-			}
-			else
-			{
-				for (auto& node : myPlayer->getUpdateableArea()->getUpdateableNodes())
-				{
-					if (node->getIsLand())
-					{
-						myPlayer->disembarkBoat(node);
-						playerBoat->setDockedNode(myPlayer->getCurrentNode());
-						FindCurrentNode();
-						FindCurrentIsland();
-						break;
-					}
-				}
-			}
+std::shared_ptr<Node> GamePlayScene::FindCurrentNode(sf::Vector2f _position) const
+{
+	int chunkSizeInNodes = 32;
+	int nodeSize = 32;
+
+	int chunkX = static_cast<int>(_position.x) / (chunkSizeInNodes * nodeSize);
+	int chunkY = static_cast<int>(_position.y) / (chunkSizeInNodes * nodeSize);
+	int chunkID = chunkX * mapSize + chunkY;  // Column-major ordering
+
+	// Ensure the chunkID is valid
+	if (chunkID < 0 || chunkID >= 25) return nullptr;
+
+	int localX = (static_cast<int>(_position.x) % (chunkSizeInNodes * nodeSize)) / nodeSize;
+	int localY = (static_cast<int>(_position.y) % (chunkSizeInNodes * nodeSize)) / nodeSize;
+	int nodeIndex = localY * chunkSizeInNodes + localX;
+
+	auto& nodeGrid = myMap->getChunks()[chunkID]->nodeGrid;
+	if (nodeIndex >= 0 && nodeIndex < nodeGrid.size()) {
+		return nodeGrid[nodeIndex];
+	}
+
+	return nullptr;
+}
+
+void GamePlayScene::UpdatePlayerCurrentNode() const
+{
+	auto playerCurrentNode = FindCurrentNode(myPlayer->getPlayerController()->getPosition());
+	if (myPlayer->getCurrentNode() != playerCurrentNode) {
+		myPlayer->setCurrentNode(playerCurrentNode);
+		myPlayer->updateUpdateableArea(playerCurrentNode, 1);
+		std::cout << "Current Node : " << playerCurrentNode->getID() << "\n";
+	}
+}
+
+void GamePlayScene::UpdateEnemiesCurrentNode() const
+{
+	for (auto& enemy : enemies)
+	{
+		auto enemyCurrentNode = FindCurrentNode(enemy->GetPosition());
+		if (enemy->getCurrentNode() != enemyCurrentNode) {
+			enemy->setCurrentNode(enemyCurrentNode);
+			enemy->updateUpdateableArea(enemyCurrentNode, 4);
 		}
 	}
 }
@@ -450,51 +373,44 @@ void GamePlayScene::interactWithObjects(const std::shared_ptr<Node>& _node)
 {
 	if (sf::Keyboard::isKeyPressed((sf::Keyboard::E)) && !interactWithObject && !Inventory::isInventoryOpen() && !HireRecruitUI::IsUIOpen() && !PlayerTabMenu::isMenuOpen())
 	{
-		for (auto& island : myMap->getChunks()[myPlayer->getCurrentChunkID()]->getIslands())
-		{
-			for (auto& gameObject : island->getGameObjects())
+		if (_node->GetObject()) {
+
+			if (_node->GetObject()->getID() == _node->getID())
 			{
-				if (gameObject->getID() == _node->getID())
-				{
-					gameObject->interact();
-					myPlayer->getPlayerController()->setLandVelocity(sf::Vector2f(0, 0));
-					currentObjectInteract = gameObject;
-					interactWithObject = true;
-					break;
-				}
+				_node->GetObject()->interact();
+				myPlayer->getPlayerController()->setLandVelocity(sf::Vector2f(0, 0));
+				currentObjectInteract = _node->GetObject();
+				interactWithObject = true;
 			}
 		}
-		if (interactWithBuildings(_node)) {
-			myPlayer->getPlayerController()->setLandVelocity(sf::Vector2f(0, 0));
+		else if (_node->GetBuilding())
+		{
+			if (interactWithBuildings(_node)) {
+				myPlayer->getPlayerController()->setLandVelocity(sf::Vector2f(0, 0));
+			}
 		}
 	}
-	
+
 }
 
 bool GamePlayScene::interactWithBuildings(const std::shared_ptr<Node>& _node)
 {
-	for (auto& island : myMap->getChunks()[myPlayer->getCurrentChunkID()]->getIslands())
+	for (auto& nodeId : _node->GetBuilding()->GetOccupiedNodeIds())
 	{
-		for (auto& building : island->getBuildings())
+		if (nodeId == _node->getID())
 		{
-			for (auto& nodeId : building->GetOccupiedNodeIds())
-			{
-				if (nodeId == _node->getID())
-				{
-					building->Interact();
-					//currentBuildingInteract = building;
-					return true;
-				}
-			}
+			_node->GetBuilding()->Interact();
+			return true;
 		}
 	}
+
 	return false;
 }
 
 void GamePlayScene::transferInventoryItems()
 {
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(Mouse::getInstance().getMousePosition());
-	for (auto& slot : currentObjectInteract.lock()->GetRenderableInventory()->getSlots())
+	for (auto& slot : RenderableInventory::getInstance().getSlots())
 	{
 		if (Mouse::getInstance().LeftClicked() && slot->getIsOccupied())
 		{

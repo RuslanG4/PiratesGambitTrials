@@ -51,7 +51,13 @@ void FullMap::initChunks()
 		{
 			int chunkIndex = chunkY * mapSize + chunkX;
 
-			std::vector<std::shared_ptr<Node>> chunkNodes = populateChunk(chunkX, chunkY, 69); //populate start chunk to apply cellular later
+			std::random_device rd;
+			std::mt19937 gen(rd());
+			std::uniform_int_distribution<int> dist(65, 70); // Random number between 50 and 64 (inclusive)
+
+			int amount = dist(gen);
+
+			std::vector<std::shared_ptr<Node>> chunkNodes = populateChunk(chunkX, chunkY, amount); //populate start chunk to apply cellular later
 			//Grid* chunk = new Grid(chunkNodes);
 			std::unique_ptr<Grid> chunk = std::make_unique<Grid>(chunkNodes, playerRef);
 			chunk->ApplyCellular(7);

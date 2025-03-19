@@ -10,20 +10,10 @@ void Building::Render(const std::unique_ptr<sf::RenderWindow>& _window) const
 	//myHitbox->render(_window);
 }
 
-void Building::RenderUI(const std::unique_ptr<sf::RenderWindow>& _window) const
-{
-	if (buildingUI->IsMenuOpen())
-	{
-		_window->setView(_window->getDefaultView());
-		buildingUI->Render(_window);
-	}
-}
-
 void Building::Update(float _dt)
 {
-	buildingUI->Update(_dt);
 	popUp->Update(_dt);
-	if(buildingUI->UnitsAvailable())
+	if(HireRecruitUI::getInstance().UnitsAvailable())
 	{
 		popUp->TogglePopUp();
 	}else
@@ -34,13 +24,14 @@ void Building::Update(float _dt)
 
 void Building::Interact()
 {
-	if (!buildingUI->IsMenuOpen())
+	if (!HireRecruitUI::getInstance().IsMenuOpen())
 	{
-		buildingUI->OpenUI();
+		HireRecruitUI::getInstance().OpenUI();
+		HireRecruitUI::getInstance().PassUI(unitType, maxUnitAmount);
 	}
 	else
 	{
-		buildingUI->CloseUI();
+		HireRecruitUI::getInstance().CloseUI();
 	}
 }
 

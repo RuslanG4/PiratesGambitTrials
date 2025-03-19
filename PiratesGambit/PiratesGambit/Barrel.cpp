@@ -11,8 +11,6 @@ Barrel::Barrel()
 	inventory->addItem(std::make_unique<CannonBallItem>(6));
 	inventory->addItem(std::make_unique<Coins>(6000));
 
-	renderableInventory = std::make_unique<BarrelInventory>(4, 2);
-
 	sprite.setTexture(TextureManager::getInstance().getTexture("BARREL"));
 	sprite.setScale(1.15f, 1.15f);
 	sprite.setOrigin(12, 12);
@@ -33,7 +31,7 @@ void Barrel::interact()
 	if(!inventory->isInventoryOpen())
 	{
 		inventory->openInventory();
-		renderableInventory->passItems(inventory->getItems());
+		RenderableInventory::getInstance().passItems(inventory->getItems());
 	}
 	else
 	{
@@ -53,7 +51,7 @@ void Barrel::update(float _dt)
 void Barrel::checkMousePosition()
 {
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(Mouse::getInstance().getMousePosition());
-	for (auto& slot : renderableInventory->getSlots())
+	for (auto& slot : RenderableInventory::getInstance().getSlots())
 	{
 		if (Mouse::getInstance().LeftClicked() && slot->getIsOccupied())
 		{
@@ -65,8 +63,4 @@ void Barrel::checkMousePosition()
 	}
 }
 
-void Barrel::RenderUI(const std::unique_ptr<sf::RenderWindow>& _window)
-{
-	renderableInventory->render(_window);
-}
 
