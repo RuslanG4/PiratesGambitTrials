@@ -51,7 +51,7 @@ private:
 
             std::vector<std::shared_ptr<Node>> area = PathFindingFunctions<Node>::BreathSearchEuclydianIslands(startNode, 2);
 
-            if (area.size() >= 9 && isAreaValid(area)) {
+            if (area.size() >= 6 && isAreaValid(area)) {
                 for (auto& node : area) {
                     //node->debugShape->setFillColor(sf::Color::Yellow); //debug
                     node->UpdateIsBuildingArea(true); //mark area as in use
@@ -76,6 +76,9 @@ private:
         std::random_device rd;
         std::mt19937 gen(rd());
 
+        int depth;
+        treeAmount <= 1 ? depth = 1 : depth = 3;
+
         while (!availableNodes.empty() && placedTrees.size() < treeAmount) {
             int randomIndex = std::rand() % availableNodes.size(); 
             std::shared_ptr<Node> startNode = availableNodes[randomIndex]; //random node
@@ -90,10 +93,10 @@ private:
                 startNode = availableNodes[randomIndex];
             }
 
-            std::vector<std::shared_ptr<Node>> area = PathFindingFunctions<Node>::BreathSearchEuclydianIslands(startNode, 3);
+            std::vector<std::shared_ptr<Node>> area = PathFindingFunctions<Node>::BreathSearchEuclydianIslands(startNode, depth);
 
             //Is the depth area large enough, excludes areas too close to an edge
-            if (area.size() >= 15 && isAreaValid(area)) {
+            if (area.size() >= depth * 3 && isAreaValid(area)) {
                 for (auto& node : area) {
                     node->UpdateIsBuildingArea(true); //set are as in use for future clumps
                 }

@@ -50,7 +50,9 @@ void Island::GenerateTrees(std::vector<std::shared_ptr<Node>>& _nodes)
 {
 	int totalTrees = CalculateTreeCount(_nodes.size());
 
-	std::vector<int> clumps = DistributeTreesIntoClumps(totalTrees);
+	std::vector<int> clumps;
+
+	totalTrees <= 1 ? clumps = { 1 } : clumps = DistributeTreesIntoClumps(totalTrees);
 
 	for(int clump : clumps)
 	{
@@ -109,11 +111,13 @@ void Island::GenerateBarrels(std::vector<std::shared_ptr<Node>>& _nodes)
 
 int Island::CalculateTreeCount(int landNodes)
 {
-	if (landNodes < 30) return 0;
+	if (landNodes < 30) {
+		return 1;
+	}
 
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_real_distribution<double> dist(0.07, 0.11); 
+	std::uniform_real_distribution<double> dist(0.07, 0.1); 
 
 	int treeCount = static_cast<int>(landNodes * dist(gen));
 	return treeCount;
@@ -122,7 +126,7 @@ int Island::CalculateTreeCount(int landNodes)
 
 std::vector<int> Island::DistributeTreesIntoClumps(int totalTrees)
 {
-	if (totalTrees < 5) return {}; // Not enough trees for a valid clump
+	if (totalTrees < 3) return {}; // Not enough trees for a valid clump
 
 	std::random_device rd;
 	std::mt19937 gen(rd());
@@ -130,7 +134,7 @@ std::vector<int> Island::DistributeTreesIntoClumps(int totalTrees)
 	std::vector<int> clumps;
 	int remainingTrees = totalTrees;
 
-	while (remainingTrees >= 5) {
+	while (remainingTrees >= 3) {
 		int clumpSize = std::min(remainingTrees, std::uniform_int_distribution<int>(3, 5)(gen));
 		clumps.push_back(clumpSize);
 		remainingTrees -= clumpSize;
@@ -152,7 +156,7 @@ int Island::CalculateBarrelCount(int islandSize)
 	const int minBarrels = 1;
 	const int maxBarrels = 4;
 
-	const int minIslandSize = 50;  
+	const int minIslandSize = 20;  
 	const int maxIslandSize = 500; 
 
 	islandSize = std::max(minIslandSize, std::min(islandSize, maxIslandSize));

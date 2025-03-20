@@ -45,6 +45,10 @@ const char* const SKULL_ICON = "ASSETS\\IMAGES\\ICONS\\SKULL.png";
 
 //Enemy Ships
 const char* const RED_SHIP_HEALTHY = "ASSETS\\IMAGES\\Enemy\\RedShip.png";
+const char* const BLACK_SHIP_HEALTHY = "ASSETS\\IMAGES\\Enemy\\BLACK_SHIP.png";
+const char* const BLUE_SHIP_HEALTHY = "ASSETS\\IMAGES\\Enemy\\BLUE_SHIP.png";
+const char* const GREEN_SHIP_HEALTHY = "ASSETS\\IMAGES\\Enemy\\GREEN_SHIP.png";
+const char* const YELLOW_SHIP_HEALTHY = "ASSETS\\IMAGES\\Enemy\\YELLOW_SHIP.png";
 
 //Borders
 const char* const ACTION_BORDER = "ASSETS\\IMAGES\\Borders\\ActionButton.png";

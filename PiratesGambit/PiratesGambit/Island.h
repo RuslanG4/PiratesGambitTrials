@@ -18,6 +18,14 @@ public:
 	{
 		playerRef = _playerRef;
 
+		for(auto& node : landNodes)
+		{
+			if(node->getParentTileType() == SAND)
+			{
+				sandNodes.push_back(node);
+			}
+		}
+
 		GenerateIsland();
 	}
 	/// <summary>
@@ -106,11 +114,14 @@ public:
 
 
 	const std::vector<std::shared_ptr<Node>>& getLandNodes() const { return landNodes; }
+	const std::vector<std::shared_ptr<Node>>& getSandNodes() const { return sandNodes; }
 	const std::vector<std::shared_ptr<GameObject>>& getGameObjects() const { return gameObjects; }
 	const std::vector<std::shared_ptr<Building>>& getBuildings() const { return buildings; }
 private:
 	//land node storage
 	std::vector<std::shared_ptr<Node>> landNodes;
+	//sand nodes storage
+	std::vector<std::shared_ptr<Node>> sandNodes;
 	//game object storage
 	std::vector<std::shared_ptr<GameObject>> gameObjects;
 	//buildings

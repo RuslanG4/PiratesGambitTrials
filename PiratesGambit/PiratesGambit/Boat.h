@@ -39,7 +39,13 @@ public:
 	void addCannonBall();
 	void fireCannonBall(int _direction);
 
-	void setPosition(sf::Vector2f _pos) { position = _pos; boatSprite.setPosition(position); }
+	void setPosition(sf::Vector2f _pos)
+	{
+		position = _pos;
+		boatSprite.setPosition(position);
+		controller->setCurrentPosition(position);
+
+	}
 	void setRotation(float _rotation){ boatSprite.setRotation(_rotation); }
 	void setDockedNode(const std::shared_ptr<Node>& _node)
 	{

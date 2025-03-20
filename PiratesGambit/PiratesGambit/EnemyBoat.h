@@ -10,14 +10,12 @@ class Enemy;
 class EnemyBoat
 {
 public:
-	EnemyBoat(sf::Vector2f _pos, const std::shared_ptr<Enemy>& _refEnemy, const sf::Texture& _shipTexture)
+	EnemyBoat(const std::shared_ptr<Enemy>& _refEnemy, const sf::Texture& _shipTexture)
 	{
 		enemyRef = _refEnemy;
 
-		position = _pos;
 		boatSprite.setTexture(_shipTexture);
 		boatSprite.setOrigin(56, 33);
-		boatSprite.setPosition(_pos);
 		boatSprite.setScale(0.5, 0.5);
 
 		myHitbox = new HitBox(sf::Vector2f(56, 25));

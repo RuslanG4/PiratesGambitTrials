@@ -45,27 +45,56 @@ void FullMap::initMap(const int& mapSize_)
 /// <param name="window"></param>
 void FullMap::initChunks()
 {
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<int> bigIslandDist(65, 70); 
+	std::uniform_int_distribution<int> smallIslandDist(50, 58);
+	std::uniform_int_distribution<int> cellularExtentBig(6, 7);
+	std::uniform_int_distribution<int> cellularExtentSmall(3, 4);
+
+	std::vector<int> availableBigIslandIndices = { 0, 1, 2, 3, 4 };
+
+	int cellularExtent = 0;
+
 	for (int chunkY = 0; chunkY < mapSize; chunkY++)
 	{
+		bool isBigIsland = false;
+		std::uniform_int_distribution<int> bigIslandIndexDist(0, availableBigIslandIndices.size() - 1);
+		int index = bigIslandIndexDist(gen);
+		int randomCol = availableBigIslandIndices[index];
+
 		for (int chunkX = 0; chunkX < mapSize; chunkX++)
 		{
 			int chunkIndex = chunkY * mapSize + chunkX;
+			int amount = 0;
 
-			std::random_device rd;
-			std::mt19937 gen(rd());
-			std::uniform_int_distribution<int> dist(55, 70); // Random number between 50 and 64 (inclusive)
+			if (!availableBigIslandIndices.empty() && chunkX == randomCol && !isBigIsland)
+			{
+				availableBigIslandIndices.erase(availableBigIslandIndices.begin() + index);
 
-			int amount = dist(gen);
+				amount = bigIslandDist(gen);
+				isBigIsland = true;
 
-			std::vector<std::shared_ptr<Node>> chunkNodes = populateChunk(chunkX, chunkY, amount); //populate start chunk to apply cellular later
-			//Grid* chunk = new Grid(chunkNodes);
+				cellularExtent = cellularExtentBig(gen);
+			}
+			else
+			{
+				amount = smallIslandDist(gen);
+				cellularExtent = cellularExtentSmall(gen);
+			}
+
+			std::vector<std::shared_ptr<Node>> chunkNodes = populateChunk(chunkX, chunkY, amount);
+
 			std::unique_ptr<Grid> chunk = std::make_unique<Grid>(chunkNodes, playerRef);
-			chunk->ApplyCellular(7);
+			chunk->ApplyCellular(cellularExtent);
 			chunk->setChunkID(chunkIndex);
+
 			chunks_.push_back(std::move(chunk));
 		}
 	}
 }
+
+
 
 ///<summary>
 /// Splits larger grid into chunks and assigns those a chunk ID

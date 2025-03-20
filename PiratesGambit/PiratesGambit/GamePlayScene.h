@@ -25,6 +25,12 @@ public:
 	void render(const std::unique_ptr<sf::RenderWindow>& window) override;
 
 private:
+	void SpawnPlayer();
+	void SpawnBoat(const std::shared_ptr<Island>& _island);
+
+	void SpawnEnemies();
+	void SpawnTeam(int _chunkIndex, sf::Texture& _texture);
+
 	void processKeyUp(sf::Event& t_event);
 
 	void processKeys();
@@ -43,6 +49,8 @@ private:
 	void transferInventoryItems();
 
 	void updateVisableNodes();
+
+	void UpdateEnemies(double _dt);
 
 	std::set<int> visibleNodes;
 
@@ -73,8 +81,11 @@ private:
 	std::unique_ptr<BattleScene> battleScene;
 	bool battle = false ;
 
-	int mapSize = 3;
+	int mapSize = 5;
 
+	int enemiesPerFrame = 5;
+	int enemyIndex = 0;
 
+	std::random_device rd;
 };
 

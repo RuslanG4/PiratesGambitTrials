@@ -287,7 +287,16 @@ void Grid::MapIsland(int _startIndex,bool saveIslandData)
 	}
 	if(saveIslandData)
 	{
-		islands.push_back((std::make_shared<Island>(currentIsland, playerRef)));
+		if(currentIsland.size() <= 20)
+		{
+			for(auto& node : currentIsland)
+			{
+				removeWorldEdges(node);
+			}
+		}
+		else {
+			islands.push_back((std::make_shared<Island>(currentIsland, playerRef)));
+		}
 	}
 	
 }

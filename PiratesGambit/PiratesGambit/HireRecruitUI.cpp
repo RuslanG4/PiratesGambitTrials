@@ -1,5 +1,7 @@
 #include "HireRecruitUI.h"
 
+#include "Building.h"
+
 
 bool HireRecruitUI::uiOpen = false;
 
@@ -46,12 +48,13 @@ void HireRecruitUI::SetUpUi()
 		TextureManager::getInstance().getTexture("MONEY_ICON"));
 }
 
-void HireRecruitUI::PassUI(UnitName _type, int _unitAmount)
+void HireRecruitUI::PassUI(UnitName _type, int _unitAmount, Building& building)
 {
 	unitsLeftReference = _unitAmount;
 	nameOfUnitSelling = _type;
+	buildingRef = &building;
 
-	if(availableUnits <=0 && progressBar->canBuyUnits())
+	if(availableUnits <=0 && building.canBuyUnits())
 	{
 		availableUnits = unitsLeftReference;
 	}
@@ -116,13 +119,14 @@ void HireRecruitUI::Render(const std::unique_ptr<sf::RenderWindow>& _window) con
 
 void HireRecruitUI::Update(float _dt)
 {
-	progressBar->Update();
 	if (IsMenuOpen()) {
 		unitIcon->Update(_dt);
 		if (availableUnits > 0)
 		{
 			amountSlider->Update();
 		}
+
+		progressBar->PassProgress(buildingRef->getProgressValue());
 
 		recruit->UpdateText(std::to_string(amountSlider->getValue()));
 		totalCost->UpdateText(std::to_string(amountSlider->getValue() * 500)); //500 is per unit
@@ -134,7 +138,7 @@ void HireRecruitUI::Update(float _dt)
 			CloseUI();
 		}
 
-		if (progressBar->canBuyUnits()) {
+		if (buildingRef->canBuyUnits()) {
 			if (resetValue)
 			{
 				availableUnits = unitsLeftReference;
@@ -163,7 +167,7 @@ void HireRecruitUI::Update(float _dt)
 
 						if (availableUnits <= 0)
 						{
-							progressBar->BuyUnits();
+							buildingRef->BuyUnits();
 							amountSlider->ResetSlider();
 							resetValues();
 							resetValue = true;

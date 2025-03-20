@@ -13,13 +13,24 @@ void Building::Render(const std::unique_ptr<sf::RenderWindow>& _window) const
 void Building::Update(float _dt)
 {
 	popUp->Update(_dt);
-	if(HireRecruitUI::getInstance().UnitsAvailable())
+	if(isActive)
 	{
 		popUp->TogglePopUp();
 	}else
 	{
 		popUp->ClosePopUp();
 	}
+
+
+	if (!isActive) {
+		float elapsed = timer.getElapsedTime().asSeconds();
+
+		if (elapsed >= 20.f) {
+			isActive = true;
+		}
+		progress = (elapsed / 20.f);
+	}
+
 }
 
 void Building::Interact()
@@ -27,7 +38,7 @@ void Building::Interact()
 	if (!HireRecruitUI::getInstance().IsMenuOpen())
 	{
 		HireRecruitUI::getInstance().OpenUI();
-		HireRecruitUI::getInstance().PassUI(unitType, maxUnitAmount);
+		HireRecruitUI::getInstance().PassUI(unitType, maxUnitAmount, *this);
 	}
 	else
 	{

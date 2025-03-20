@@ -21,7 +21,7 @@ public:
 
     void SetUpUi();
 
-    void PassUI(UnitName _type, int _unitAmount);
+    void PassUI(UnitName _type, int _unitAmount, Building& building);
     void PassPlayer(std::shared_ptr<Player>& _playerRef) { playerRef = _playerRef; }
 
     // Delete copy constructor & assignment operator (Singleton Rule)
@@ -40,7 +40,7 @@ public:
 
     static bool IsUIOpen() { return uiOpen; }
     bool IsMenuOpen() const { return isMenuOpen; }
-    bool UnitsAvailable() const { return progressBar->canBuyUnits(); }
+
 
 private:
     // Private Constructor (Only accessible via getInstance)
@@ -61,6 +61,8 @@ private:
     sf::Sprite background;
     sf::Sprite unit;
     AnimationState animationState;
+
+    Building* buildingRef;
 
     std::unique_ptr<ProgressBar> progressBar;
     std::unique_ptr<InfoBoxUI> costPerTroop;

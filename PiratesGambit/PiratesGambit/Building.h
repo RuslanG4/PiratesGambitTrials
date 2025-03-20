@@ -25,6 +25,18 @@ public:
 	int GetMaxUnitAmount() const { return maxUnitAmount; }
 
 	sf::FloatRect GetHitBox()const { return myHitbox->GetGlobalBounds(); }
+
+	bool canBuyUnits() const {
+		return isActive;
+	}
+
+	void BuyUnits()
+	{
+		isActive = false;
+		timer.restart();
+	}
+
+	float getProgressValue() const { return progress; }
 protected:
 	sf::Sprite buildingSprite;
 	std::unique_ptr<HitBox> myHitbox;
@@ -38,5 +50,10 @@ protected:
 
 	std::unique_ptr<BuildingPopUp> popUp;
 	int unitsAmount = 0;
+
+	sf::Clock timer;
+	bool isActive = true;
+
+	float progress = 100;
 };
 

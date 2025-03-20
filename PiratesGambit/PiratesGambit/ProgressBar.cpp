@@ -17,15 +17,9 @@ void ProgressBar::Render(const std::unique_ptr<sf::RenderWindow>& _win) const
     _win->draw(progressBar);
 }
 
-void ProgressBar::Update()
+void ProgressBar::PassProgress(float progress)
 {
-    if (!isActive) {
-        float elapsed = timer.getElapsedTime().asSeconds();
-
-        if (elapsed >= 20.f) {
-            isActive = true;
-        }
-        float progress = (elapsed / 20.f) * backgroundBar.getSize().x;
-        progressBar.setSize(sf::Vector2f(progress, progressBar.getSize().y));
-    }
+    progress = progress * backgroundBar.getSize().x;
+    progressBar.setSize(sf::Vector2f(progress, progressBar.getSize().y));
 }
+

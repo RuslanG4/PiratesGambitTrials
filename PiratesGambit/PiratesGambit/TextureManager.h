@@ -32,7 +32,13 @@ public:
         texturesLoaded &= loadTexture("PLAYER_BOAT", PLAYER);
         texturesLoaded &= loadTexture("PLAYER_BOAT_DAMAGED", PLAYER_DAMAGED);
         texturesLoaded &= loadTexture("PLAYER_BOAT_PLASTERED", PLAYER_PLASTERED);
+        //PIRATE SHIPS
         texturesLoaded &= loadTexture("RED_BOAT", RED_SHIP_HEALTHY);
+        texturesLoaded &= loadTexture("BLACK_BOAT", BLACK_SHIP_HEALTHY);
+        texturesLoaded &= loadTexture("GREEN_BOAT", GREEN_SHIP_HEALTHY);
+        texturesLoaded &= loadTexture("BLUE_BOAT", BLUE_SHIP_HEALTHY);
+        texturesLoaded &= loadTexture("YELLOW_BOAT", YELLOW_SHIP_HEALTHY);
+
         texturesLoaded &= loadTexture("CANNON_BALL", CANNON_BALL);
         texturesLoaded &= loadTexture("HARPOON", HARPOON);
         texturesLoaded &= loadTexture("PIRATE_CAPTAIN", PIRATE_CAPTAIN);

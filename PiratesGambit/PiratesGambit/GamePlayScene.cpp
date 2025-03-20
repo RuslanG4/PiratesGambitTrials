@@ -4,7 +4,7 @@ GamePlayScene::GamePlayScene()
 {
 	myPlayer = std::make_shared<Player>(sf::Vector2f(25, 25));
 	playerBoat = std::make_shared<Boat>(sf::Vector2f(25, 25), myPlayer);
-	myPlayer->boardBoat(playerBoat);
+	//myPlayer->boardBoat(playerBoat);
 
 	playerMenu = std::make_unique<PlayerTabMenu>(myPlayer->getArmy(), myPlayer->getInventory());
 	RenderableInventory::getInstance().Init();
@@ -12,16 +12,10 @@ GamePlayScene::GamePlayScene()
 
 	myMap = std::make_unique<FullMap>(mapSize, myPlayer);
 
+	SpawnPlayer();
 	UpdatePlayerCurrentNode(); // sets player current Node
 
-	for (int i = 0; i < 10; i++)
-	{
-		auto enemy = std::make_shared<Enemy>(myPlayer);
-		auto enemyBoat = std::make_shared<EnemyBoat>(sf::Vector2f(325 + i * 100, 25), enemy, TextureManager::getInstance().getTexture("RED_BOAT"));
-		enemy->boardBoat(enemyBoat);
-		enemies.push_back(enemy);
-		enemyBoats.push_back(enemyBoat);
-	}
+	SpawnEnemies();
 
 	UpdateEnemiesCurrentNode();
 
@@ -78,10 +72,8 @@ void GamePlayScene::update(float dt)
 
 		for (auto& updateableNode : myPlayer->getUpdateableArea()->getUpdateableNodes())
 		{
-
-				interactWithObjects(updateableNode);
-				transitionToBattleMode(updateableNode);
-			
+			interactWithObjects(updateableNode);
+			transitionToBattleMode(updateableNode);
 		}
 
 
@@ -96,10 +88,7 @@ void GamePlayScene::update(float dt)
 
 		playerMenu->Update();
 
-		for (auto& enemy : enemies)
-		{
-			enemy->update(dt);
-		}
+		UpdateEnemies(dt);
 
 	}
 	else if (battleTransition.IsTransitionActive())
@@ -176,13 +165,124 @@ void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 	{
 		AllianceDialogueUI::getInstance().Render(window);
 	}
-	if(RenderableInventory::getInstance().isOpen())
+	if (RenderableInventory::getInstance().isOpen())
 	{
 		RenderableInventory::getInstance().render(window);
 	}
-	if(HireRecruitUI::getInstance().IsMenuOpen())
+	if (HireRecruitUI::getInstance().IsMenuOpen())
 	{
 		HireRecruitUI::getInstance().Render(window);
+	}
+}
+
+void GamePlayScene::SpawnPlayer()
+{
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<int> chunkDist(0, myMap->getChunks().size() - 1);
+
+	int randomChunkIndex = chunkDist(gen);
+	auto chunk = myMap->getChunks()[randomChunkIndex].get();
+
+	while (chunk->getIslands().empty())
+	{
+		randomChunkIndex = chunkDist(gen);
+		chunk = myMap->getChunks()[randomChunkIndex].get();
+	}
+
+	auto islands = chunk->getIslands()[0];
+
+	std::uniform_int_distribution<int> nodeDist(0, islands->getLandNodes().size() - 1);
+	int nodeIndex = nodeDist(gen);
+
+	while (islands->getLandNodes()[nodeIndex]->isOccupied())
+	{
+		nodeIndex = nodeDist(gen);
+	}
+
+	myPlayer->updatePosition(islands->getLandNodes()[nodeIndex]->getMidPoint());
+
+	SpawnBoat(islands);
+
+}
+
+void GamePlayScene::SpawnBoat(const std::shared_ptr<Island>& _island)
+{
+	for (auto& sandNode : _island->getSandNodes())
+	{
+		for (auto& neighbor : sandNode->getNeighbours())
+		{
+			if (!neighbor.first->getIsLand() && !neighbor.first->isOccupied())
+			{
+				playerBoat->setPosition(neighbor.first->getMidPoint());
+				playerBoat->setDockedNode(neighbor.first);
+				return;
+			}
+		}
+	}
+}
+
+void GamePlayScene::SpawnEnemies()
+{
+	auto& chunks = myMap->getChunks();
+	std::vector<int> availableChunkIndices;
+
+	if (availableChunkIndices.empty())
+	{
+		availableChunkIndices.resize(chunks.size());
+		std::iota(availableChunkIndices.begin(), availableChunkIndices.end(), 0);
+	}
+
+	std::mt19937 gen(rd());
+
+	auto SelectAndSpawn = [&](const std::string& textureName) {
+		if (availableChunkIndices.empty()) return;
+
+		std::uniform_int_distribution<int> chunkDist(0, availableChunkIndices.size() - 1);
+		int selectedIndex = chunkDist(gen);
+		int chunkIndex = availableChunkIndices[selectedIndex];
+
+		SpawnTeam(chunkIndex, TextureManager::getInstance().getTexture(textureName));
+		availableChunkIndices.erase(availableChunkIndices.begin() + selectedIndex);
+		};
+
+	std::vector<std::string> enemyTextures = { "BLUE_BOAT", "BLACK_BOAT", "RED_BOAT", "GREEN_BOAT" };
+
+	for (const auto& texture : enemyTextures)
+	{
+		SelectAndSpawn(texture);
+	}
+}
+
+void GamePlayScene::SpawnTeam(int _chunkIndex, sf::Texture& _texture)
+{
+	std::mt19937 gen(rd());
+
+	auto nodes = myMap->getChunks()[_chunkIndex]->nodeGrid;
+
+	std::uniform_int_distribution<int> randomWater(0, nodes.size() - 1);
+	
+
+	for (int i = 0; i < 5; i++) {
+
+		int waterNode = randomWater(gen);
+
+		while (myMap->getChunks()[_chunkIndex]->nodeGrid[waterNode]->getIsLand())
+		{
+			waterNode = randomWater(gen);
+		}
+
+		if (waterNode)
+		{
+			auto enemy = std::make_shared<Enemy>(myPlayer);
+			auto enemyBoat = std::make_shared<EnemyBoat>(enemy, _texture);
+
+			enemyBoat->setPosition(myMap->getChunks()[_chunkIndex]->nodeGrid[waterNode]->getMidPoint());
+			enemyBoat->setDockedNode(myMap->getChunks()[_chunkIndex]->nodeGrid[waterNode]);
+			enemy->boardBoat(enemyBoat);
+
+			enemies.push_back(enemy);
+			enemyBoats.push_back(enemyBoat);
+		}
 	}
 }
 
@@ -220,7 +320,6 @@ void GamePlayScene::processKeys()
 			}
 			else
 			{
-				std::cout << "R clicked" << "\n";
 				for (auto& node : myPlayer->getUpdateableArea()->getUpdateableNodes())
 				{
 					if (node->getIsLand())
@@ -349,7 +448,7 @@ void GamePlayScene::UpdateEnemiesCurrentNode() const
 		auto enemyCurrentNode = FindCurrentNode(enemy->GetPosition());
 		if (enemy->getCurrentNode() != enemyCurrentNode) {
 			enemy->setCurrentNode(enemyCurrentNode);
-			enemy->updateUpdateableArea(enemyCurrentNode, 4);
+			enemy->updateUpdateableArea(enemyCurrentNode, 5);
 		}
 	}
 }
@@ -442,4 +541,18 @@ void GamePlayScene::updateVisableNodes()
 	}
 
 	visibleNodes = std::move(newVisibleNodes);
+}
+
+void GamePlayScene::UpdateEnemies(double _dt)
+{
+	for(auto& enemy : enemies)
+	{
+		enemy->update(_dt);
+	}
+	/*int count = enemies.size();
+	for (int i = 0; i < enemiesPerFrame; ++i) {
+		if (count == 0) break;
+		enemies[enemyIndex]->update(_dt);
+		enemyIndex = (enemyIndex + 1) % count;
+	}*/
 }

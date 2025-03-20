@@ -63,7 +63,12 @@ public:
 	
 	//player controller
 	PlayerController* getPlayerController() const { return controller; }
-	void updatePosition(const sf::Vector2f& _pos) { body.setPosition(_pos); }
+	void updatePosition(const sf::Vector2f& _pos)
+	{
+		body.setPosition(_pos);
+		controller->setCurrentPosition(_pos);
+		myHitbox->setPosition(_pos);
+	}
 
 	//Inventory
 	const std::unique_ptr<Inventory>& getInventory() const { return inventory; }
@@ -111,7 +116,7 @@ private:
 
 	//Boat
 	std::weak_ptr<Boat> currentBoat;
-	bool onBoat{ true };
+	bool onBoat{ false };
 
 	bool idleAnimation;
 	bool walkAnimation;

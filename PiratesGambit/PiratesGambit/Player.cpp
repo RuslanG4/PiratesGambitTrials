@@ -42,16 +42,16 @@ void Player::render(const std::unique_ptr<sf::RenderWindow>& window) const
 	if (!onBoat)
 	{
 		window->draw(body);
-		myHitbox->render(window);
+		//myHitbox->render(window);
 	}
 
 	//debug
-	for (auto& node : updateableArea->getUpdateableNodes())
-	{
-		if (node != nullptr) {
-			window->draw(*(node->debugShape));
-		}
-	}
+	//for (auto& node : updateableArea->getUpdateableNodes())
+	//{
+	//	if (node != nullptr) {
+	//		window->draw(*(node->debugShape));
+	//	}
+	//}
 }
 
 /// <summary>
