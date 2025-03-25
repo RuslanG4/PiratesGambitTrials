@@ -9,6 +9,7 @@ EnemyScoutArmySlot::EnemyScoutArmySlot()
 	rectSourceSprite.top = 0;
 	unitSprite.setTextureRect(rectSourceSprite);
 	unitSprite.setOrigin(16, 24);
+	unitSprite.setScale(1.5, 1.5);
 
 	boxBorder.setSize(sf::Vector2f(32, 32));
 	boxBorder.setOutlineThickness(2.f);

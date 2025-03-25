@@ -21,7 +21,7 @@ GamePlayScene::GamePlayScene()
 
 	//playerBoat->addCannonBall();
 
-	battleScene = std::make_unique<BattleScene>(myPlayer, enemies[0]);
+	battleScene = std::make_unique<BattleScene>(myPlayer);
 }
 
 void GamePlayScene::handleInput(const std::unique_ptr<sf::RenderWindow>& window, sf::Event newEvent)
@@ -249,7 +249,7 @@ void GamePlayScene::SpawnEnemies()
 		availableChunkIndices.erase(availableChunkIndices.begin() + selectedIndex);
 		};
 
-	std::vector<UnitAllegiance> enemyAllegiances = { BLUE_PLAYER, BLACK_PLAYER };
+	std::vector<UnitAllegiance> enemyAllegiances = { BLUE_PLAYER, BLACK_PLAYER, RED_PLAYER };
 
 	for (const auto& allegiance : enemyAllegiances)
 	{
@@ -525,6 +525,7 @@ void GamePlayScene::transitionToBattleMode(const std::shared_ptr<Node>& _node)
 			if (enemy->GetGlobalBounds().intersects(myPlayer->GetHitBox()))
 			{
 				battleTransition.startTransition(1);
+				battleScene->setEnemyRef(enemy);
 			}
 		}
 	}

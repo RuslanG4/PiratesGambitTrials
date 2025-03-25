@@ -15,7 +15,7 @@
 class BattleScene
 {
 public:
-	BattleScene(const std::shared_ptr<Player>& _player, const std::shared_ptr<Enemy>& _enemy) : playerRef(_player), enemyRef(_enemy)
+	BattleScene(const std::shared_ptr<Player>& _player) : playerRef(_player)
 	{
 		UIInterface = std::make_unique<BattleActionUI>();
 		tacticsArmyUI = std::make_unique<TacticsArmyUI>(_player->getArmy());
@@ -30,7 +30,9 @@ public:
 		placeUnits(playerRef->getArmy(), false);
 
 		background.setTexture(TextureManager::getInstance().getTexture("background"));
-	};
+	}
+
+	void setEnemyRef(const std::shared_ptr<Enemy>& _enemy) { enemyRef = _enemy; }
 
 	void placeUnits(const std::unique_ptr<Army>& _army, bool _isEnemy) const;
 

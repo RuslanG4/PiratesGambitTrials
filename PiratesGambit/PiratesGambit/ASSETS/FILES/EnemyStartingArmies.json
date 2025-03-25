@@ -16,6 +16,22 @@
                     { "unittype": "Buccaneer", "amount": 12 },
                     { "unittype": "Buccaneer", "amount": 12 }
                 ]
+            },
+            {
+                "EnemyId": 2,
+                "army": [
+                    { "unittype": "Buccaneer", "amount": 30 },
+                    { "unittype": "Gunner", "amount": 12 },
+                    { "unittype": "Gunner", "amount": 12 }
+                ]
+            },
+            {
+                "EnemyId": 3,
+                "army": [
+                    { "unittype": "Gunner", "amount": 30 },
+                    { "unittype": "Buccaneer", "amount": 22 },
+                    { "unittype": "Gunner", "amount": 12 }
+                ]
             }
         ]
     },
@@ -35,6 +51,57 @@
                     { "unittype": "Gunner", "amount": 8 },
                     { "unittype": "Gunner", "amount": 8 },
                     { "unittype": "Buccaneer", "amount": 8 }
+                ]
+            },
+            {
+                "EnemyId": 2,
+                "army": [
+                    { "unittype": "Gunner", "amount": 18 },
+                    { "unittype": "Harpooner", "amount": 8 },
+                    { "unittype": "Buccaneer", "amount": 18 }
+                ]
+            },
+            {
+                "EnemyId": 3,
+                "army": [
+                    { "unittype": "Harpooner", "amount": 6 },
+                    { "unittype": "Harpooner", "amount": 6 },
+                    { "unittype": "Harpooner", "amount": 6 }
+                ]
+            }
+        ]
+    },
+    {
+        "Allegiance": "Red",
+        "Enemies": [
+            {
+                "EnemyId": 0,
+                "army": [
+                    { "unittype": "Buccaneer", "amount": 12 },
+                    { "unittype": "Buccaneer", "amount": 12 }
+                ]
+            },
+            {
+                "EnemyId": 1,
+                "army": [
+                    { "unittype": "Gunner", "amount": 18 },
+                    { "unittype": "Gunner", "amount": 18 }
+                ]
+            },
+            {
+                "EnemyId": 2,
+                "army": [
+                    { "unittype": "Gunner", "amount": 12 },
+                    { "unittype": "Harpooner", "amount": 3 },
+                    { "unittype": "Buccaneer", "amount": 24 }
+                ]
+            },
+            {
+                "EnemyId": 3,
+                "army": [
+                    { "unittype": "Harpooner", "amount": 6 },
+                    { "unittype": "Buccaneer", "amount": 20 },
+                    { "unittype": "Harpooner", "amount": 6 }
                 ]
             }
         ]

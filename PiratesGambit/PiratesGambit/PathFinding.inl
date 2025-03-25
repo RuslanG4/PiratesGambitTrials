@@ -219,7 +219,7 @@ std::vector<int> PathFindingFunctions<NodeType>::BreathSearchEuclydianNodes(
 		auto neighbours = currentNode->getNodeData().neighbourIDs;
 		for (auto& neighbourID : neighbours)
 		{
-			if (!_area[neighbourID.first]->hasBeenTraversed() && neighbourID.second % 2 != 0)
+			if (!_area[neighbourID.first]->hasBeenTraversed() && neighbourID.second % 2 != 0 && !_area[neighbourID.first]->isOccupied())
 			{
 				_area[neighbourID.first]->updateTraversed(true);
 				allScannedNodes.push_back(_area[neighbourID.first]);
