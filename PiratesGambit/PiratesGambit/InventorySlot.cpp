@@ -12,7 +12,7 @@ InventorySlot::InventorySlot(int _x, int _y, int _id)
 
 	midPoint = sf::Vector2f(_x, _y);
 
-	stackSize.setFont(TextureManager::getInstance().getFont());
+	stackSize.setFont(TextureManager::getInstance().getFont("Comic"));
 	stackSize.setCharacterSize(16);
 	stackSize.setString("1");
 }

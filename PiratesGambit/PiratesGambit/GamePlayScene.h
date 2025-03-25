@@ -11,6 +11,9 @@
 #include "Camera.h"
 #include "UnitStatsDisplay.h"
 #include"AllianceDialogueUI.h"
+#include"EnemyScoutUI.h"
+#include <fstream>
+#include "json.hpp"
 
 class PlayerTabMenu;
 
@@ -29,11 +32,14 @@ private:
 	void SpawnBoat(const std::shared_ptr<Island>& _island);
 
 	void SpawnEnemies();
-	void SpawnTeam(int _chunkIndex, sf::Texture& _texture);
+	void InitialiseEnemyArmy(const std::shared_ptr<Enemy>& _enemyRef, nlohmann::json& jsonData);
+	void SpawnTeam(int _chunkIndex, const UnitAllegiance& _allegiance);
 
 	void processKeyUp(sf::Event& t_event);
 
 	void processKeys();
+
+	void HandleEnemyScoutUI(const std::unique_ptr<sf::RenderWindow>& window);
 
 	void HandleMovement() const;
 
@@ -51,6 +57,8 @@ private:
 	void updateVisableNodes();
 
 	void UpdateEnemies(double _dt);
+
+	int FindCurrentTeamSize(nlohmann::json& jsonData, const UnitAllegiance& _allegiance);
 
 	std::set<int> visibleNodes;
 
@@ -81,7 +89,7 @@ private:
 	std::unique_ptr<BattleScene> battleScene;
 	bool battle = false ;
 
-	int mapSize = 5;
+	int mapSize = 2;
 
 	int enemiesPerFrame = 5;
 	int enemyIndex = 0;

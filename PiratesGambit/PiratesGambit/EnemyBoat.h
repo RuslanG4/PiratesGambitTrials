@@ -10,11 +10,11 @@ class Enemy;
 class EnemyBoat
 {
 public:
-	EnemyBoat(const std::shared_ptr<Enemy>& _refEnemy, const sf::Texture& _shipTexture)
+	EnemyBoat(const std::shared_ptr<Enemy>& _refEnemy, const UnitAllegiance& _allegiance)
 	{
 		enemyRef = _refEnemy;
 
-		boatSprite.setTexture(_shipTexture);
+		setShipTexture(_allegiance);
 		boatSprite.setOrigin(56, 33);
 		boatSprite.setScale(0.5, 0.5);
 
@@ -37,7 +37,11 @@ public:
 	void setDockedNode(const std::shared_ptr<Node>& _node) { dockedNode = _node; }
 	std::shared_ptr<Node> GetDockedNode() const { return dockedNode; }
 
+	sf::FloatRect GetGlobalBounds() const { return boatSprite.getGlobalBounds(); }
+
 private:
+	void setShipTexture(const UnitAllegiance& _allegiance);
+
 	sf::Vector2f position;
 	sf::Sprite boatSprite;
 

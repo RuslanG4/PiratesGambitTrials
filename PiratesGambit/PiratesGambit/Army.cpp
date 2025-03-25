@@ -7,6 +7,11 @@ void Army::addUnit(std::shared_ptr<PirateUnit> _unit)
     }
 }
 
+void Army::addUnitNoCombine(std::shared_ptr<PirateUnit> _unit)
+{
+    army.push_back(_unit);
+}
+
 bool Army::combineUnits(std::shared_ptr<PirateUnit> _unit)
 {
     auto it = std::ranges::find_if(army, [&](const std::shared_ptr<PirateUnit>& unit) {

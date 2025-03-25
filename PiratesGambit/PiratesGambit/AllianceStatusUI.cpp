@@ -7,12 +7,12 @@ AllianceStatusUI::AllianceStatusUI(sf::Vector2f _pos)
     background.setSize(sf::Vector2f(250, 250));
     background.setFillColor(sf::Color(0, 0, 0, 150)); // Semi-transparent gray
 
-    costText.setFont(TextureManager::getInstance().getFont());
+    costText.setFont(TextureManager::getInstance().getFont("Comic"));
     costText.setCharacterSize(36U);
     costText.setFillColor(sf::Color::White);
     costText.setString("1000");
 
-    alligianceText.setFont(TextureManager::getInstance().getFont());
+    alligianceText.setFont(TextureManager::getInstance().getFont("Comic"));
     alligianceText.setCharacterSize(36U);
     alligianceText.setFillColor(sf::Color::White);
     alligianceText.setString(("Allegiance"));

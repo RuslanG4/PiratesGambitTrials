@@ -12,6 +12,8 @@ public:
 
 	void addUnit(std::shared_ptr<PirateUnit> _unit);
 
+	void addUnitNoCombine(std::shared_ptr<PirateUnit> _unit);
+
 	bool combineUnits(std::shared_ptr<PirateUnit> _unit);
 
 	void removeUnit();

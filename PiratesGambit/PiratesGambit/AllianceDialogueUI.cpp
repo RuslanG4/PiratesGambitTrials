@@ -15,7 +15,7 @@ void AllianceDialogueUI::Init()
     characterPortrait.setScale(8,8);
     characterPortrait.setPosition(dialogueBox.getPosition() + sf::Vector2f(100,80));
 
-    dialogueText.setFont(TextureManager::getInstance().getFont());
+    dialogueText.setFont(TextureManager::getInstance().getFont("Comic"));
     dialogueText.setCharacterSize(36U);
     dialogueText.setFillColor(sf::Color::White);
 

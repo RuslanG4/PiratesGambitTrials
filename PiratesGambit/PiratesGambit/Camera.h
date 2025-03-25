@@ -56,6 +56,6 @@ private:
     sf::View camera; ///< SFML view representing the camera.
 
     float zoomLevel = 1.0f;  ///< Current zoom level
-    const float minZoom = 0.5f;  ///< Minimum zoom level (zoomed in)
-    const float maxZoom = 15.0f;  ///< Maximum zoom level (zoomed out)
+    const float minZoom = 1.f;  ///< Minimum zoom level (zoomed in)
+    const float maxZoom = 2.0f;  ///< Maximum zoom level (zoomed out)
 };

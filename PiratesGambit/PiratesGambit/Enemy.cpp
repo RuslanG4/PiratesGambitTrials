@@ -14,9 +14,10 @@ void Enemy::render(const std::unique_ptr<sf::RenderWindow>& window) const
 	if (!onBoat)
 	{
 		window->draw(body);
-		myHitbox->render(window);
 	}
 	enemyUI->Render(window);
+
+	myHitbox->render(window);
 
 	/*for (auto& node : updateableArea->getUpdateableNodes())
 		{
@@ -36,6 +37,17 @@ void Enemy::handleAnimationStates(double dt)
 	case WALK:
 		Animator::getInstance().AnimateSprite(body, animationState, walkAnimation, 6, 1, dt);
 		break;
+	}
+}
+
+sf::FloatRect Enemy::GetGlobalBounds() const
+{
+	if(isOnBoat())
+	{
+		return boatRef->GetGlobalBounds();
+	}else
+	{
+		return myHitbox->GetGlobalBounds();
 	}
 }
 
@@ -103,6 +115,26 @@ void Enemy::ChangeState(EnemyState* newState)
 
 	if (currentActionState)
 		currentActionState->Enter(*this);
+}
+
+std::string Enemy::GetEnemyAllegiance() const
+{
+	switch(enemyAllegiance)
+	{
+	case YELLOW_PLAYER:
+		return "Yellow";
+	case RED_PLAYER:
+		return "Red";
+	case BLUE_PLAYER:
+		return "Blue";
+	case GREEN_PLAYER:
+		return "Green";
+	case BLACK_PLAYER:
+		return "Black";
+	default:
+		return "Unknown";
+	}
+
 }
 
 

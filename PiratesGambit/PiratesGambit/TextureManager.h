@@ -10,8 +10,12 @@ public:
 
     // Explicit loading function
     bool loadAllResources() {
-        bool fontsLoaded = loadFont(FONT);
+        bool fontsLoaded= true;
         bool texturesLoaded = true;
+
+        fontsLoaded &= loadFont("Roboto", ROBOTO_FONT);
+        fontsLoaded &= loadFont("Comic", ROBOTO_FONT);
+        fontsLoaded &= loadFont("Varsity", VARSITY_FONT);
 
         texturesLoaded &= loadTexture("landTile", LAND_SPRITE);
         texturesLoaded &= loadTexture("grassyLandTile", GRASSY_LAND_SPRITE);
@@ -33,11 +37,11 @@ public:
         texturesLoaded &= loadTexture("PLAYER_BOAT_DAMAGED", PLAYER_DAMAGED);
         texturesLoaded &= loadTexture("PLAYER_BOAT_PLASTERED", PLAYER_PLASTERED);
         //PIRATE SHIPS
-        texturesLoaded &= loadTexture("RED_BOAT", RED_SHIP_HEALTHY);
-        texturesLoaded &= loadTexture("BLACK_BOAT", BLACK_SHIP_HEALTHY);
-        texturesLoaded &= loadTexture("GREEN_BOAT", GREEN_SHIP_HEALTHY);
-        texturesLoaded &= loadTexture("BLUE_BOAT", BLUE_SHIP_HEALTHY);
-        texturesLoaded &= loadTexture("YELLOW_BOAT", YELLOW_SHIP_HEALTHY);
+        texturesLoaded &= loadTexture("RED_SHIP", RED_SHIP_HEALTHY);
+        texturesLoaded &= loadTexture("BLACK_SHIP", BLACK_SHIP_HEALTHY);
+        texturesLoaded &= loadTexture("GREEN_SHIP", GREEN_SHIP_HEALTHY);
+        texturesLoaded &= loadTexture("BLUE_SHIP", BLUE_SHIP_HEALTHY);
+        texturesLoaded &= loadTexture("YELLOW_SHIP", YELLOW_SHIP_HEALTHY);
 
         texturesLoaded &= loadTexture("CANNON_BALL", CANNON_BALL);
         texturesLoaded &= loadTexture("HARPOON", HARPOON);
@@ -72,8 +76,8 @@ public:
         return fontsLoaded && texturesLoaded;
     }
 
-    sf::Font& getFont() {
-        return *globalFont;
+    sf::Font& getFont(const std::string& name) {
+        return fonts[name];
     }
 
     sf::Texture& getTexture(const std::string& name) {
@@ -97,15 +101,15 @@ private:
         return false;
     }
 
-    bool loadFont(const std::string& filename) {
-        globalFont = std::make_unique<sf::Font>();
-        if (globalFont->loadFromFile("ASSETS\\FONTS\\VarsityTeam-Bold.otf")) {
-            fontLoaded = true;
+    bool loadFont(const std::string& name, const std::string& filename) {
+        sf::Font font;
+        if (font.loadFromFile(filename)) {
+            fonts[name] = font;
             return true;
         }
         return false;
     }
     bool fontLoaded = false;
     std::map<std::string, sf::Texture> textures;
-    std::unique_ptr<sf::Font> globalFont;
+    std::map<std::string, sf::Font> fonts;
 };

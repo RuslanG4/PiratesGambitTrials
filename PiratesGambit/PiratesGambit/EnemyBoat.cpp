@@ -27,3 +27,28 @@ void EnemyBoat::RotateTowardsPlayer(sf::Vector2f _pos)
         boatSprite.setRotation(newAngle);
     }
 }
+
+void EnemyBoat::setShipTexture(const UnitAllegiance& _allegiance)
+{
+	switch (_allegiance)
+	{
+	case YELLOW_PLAYER:
+		boatSprite.setTexture(TextureManager::getInstance().getTexture("YELLOW_SHIP"));
+		break;
+	case RED_PLAYER:
+		boatSprite.setTexture(TextureManager::getInstance().getTexture("RED_SHIP"));
+		break;
+	case BLUE_PLAYER:
+		boatSprite.setTexture(TextureManager::getInstance().getTexture("BLUE_SHIP"));
+		break;
+	case GREEN_PLAYER:
+		boatSprite.setTexture(TextureManager::getInstance().getTexture("GREEN_SHIP"));
+		break;
+	case BLACK_PLAYER:
+		boatSprite.setTexture(TextureManager::getInstance().getTexture("BLACK_SHIP"));
+		break;
+	default:
+		break;
+	}
+
+}

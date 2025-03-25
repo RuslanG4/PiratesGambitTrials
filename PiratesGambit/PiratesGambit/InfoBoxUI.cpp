@@ -2,10 +2,10 @@
 
 InfoBoxUI::InfoBoxUI(float _scaleX, float _scaleY)
 {
-	topText.setFont(TextureManager::getInstance().getFont());
+	topText.setFont(TextureManager::getInstance().getFont("Comic"));
 	topText.setCharacterSize(20);
 
-	bottomText.setFont(TextureManager::getInstance().getFont());
+	bottomText.setFont(TextureManager::getInstance().getFont("Comic"));
 	bottomText.setCharacterSize(20);
 
     backgroundSprite.setTexture(TextureManager::getInstance().getTexture("ARMY_MENU_UI"));

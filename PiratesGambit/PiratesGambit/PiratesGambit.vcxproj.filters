@@ -133,6 +133,15 @@
     <Filter Include="Header Files\Buildings">
       <UniqueIdentifier>{598649b8-1a52-497a-a39e-c167f322dccb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\UI\EnemyScout">
+      <UniqueIdentifier>{4d1c1e5a-ca37-4327-b639-d087a13b43ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI\PlayerMenu">
+      <UniqueIdentifier>{2cd686f2-504d-4c3a-a349-de0137e31ed9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI\Alliance">
+      <UniqueIdentifier>{d9b32117-6095-4134-bf58-e88f66040cee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -399,6 +408,12 @@
     <ClCompile Include="EnemyLandWander.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyScoutUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyScoutArmySlot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -581,12 +596,6 @@
     <ClInclude Include="PathFindingFunctions.h">
       <Filter>Header Files\Singletons</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerArmy_TabMenu.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerTabMenu.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
     <ClInclude Include="Resources_TabMenu.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
@@ -601,9 +610,6 @@
     </ClInclude>
     <ClInclude Include="Tree.h">
       <Filter>Header Files\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="AllianceDialogueUI.h">
-      <Filter>Header Files\UI</Filter>
     </ClInclude>
     <ClInclude Include="Button.h">
       <Filter>Header Files\UI</Filter>
@@ -650,12 +656,6 @@
     <ClInclude Include="IdleState.h">
       <Filter>Header Files\Enemy\States</Filter>
     </ClInclude>
-    <ClInclude Include="AnimatedCharacterIcon.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="HireRecruitUI.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
     <ClInclude Include="BuccaneerBuilding.h">
       <Filter>Header Files\Buildings</Filter>
     </ClInclude>
@@ -671,19 +671,40 @@
     <ClInclude Include="PirateUnits.h">
       <Filter>Header Files\Army</Filter>
     </ClInclude>
-    <ClInclude Include="AllianceStatusUI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ProgressBar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BuildingPopUp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="EnemyBoatWander.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Enemy\States</Filter>
     </ClInclude>
     <ClInclude Include="EnemyLandWander.h">
+      <Filter>Header Files\Enemy\States</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyScoutUI.h">
+      <Filter>Header Files\UI\EnemyScout</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerTabMenu.h">
+      <Filter>Header Files\UI\PlayerMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerArmy_TabMenu.h">
+      <Filter>Header Files\UI\PlayerMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="ProgressBar.h">
+      <Filter>Header Files\UI\Building Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="HireRecruitUI.h">
+      <Filter>Header Files\UI\Building Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildingPopUp.h">
+      <Filter>Header Files\UI\Building Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimatedCharacterIcon.h">
+      <Filter>Header Files\UI\Building Menus\Icons</Filter>
+    </ClInclude>
+    <ClInclude Include="AllianceStatusUI.h">
+      <Filter>Header Files\UI\Alliance</Filter>
+    </ClInclude>
+    <ClInclude Include="AllianceDialogueUI.h">
+      <Filter>Header Files\UI\Alliance</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyScoutArmySlot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

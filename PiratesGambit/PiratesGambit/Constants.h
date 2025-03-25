@@ -81,6 +81,8 @@ const char* const BUILDINGS = "ASSETS\\IMAGES\\Buildings\\Buildings.png";
 const char* const BACKGROUND = "ASSETS\\IMAGES\\export.png";
 
 const char* const FONT = "ASSETS\\FONTS\\VarsityTeam-Bold.otf";
+const char* const ROBOTO_FONT = "ASSETS\\FONTS\\Helvetica.ttf";
+const char* const VARSITY_FONT = "ASSETS\\FONTS\\VarsityTeam-Bold.otf";
 
 const sf::Color GRAY = sf::Color(21, 21, 21);
 
@@ -92,3 +94,5 @@ constexpr int CAMERA_HEIGHT = 1080 / 2;
 
 constexpr int CHUNK_NODE_ROWS = 32;
 constexpr int CHUNK_NODE_COLS = 32;
+
+constexpr int NODE_SIZE = 32;

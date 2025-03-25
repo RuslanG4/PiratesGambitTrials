@@ -14,7 +14,7 @@ ResourceSlotUI::ResourceSlotUI(const sf::Texture& _icon, int _amount)
 	//textBoundingBox.setFillColor(sf::Color::Transparent);
 	//textBoundingBox.setOutlineThickness(3);
 
-	amountText.setFont(TextureManager::getInstance().getFont());
+	amountText.setFont(TextureManager::getInstance().getFont("Comic"));
 	amountText.setCharacterSize(30U);
 	amountText.setString(std::to_string(_amount));
 

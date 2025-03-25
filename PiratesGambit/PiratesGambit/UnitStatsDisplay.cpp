@@ -8,17 +8,17 @@ UnitStatsDisplay::UnitStatsDisplay()
 	background.setScale(3, 4);
 	//background.setOrigin(48, 48);
 
-    speedText.setFont(TextureManager::getInstance().getFont());
+    speedText.setFont(TextureManager::getInstance().getFont("Comic"));
     speedText.setCharacterSize(30U);
-    attackText.setFont(TextureManager::getInstance().getFont());
+    attackText.setFont(TextureManager::getInstance().getFont("Comic"));
     attackText.setCharacterSize(30U);
-    defenceText.setFont(TextureManager::getInstance().getFont());
+    defenceText.setFont(TextureManager::getInstance().getFont("Comic"));
     defenceText.setCharacterSize(30U);
-    damageRange.setFont(TextureManager::getInstance().getFont());
+    damageRange.setFont(TextureManager::getInstance().getFont("Comic"));
     damageRange.setCharacterSize(30U);
-    health.setFont(TextureManager::getInstance().getFont());
+    health.setFont(TextureManager::getInstance().getFont("Comic"));
     health.setCharacterSize(30U);
-    initiative.setFont(TextureManager::getInstance().getFont());
+    initiative.setFont(TextureManager::getInstance().getFont("Comic"));
     initiative.setCharacterSize(30U);
 
 }

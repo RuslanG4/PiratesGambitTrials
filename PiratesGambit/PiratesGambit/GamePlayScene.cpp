@@ -115,6 +115,8 @@ void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 	if (!battle) {
 		window->setView(Camera::getInstance().getCamera());
 
+		HandleEnemyScoutUI(window);
+
 		for (int index : visibleNodes) {
 			std::shared_ptr<Node> node = myMap->getFullMap()[index];
 
@@ -156,6 +158,7 @@ void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 	}
 
 	UnitStatsDisplay::getInstance().Render(window);
+	EnemyScoutUI::getInstance().Render(window);
 
 	window->setView(Camera::getInstance().getCamera());
 
@@ -173,6 +176,7 @@ void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 	{
 		HireRecruitUI::getInstance().Render(window);
 	}
+	
 }
 
 void GamePlayScene::SpawnPlayer()
@@ -234,35 +238,74 @@ void GamePlayScene::SpawnEnemies()
 
 	std::mt19937 gen(rd());
 
-	auto SelectAndSpawn = [&](const std::string& textureName) {
+	auto SelectAndSpawn = [&](const UnitAllegiance& _enemyAllegiance) {
 		if (availableChunkIndices.empty()) return;
 
 		std::uniform_int_distribution<int> chunkDist(0, availableChunkIndices.size() - 1);
 		int selectedIndex = chunkDist(gen);
 		int chunkIndex = availableChunkIndices[selectedIndex];
 
-		SpawnTeam(chunkIndex, TextureManager::getInstance().getTexture(textureName));
+		SpawnTeam(chunkIndex, _enemyAllegiance);
 		availableChunkIndices.erase(availableChunkIndices.begin() + selectedIndex);
 		};
 
-	std::vector<std::string> enemyTextures = { "BLUE_BOAT", "BLACK_BOAT", "RED_BOAT", "GREEN_BOAT" };
+	std::vector<UnitAllegiance> enemyAllegiances = { BLUE_PLAYER, BLACK_PLAYER };
 
-	for (const auto& texture : enemyTextures)
+	for (const auto& allegiance : enemyAllegiances)
 	{
-		SelectAndSpawn(texture);
+		SelectAndSpawn(allegiance);
 	}
 }
 
-void GamePlayScene::SpawnTeam(int _chunkIndex, sf::Texture& _texture)
+void GamePlayScene::InitialiseEnemyArmy(const std::shared_ptr<Enemy>& _enemyRef, nlohmann::json& jsonData)
+{
+	for (const auto& allegianceData : jsonData) {
+		if (allegianceData["Allegiance"] == _enemyRef->GetEnemyAllegiance()) {
+			// Search for the correct EnemyId within the allegiance
+			for (const auto& enemyData : allegianceData["Enemies"]) {
+				if (enemyData["EnemyId"] == _enemyRef->GetEnemyID()) {
+					for (const auto& unitData : enemyData["army"]) {
+
+						if (unitData["unittype"] == "Buccaneer") {
+							_enemyRef->getArmy()->addUnitNoCombine(std::make_shared<Buccaneer>(unitData["amount"], _enemyRef->GetEnemyTeam()));
+						}
+						else if (unitData["unittype"] == "Gunner") {
+							_enemyRef->getArmy()->addUnitNoCombine(std::make_shared<Gunner>(unitData["amount"], _enemyRef->GetEnemyTeam()));
+						}
+						else if (unitData["unittype"] == "Harpooner") {
+							_enemyRef->getArmy()->addUnitNoCombine(std::make_shared<Harpooner>(unitData["amount"], _enemyRef->GetEnemyTeam()));
+						}
+						else {
+							std::cerr << "Unknown unit type: " << unitData["unittype"] << "\n";
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void GamePlayScene::SpawnTeam(int _chunkIndex, const UnitAllegiance& _allegiance)
 {
 	std::mt19937 gen(rd());
 
 	auto nodes = myMap->getChunks()[_chunkIndex]->nodeGrid;
 
 	std::uniform_int_distribution<int> randomWater(0, nodes.size() - 1);
-	
 
-	for (int i = 0; i < 5; i++) {
+	std::ifstream file("ASSETS\\FILES\\EnemyStartingArmies.json");
+	if (!file.is_open()) {
+		std::cerr << "Failed to open file\n";
+		return;
+	}
+
+	nlohmann::json jsonData;
+	file >> jsonData;
+	file.close();
+
+	int currentTeamSize = FindCurrentTeamSize(jsonData, _allegiance);
+
+	for (int i = 0; i < currentTeamSize; i++) {
 
 		int waterNode = randomWater(gen);
 
@@ -273,8 +316,9 @@ void GamePlayScene::SpawnTeam(int _chunkIndex, sf::Texture& _texture)
 
 		if (waterNode)
 		{
-			auto enemy = std::make_shared<Enemy>(myPlayer);
-			auto enemyBoat = std::make_shared<EnemyBoat>(enemy, _texture);
+			auto enemy = std::make_shared<Enemy>(myPlayer, i ,_allegiance);
+			InitialiseEnemyArmy(enemy, jsonData);
+			auto enemyBoat = std::make_shared<EnemyBoat>(enemy, _allegiance);
 
 			enemyBoat->setPosition(myMap->getChunks()[_chunkIndex]->nodeGrid[waterNode]->getMidPoint());
 			enemyBoat->setDockedNode(myMap->getChunks()[_chunkIndex]->nodeGrid[waterNode]);
@@ -355,6 +399,25 @@ void GamePlayScene::processKeys()
 
 }
 
+void GamePlayScene::HandleEnemyScoutUI(const std::unique_ptr<sf::RenderWindow>& window)
+{
+	for(auto& enemy : enemies)
+	{
+		sf::Vector2f mousePos = window->mapPixelToCoords(Mouse::getInstance().getMousePosition());
+
+		if (Mouse::getInstance().RightClicked() && enemy->GetGlobalBounds().contains(mousePos))
+		{
+			EnemyScoutUI::getInstance().passArmy(enemy->getArmy());
+			EnemyScoutUI::getInstance().placeMenu(mousePos);
+			EnemyScoutUI::getInstance().OpenMenu();
+		}
+		if (EnemyScoutUI::getInstance().isDisplayOpen() && !Mouse::getInstance().RightClicked())
+		{
+			EnemyScoutUI::getInstance().CloseMenu();
+		}
+	}
+}
+
 void GamePlayScene::HandleMovement() const
 {
 	if (!Inventory::isInventoryOpen() && !HireRecruitUI::IsUIOpen()) {
@@ -409,8 +472,8 @@ void GamePlayScene::HandleMovement() const
 
 std::shared_ptr<Node> GamePlayScene::FindCurrentNode(sf::Vector2f _position) const
 {
-	int chunkSizeInNodes = 32;
-	int nodeSize = 32;
+	int chunkSizeInNodes = NODE_SIZE;
+	int nodeSize = NODE_SIZE;
 
 	int chunkX = static_cast<int>(_position.x) / (chunkSizeInNodes * nodeSize);
 	int chunkY = static_cast<int>(_position.y) / (chunkSizeInNodes * nodeSize);
@@ -526,16 +589,16 @@ void GamePlayScene::updateVisableNodes()
 {
 	sf::FloatRect viewBounds(Camera::getInstance().getCamera().getCenter() - (Camera::getInstance().getCamera().getSize() + sf::Vector2f(128, 128)) / 2.0f, Camera::getInstance().getCamera().getSize() + sf::Vector2f(128, 128));
 
-	int minX = std::max(0, static_cast<int>(viewBounds.left / 32));
-	int maxX = std::min(32 * mapSize - 1, static_cast<int>((viewBounds.left + viewBounds.width) / 32));
-	int minY = std::max(0, static_cast<int>(viewBounds.top / 32));
-	int maxY = std::min(32 * mapSize - 1, static_cast<int>((viewBounds.top + viewBounds.height) / 32));
+	int minX = std::max(0, static_cast<int>(viewBounds.left / NODE_SIZE));
+	int maxX = std::min(NODE_SIZE * mapSize - 1, static_cast<int>((viewBounds.left + viewBounds.width) / NODE_SIZE));
+	int minY = std::max(0, static_cast<int>(viewBounds.top / NODE_SIZE));
+	int maxY = std::min(NODE_SIZE * mapSize - 1, static_cast<int>((viewBounds.top + viewBounds.height) / NODE_SIZE));
 
 	std::set<int> newVisibleNodes;
 
 	for (int y = minY; y <= maxY; ++y) {
 		for (int x = minX; x <= maxX; ++x) {
-			int index = y * (32 * mapSize) + x;
+			int index = y * (NODE_SIZE * mapSize) + x;
 			newVisibleNodes.insert(index);
 		}
 	}
@@ -555,4 +618,36 @@ void GamePlayScene::UpdateEnemies(double _dt)
 		enemies[enemyIndex]->update(_dt);
 		enemyIndex = (enemyIndex + 1) % count;
 	}*/
+}
+
+int GamePlayScene::FindCurrentTeamSize(nlohmann::json& jsonData, const UnitAllegiance& _allegiance)
+{
+	std::string allegianceStr;
+
+	switch (_allegiance)
+	{
+	case YELLOW_PLAYER:
+		allegianceStr = "Yellow";
+		break;
+	case RED_PLAYER:
+		allegianceStr = "Red";
+		break;
+	case BLUE_PLAYER:
+		allegianceStr = "Blue";
+		break;
+	case GREEN_PLAYER:
+		allegianceStr = "Green";
+		break;
+	case BLACK_PLAYER:
+		allegianceStr = "Black";
+		break;
+	}
+
+	for (const auto& allegianceData : jsonData) {
+		if (allegianceData["Allegiance"] == allegianceStr) {
+			return allegianceData["Enemies"].size();
+		}
+	}
+
+	return 0;
 }

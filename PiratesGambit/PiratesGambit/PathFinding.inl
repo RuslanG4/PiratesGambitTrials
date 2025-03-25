@@ -276,7 +276,7 @@ inline std::vector<std::shared_ptr<NodeType>> PathFindingFunctions<NodeType>::Br
 				float dx = static_cast<float>(neighbour.first->getPosition().x - startPos.x);
 				float dy = static_cast<float>(neighbour.first->getPosition().y - startPos.y);
 
-				float distance = std::hypotf(dx / 32, dy / 32);
+				float distance = std::hypotf(dx / NODE_SIZE, dy / NODE_SIZE);
 
 				nodeQueue.emplace(neighbour.first, std::ceil(distance)); // std::ceil for rounding up
 

@@ -27,6 +27,6 @@ private:
 	std::vector<std::unique_ptr<Grid>> chunks_;
 
 	int mapSize;
-	int nodeSize = 32; //size of nodes
+	int nodeSize = NODE_SIZE; //size of nodes
 };
 

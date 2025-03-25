@@ -89,7 +89,6 @@ void TacticsArmySlot::updateSlots(UnitName _type, UnitStats _stats)
 	}
 	stats = _stats;
 	UnitStatsDisplay::getInstance().updateDisplay(stats);
-
 }
 
 void TacticsArmySlot::updateUnitAmount(int _amount)

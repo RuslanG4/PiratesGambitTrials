@@ -1,0 +1,42 @@
+[
+    {
+        "Allegiance": "Blue",
+        "Enemies": [
+            {
+                "EnemyId": 0,
+                "army": [
+                    { "unittype": "Buccaneer", "amount": 14 },
+                    { "unittype": "Gunner", "amount": 10 }
+                ]
+            },
+            {
+                "EnemyId": 1,
+                "army": [
+                    { "unittype": "Buccaneer", "amount": 12 },
+                    { "unittype": "Buccaneer", "amount": 12 },
+                    { "unittype": "Buccaneer", "amount": 12 }
+                ]
+            }
+        ]
+    },
+    {
+        "Allegiance": "Black",
+        "Enemies": [
+            {
+                "EnemyId": 0,
+                "army": [
+                    { "unittype": "Buccaneer", "amount": 24 },
+                    { "unittype": "Gunner", "amount": 12 }
+                ]
+            },
+            {
+                "EnemyId": 1,
+                "army": [
+                    { "unittype": "Gunner", "amount": 8 },
+                    { "unittype": "Gunner", "amount": 8 },
+                    { "unittype": "Buccaneer", "amount": 8 }
+                ]
+            }
+        ]
+    }
+]

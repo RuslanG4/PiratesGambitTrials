@@ -54,6 +54,6 @@ protected:
 	sf::Clock timer;
 	bool isActive = true;
 
-	float progress = 100;
+	float progress = 1;
 };
 

@@ -13,7 +13,7 @@ BattleActionUI::BattleActionUI()
 	uiBorder.setPosition(sf::Vector2f(SCREEN_WIDTH - uiBorder.getGlobalBounds().width, SCREEN_HEIGHT - uiBorder.getGlobalBounds().height));
 	attackSprite.setPosition(uiBorder.getPosition());
 
-	currentMode.setFont(TextureManager::getInstance().getFont());
+	currentMode.setFont(TextureManager::getInstance().getFont("Comic"));
 	currentMode.setString("Tactics Mode");
 	currentMode.setPosition(250, 50);
 }

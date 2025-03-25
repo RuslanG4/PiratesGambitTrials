@@ -20,13 +20,16 @@ class EnemyBoat; //forward ref
 class Enemy
 {
 public:
-	Enemy(const std::shared_ptr<Player>& _playerRef)
+	Enemy(const std::shared_ptr<Player>& _playerRef, int _enemyID, UnitAllegiance _allegiance)
 	{
 		army = std::make_unique<Army>();
 		updateableArea = std::make_unique<UpdateableArea>();
 
-		army->addUnit(std::make_shared<Buccaneer>(23,YELLOW_PLAYER));
-		army->addUnit(std::make_shared<Gunner>(16,YELLOW_PLAYER));
+		enemyID = _enemyID;
+		enemyAllegiance = _allegiance;
+
+		//army->addUnit(std::make_shared<Buccaneer>(23,YELLOW_PLAYER));
+		//army->addUnit(std::make_shared<Gunner>(16,YELLOW_PLAYER));
 
 
 		body.setTexture(TextureManager::getInstance().getTexture("PIRATE_CAPTAIN"));
@@ -64,7 +67,7 @@ public:
 	void SetAnimationState(UnitState _newState) { currentState = _newState; }
 
 	//Global Bounds;
-	sf::FloatRect GetGlobalBounds() const { return myHitbox->GetGlobalBounds(); }
+	sf::FloatRect GetGlobalBounds() const;
 
 	//Updating position
 	void setCurrentNode(const std::shared_ptr<Node>& node_) { currentNode = node_; }
@@ -100,6 +103,9 @@ public:
 	EnemyState* GetCurrentState() const { return currentActionState; }
 
 	std::unique_ptr <PlayerAllegiance>& GetPlayerAllegiance() { return playerAllegiance; }
+	int GetEnemyID() const { return enemyID; }
+	std::string GetEnemyAllegiance() const;
+	UnitAllegiance GetEnemyTeam() const { return enemyAllegiance; }
 
 private:
 	sf::Sprite body;
@@ -135,6 +141,12 @@ private:
 	//Boat
 	std::shared_ptr<EnemyBoat> boatRef;
 	bool onBoat{ false };
+
+	//ID
+	int enemyID;
+
+	//Enemy Allegiance
+	UnitAllegiance enemyAllegiance;
 
 };
 

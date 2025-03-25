@@ -11,7 +11,7 @@ Button::Button(const sf::Vector2f& position, std::string _string) : clicked(fals
     button.setOrigin(96 / 2, 64 / 2);
     button.setScale(4.5f, 2.5f);
 
-    text.setFont(TextureManager::getInstance().getFont());
+    text.setFont(TextureManager::getInstance().getFont("Comic"));
     text.setString(_string);
     text.setCharacterSize(80);
     text.setFillColor(sf::Color(220, 235, 241));
