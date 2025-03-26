@@ -1,24 +1,71 @@
 #include "BattleScene.h"
 
 
-void BattleScene::placeUnits(const std::unique_ptr<Army>& _army, bool _isEnemy) const
+void BattleScene::placeUnits(const std::unique_ptr<Army>& _army, bool _isEnemy)
 {
 	auto area = _isEnemy ? enemyStartArea : startArea;
 	for(auto& unit: _army->getArmy())
 	{
 		tacticsArmyUI->initiativeSystem.addUnit(unit);
-		for(auto& node : area)
+		if(_isEnemy)
 		{
-			if(!node->isOccupied())
+			auto node = placeEnemyUnits(area, unit);
+			node->updateOccupied(true);
+			node->updateAllegiance(unit->unitInformation.allegiance);
+		}else
+		{
+			for (auto& node : area)
 			{
-				unit->placeUnit(node->getMidPoint());
-				unit->setCurrentNodeId(node->getID());
-				node->updateOccupied(true);
-				node->updateAllegiance(unit->unitInformation.allegiance);
-				break; //end loop
+				if (!node->isOccupied())
+				{
+					unit->placeUnit(node->getMidPoint());
+					unit->setCurrentNodeId(node->getID());
+					node->updateOccupied(true);
+					node->updateAllegiance(unit->unitInformation.allegiance);
+					break; //end loop
+				}
 			}
 		}
 	}
+}
+
+ std::shared_ptr<BattleGridNode> BattleScene::placeEnemyUnits(std::vector<std::shared_ptr<BattleGridNode>>& _gridArea,
+	const std::shared_ptr<PirateUnit>& _unit
+)
+{
+	bool frontLine = false;
+	if(_unit->unitInformation.unitType == MELEE)
+	{
+		frontLine = true;
+	}else
+	{
+		frontLine = false;
+	}
+
+	std::random_device rd;
+	std::mt19937 g(rd());
+
+	std::ranges::shuffle(_gridArea.begin(), _gridArea.end(), g);
+
+	for (auto& node : _gridArea)
+	{
+		if (!node->isOccupied())
+		{
+			if(frontLine && node->getID() % 2 == 0)
+			{
+				_unit->placeUnit(node->getMidPoint());
+				_unit->setCurrentNodeId(node->getID());
+				return node;
+			}
+			if (!frontLine && node->getID() % 2 != 0)
+			{
+				_unit->placeUnit(node->getMidPoint());
+				_unit->setCurrentNodeId(node->getID());
+				return node;
+			}
+		}
+	}
+	return nullptr;
 }
 
 void BattleScene::update(float _dt)

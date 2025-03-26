@@ -17,7 +17,7 @@ void Enemy::render(const std::unique_ptr<sf::RenderWindow>& window) const
 	}
 	enemyUI->Render(window);
 
-	myHitbox->render(window);
+	//myHitbox->render(window);
 
 	/*for (auto& node : updateableArea->getUpdateableNodes())
 		{

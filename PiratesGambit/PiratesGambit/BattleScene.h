@@ -34,7 +34,9 @@ public:
 
 	void setEnemyRef(const std::shared_ptr<Enemy>& _enemy) { enemyRef = _enemy; }
 
-	void placeUnits(const std::unique_ptr<Army>& _army, bool _isEnemy) const;
+	void placeUnits(const std::unique_ptr<Army>& _army, bool _isEnemy);
+
+	std::shared_ptr<BattleGridNode> placeEnemyUnits(std::vector<std::shared_ptr<BattleGridNode>>& _gridArea, const std::shared_ptr<PirateUnit>& _unit);
 
 	void update(float _dt);
 	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
