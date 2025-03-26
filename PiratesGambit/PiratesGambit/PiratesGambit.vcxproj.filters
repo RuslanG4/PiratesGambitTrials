@@ -705,7 +705,7 @@
       <Filter>Header Files\UI\Alliance</Filter>
     </ClInclude>
     <ClInclude Include="EnemyScoutArmySlot.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\UI\EnemyScout</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

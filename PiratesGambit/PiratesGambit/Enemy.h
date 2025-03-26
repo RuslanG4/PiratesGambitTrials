@@ -107,6 +107,9 @@ public:
 	std::string GetEnemyAllegiance() const;
 	UnitAllegiance GetEnemyTeam() const { return enemyAllegiance; }
 
+	void setPirateName(const std::string& _name) { pirateName = _name; }
+	std::string GetPirateName() const { return pirateName; }
+
 private:
 	sf::Sprite body;
 	std::unique_ptr <PlayerAllegiance> playerAllegiance;
@@ -144,6 +147,9 @@ private:
 
 	//ID
 	int enemyID;
+
+	//Name
+	std::string pirateName;
 
 	//Enemy Allegiance
 	UnitAllegiance enemyAllegiance;

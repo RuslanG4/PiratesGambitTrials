@@ -40,5 +40,25 @@ void EnemyScoutUI::Render(const std::unique_ptr<sf::RenderWindow>& _window) cons
 		{
 			slot->Render(_window);
 		}
+		_window->draw(pirateName);
+		_window->draw(difficulty);
 	}
+}
+
+void EnemyScoutUI::PositionText()
+{
+	sf::FloatRect pirateNametextBounds = pirateName.getLocalBounds();
+	sf::FloatRect difficultytextBounds = difficulty.getLocalBounds();
+	sf::FloatRect boxBounds = background.getGlobalBounds();
+
+	float padding = 30.f;
+
+	float xPosBottom = boxBounds.left + (boxBounds.width - difficultytextBounds.width) / 2.f - difficultytextBounds.left;
+	float yPosBottom = boxBounds.top + boxBounds.height - difficultytextBounds.height - padding * 1.5;
+
+	float xPosTop = boxBounds.left + (boxBounds.width - pirateNametextBounds.width) / 2.f - pirateNametextBounds.left;
+	float yPosTop = boxBounds.top + padding - 10;
+
+	difficulty.setPosition(xPosBottom, yPosBottom);
+	pirateName.setPosition(xPosTop, yPosTop);
 }

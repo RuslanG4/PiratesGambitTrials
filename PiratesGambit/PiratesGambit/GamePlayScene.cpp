@@ -264,6 +264,7 @@ void GamePlayScene::InitialiseEnemyArmy(const std::shared_ptr<Enemy>& _enemyRef,
 			// Search for the correct EnemyId within the allegiance
 			for (const auto& enemyData : allegianceData["Enemies"]) {
 				if (enemyData["EnemyId"] == _enemyRef->GetEnemyID()) {
+					_enemyRef->setPirateName(enemyData["name"]);
 					for (const auto& unitData : enemyData["army"]) {
 
 						if (unitData["unittype"] == "Buccaneer") {
@@ -407,7 +408,7 @@ void GamePlayScene::HandleEnemyScoutUI(const std::unique_ptr<sf::RenderWindow>& 
 
 		if (Mouse::getInstance().RightClicked() && enemy->GetGlobalBounds().contains(mousePos))
 		{
-			EnemyScoutUI::getInstance().passArmy(enemy->getArmy());
+			EnemyScoutUI::getInstance().passArmy(enemy->getArmy(), enemy->GetPirateName());
 			EnemyScoutUI::getInstance().placeMenu(mousePos);
 			EnemyScoutUI::getInstance().OpenMenu();
 		}
