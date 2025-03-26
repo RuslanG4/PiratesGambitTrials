@@ -13,7 +13,7 @@ public:
 
 	void MoveTowardsTarget(Enemy& enemy);
 	std::shared_ptr<Node> SelectNextTarget(Enemy& enemy);
-	std::vector<std::shared_ptr<Node>> GetValidWaterNodes(Enemy& enemy);
+	std::vector<std::shared_ptr<Node>> GetValidNodes(Enemy& enemy);
 	void ChangeDirection(Enemy& enemy);
 private:
 	std::shared_ptr<Player> playerRef;

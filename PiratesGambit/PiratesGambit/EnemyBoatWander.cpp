@@ -23,7 +23,10 @@ void EnemyBoatWander::Update(Enemy& enemy, float deltaTime)
     }
    if (path.empty()) {
         targetNode = SelectNextTarget(enemy);
-        path = PathFindingFunctions<Node>::aStarPathFind(enemy.getCurrentNode(), targetNode, enemy.isOnBoat());
+		if(targetNode->getIsLand()) 
+            path = PathFindingFunctions<Node>::generalAStarPathFind(enemy.getCurrentNode(), targetNode);
+        else 
+            path = PathFindingFunctions<Node>::aStarPathFind(enemy.getCurrentNode(), targetNode, enemy.isOnBoat());
     }
 
     MoveTowardsTarget(enemy);
@@ -38,6 +41,14 @@ void EnemyBoatWander::MoveTowardsTarget(Enemy& enemy)
 {
     if (currentNodeInPath >= path.size()) {
         path.clear();
+        return;
+    }
+
+    if (path[currentNodeInPath]->getIsLand() && enemy.isOnBoat())
+    {
+        enemy.disembarkBoat(path[currentNodeInPath]);
+        path.clear();
+        enemy.ChangeState(new IdleState(playerRef));
         return;
     }
 
@@ -64,16 +75,17 @@ void EnemyBoatWander::MoveTowardsTarget(Enemy& enemy)
 
 std::shared_ptr<Node> EnemyBoatWander::SelectNextTarget(Enemy& enemy)
 {
-    auto waterNodes = GetValidWaterNodes(enemy);
+    auto possibleNodes = GetValidNodes(enemy);
 
-    std::ranges::shuffle(waterNodes.begin(), waterNodes.end(), std::mt19937(std::random_device()()));
+    std::ranges::shuffle(possibleNodes.begin(), possibleNodes.end(), std::mt19937(std::random_device()()));
 
-    return waterNodes.front();
+    return possibleNodes.front();
 }
 
-std::vector<std::shared_ptr<Node>> EnemyBoatWander::GetValidWaterNodes(Enemy& enemy)
+std::vector<std::shared_ptr<Node>> EnemyBoatWander::GetValidNodes(Enemy& enemy)
 {
     std::vector<std::shared_ptr<Node>> waterNodes;
+    std::vector<std::shared_ptr<Node>> landNodes;
 
     for (auto& node : enemy.getUpdateableArea()->getUpdateableNodes())
     {
@@ -96,13 +108,26 @@ std::vector<std::shared_ptr<Node>> EnemyBoatWander::GetValidWaterNodes(Enemy& en
                 if (nodePos.x < enemy.getCurrentNode()->getPosition().x) waterNodes.push_back(node);
                 break;
             }
+        }else
+        {
+            landNodes.push_back(node);
+        }
+    }
+
+    if(!landNodes.empty())
+    {
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> goOnLand(1, 15); //1/15 to go onto land
+        if (goOnLand(gen) == 1)
+        {
+            return landNodes;
         }
     }
 
     if (waterNodes.empty())
     {
         ChangeDirection(enemy);
-        return GetValidWaterNodes(enemy);
+        return GetValidNodes(enemy);
     }
 
     return waterNodes;
