@@ -75,6 +75,7 @@ enum ItemName
 enum UnitAllegiance
 {
 	NONE,
+	HUMAN_PLAYER,
 	RED_PLAYER,
 	BLUE_PLAYER,
 	GREEN_PLAYER,

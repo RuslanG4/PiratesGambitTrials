@@ -24,10 +24,10 @@ public:
 		updateableArea = std::make_unique<UpdateableArea>();
 		playerArmy = std::make_unique<Army>();
 
-		playerArmy->addUnit(std::make_shared<Buccaneer>(12,RED_PLAYER));
-		playerArmy->addUnitNoCombine(std::make_shared<Buccaneer>(12, RED_PLAYER));
-		playerArmy->addUnit(std::make_shared<Gunner>(26, RED_PLAYER));
-		playerArmy->addUnit(std::make_shared<Harpooner>(6, RED_PLAYER));
+		playerArmy->addUnit(std::make_shared<Buccaneer>(12, HUMAN_PLAYER));
+		playerArmy->addUnitNoCombine(std::make_shared<Buccaneer>(12, HUMAN_PLAYER));
+		playerArmy->addUnit(std::make_shared<Gunner>(26, HUMAN_PLAYER));
+		playerArmy->addUnit(std::make_shared<Harpooner>(6, HUMAN_PLAYER));
 
 		inventory->addItem(std::make_unique<Coins>(50000));
 

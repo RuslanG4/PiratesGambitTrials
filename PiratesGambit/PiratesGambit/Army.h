@@ -16,7 +16,7 @@ public:
 
 	bool combineUnits(std::shared_ptr<PirateUnit> _unit);
 
-	void removeUnit();
+	void removeUnit(std::shared_ptr<PirateUnit> _unit);
 
 	const std::vector<std::shared_ptr<PirateUnit>>& getArmy() const { return army; }
 

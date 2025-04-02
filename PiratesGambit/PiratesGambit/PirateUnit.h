@@ -29,16 +29,29 @@ struct UnitStats
 
 struct UnitInformation
 {
+	using IDType = unsigned int;
+
+	static IDType nextID; //tracking unit IDs
+
+	IDType id;
 	UnitType unitType;
 	UnitName unitName;
 	UnitAllegiance allegiance;
+
+	UnitInformation(UnitType type, UnitName name, UnitAllegiance ally)
+		: id(nextID++), unitType(type), unitName(name), allegiance(ally) {
+	}
 };
 
 class PirateUnit
 {
 public:
 	virtual ~PirateUnit() = default;
-	PirateUnit() = default;
+	PirateUnit(UnitType type, UnitName name, UnitAllegiance allegiance)
+		: unitInformation(type, name, allegiance)
+	{
+		unitAmount = std::make_unique<UnitAmount>();
+	}
 
 	void addToCurrentStack(int _amount);
 	int getStackSize() const { return unitStats.stackSize; }

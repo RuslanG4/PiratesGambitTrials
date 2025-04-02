@@ -7,8 +7,13 @@
 LoadingScene::LoadingScene()
 {
     generationThread = std::thread([this]() {
-        nextScene = generateNextScene();
-        sceneReady = true;
+        Scene* newScene = generateNextScene();
+
+        {
+            std::lock_guard<std::mutex> lock(sceneMutex);
+            nextScene = newScene;
+            sceneReady = true;
+        }
         });
 
     if (!font.loadFromFile("ASSETS\\FONTS\\VarsityTeam-Bold.otf"))

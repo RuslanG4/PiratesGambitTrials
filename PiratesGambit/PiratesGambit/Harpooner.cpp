@@ -11,7 +11,7 @@ void Harpooner::init()
 	rectSourceSprite.top = 0;
 	sprite.setTextureRect(rectSourceSprite);
 
-	if (unitInformation.allegiance != RED_PLAYER) {
+	if (unitInformation.allegiance != HUMAN_PLAYER) {
 		scaleX = -scaleX;
 		facingDirection = -facingDirection;
 	}

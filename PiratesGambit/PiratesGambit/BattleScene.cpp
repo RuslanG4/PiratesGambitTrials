@@ -148,7 +148,7 @@ void BattleScene::updateNextTurn()
 
 	createMoveableArea(currentSelectedUnit);
 
-	if (currentSelectedUnit->unitInformation.allegiance != RED_PLAYER) {
+	if (currentSelectedUnit->unitInformation.allegiance != HUMAN_PLAYER) {
 		EnemyTurn();
 	}
 }
@@ -302,7 +302,7 @@ void BattleScene::detectMouse()
 	}
 	else
 	{
-		if (currentState == BATTLE && currentSelectedUnit->unitInformation.allegiance == RED_PLAYER && !hasAttacked) {
+		if (currentState == BATTLE && currentSelectedUnit->unitInformation.allegiance == HUMAN_PLAYER && !hasAttacked) {
 			hoverMouseOnNode();
 		}
 		if (currentSelectedUnit && currentState ==PREP) {
@@ -401,6 +401,7 @@ void BattleScene::hoverMouseOnNode()
 	// Handle logic for RANGED units
 	else if (currentSelectedUnit->unitInformation.unitType == RANGED) {
 		// Check if the hovered node contains an enemy
+		attackIcon.setPosition(sf::Vector2f(-200, -200)); // Offscreen
 		attackNode = -1;
 		bool defaultIcon = true;
 		for (auto& enemyUnit : enemyRef->getArmy()->getArmy()) {
@@ -661,6 +662,15 @@ void BattleScene::calculateDamage(const std::shared_ptr<PirateUnit>& _attacker, 
 		tacticsArmyUI->initiativeSystem.removeUnit(_defender);
 		tacticsArmyUI->UpdateToInitiativeView();
 		newAreaSet = false;
+		if (_defender->unitInformation.allegiance == enemyRef->GetEnemyTeam())
+		{
+			enemyRef->getArmy()->removeUnit(_defender);
+			CheckBattleOver(enemyRef->getArmy());
+		}
+		else {
+			playerRef->getArmy()->removeUnit(_defender);
+			CheckBattleOver(playerRef->getArmy());
+		}
 	}
 	currentDefendingUnit = nullptr;
 }
@@ -747,6 +757,20 @@ int BattleScene::SelectAttackNodeToWalkTo(const std::vector<std::shared_ptr<Pira
 	}
 
 	return selectedID;
+}
+
+void BattleScene::CheckBattleOver(const std::unique_ptr<Army>& _army)
+{
+	if (_army->getArmy().empty())
+	{
+		UIInterface->updateModeString("Player Wins");
+		currentState = END;
+	}
+	else if (_army->getArmy().empty())
+	{
+		UIInterface->updateModeString("Enemy Wins");
+		currentState = END;
+	}
 }
 
 void BattleScene::WaitForTurn()

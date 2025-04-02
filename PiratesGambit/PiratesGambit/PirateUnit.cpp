@@ -2,6 +2,8 @@
 
 #include "DamageCalculations.h"
 
+UnitInformation::IDType UnitInformation::nextID = 0;
+
 void PirateUnit::addToCurrentStack(int _amount)
 {
 	unitStats.stackSize += _amount;

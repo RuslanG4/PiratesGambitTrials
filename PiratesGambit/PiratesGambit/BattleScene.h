@@ -87,6 +87,8 @@ public:
 	int SelectNodeToWalkTo();
 	int SelectAttackNodeToWalkTo(const std::vector<std::shared_ptr<PirateUnit>>& _possibleUnits) const;
 
+	void CheckBattleOver(const std::unique_ptr<Army>& _army);
+
 private:
 	std::vector<std::shared_ptr<BattleGridNode>> battleGrid;
 

@@ -101,6 +101,9 @@ void TacticsArmySlot::updateAllegianceColor(UnitAllegiance _allegiance)
 {
 	switch (_allegiance)
 	{
+	case HUMAN_PLAYER:
+		teamColor.setFillColor(sf::Color::Cyan);
+		break;
 	case RED_PLAYER:
 		teamColor.setFillColor(sf::Color::Red);
 		break;
@@ -112,6 +115,9 @@ void TacticsArmySlot::updateAllegianceColor(UnitAllegiance _allegiance)
 		break;
 	case YELLOW_PLAYER:
 		teamColor.setFillColor(sf::Color::Yellow);
+		break;
+	case BLACK_PLAYER:
+		teamColor.setFillColor(sf::Color::Black);
 		break;
 	}
 }

@@ -38,5 +38,7 @@ private:
     sf::Text loadingText;
 
     sf::Text toolTipText;
+
+    std::mutex sceneMutex;
 };
 
