@@ -62,7 +62,9 @@ enum UnitName
 	EMPTY,
 	BUCCANEER,
 	GUNNER,
-	HARPOONER
+	HARPOONER,
+	CANNON,
+	BIRD
 };
 
 enum ItemName

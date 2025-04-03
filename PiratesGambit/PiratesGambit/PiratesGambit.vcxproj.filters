@@ -414,6 +414,12 @@
     <ClCompile Include="EnemyScoutArmySlot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CannonUnit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BirdUnit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -706,6 +712,12 @@
     </ClInclude>
     <ClInclude Include="EnemyScoutArmySlot.h">
       <Filter>Header Files\UI\EnemyScout</Filter>
+    </ClInclude>
+    <ClInclude Include="CannonUnit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BirdUnit.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -4,6 +4,7 @@
 
 TacticsArmySlot::TacticsArmySlot(UnitName _type, UnitStats _stats, sf::Vector2f _pos, bool _mainIcon)
 {
+	mainIcon = _mainIcon;
 	stats = _stats;
 	init();
 	updateSlots(_type, stats);
@@ -11,7 +12,7 @@ TacticsArmySlot::TacticsArmySlot(UnitName _type, UnitStats _stats, sf::Vector2f 
 	boxBorder.setPosition(_pos);
 	teamColor.setScale(5, 5);
 	teamColor.setPosition(boxBorder.getPosition());
-	unitSprite.setScale(8, 8);
+	
 	unitSprite.setPosition(boxBorder.getPosition());
 }
 
@@ -25,8 +26,7 @@ TacticsArmySlot::TacticsArmySlot(UnitName _type, UnitStats _stats, sf::Vector2f 
 	teamColor.setScale(2.5, 2.5);
 	teamColor.setPosition(boxBorder.getPosition());
 	unitSprite.setPosition(boxBorder.getPosition());
-	unitSprite.setScale(4, 4);
-
+	
 	unitAmountUI.setPosition(sf::Vector2f(boxBorder.getPosition().x - 32, boxBorder.getPosition().y + 32));
 
 }
@@ -73,20 +73,54 @@ void TacticsArmySlot::updateSlots(UnitName _type, UnitStats _stats)
 	{
 	case BUCCANEER:
 		unitSprite.setTexture(TextureManager::getInstance().getTexture("BUCCANEER"));
+		unitSprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
+		unitSprite.setOrigin(16, 24);
 		occupied = true;
 		break;
 	case GUNNER:
 		unitSprite.setTexture(TextureManager::getInstance().getTexture("GUNNER"));
+		unitSprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
+		unitSprite.setOrigin(16, 24);
 		occupied = true;
 		break;
 	case HARPOONER:
 		unitSprite.setTexture(TextureManager::getInstance().getTexture("HARPOONER"));
+		unitSprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
+		unitSprite.setOrigin(16, 24);
+		occupied = true;
+		break;
+	case CANNON:
+		unitSprite.setTexture(TextureManager::getInstance().getTexture("CANNON_UNIT"));
+		unitSprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
+		unitSprite.setOrigin(16, 24);
+		occupied = true;
+		break;
+	case BIRD:
+		unitSprite.setTexture(TextureManager::getInstance().getTexture("BIRD"));
+		unitSprite.setTextureRect(sf::IntRect(0,0,64,64));
+		unitSprite.setOrigin(32, 32);
 		occupied = true;
 		break;
 	case EMPTY:
 		occupied = false;
 		break;
 	}
+	if (mainIcon) {
+		if (_type != BIRD) {
+			unitSprite.setScale(8, 8);
+		}
+		else
+			unitSprite.setScale(4, 4);
+	}
+	else {
+		if (_type != BIRD) {
+			unitSprite.setScale(4, 4);
+		}
+		else
+			unitSprite.setScale(2, 2);
+
+	}
+
 	stats = _stats;
 	UnitStatsDisplay::getInstance().updateDisplay(stats);
 }

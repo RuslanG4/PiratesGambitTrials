@@ -775,7 +775,7 @@ void BattleScene::CheckBattleOver(const std::unique_ptr<Army>& _army)
 
 void BattleScene::WaitForTurn()
 {
-	if(enemyWaitTime.getElapsedTime().asSeconds() > 0.5f)
+	if(enemyWaitTime.getElapsedTime().asSeconds() > 0.75f)
 	{
 		updateNextTurn();
 		startEnemyTurnTimer = false;

@@ -276,6 +276,12 @@ void GamePlayScene::InitialiseEnemyArmy(const std::shared_ptr<Enemy>& _enemyRef,
 						else if (unitData["unittype"] == "Harpooner") {
 							_enemyRef->getArmy()->addUnitNoCombine(std::make_shared<Harpooner>(unitData["amount"], _enemyRef->GetEnemyTeam()));
 						}
+						else if (unitData["unittype"] == "Cannon") {
+							_enemyRef->getArmy()->addUnitNoCombine(std::make_shared<CannonUnit>(unitData["amount"], _enemyRef->GetEnemyTeam()));
+						}
+						else if (unitData["unittype"] == "Bird") {
+							_enemyRef->getArmy()->addUnitNoCombine(std::make_shared<BirdUnit>(unitData["amount"], _enemyRef->GetEnemyTeam()));
+						}
 						else {
 							std::cerr << "Unknown unit type: " << unitData["unittype"] << "\n";
 						}

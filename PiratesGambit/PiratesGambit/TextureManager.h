@@ -49,6 +49,8 @@ public:
         texturesLoaded &= loadTexture("BUCCANEER", BUCCANEER_SPRITE);
         texturesLoaded &= loadTexture("GUNNER", GUNNER_SPRITE);
         texturesLoaded &= loadTexture("HARPOONER", HARPOONER_SPRITE);
+        texturesLoaded &= loadTexture("CANNON_UNIT", CANNON_UNIT_SPRITE);
+        texturesLoaded &= loadTexture("BIRD", BIRD_SPRITE);
         texturesLoaded &= loadTexture("BARREL", BARREL);
         texturesLoaded &= loadTexture("TREEA", TREE0);
         texturesLoaded &= loadTexture("TREEB", TREE1);

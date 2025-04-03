@@ -22,8 +22,8 @@ void Animator::AnimateSprite(sf::Sprite& _sprite, AnimationState& _state, bool& 
 	int row = _rowNum;
 
 	sf::IntRect rectSourceSprite;
-	rectSourceSprite.height = 32;
-	rectSourceSprite.width = 32;
+	rectSourceSprite.height = _sprite.getLocalBounds().height;
+	rectSourceSprite.width = _sprite.getLocalBounds().width;
 	rectSourceSprite.left = col * rectSourceSprite.width;
 	rectSourceSprite.top = row * rectSourceSprite.height;
 	_sprite.setTextureRect(rectSourceSprite);
@@ -55,8 +55,8 @@ void Animator::AnimateShoot(sf::Sprite& _sprite, AnimationState& _state, bool& _
 	int row = _rowNum;
 
 	sf::IntRect rectSourceSprite;
-	rectSourceSprite.height = 32;
-	rectSourceSprite.width = 32;
+	rectSourceSprite.height = _sprite.getLocalBounds().height;
+	rectSourceSprite.width = _sprite.getLocalBounds().width;
 	rectSourceSprite.left = col * rectSourceSprite.width;
 	rectSourceSprite.top = row * rectSourceSprite.height;
 	_sprite.setTextureRect(rectSourceSprite);
@@ -65,8 +65,8 @@ void Animator::AnimateShoot(sf::Sprite& _sprite, AnimationState& _state, bool& _
 void Animator::AnimateDeath(sf::Sprite& _sprite, int _colNum, int _rowNum)
 {
 	sf::IntRect rectSourceSprite;
-	rectSourceSprite.height = 32;
-	rectSourceSprite.width = 32;
+	rectSourceSprite.height = _sprite.getLocalBounds().height;
+	rectSourceSprite.width = _sprite.getLocalBounds().width;
 	rectSourceSprite.left = _colNum * rectSourceSprite.width;
 	rectSourceSprite.top = _rowNum * rectSourceSprite.height;
 	_sprite.setTextureRect(rectSourceSprite);

@@ -152,6 +152,7 @@
     <ClCompile Include="BattleGridNode.cpp" />
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="BattleSceneTransition.cpp" />
+    <ClCompile Include="BirdUnit.cpp" />
     <ClCompile Include="BloodParticle.cpp" />
     <ClCompile Include="Boat.cpp" />
     <ClCompile Include="BoatController.cpp" />
@@ -165,6 +166,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CannonBall.cpp" />
     <ClCompile Include="CannonBallItem.cpp" />
+    <ClCompile Include="CannonUnit.cpp" />
     <ClCompile Include="ChaseState.cpp" />
     <ClCompile Include="Coins.cpp" />
     <ClCompile Include="DamageCalculations.cpp" />
@@ -244,6 +246,7 @@
     <ClInclude Include="BattleGridNode.h" />
     <ClInclude Include="BattleScene.h" />
     <ClInclude Include="BattleSceneTransition.h" />
+    <ClInclude Include="BirdUnit.h" />
     <ClInclude Include="BloodParticle.h" />
     <ClInclude Include="Boat.h" />
     <ClInclude Include="BoatController.h" />
@@ -257,6 +260,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CannonBall.h" />
     <ClInclude Include="CannonBallItem.h" />
+    <ClInclude Include="CannonUnit.h" />
     <ClInclude Include="ChaseState.h" />
     <ClInclude Include="Coins.h" />
     <ClInclude Include="Constants.h" />

@@ -27,6 +27,7 @@ private:
 	UnitStats stats;
 
 	bool occupied = true;
+	bool mainIcon = false;
 
 	UnitAmount unitAmountUI;
 	
