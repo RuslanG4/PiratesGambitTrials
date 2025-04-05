@@ -19,12 +19,12 @@ void Enemy::render(const std::unique_ptr<sf::RenderWindow>& window) const
 
 	//myHitbox->render(window);
 
-	/*for (auto& node : updateableArea->getUpdateableNodes())
-		{
-			if (node != nullptr) {
-				window->draw(*(node->debugShape));
-			}
-		}*/
+	//for (auto& node : updateableArea->getUpdateableNodes())
+	//	{
+	//		if (node != nullptr) {
+	//			window->draw(*(node->debugShape));
+	//		}
+	//	}
 }
 
 void Enemy::handleAnimationStates(double dt)

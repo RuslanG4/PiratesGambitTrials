@@ -39,6 +39,9 @@ public:
 
 	bool isDisplayOpen() const { return isOpen; }
 
+	float getWidth() const { return background.getGlobalBounds().width; }
+	float getHeight() const { return background.getGlobalBounds().height; }
+
 
 private:
 	EnemyScoutUI()

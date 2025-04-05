@@ -52,7 +52,8 @@ void GamePlayScene::handleInput(const std::unique_ptr<sf::RenderWindow>& window,
 
 void GamePlayScene::update(float dt)
 {
-	Camera::getInstance().setCameraCenter(myPlayer->getPlayerController()->getPosition());
+	Camera::getInstance().update(myPlayer->getPlayerController()->getPosition(), sf::Vector2f(mapSize * CHUNK_NODE_COLS * NODE_SIZE, mapSize * CHUNK_NODE_COLS * NODE_SIZE));
+	//Camera::getInstance().setCameraCenter(myPlayer->getPlayerController()->getPosition());
 
 	if (!battle && !battleTransition.IsTransitionActive()) {
 		updateVisableNodes();
@@ -413,14 +414,29 @@ void GamePlayScene::processKeys()
 
 void GamePlayScene::HandleEnemyScoutUI(const std::unique_ptr<sf::RenderWindow>& window)
 {
-	for(auto& enemy : enemies)
+	for (auto& enemy : enemies)
 	{
 		sf::Vector2f mousePos = window->mapPixelToCoords(Mouse::getInstance().getMousePosition());
+		float menuWidth = EnemyScoutUI::getInstance().getWidth();
+		float menuHeight = EnemyScoutUI::getInstance().getHeight();
 
 		if (Mouse::getInstance().RightClicked() && enemy->GetGlobalBounds().contains(mousePos))
 		{
 			EnemyScoutUI::getInstance().passArmy(enemy->getArmy(), enemy->GetPirateName());
-			EnemyScoutUI::getInstance().placeMenu(mousePos);
+
+			sf::Vector2f enemyPos = enemy->GetPosition(); 
+
+			if (enemyPos.x > myPlayer->getPlayerController()->getPosition().x)
+			{
+				enemyPos.x -= menuWidth;
+			}
+
+			if (enemyPos.y > myPlayer->getPlayerController()->getPosition().y)
+			{
+				enemyPos.y -= menuHeight;
+			}
+
+			EnemyScoutUI::getInstance().placeMenu(enemyPos);
 			EnemyScoutUI::getInstance().OpenMenu();
 		}
 		if (EnemyScoutUI::getInstance().isDisplayOpen() && !Mouse::getInstance().RightClicked())
@@ -494,7 +510,7 @@ void GamePlayScene::HandleProjectiles() const
 			{
 				it = projectiles.erase(it);
 				ParticleManager::getInstance().CreateExplosionParticle(boat->getPosition());
-				boat->getEnemyRef()->GetPlayerAllegiance().changeAllegiance(-40); // - 40 rep
+				boat->getEnemyRef()->updateAllegiance(-40); // - 40 rep
 				boat->takeDamage();
 				found = true;
 				break;
@@ -551,7 +567,7 @@ void GamePlayScene::UpdateEnemiesCurrentNode() const
 		auto enemyCurrentNode = FindCurrentNode(enemy->GetPosition());
 		if (enemy->getCurrentNode() != enemyCurrentNode) {
 			enemy->setCurrentNode(enemyCurrentNode);
-			enemy->updateUpdateableArea(enemyCurrentNode, 5);
+			enemy->updateUpdateableArea(enemyCurrentNode, 6);
 		}
 	}
 }

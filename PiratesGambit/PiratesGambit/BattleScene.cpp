@@ -663,6 +663,7 @@ void BattleScene::calculateDamage(const std::shared_ptr<PirateUnit>& _attacker, 
 		newAreaSet = false;
 		if (_defender->unitInformation.allegiance == enemyRef->GetEnemyTeam())
 		{
+			battleGrid[_defender->getCurrentNodeId()]->updateOccupied(false);
 			enemyRef->getArmy()->removeUnit(_defender);
 			CheckBattleOver(enemyRef->getArmy());
 		}

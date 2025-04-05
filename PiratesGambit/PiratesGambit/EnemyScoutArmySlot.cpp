@@ -2,15 +2,6 @@
 
 EnemyScoutArmySlot::EnemyScoutArmySlot()
 {
-	sf::IntRect rectSourceSprite;
-	rectSourceSprite.height = 32;
-	rectSourceSprite.width = 32;
-	rectSourceSprite.left = 0;
-	rectSourceSprite.top = 0;
-	unitSprite.setTextureRect(rectSourceSprite);
-	unitSprite.setOrigin(16, 24);
-	unitSprite.setScale(1.5, 1.5);
-
 	boxBorder.setSize(sf::Vector2f(32, 32));
 	boxBorder.setOutlineThickness(2.f);
 	boxBorder.setOutlineColor(sf::Color(194, 159, 106));
@@ -31,16 +22,42 @@ void EnemyScoutArmySlot::passUnit(const std::shared_ptr<PirateUnit>& _unit)
 
 void EnemyScoutArmySlot::setSprite(UnitInformation& _unit)
 {
+	sf::IntRect rectSourceSprite;
+	rectSourceSprite.height = 32;
+	rectSourceSprite.width = 32;
+	rectSourceSprite.left = 0;
+	rectSourceSprite.top = 0;
+	unitSprite.setTextureRect(rectSourceSprite);
+
 	switch (_unit.unitName)
 	{
 	case BUCCANEER:
 		unitSprite.setTexture(TextureManager::getInstance().getTexture("BUCCANEER"));
+		unitSprite.setOrigin(16, 24);
+		unitSprite.setScale(1.5, 1.5);
 		break;
 	case GUNNER:
 		unitSprite.setTexture(TextureManager::getInstance().getTexture("GUNNER"));
+		unitSprite.setOrigin(16, 24);
+		unitSprite.setScale(1.5, 1.5);
 		break;
 	case HARPOONER:
 		unitSprite.setTexture(TextureManager::getInstance().getTexture("HARPOONER"));
+		unitSprite.setOrigin(16, 24);
+		unitSprite.setScale(1.5, 1.5);
+		break;
+	case BIRD:
+		unitSprite.setTexture(TextureManager::getInstance().getTexture("BIRD"));
+		rectSourceSprite.height = 64;
+		rectSourceSprite.width = 64;
+		unitSprite.setTextureRect(rectSourceSprite);
+		unitSprite.setOrigin(32, 32);
+		unitSprite.setScale(0.75, 0.75);
+		break;
+	case CANNON:
+		unitSprite.setTexture(TextureManager::getInstance().getTexture("CANNON_UNIT"));
+		unitSprite.setOrigin(16, 24);
+		unitSprite.setScale(1.5, 1.5);
 		break;
 	case EMPTY:
 		break;

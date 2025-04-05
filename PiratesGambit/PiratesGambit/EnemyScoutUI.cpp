@@ -10,8 +10,7 @@ void EnemyScoutUI::clearSlots()
 
 void EnemyScoutUI::placeMenu(sf::Vector2f _pos)
 {
-	sf::Vector2f backgroundPos = _pos - sf::Vector2f(0, background.getGlobalBounds().height);
-	background.setPosition(backgroundPos);
+	background.setPosition(_pos);
 
 	sf::Vector2f position = background.getPosition() + sf::Vector2f(42, 70);
 

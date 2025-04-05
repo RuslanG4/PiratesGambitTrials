@@ -43,6 +43,8 @@ public:
 
     void handleZooming(sf::Event event);
 
+    void update(sf::Vector2f playerPos, sf::Vector2f _worldSize);
+
 private:
     /// <summary>
     /// Private constructor to enforce the singleton pattern.
@@ -57,5 +59,5 @@ private:
 
     float zoomLevel = 1.0f;  ///< Current zoom level
     const float minZoom = 1.f;  ///< Minimum zoom level (zoomed in)
-    const float maxZoom = 7.0f;  ///< Maximum zoom level (zoomed out)
+    const float maxZoom = 2.0f;  ///< Maximum zoom level (zoomed out)
 };

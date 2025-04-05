@@ -110,6 +110,10 @@ public:
 		playerAllegiance.setAllegiance(_value); 
 		enemyUI->updateAllegiance(playerAllegiance);
 	}
+	void updateAllegiance(const int& _value) {
+		playerAllegiance.changeAllegiance(_value);
+		enemyUI->updateAllegiance(playerAllegiance);
+	}
 	PlayerAllegiance GetPlayerAllegiance() const{
 		return playerAllegiance;
 	}

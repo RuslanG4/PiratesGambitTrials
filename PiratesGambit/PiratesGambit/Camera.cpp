@@ -13,3 +13,24 @@ void Camera::handleZooming(sf::Event event)
         }
     }
 }
+
+void Camera::update(sf::Vector2f playerPos, sf::Vector2f _worldSize)
+{
+    sf::Vector2f cameraPos = camera.getCenter();
+    sf::Vector2f cameraSize = camera.getSize();
+
+    float minX = cameraSize.x / 2.0f;
+    float maxX = _worldSize.x - cameraSize.x / 2.0f;
+    float minY = cameraSize.y / 2.0f;
+    float maxY = _worldSize.y - cameraSize.y / 2.0f;
+
+    float borderMarginX = 10.0f; 
+    float borderMarginY = 10.0f; 
+
+    sf::Vector2f targetCameraPos = playerPos;
+
+    targetCameraPos.x = std::clamp(targetCameraPos.x, minX + borderMarginX, maxX - borderMarginX);
+    targetCameraPos.y = std::clamp(targetCameraPos.y, minY + borderMarginY, maxY - borderMarginY);
+
+    camera.setCenter(targetCameraPos);
+}
