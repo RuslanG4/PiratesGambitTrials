@@ -132,7 +132,6 @@ void BattleScene::render(const std::unique_ptr<sf::RenderWindow>& window) const
 		window->draw(attackIcon);
 	}
 	tacticsArmyUI->render(window);
-	BulletFactory::getInstance().render(window);
 	
 	UIInterface->render(window);
 }

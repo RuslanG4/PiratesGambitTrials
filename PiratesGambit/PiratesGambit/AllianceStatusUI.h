@@ -7,10 +7,12 @@ public:
 	AllianceStatusUI(sf::Vector2f _pos);
 	void Render(const std::unique_ptr<sf::RenderWindow>& _window) const;
 
-	void PassValues(int _playerAllegianceValue, int _cost);
+	void updateAllegianceLevel(const AllegianceLevel& _level);
+	void PlaceIndicatorOnAllegianceBar(int _value);
 
 private:
 	void ScaleAllegianceBar();
+
 	void CenterTexts();
 
 	sf::Text costText;

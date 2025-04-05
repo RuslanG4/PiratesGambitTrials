@@ -7,12 +7,12 @@ AllianceStatusUI::AllianceStatusUI(sf::Vector2f _pos)
     background.setSize(sf::Vector2f(250, 250));
     background.setFillColor(sf::Color(0, 0, 0, 150)); // Semi-transparent gray
 
-    costText.setFont(TextureManager::getInstance().getFont("Comic"));
+    costText.setFont(TextureManager::getInstance().getFont("Varsity"));
     costText.setCharacterSize(36U);
     costText.setFillColor(sf::Color::White);
     costText.setString("1000");
 
-    alligianceText.setFont(TextureManager::getInstance().getFont("Comic"));
+    alligianceText.setFont(TextureManager::getInstance().getFont("Varsity"));
     alligianceText.setCharacterSize(36U);
     alligianceText.setFillColor(sf::Color::White);
     alligianceText.setString(("Allegiance"));
@@ -52,9 +52,19 @@ void AllianceStatusUI::Render(const std::unique_ptr<sf::RenderWindow>& _window) 
     }
 }
 
-void AllianceStatusUI::PassValues(int _playerAllegianceValue, int _cost)
+void AllianceStatusUI::updateAllegianceLevel(const AllegianceLevel& _level)
 {
-
+    switch (_level) {
+    case AllegianceLevel::Hostile:
+        allegianceBarSlider.setFillColor(sf::Color::Red);
+        break;
+    case AllegianceLevel::Neutral:
+        allegianceBarSlider.setFillColor(sf::Color::Yellow);
+        break;
+    case AllegianceLevel::Friendly:
+        allegianceBarSlider.setFillColor(sf::Color::Green);
+        break;
+    }
 }
 
 void AllianceStatusUI::ScaleAllegianceBar()
@@ -66,6 +76,21 @@ void AllianceStatusUI::ScaleAllegianceBar()
     allegianceCircles[1].setPosition(allegianceBar.getPosition() + sf::Vector2f(allegianceBar.getSize().x / 2, -25));
     allegianceCircles[2].setPosition(allegianceBar.getPosition() + sf::Vector2f(allegianceBar.getSize().x, -25));
     allegianceBarSlider.setPosition(allegianceBar.getPosition().x, allegianceBar.getPosition().y + allegianceBar.getSize().y / 2);
+}
+
+void AllianceStatusUI::PlaceIndicatorOnAllegianceBar(int _value)
+{
+	float barWidth = allegianceBar.getSize().x;
+    _value = std::clamp(_value, 0, 100);
+    float sliderPosX = allegianceBar.getPosition().x + (barWidth * (_value / 100.f));
+	allegianceBarSlider.setPosition(sliderPosX, allegianceBar.getPosition().y + allegianceBar.getSize().y / 2);
+
+    int baseCost = 2000; 
+
+    float multiplier = 1.0f + (1.0f - (_value / 100.0f));
+    int cost = static_cast<int>(baseCost * multiplier);
+
+	costText.setString(std::to_string(cost));
 }
 
 void AllianceStatusUI::CenterTexts()

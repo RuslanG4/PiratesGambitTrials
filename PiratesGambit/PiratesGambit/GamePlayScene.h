@@ -43,6 +43,8 @@ private:
 
 	void HandleMovement() const;
 
+	void HandleProjectiles() const;
+
 	std::shared_ptr<Node> FindCurrentNode(sf::Vector2f _position) const;
 	void UpdatePlayerCurrentNode() const;
 	void UpdateEnemiesCurrentNode() const;

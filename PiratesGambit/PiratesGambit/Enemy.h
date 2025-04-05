@@ -28,9 +28,7 @@ public:
 		enemyID = _enemyID;
 		enemyAllegiance = _allegiance;
 
-		//army->addUnit(std::make_shared<Buccaneer>(23,YELLOW_PLAYER));
-		//army->addUnit(std::make_shared<Gunner>(16,YELLOW_PLAYER));
-
+		setFactionAllegiance();
 
 		body.setTexture(TextureManager::getInstance().getTexture("PIRATE_CAPTAIN"));
 
@@ -48,10 +46,7 @@ public:
 
 		myHitbox = new HitBox(sf::Vector2f(22, 22));
 
-		int randomValue = (rand() % 3) * 10 - 10;
-		playerAllegiance = std::make_unique<PlayerAllegiance>(randomValue);
-
-		enemyUI = std::make_unique<EnemyUI>(100, 5, playerAllegiance);
+		enemyUI = std::make_unique<EnemyUI>(100, 5);
 
 		ChangeState(new EnemyBoatWander(_playerRef));
 	}
@@ -102,17 +97,31 @@ public:
 	void ChangeState(EnemyState* newState);
 	EnemyState* GetCurrentState() const { return currentActionState; }
 
-	std::unique_ptr <PlayerAllegiance>& GetPlayerAllegiance() { return playerAllegiance; }
+
+	void setFactionAllegiance();
+	std::string GetFactionAllegiance() { return factionAllegiance; }
 	int GetEnemyID() const { return enemyID; }
 	std::string GetEnemyAllegiance() const;
 	UnitAllegiance GetEnemyTeam() const { return enemyAllegiance; }
 
 	void setPirateName(const std::string& _name) { pirateName = _name; }
+
+	void setAllegiance(const int& _value) { 
+		playerAllegiance.setAllegiance(_value); 
+		enemyUI->updateAllegiance(playerAllegiance);
+	}
+	PlayerAllegiance GetPlayerAllegiance() const{
+		return playerAllegiance;
+	}
+	void updateEnemyAllegiance(const int& _value);
+
 	std::string GetPirateName() const { return pirateName; }
 
 private:
 	sf::Sprite body;
-	std::unique_ptr <PlayerAllegiance> playerAllegiance;
+	std::string factionAllegiance = "";
+
+	PlayerAllegiance playerAllegiance;
 	std::unique_ptr<EnemyUI> enemyUI;
 
 	EnemyState* currentActionState;

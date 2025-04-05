@@ -15,7 +15,7 @@ void IdleState::Enter(Enemy& enemy)
 
 void IdleState::Update(Enemy& enemy, float deltaTime)
 {
-	if (enemy.GetPlayerAllegiance()->isHostile()) {
+	if (enemy.GetPlayerAllegiance().isHostile()) {
 		for (auto& node : enemy.getUpdateableArea()->getUpdateableNodes())
 		{
 			if (node == playerRef->getCurrentNode())

@@ -3,15 +3,13 @@
 
 class PlayerAllegiance {
 public:
-    enum class AllegianceLevel {
-        Hostile, 
-        Neutral, 
-        Friendly 
-    };
-
-    PlayerAllegiance(int initialAllegiance) {
-        setAllegiance(initialAllegiance);
+    PlayerAllegiance() {
     }
+
+	void changeAllegiance(int change) {
+		allegianceValue += change;
+		updateAllegianceLevel();
+	}
 
     void setAllegiance(int value) {
         allegianceValue = value;

@@ -4,6 +4,8 @@
 #include "Particle.h"
 #include "ShotParticle.h"
 #include "LeafParticle.h"
+#include"ExplosionParticle.h"   
+#include"SmokeParticle.h"
 
 /// <summary>
 /// Particle factory singleton to create and manage particles in the world.
@@ -43,12 +45,30 @@ public:
     }
 
     /// <summary>
+  /// Creates a explosion particle effect at the given position.
+  /// </summary>
+  /// <param name="_pos">The position to spawn the shooting particle.</param>
+    void CreateExplosionParticle(sf::Vector2f _pos)
+    {
+        particles.push_back(std::make_unique<ExplosionParticle>(_pos));
+    }
+
+    /// <summary>
     /// Creates a leaf particle at the given position.
     /// </summary>
     /// <param name="_pos">The position to spawn the leaf particle.</param>
     void CreateLeafParticle(sf::Vector2f _pos)
     {
         particles.push_back(std::make_unique<LeafParticle>(_pos));
+    }
+
+    /// <summary>
+ /// Creates a smoke particle at the given position.
+ /// </summary>
+ /// <param name="_pos">The position to spawn the leaf particle.</param>
+    void CreateSmokeParticle(sf::Vector2f _pos)
+    {
+        particles.push_back(std::make_unique<SmokeParticle>(_pos));
     }
 
     /// <summary>

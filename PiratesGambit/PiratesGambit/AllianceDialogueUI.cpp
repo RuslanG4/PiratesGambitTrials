@@ -21,10 +21,6 @@ void AllianceDialogueUI::Init()
 
     costText.setPosition(characterPortrait.getPosition().x + characterPortrait.getGlobalBounds().width + 50, characterPortrait.getPosition().y + 150);
 
-    allianceIndicator.setRadius(20);
-    allianceIndicator.setPosition(750, 250);
-    allianceIndicator.setFillColor(sf::Color::Green);
-
     exitButton = std::make_unique<IconButton>(2, 2,
         sf::Vector2f(dialogueBox.getPosition().x + 300, dialogueBox.getPosition().y + 600),
         TextureManager::getInstance().getTexture("MONEY_ICON"));
@@ -73,23 +69,18 @@ void AllianceDialogueUI::Update()
     }
 }
 
-void AllianceDialogueUI::OpenMenu()
+void AllianceDialogueUI::OpenMenu(const std::shared_ptr<Enemy>& _enemyRef)
 {
     dialogueText.setString("");
     isOpen = true;
     UpdateText();
+	allianceStatus->updateAllegianceLevel(_enemyRef->GetPlayerAllegiance().getAllegianceLevel());
+    allianceStatus->PlaceIndicatorOnAllegianceBar(_enemyRef->GetPlayerAllegiance().getAllegianceValue());
 }
 
 void AllianceDialogueUI::CloseMenu()
 {
     isOpen = false;
-}
-
-void AllianceDialogueUI::setAllianceLevel(int level)
-{
-    if (level < 0) allianceIndicator.setFillColor(sf::Color::Red);
-    else if (level == 0) allianceIndicator.setFillColor(sf::Color::Yellow);
-    else allianceIndicator.setFillColor(sf::Color::Green);
 }
 
 void AllianceDialogueUI::Render(const std::unique_ptr<sf::RenderWindow>& _window) const

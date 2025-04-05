@@ -44,6 +44,12 @@ enum UnitState
 	DEATH
 };
 
+enum AllegianceLevel {
+	Hostile,
+	Neutral,
+	Friendly
+};
+
 enum BattleState
 {
 	PREP,

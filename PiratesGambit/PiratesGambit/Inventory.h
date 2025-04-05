@@ -10,6 +10,9 @@ public:
 
 	void addItem(std::unique_ptr<InventoryItem> _item);
 	std::unique_ptr<InventoryItem> removeItem(ItemName _name);
+	bool removeItemFromStack(ItemName _name);
+
+	const InventoryItem* getItem(ItemName _name);
 
 	void openInventory();
 	void closeInventory();

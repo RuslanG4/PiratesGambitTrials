@@ -21,6 +21,10 @@ public:
 		boatSprite.setOrigin(56, 33);
 		boatSprite.setScale(0.5, 0.5);
 
+		fireIndicator.setTexture(TextureManager::getInstance().getTexture("INDICATOR_ICON"));
+		fireIndicator.setOrigin(16, 16);
+		fireIndicator.setScale(0.5, 0.5);
+
 		myHitbox = new HitBox(sf::Vector2f(56,25));
 	}
 
@@ -46,6 +50,9 @@ public:
 		controller->setCurrentPosition(position);
 
 	}
+
+	void updateIndicator();
+
 	void setRotation(float _rotation){ boatSprite.setRotation(_rotation); }
 	void setDockedNode(const std::shared_ptr<Node>& _node)
 	{
@@ -55,6 +62,9 @@ public:
 private:
 	sf::Vector2f position;
 	sf::Sprite boatSprite;
+	sf::Sprite fireIndicator;
+
+	int fireDirection = 0;
 
 	HitBox* myHitbox;
 	std::shared_ptr<Node> dockedNode;
@@ -65,6 +75,7 @@ private:
 
 	BoatController* controller;
 	std::shared_ptr<Player> currentPlayer;
+
 };
 
 #endif // BOAT_H

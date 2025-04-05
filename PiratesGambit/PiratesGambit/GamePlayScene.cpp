@@ -89,6 +89,7 @@ void GamePlayScene::update(float dt)
 		playerMenu->Update();
 
 		UpdateEnemies(dt);
+		HandleProjectiles();
 
 	}
 	else if (battleTransition.IsTransitionActive())
@@ -114,7 +115,6 @@ void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 {
 	if (!battle) {
 		window->setView(Camera::getInstance().getCamera());
-
 		HandleEnemyScoutUI(window);
 
 		for (int index : visibleNodes) {
@@ -150,12 +150,16 @@ void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 			}
 		}
 
+		
 		playerMenu->Render(window);
 	}
 	else
 	{
 		battleScene->render(window);
 	}
+	BulletFactory::getInstance().render(window);
+	ParticleManager::getInstance().render(window);
+
 
 	UnitStatsDisplay::getInstance().Render(window);
 	EnemyScoutUI::getInstance().Render(window);
@@ -265,6 +269,7 @@ void GamePlayScene::InitialiseEnemyArmy(const std::shared_ptr<Enemy>& _enemyRef,
 			for (const auto& enemyData : allegianceData["Enemies"]) {
 				if (enemyData["EnemyId"] == _enemyRef->GetEnemyID()) {
 					_enemyRef->setPirateName(enemyData["name"]);
+					_enemyRef->setAllegiance(allegianceData["PlayerReputation"]);
 					for (const auto& unitData : enemyData["army"]) {
 
 						if (unitData["unittype"] == "Buccaneer") {
@@ -389,9 +394,9 @@ void GamePlayScene::processKeys()
 		{
 			for (auto& enemy : enemies)
 			{
-				if (enemy->getCurrentNode() == node && !enemy->GetPlayerAllegiance()->isHostile())
+				if (enemy->getCurrentNode() == node && !enemy->GetPlayerAllegiance().isHostile())
 				{
-					AllianceDialogueUI::getInstance().OpenMenu();
+					AllianceDialogueUI::getInstance().OpenMenu(enemy);
 					enemy->ChangeState(new IdleState(myPlayer));
 				}
 			}
@@ -474,6 +479,34 @@ void GamePlayScene::HandleMovement() const
 			}
 		}
 		myPlayer->getPlayerController()->setLandVelocity(desiredVelocity);
+	}
+}
+
+void GamePlayScene::HandleProjectiles() const
+{
+	bool found = false;
+	auto& projectiles = BulletFactory::getInstance().GetProjectiles();
+
+	for (auto it = projectiles.begin(); it != projectiles.end(); )
+	{
+		for (auto& boat : enemyBoats) {
+			if ((*it)->getBounds().intersects(boat->GetGlobalBounds()))
+			{
+				it = projectiles.erase(it);
+				ParticleManager::getInstance().CreateExplosionParticle(boat->getPosition());
+				boat->getEnemyRef()->GetPlayerAllegiance().changeAllegiance(-40); // - 40 rep
+				boat->takeDamage();
+				found = true;
+				break;
+			}
+		}
+		if (found)
+		{
+			break;
+		}
+		else {
+			it++;
+		}
 	}
 }
 
@@ -620,12 +653,10 @@ void GamePlayScene::UpdateEnemies(double _dt)
 	{
 		enemy->update(_dt);
 	}
-	/*int count = enemies.size();
-	for (int i = 0; i < enemiesPerFrame; ++i) {
-		if (count == 0) break;
-		enemies[enemyIndex]->update(_dt);
-		enemyIndex = (enemyIndex + 1) % count;
-	}*/
+	for (auto& boat : enemyBoats)
+	{
+		boat->update(_dt);
+	}
 }
 
 int GamePlayScene::FindCurrentTeamSize(nlohmann::json& jsonData, const UnitAllegiance& _allegiance)

@@ -1,6 +1,6 @@
 #include "EnemyUI.h"
 
-EnemyUI::EnemyUI(float width, float height, const std::unique_ptr<PlayerAllegiance>& _allegiance)
+EnemyUI::EnemyUI(float width, float height)
 {
     healthBarBackground.setSize(sf::Vector2f(width, height));
     healthBarBackground.setFillColor(sf::Color(50, 50, 50));
@@ -14,7 +14,6 @@ EnemyUI::EnemyUI(float width, float height, const std::unique_ptr<PlayerAllegian
     allegianceIndicator.setOutlineThickness(2);
     allegianceIndicator.setOutlineColor(sf::Color::Black);
 
-    updateAllegiance(_allegiance);
     updateHealth(1.f);
 }
 
@@ -40,12 +39,12 @@ void EnemyUI::updateHealth(float _healthPercentage)
     }
 }
 
-void EnemyUI::updateAllegiance(const std::unique_ptr<PlayerAllegiance>& _allegiance)
+void EnemyUI::updateAllegiance(const PlayerAllegiance& _allegiance)
 {
-    if (_allegiance->isHostile()) {
+    if (_allegiance.isHostile()) {
         allegianceIndicator.setFillColor(sf::Color::Red);
     }
-    else if (_allegiance->getAllegianceLevel() == PlayerAllegiance::AllegianceLevel::Neutral) {
+    else if (_allegiance.getAllegianceLevel() == AllegianceLevel::Neutral) {
         allegianceIndicator.setFillColor(sf::Color::Yellow);
     }
     else {

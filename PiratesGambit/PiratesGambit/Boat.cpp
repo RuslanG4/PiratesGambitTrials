@@ -3,9 +3,17 @@
 
 void Boat::processKeys(sf::Event t_event)
 {
+	if (t_event.key.code == sf::Keyboard::Q) {
+		fireDirection = 0;
+		fireIndicator.setScale(0.5, 0.5);
+	}
+	if (t_event.key.code == sf::Keyboard::E) {
+		fireDirection = 1;
+		fireIndicator.setScale(0.5, -0.5);
+	}
 	if (t_event.key.code == sf::Keyboard::Space)
 	{
-		fireCannonBall(1);
+		fireCannonBall(fireDirection);
 		canShoot = false;
 	}
 }
@@ -18,6 +26,7 @@ void Boat::processKeyUp(sf::Event t_event)
 void Boat::render(const std::unique_ptr<sf::RenderWindow>& window) const
 {
 	window->draw(boatSprite);
+	window->draw(fireIndicator);
 	//myHitbox->render(window);
 	for (auto& cannonball : cannonBalls) {
 		cannonball->render(window);
@@ -52,6 +61,7 @@ void Boat::update(double dt)
 			cannonball->update();
 		}
 	}
+	updateIndicator();
 }
 
 bool Boat::checkCollision(const std::shared_ptr<Node>& _node, sf::Vector2f& _pos)
@@ -75,26 +85,46 @@ void Boat::addCannonBall()
 
 void Boat::fireCannonBall(int _direction)
 {
-	float angleRadians = controller->getRotation() * Utility::DEG_TO_RADIAN;
+	auto item = currentPlayer->getInventory()->getItem(CANNONBALLS);
+		if (item != nullptr) {
+			if (item->getStackSize() > 0) {
+				float angleRadians = controller->getRotation() * Utility::DEG_TO_RADIAN;
 
-	float forwardX = std::cos(angleRadians);
-	float forwardY = std::sin(angleRadians);
+				float forwardX = std::cos(angleRadians);
+				float forwardY = std::sin(angleRadians);
 
-	sf::Vector2f velocity;
-	if(_direction == 1)
-	{
-		velocity = { -forwardY, forwardX };
-	}
-	else
-	{
-		velocity = { forwardY, -forwardX };
-	}
-	
-	for (auto& cannonball : cannonBalls) {
-		if (!cannonball->getIsActive()) {
+				sf::Vector2f velocity;
+				if (_direction == 1)
+				{
+					velocity = { -forwardY, forwardX };
+				}
+				else
+				{
+					velocity = { forwardY, -forwardX };
+				}
+		
+				BulletFactory::getInstance().createCannonBall(controller->getPosition(), Utility::unitVector2D(velocity) * 0.5f);
 
-			cannonball->fire(controller->getPosition(), velocity);
-			break;
+				currentPlayer->getInventory()->removeItemFromStack(CANNONBALLS);
+				ParticleManager::getInstance().CreateShootParticle(fireIndicator.getPosition());
+			}
 		}
-	}
+}
+
+void Boat::updateIndicator()
+{
+	sf::Vector2f shipPos = controller->getPosition();
+	float shipRotation = controller->getRotation();
+
+	sf::Vector2f localOffset = (fireDirection == 1) ? sf::Vector2f(0.f, 30.f) : sf::Vector2f(0.f, -30.f);
+
+	float radians = shipRotation * Utility::DEG_TO_RADIAN;
+
+	sf::Vector2f rotatedOffset;
+	rotatedOffset.x = localOffset.x * std::cos(radians) - localOffset.y * std::sin(radians);
+	rotatedOffset.y = localOffset.x * std::sin(radians) + localOffset.y * std::cos(radians);
+
+	fireIndicator.setPosition(shipPos + rotatedOffset);
+
+	fireIndicator.setRotation(shipRotation);
 }

@@ -1,6 +1,7 @@
 [
     {
         "Allegiance": "Blue",
+        "PlayerReputation":100,
         "Enemies": [
             {
                 "EnemyId": 0,
@@ -41,6 +42,7 @@
     },
     {
         "Allegiance": "Black",
+        "PlayerReputation":0,
         "Enemies": [
             {
                 "EnemyId": 0,
@@ -81,6 +83,7 @@
     },
     {
         "Allegiance": "Red",
+        "PlayerReputation":50,
         "Enemies": [
             {
                 "EnemyId": 0,

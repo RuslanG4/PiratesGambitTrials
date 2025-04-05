@@ -179,6 +179,7 @@
     <ClCompile Include="EnemyScoutUI.cpp" />
     <ClCompile Include="EnemyState.cpp" />
     <ClCompile Include="EnemyUI.cpp" />
+    <ClCompile Include="ExplosionParticle.cpp" />
     <ClCompile Include="FindBoatState.cpp" />
     <ClCompile Include="FullMap.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -225,6 +226,7 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ShotParticle.cpp" />
     <ClCompile Include="Slider.cpp" />
+    <ClCompile Include="SmokeParticle.cpp" />
     <ClCompile Include="TacticsArmySlot.cpp" />
     <ClCompile Include="TacticsArmyUI.cpp" />
     <ClCompile Include="Tree.cpp" />
@@ -276,6 +278,7 @@
     <ClInclude Include="EnemyState.h" />
     <ClInclude Include="EnemyUI.h" />
     <ClInclude Include="Enums.h" />
+    <ClInclude Include="ExplosionParticle.h" />
     <ClInclude Include="FindBoatState.h" />
     <ClInclude Include="FullMap.h" />
     <ClInclude Include="Game.h" />
@@ -323,6 +326,7 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ShotParticle.h" />
     <ClInclude Include="Slider.h" />
+    <ClInclude Include="SmokeParticle.h" />
     <ClInclude Include="Structs.h" />
     <ClInclude Include="TacticsArmySlot.h" />
     <ClInclude Include="TacticsArmyUI.h" />

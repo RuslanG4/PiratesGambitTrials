@@ -42,6 +42,7 @@ const char* const SHOOT_ICON = "ASSETS\\IMAGES\\ICONS\\SHOOT.png";
 const char* const MONEY_ICON = "ASSETS\\IMAGES\\ICONS\\MONEY.png";
 const char* const COIN_ICON = "ASSETS\\IMAGES\\ICONS\\COIN.png";
 const char* const SKULL_ICON = "ASSETS\\IMAGES\\ICONS\\SKULL.png";
+const char* const INDICATOR_ICON = "ASSETS\\IMAGES\\ICONS\\Indicator.png";
 
 //Enemy Ships
 const char* const RED_SHIP_HEALTHY = "ASSETS\\IMAGES\\Enemy\\RedShip.png";
@@ -49,6 +50,19 @@ const char* const BLACK_SHIP_HEALTHY = "ASSETS\\IMAGES\\Enemy\\BLACK_SHIP.png";
 const char* const BLUE_SHIP_HEALTHY = "ASSETS\\IMAGES\\Enemy\\BLUE_SHIP.png";
 const char* const GREEN_SHIP_HEALTHY = "ASSETS\\IMAGES\\Enemy\\GREEN_SHIP.png";
 const char* const YELLOW_SHIP_HEALTHY = "ASSETS\\IMAGES\\Enemy\\YELLOW_SHIP.png";
+
+const char* const RED_SHIP_DAMAGED = "ASSETS\\IMAGES\\Enemy\\red_damaged.png";
+const char* const BLACK_SHIP_DAMAGED = "ASSETS\\IMAGES\\Enemy\\black_damaged.png";
+const char* const BLUE_SHIP_DAMAGED = "ASSETS\\IMAGES\\Enemy\\blue_damaged.png";
+const char* const GREEN_SHIP_DAMAGED = "ASSETS\\IMAGES\\Enemy\\green_damaged.png";
+const char* const YELLOW_SHIP_DAMAGED = "ASSETS\\IMAGES\\Enemy\\yellow_damaged.png";
+
+const char* const RED_SHIP_BROKEN = "ASSETS\\IMAGES\\Enemy\\red_broken.png";
+const char* const BLACK_SHIP_BROKEN = "ASSETS\\IMAGES\\Enemy\\black_broken.png";
+const char* const BLUE_SHIP_BROKEN = "ASSETS\\IMAGES\\Enemy\\blue_broken.png";
+const char* const GREEN_SHIP_BROKEN = "ASSETS\\IMAGES\\Enemy\\green_broken.png";
+const char* const YELLOW_SHIP_BROKEN = "ASSETS\\IMAGES\\Enemy\\yellow_broken.png";
+
 
 //Borders
 const char* const ACTION_BORDER = "ASSETS\\IMAGES\\Borders\\ActionButton.png";
@@ -75,6 +89,8 @@ const char* const BIRD_SPRITE = "ASSETS\\IMAGES\\Pirates\\Bird.png";
 const char* const BLOOD_PARTICLES = "ASSETS\\IMAGES\\Particles\\BLOOD_PARTICLES.png";
 const char* const SHOOT_PARTICLES = "ASSETS\\IMAGES\\Particles\\848.png";
 const char* const LEAF_PARTICLE = "ASSETS\\IMAGES\\Particles\\leaf.png";
+const char* const SMOKE_PARTICLE = "ASSETS\\IMAGES\\Particles\\Smoke.png";
+const char* const EXPLOSION_PARTICLE = "ASSETS\\IMAGES\\Particles\\explosion.png";
 
 //BUILDINGS
 const char* const BUILDINGS = "ASSETS\\IMAGES\\Buildings\\Buildings.png";

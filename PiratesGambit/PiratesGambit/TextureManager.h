@@ -36,13 +36,6 @@ public:
         texturesLoaded &= loadTexture("PLAYER_BOAT", PLAYER);
         texturesLoaded &= loadTexture("PLAYER_BOAT_DAMAGED", PLAYER_DAMAGED);
         texturesLoaded &= loadTexture("PLAYER_BOAT_PLASTERED", PLAYER_PLASTERED);
-        //PIRATE SHIPS
-        texturesLoaded &= loadTexture("RED_SHIP", RED_SHIP_HEALTHY);
-        texturesLoaded &= loadTexture("BLACK_SHIP", BLACK_SHIP_HEALTHY);
-        texturesLoaded &= loadTexture("GREEN_SHIP", GREEN_SHIP_HEALTHY);
-        texturesLoaded &= loadTexture("BLUE_SHIP", BLUE_SHIP_HEALTHY);
-        texturesLoaded &= loadTexture("YELLOW_SHIP", YELLOW_SHIP_HEALTHY);
-
         texturesLoaded &= loadTexture("CANNON_BALL", CANNON_BALL);
         texturesLoaded &= loadTexture("HARPOON", HARPOON);
         texturesLoaded &= loadTexture("PIRATE_CAPTAIN", PIRATE_CAPTAIN);
@@ -55,6 +48,7 @@ public:
         texturesLoaded &= loadTexture("TREEA", TREE0);
         texturesLoaded &= loadTexture("TREEB", TREE1);
         texturesLoaded &= loadTexture("CANNON_BALL_ICON", CANNON_BALL_ICON);
+        texturesLoaded &= loadTexture("INDICATOR_ICON", INDICATOR_ICON);
         texturesLoaded &= loadTexture("SWORD_ICON", SWORD_ICON);
         texturesLoaded &= loadTexture("SHOOT_ICON", SHOOT_ICON);
         texturesLoaded &= loadTexture("MONEY_ICON", MONEY_ICON);
@@ -64,7 +58,9 @@ public:
         texturesLoaded &= loadTexture("BULKY_BORDER", BULKY_BORDER);
         texturesLoaded &= loadTexture("BLOOD_PARTICLES", BLOOD_PARTICLES);
         texturesLoaded &= loadTexture("SHOOT_PARTICLES", SHOOT_PARTICLES);
+        texturesLoaded &= loadTexture("EXPLOSION_PARTICLE", EXPLOSION_PARTICLE);
         texturesLoaded &= loadTexture("LEAF_PARTICLE", LEAF_PARTICLE);
+        texturesLoaded &= loadTexture("SMOKE_PARTICLE", SMOKE_PARTICLE);
         texturesLoaded &= loadTexture("PLAYER_MENU_UI", PLAYER_MENU_UI);
         texturesLoaded &= loadTexture("ARMY_MENU_UI", ARMY_MENU_UI);
         texturesLoaded &= loadTexture("background", BACKGROUND);
@@ -75,6 +71,28 @@ public:
         texturesLoaded &= loadTexture("PIRATE_ONE", PIRATE_ONE);
         texturesLoaded &= loadTexture("POP_UP", POP_UP);
 
+
+    //Boats
+        texturesLoaded &= loadBoatTexture("Red","HEALTHY", RED_SHIP_HEALTHY);
+        texturesLoaded &= loadBoatTexture("Red", "DAMAGED", RED_SHIP_DAMAGED);
+        texturesLoaded &= loadBoatTexture("Red", "BROKEN", RED_SHIP_BROKEN);
+
+        texturesLoaded &= loadBoatTexture("Yellow", "HEALTHY", YELLOW_SHIP_HEALTHY);
+        texturesLoaded &= loadBoatTexture("Yellow", "DAMAGED", YELLOW_SHIP_DAMAGED);
+        texturesLoaded &= loadBoatTexture("Yellow", "BROKEN", YELLOW_SHIP_BROKEN);
+
+        texturesLoaded &= loadBoatTexture("Black", "HEALTHY", BLACK_SHIP_HEALTHY);
+        texturesLoaded &= loadBoatTexture("Black", "DAMAGED", BLACK_SHIP_DAMAGED);
+        texturesLoaded &= loadBoatTexture("Black", "BROKEN", BLACK_SHIP_BROKEN);
+
+        texturesLoaded &= loadBoatTexture("Blue", "HEALTHY", BLUE_SHIP_HEALTHY);
+        texturesLoaded &= loadBoatTexture("Blue", "DAMAGED", BLUE_SHIP_DAMAGED);
+        texturesLoaded &= loadBoatTexture("Blue", "BROKEN", BLUE_SHIP_BROKEN);
+
+        texturesLoaded &= loadBoatTexture("Green", "HEALTHY", GREEN_SHIP_HEALTHY);
+        texturesLoaded &= loadBoatTexture("Green", "DAMAGED", GREEN_SHIP_DAMAGED);
+        texturesLoaded &= loadBoatTexture("Green", "BROKEN", GREEN_SHIP_BROKEN);
+
         return fontsLoaded && texturesLoaded;
     }
 
@@ -84,6 +102,10 @@ public:
 
     sf::Texture& getTexture(const std::string& name) {
         return textures[name];
+    }
+
+    sf::Texture& getBoatTexture(const std::string& parent, const std::string& name) {
+        return boatTextures.at(parent).at(name);
     }
 
     bool isFontLoaded() const { return fontLoaded; }
@@ -103,6 +125,15 @@ private:
         return false;
     }
 
+    bool loadBoatTexture(const std::string& parent, const std::string& name, const std::string& filename) {
+        sf::Texture texture;
+        if (texture.loadFromFile(filename)) {
+            boatTextures[parent][name] = std::move(texture);
+            return true;
+        }
+        return false;
+    }
+
     bool loadFont(const std::string& name, const std::string& filename) {
         sf::Font font;
         if (font.loadFromFile(filename)) {
@@ -112,6 +143,7 @@ private:
         return false;
     }
     bool fontLoaded = false;
+    std::map<std::string, std::map<std::string, sf::Texture>> boatTextures;
     std::map<std::string, sf::Texture> textures;
     std::map<std::string, sf::Font> fonts;
 };

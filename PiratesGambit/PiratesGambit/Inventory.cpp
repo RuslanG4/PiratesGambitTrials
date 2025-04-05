@@ -29,6 +29,34 @@ std::unique_ptr<InventoryItem> Inventory::removeItem(ItemName _name)
 	return nullptr;
 }
 
+bool Inventory::removeItemFromStack(ItemName _name)
+{
+	auto it = std::find_if(inventory.begin(), inventory.end(), [&](const std::unique_ptr<InventoryItem>& item) {
+		return item->getItemName() == _name;
+		});
+
+	if (it != inventory.end()) {
+		(*it)->removeFromCurrentStack(1);
+		if ((*it)->getStackSize() <= 0) {
+			removeItem(_name);
+		}
+		return true;
+	}
+	return false;
+}
+
+const InventoryItem* Inventory::getItem(ItemName _name)  
+{  
+   auto it = std::find_if(inventory.begin(), inventory.end(), [&](const std::unique_ptr<InventoryItem>& item) {  
+       return item->getItemName() == _name;  
+   });  
+
+   if (it != inventory.end()) {  
+       return it->get();  
+   }  
+   return nullptr;  
+}
+
 void Inventory::openInventory()
 {
 	inventoryOpen = true;

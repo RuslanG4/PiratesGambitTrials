@@ -4,25 +4,20 @@
 #include"Node.h"
 #include"HitBox.h"
 #include"CannonBall.h"
+#include"SmokeParticle.h"
 
 class Enemy;
 
 class EnemyBoat
 {
 public:
-	EnemyBoat(const std::shared_ptr<Enemy>& _refEnemy, const UnitAllegiance& _allegiance)
-	{
-		enemyRef = _refEnemy;
-
-		setShipTexture(_allegiance);
-		boatSprite.setOrigin(56, 33);
-		boatSprite.setScale(0.5, 0.5);
-
-		myHitbox = new HitBox(sf::Vector2f(56, 25));
-	}
+	EnemyBoat(const std::shared_ptr<Enemy>& _refEnemy, const UnitAllegiance& _allegiance);
 
 	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
 	void update(double dt);
+
+	void takeDamage();
+	void decideSprite();
 
 	void RotateTowardsPlayer(sf::Vector2f _pos);
 
@@ -39,8 +34,12 @@ public:
 
 	sf::FloatRect GetGlobalBounds() const { return boatSprite.getGlobalBounds(); }
 
+	const std::shared_ptr<Enemy>& getEnemyRef() const { return enemyRef; }
+
+
 private:
 	void setShipTexture(const UnitAllegiance& _allegiance);
+	void createSmokeParticles(double dt);
 
 	sf::Vector2f position;
 	sf::Sprite boatSprite;
@@ -53,6 +52,12 @@ private:
 	bool canShoot{ true };
 
 	std::shared_ptr<Enemy> enemyRef;
-};
 
+	std::random_device rd;
+	std::vector<SmokeParticle> smokeParticles;
+	float smokeScale;
+	float emitionRate;
+
+	int totalHealth = 100;
+};
 #endif // ENEMYBOAT_H

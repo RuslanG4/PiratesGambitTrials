@@ -117,6 +117,28 @@ void Enemy::ChangeState(EnemyState* newState)
 		currentActionState->Enter(*this);
 }
 
+void Enemy::setFactionAllegiance()
+{
+	switch (enemyAllegiance)
+	{
+	case YELLOW_PLAYER:
+		factionAllegiance = "Yellow";
+		break;
+	case RED_PLAYER:
+		factionAllegiance = "Red";
+		break;
+	case BLUE_PLAYER:
+		factionAllegiance = "Blue";
+		break;
+	case GREEN_PLAYER:
+		factionAllegiance = "Green";
+		break;
+	case BLACK_PLAYER:
+		factionAllegiance = "Black";
+		break;
+	}
+}
+
 std::string Enemy::GetEnemyAllegiance() const
 {
 	switch(enemyAllegiance)
@@ -135,6 +157,12 @@ std::string Enemy::GetEnemyAllegiance() const
 		return "Unknown";
 	}
 
+}
+
+void Enemy::updateEnemyAllegiance(const int& _value)
+{
+	playerAllegiance.changeAllegiance(_value);
+	enemyUI->updateAllegiance(playerAllegiance);
 }
 
 

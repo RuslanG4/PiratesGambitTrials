@@ -3,6 +3,7 @@
 #include "IconButton.h"
 #include"Includes.h"
 #include"AllianceStatusUI.h"
+#include"Enemy.h"
 
 class AllianceDialogueUI {
 public:
@@ -17,12 +18,10 @@ public:
 
     void Update();
 
-    void OpenMenu();
+    void OpenMenu(const std::shared_ptr<Enemy>& _enemyRef);
     void CloseMenu();
 
     bool isMenuOpen() const { return isOpen; }
-
-    void setAllianceLevel(int level);
 
     void Render(const std::unique_ptr<sf::RenderWindow>& _window) const;
 

@@ -420,6 +420,12 @@
     <ClCompile Include="BirdUnit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ExplosionParticle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SmokeParticle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -717,6 +723,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BirdUnit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ExplosionParticle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SmokeParticle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
