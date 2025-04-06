@@ -14,6 +14,8 @@
 #include"EnemyScoutUI.h"
 #include <fstream>
 #include "json.hpp"
+#include"FindBoatState.h"
+#include"KeyPopUpManager.h"
 
 class PlayerTabMenu;
 
@@ -43,7 +45,8 @@ private:
 
 	void HandleMovement() const;
 
-	void HandleProjectiles() const;
+	void HandleProjectiles();
+	void RemoveEnemy();
 
 	std::shared_ptr<Node> FindCurrentNode(sf::Vector2f _position) const;
 	void UpdatePlayerCurrentNode() const;
@@ -53,6 +56,7 @@ private:
 
 	void interactWithObjects(const std::shared_ptr<Node>& _node);
 	bool interactWithBuildings(const std::shared_ptr<Node>& _node);
+	void handleKeyPopUps();
 
 	void transferInventoryItems();
 

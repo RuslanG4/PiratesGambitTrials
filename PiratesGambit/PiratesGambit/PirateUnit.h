@@ -74,6 +74,7 @@ public:
 	sf::Vector2f getPosition() const { return sprite.getPosition(); }
 	int getSpeed() const { return unitStats.speed; }
 	sf::FloatRect getGlobalBounds() const { return sprite.getGlobalBounds(); }
+	void setStackSize(int _size) { unitStats.stackSize = _size; }
 
 	UnitState currentState = IDLE;
 

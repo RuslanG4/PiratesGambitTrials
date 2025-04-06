@@ -26,12 +26,16 @@ const char* const PLAYER_DAMAGED = "ASSETS\\IMAGES\\PLAYER\\PLAYER_DAMAGED.png";
 const char* const PLAYER_PLASTERED = "ASSETS\\IMAGES\\PLAYER\\PLAYER_PLASTERED.png";
 const char* const CANNON_BALL = "ASSETS\\IMAGES\\Pirates\\MiniCannonBall.png";
 const char* const HARPOON = "ASSETS\\IMAGES\\Pirates\\MiniHarpoon.png";
+//Keys
+const char* const V_KEY = "ASSETS\\IMAGES\\KEYS\\V-Key.png";
+const char* const X_KEY = "ASSETS\\IMAGES\\KEYS\\X-Key.png";
+const char* const E_KEY = "ASSETS\\IMAGES\\KEYS\\E-Key.png";
 
 //Menus
 const char* const SEA_BG = "ASSETS\\IMAGES\\MENU\\sea.png";
 
 //GameObjects
-const char* const BARREL = "ASSETS\\IMAGES\\GameObjects\\BARREL.png";
+const char* const BARREL_SPRITE = "ASSETS\\IMAGES\\GameObjects\\BARREL.png";
 const char* const TREE0 = "ASSETS\\IMAGES\\GameObjects\\TREE0.png";
 const char* const TREE1 = "ASSETS\\IMAGES\\GameObjects\\TREE1.png";
 

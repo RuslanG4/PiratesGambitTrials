@@ -26,11 +26,11 @@ void BuildingPopUp::Update(float dt)
 {
 	if (!isActive) return;
 
-	static float time = 0.0f;
-	time += dt * 0.001f;
+	pulseTime += dt; 
 
-	float scaleFactor = 0.75 + std::sin(time) * 0.025f;
-	float bgScaleFactor = 0.5 + std::sin(time) * 0.025f;
+	float scaleFactor = 0.75f + std::sin(pulseTime * 0.001f) * 0.025f;
+	float bgScaleFactor = 0.5f + std::sin(pulseTime * 0.001f) * 0.025f;
+
 	icon.setScale(scaleFactor, scaleFactor);
 	background.setScale(bgScaleFactor, bgScaleFactor);
 }

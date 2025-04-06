@@ -44,7 +44,7 @@ public:
         texturesLoaded &= loadTexture("HARPOONER", HARPOONER_SPRITE);
         texturesLoaded &= loadTexture("CANNON_UNIT", CANNON_UNIT_SPRITE);
         texturesLoaded &= loadTexture("BIRD", BIRD_SPRITE);
-        texturesLoaded &= loadTexture("BARREL", BARREL);
+        texturesLoaded &= loadTexture("BARREL", BARREL_SPRITE);
         texturesLoaded &= loadTexture("TREEA", TREE0);
         texturesLoaded &= loadTexture("TREEB", TREE1);
         texturesLoaded &= loadTexture("CANNON_BALL_ICON", CANNON_BALL_ICON);
@@ -71,7 +71,10 @@ public:
         texturesLoaded &= loadTexture("PIRATE_ONE", PIRATE_ONE);
         texturesLoaded &= loadTexture("POP_UP", POP_UP);
 
-
+        //keys
+        texturesLoaded &= loadTexture("V-KEY", V_KEY);
+        texturesLoaded &= loadTexture("X-KEY", X_KEY);
+        texturesLoaded &= loadTexture("E-KEY", E_KEY);
     //Boats
         texturesLoaded &= loadBoatTexture("Red","HEALTHY", RED_SHIP_HEALTHY);
         texturesLoaded &= loadBoatTexture("Red", "DAMAGED", RED_SHIP_DAMAGED);

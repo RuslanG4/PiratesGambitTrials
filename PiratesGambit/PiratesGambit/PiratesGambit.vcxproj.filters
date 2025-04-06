@@ -426,6 +426,12 @@
     <ClCompile Include="SmokeParticle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BattleUIButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyPopUpManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -729,6 +735,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SmokeParticle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleUIButton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyPopUpManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

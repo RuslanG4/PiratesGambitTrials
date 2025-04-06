@@ -51,6 +51,15 @@ public:
 
 	}
 
+	void TakeDamage(int _damage)
+	{
+		health -= _damage;
+		if (health <= 0)
+		{
+			//handle death
+		}
+	}
+
 	void updateIndicator();
 
 	void setRotation(float _rotation){ boatSprite.setRotation(_rotation); }
@@ -75,6 +84,8 @@ private:
 
 	BoatController* controller;
 	std::shared_ptr<Player> currentPlayer;
+
+	int health = 100;
 
 };
 

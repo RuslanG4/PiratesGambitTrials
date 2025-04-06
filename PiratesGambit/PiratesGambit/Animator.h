@@ -65,6 +65,9 @@ public:
     /// <param name="_dt">Delta time for animation updates.</param>
     void AnimateParticle(sf::Sprite& _sprite, AnimationState& _state, bool& _animationComplete, int _colNum, int _rowNum, int _width, int _height, float _dt);
 
+
+    void AnimateKey(sf::Sprite& _sprite, AnimationState& _state, int _colNum, int _rowNum, float _dt);
+
     /// <summary>
     /// Deleted copy constructor to prevent multiple instances.
     /// </summary>

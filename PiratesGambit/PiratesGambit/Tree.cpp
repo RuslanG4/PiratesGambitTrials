@@ -26,6 +26,8 @@ Tree::Tree()
 
 	scale = dist(gen);
 
+	objectName = TREE;
+
 	sprite.setScale(scale, scale);
 
 	myHitbox = std::make_unique<HitBox>(sf::Vector2f(12, 5));

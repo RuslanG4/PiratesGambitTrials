@@ -18,11 +18,13 @@ public:
 	virtual sf::Vector2f GetPosition() const = 0;
 
 	sf::FloatRect GetHitBox()const { return myHitbox->GetGlobalBounds(); }
+	ObjectName getName() const { return objectName; }
 
 protected:
 	sf::Sprite sprite;
 	int currentNodeId;
 
+	ObjectName objectName;
 	std::unique_ptr<Inventory> inventory;
 	std::unique_ptr<HitBox> myHitbox;
 };

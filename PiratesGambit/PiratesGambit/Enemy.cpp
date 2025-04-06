@@ -106,6 +106,15 @@ void Enemy::disembarkBoat(const std::shared_ptr<Node>& _node)
 	boatRef->setDockedNode(_node);
 }
 
+void Enemy::LoseArmy()
+{
+	float lossPercent = 0.1f; // 10% loss
+	for (auto& unit : army->getArmy())
+	{
+		unit->setStackSize(std::round(unit->getStackSize() - (unit->getStackSize() * lossPercent))); //round up
+	}
+}
+
 void Enemy::ChangeState(EnemyState* newState)
 {
 	if (currentState)

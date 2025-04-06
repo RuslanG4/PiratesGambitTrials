@@ -15,7 +15,7 @@ public:
 	void ClosePopUp() { isActive = false; }
 private:
 	bool isActive = true;
-
+	float pulseTime = 0.0f;
 	sf::Sprite background;
 	sf::Sprite icon;
 };

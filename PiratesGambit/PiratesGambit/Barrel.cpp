@@ -15,6 +15,8 @@ Barrel::Barrel()
 	sprite.setScale(1.15f, 1.15f);
 	sprite.setOrigin(12, 12);
 
+	objectName = BARREL;
+
 	myHitbox = std::make_unique<HitBox>(sf::Vector2f(8, 15));
 	myHitbox->setPosition(sprite.getPosition());
 }

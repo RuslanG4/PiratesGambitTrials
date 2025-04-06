@@ -23,6 +23,7 @@ public:
 
 	sf::Vector2f getPosition() const { return position; }
 	const std::shared_ptr<Node>& getDockedNode() const { return dockedNode; }
+	bool isAlive() const { return totalHealth > 0; }
 
 	/*void addCannonBall();
 	void fireCannonBall(int _direction);*/

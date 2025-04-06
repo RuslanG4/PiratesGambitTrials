@@ -89,10 +89,13 @@ public:
 	void boardBoat(const std::shared_ptr<EnemyBoat>& _boat);
 	void disembarkBoat(const std::shared_ptr<Node>& _node);
 	bool isOnBoat() const { return onBoat; }
+	void markForDeath() { drowned = true; }
+	bool isAlive() const { return !drowned; }
 	std::shared_ptr<EnemyBoat> GetBoat() const { return boatRef; }
 
 	//Army
 	const std::unique_ptr<Army>& getArmy() const { return army; }
+	void LoseArmy();
 
 	void ChangeState(EnemyState* newState);
 	EnemyState* GetCurrentState() const { return currentActionState; }
@@ -157,6 +160,7 @@ private:
 	//Boat
 	std::shared_ptr<EnemyBoat> boatRef;
 	bool onBoat{ false };
+	bool drowned{ false };
 
 	//ID
 	int enemyID;

@@ -152,6 +152,7 @@
     <ClCompile Include="BattleGridNode.cpp" />
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="BattleSceneTransition.cpp" />
+    <ClCompile Include="BattleUIButton.cpp" />
     <ClCompile Include="BirdUnit.cpp" />
     <ClCompile Include="BloodParticle.cpp" />
     <ClCompile Include="Boat.cpp" />
@@ -201,6 +202,7 @@
     <ClCompile Include="InventoryItem.cpp" />
     <ClCompile Include="InventorySlot.cpp" />
     <ClCompile Include="Island.cpp" />
+    <ClCompile Include="KeyPopUpManager.cpp" />
     <ClCompile Include="LeafParticle.cpp" />
     <ClCompile Include="LoadingScene.cpp" />
     <ClCompile Include="main.cpp" />
@@ -248,6 +250,7 @@
     <ClInclude Include="BattleGridNode.h" />
     <ClInclude Include="BattleScene.h" />
     <ClInclude Include="BattleSceneTransition.h" />
+    <ClInclude Include="BattleUIButton.h" />
     <ClInclude Include="BirdUnit.h" />
     <ClInclude Include="BloodParticle.h" />
     <ClInclude Include="Boat.h" />
@@ -301,6 +304,7 @@
     <ClInclude Include="InventoryItem.h" />
     <ClInclude Include="InventorySlot.h" />
     <ClInclude Include="Island.h" />
+    <ClInclude Include="KeyPopUpManager.h" />
     <ClInclude Include="LeafParticle.h" />
     <ClInclude Include="LoadingScene.h" />
     <ClInclude Include="MainMenuScene.h" />

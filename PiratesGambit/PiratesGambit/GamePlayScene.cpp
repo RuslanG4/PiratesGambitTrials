@@ -76,7 +76,7 @@ void GamePlayScene::update(float dt)
 			interactWithObjects(updateableNode);
 			transitionToBattleMode(updateableNode);
 		}
-
+		handleKeyPopUps();
 
 		if (myPlayer->isOnBoat())
 		{
@@ -110,6 +110,7 @@ void GamePlayScene::update(float dt)
 		AllianceDialogueUI::getInstance().Update();
 	}
 	HireRecruitUI::getInstance().Update(dt);
+	KeyPopUpManager::getInstance().Update(dt);
 }
 
 void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
@@ -161,6 +162,7 @@ void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 	BulletFactory::getInstance().render(window);
 	ParticleManager::getInstance().render(window);
 
+	KeyPopUpManager::getInstance().Render(window);
 
 	UnitStatsDisplay::getInstance().Render(window);
 	EnemyScoutUI::getInstance().Render(window);
@@ -498,7 +500,7 @@ void GamePlayScene::HandleMovement() const
 	}
 }
 
-void GamePlayScene::HandleProjectiles() const
+void GamePlayScene::HandleProjectiles()
 {
 	bool found = false;
 	auto& projectiles = BulletFactory::getInstance().GetProjectiles();
@@ -508,10 +510,22 @@ void GamePlayScene::HandleProjectiles() const
 		for (auto& boat : enemyBoats) {
 			if ((*it)->getBounds().intersects(boat->GetGlobalBounds()))
 			{
-				it = projectiles.erase(it);
-				ParticleManager::getInstance().CreateExplosionParticle(boat->getPosition());
-				boat->getEnemyRef()->updateAllegiance(-40); // - 40 rep
 				boat->takeDamage();
+				ParticleManager::getInstance().CreateExplosionParticle(boat->getPosition());
+				if (boat->isAlive()) {
+					if (!boat->getEnemyRef()->isOnBoat()) {
+						boat->getEnemyRef()->ChangeState(new FindBoatState(myPlayer));
+					}
+					else {
+						boat->getEnemyRef()->LoseArmy();
+					}
+					boat->getEnemyRef()->updateAllegiance(-40); // - 40 rep
+				}
+				else {
+					boat->getEnemyRef()->markForDeath();
+					RemoveEnemy();
+				}
+				it = projectiles.erase(it);
 				found = true;
 				break;
 			}
@@ -524,6 +538,22 @@ void GamePlayScene::HandleProjectiles() const
 			it++;
 		}
 	}
+}
+
+void GamePlayScene::RemoveEnemy() 
+{
+	enemyBoats.erase(
+		std::remove_if(enemyBoats.begin(), enemyBoats.end(),
+			[](const std::shared_ptr<EnemyBoat>& boat) {
+				return !boat->isAlive();
+			}),
+		enemyBoats.end());
+	enemies.erase(
+		std::remove_if(enemies.begin(), enemies.end(),
+			[](const std::shared_ptr<Enemy>& enemy) {
+				return !enemy->isAlive();
+			}),
+		enemies.end());
 }
 
 std::shared_ptr<Node> GamePlayScene::FindCurrentNode(sf::Vector2f _position) const
@@ -624,6 +654,61 @@ bool GamePlayScene::interactWithBuildings(const std::shared_ptr<Node>& _node)
 
 	return false;
 }
+
+void GamePlayScene::handleKeyPopUps()
+{
+	auto& updateableNodes = myPlayer->getUpdateableArea()->getUpdateableNodes();
+	auto playerPos = myPlayer->getPlayerController()->getPosition();
+
+	bool showXKey = std::any_of(enemies.begin(), enemies.end(),
+		[&](const std::shared_ptr<Enemy>& enemy) {
+			return !enemy->GetPlayerAllegiance().isHostile() &&
+				std::find(updateableNodes.begin(), updateableNodes.end(), enemy->getCurrentNode()) != updateableNodes.end();
+		});
+
+	if (showXKey) {
+		KeyPopUpManager::getInstance().showKey(playerPos, "X-KEY");
+		return;
+	}
+
+	auto playerBoatPtr = playerBoat;
+
+	if (myPlayer->isOnBoat()) {
+		bool landNearby = std::any_of(updateableNodes.begin(), updateableNodes.end(),
+			[](const std::shared_ptr<Node>& node) {
+				return node->getIsLand();
+			});
+
+		if (landNearby) {
+			KeyPopUpManager::getInstance().showKey(playerPos, "V-KEY");
+		}
+		else {
+			KeyPopUpManager::getInstance().hideKey();
+		}
+	}
+	else {
+		bool nearBoatDock = std::find(updateableNodes.begin(), updateableNodes.end(), playerBoatPtr->getDockedNode()) != updateableNodes.end();
+		bool nearBuilding = std::any_of(updateableNodes.begin(), updateableNodes.end(),
+			[](const std::shared_ptr<Node>& node) {
+				return node->GetBuilding();
+			});
+		bool nearObject = std::any_of(updateableNodes.begin(), updateableNodes.end(),
+			[](const std::shared_ptr<Node>& node) {
+				return node->GetObject() && node->GetObject()->getName() == BARREL;
+			});
+
+		if (nearBoatDock) {
+			KeyPopUpManager::getInstance().showKey(playerPos, "V-KEY");
+		}
+		else if (nearBuilding || nearObject) {
+			KeyPopUpManager::getInstance().showKey(playerPos, "E-KEY");
+		}
+		else {
+			KeyPopUpManager::getInstance().hideKey();
+		}
+	}
+}
+
 
 void GamePlayScene::transferInventoryItems()
 {

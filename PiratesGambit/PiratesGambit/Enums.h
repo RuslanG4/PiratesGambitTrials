@@ -73,6 +73,12 @@ enum UnitName
 	BIRD
 };
 
+enum ObjectName {
+	NO_OBJECT,
+	BARREL,
+	TREE
+};
+
 enum ItemName
 {
 	NO_ITEM,

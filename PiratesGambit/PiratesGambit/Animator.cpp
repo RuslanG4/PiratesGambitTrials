@@ -97,3 +97,25 @@ void Animator::AnimateParticle(sf::Sprite& _sprite, AnimationState& _state, bool
 	rectSourceSprite.top = row * rectSourceSprite.height;
 	_sprite.setTextureRect(rectSourceSprite);
 }
+
+void Animator::AnimateKey(sf::Sprite& _sprite, AnimationState& _state, int _colNum, int _rowNum, float _dt)
+{
+	const float frameDuration = 0.03f;
+
+	_state.elapsedTime += _dt * 0.0001f;
+
+	if (_state.elapsedTime >= frameDuration)
+	{
+		_state.currentFrame++;
+		_state.elapsedTime = 0;
+	}
+	int col = _state.currentFrame % _colNum;
+	int row = _rowNum;
+
+	sf::IntRect rectSourceSprite;
+	rectSourceSprite.height = 32;
+	rectSourceSprite.width = 32;
+	rectSourceSprite.left = col * rectSourceSprite.width;
+	rectSourceSprite.top = 0;
+	_sprite.setTextureRect(rectSourceSprite);
+}
