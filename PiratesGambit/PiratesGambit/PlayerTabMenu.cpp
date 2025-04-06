@@ -40,11 +40,17 @@ void PlayerTabMenu::Interact(const std::shared_ptr<Player>& _player)
 	{
 		OpenMenu();
 		UpdateUnitAmountUI(_player->getArmy());
+		UpdateSlots(_player->getArmy());
 		UpdateResourcesUI(_player->getInventory());
 	}else
 	{
 		CloseMenu();
 	}
+}
+
+void PlayerTabMenu::UpdateSlots(const std::unique_ptr<Army>& _army)
+{
+	armyMenu->updateSlot(_army);
 }
 
 void PlayerTabMenu::UpdateUnitAmountUI(const std::unique_ptr<Army>& _army)

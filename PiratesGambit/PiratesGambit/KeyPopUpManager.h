@@ -20,7 +20,7 @@ private:
     std::map<char, sf::Texture> keyTextures;
     sf::Sprite keySprite;
     bool isVisible = false;
-    sf::Vector2f offset = { 0.f, -25.f };
+    sf::Vector2f offset = { 0.f, -35.f };
     AnimationState state;
 
     KeyPopUpManager(const KeyPopUpManager&) = delete;

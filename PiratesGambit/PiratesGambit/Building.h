@@ -55,5 +55,7 @@ protected:
 	bool isActive = true;
 
 	float progress = 1;
+
+	int costPerTroop;
 };
 

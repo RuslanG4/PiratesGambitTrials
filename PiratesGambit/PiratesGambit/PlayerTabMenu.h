@@ -15,6 +15,7 @@ public:
 	static void OpenMenu() { isOpen = true; }
 	static void CloseMenu() { isOpen = false; }
 
+	void UpdateSlots(const std::unique_ptr<Army>& _army);
 	void UpdateUnitAmountUI(const std::unique_ptr<Army>& _army);
 	void UpdateResourcesUI(const std::unique_ptr<Inventory>& _inventory);
 

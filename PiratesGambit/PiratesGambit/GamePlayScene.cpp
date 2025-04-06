@@ -170,7 +170,7 @@ void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 	BulletFactory::getInstance().render(window);
 	ParticleManager::getInstance().render(window);
 
-	KeyPopUpManager::getInstance().Render(window);
+	
 
 	UnitStatsDisplay::getInstance().Render(window);
 	EnemyScoutUI::getInstance().Render(window);
@@ -190,6 +190,11 @@ void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 	if (HireRecruitUI::getInstance().IsMenuOpen())
 	{
 		HireRecruitUI::getInstance().Render(window);
+	}
+
+	if (!HireRecruitUI::getInstance().IsUIOpen() && !AllianceDialogueUI::getInstance().isMenuOpen() && !RenderableInventory::getInstance().isOpen() && !PlayerTabMenu::isMenuOpen())
+	{
+		KeyPopUpManager::getInstance().Render(window);
 	}
 	
 }

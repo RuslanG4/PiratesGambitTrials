@@ -10,8 +10,10 @@ BuccaneerBuilding::BuccaneerBuilding(const std::shared_ptr<Player>& _playerRef)
 	buildingSprite.setOrigin(24, 24); //half of 48
 	buildingSprite.setScale(2, 2);
 
-	maxUnitAmount = 14;
+	maxUnitAmount = 22;
 	unitType = BUCCANEER;
+
+	costPerTroop = 85;
 
 	popUp = std::make_unique<BuildingPopUp>();
 

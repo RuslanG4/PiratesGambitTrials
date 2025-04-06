@@ -5,6 +5,9 @@
 #include"InfoBoxUI.h"
 #include "BuccaneerIcon.h"
 #include "GunnerIcon.h"
+#include"HarpoonerIcon.h"
+#include"CannonIcon.h"
+#include"BirdIcon.h"
 #include "Slider.h"
 #include"IconButton.h"
 #include"Player.h"
@@ -21,7 +24,7 @@ public:
 
     void SetUpUi();
 
-    void PassUI(UnitName _type, int _unitAmount, Building& building);
+    void PassUI(UnitName _type, int _unitAmount, Building& building, int _cost);
     void PassPlayer(std::shared_ptr<Player>& _playerRef) { playerRef = _playerRef; }
 
     // Delete copy constructor & assignment operator (Singleton Rule)
@@ -57,6 +60,8 @@ private:
     bool resetValue = false;
     int unitsLeftReference;
     int availableUnits;
+
+    int costPerUnit = 0;
 
     sf::Sprite background;
     sf::Sprite unit;

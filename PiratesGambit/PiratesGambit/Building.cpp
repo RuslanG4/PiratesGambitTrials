@@ -38,7 +38,7 @@ void Building::Interact()
 	if (!HireRecruitUI::getInstance().IsMenuOpen())
 	{
 		HireRecruitUI::getInstance().OpenUI();
-		HireRecruitUI::getInstance().PassUI(unitType, maxUnitAmount, *this);
+		HireRecruitUI::getInstance().PassUI(unitType, maxUnitAmount, *this, costPerTroop);
 	}
 	else
 	{

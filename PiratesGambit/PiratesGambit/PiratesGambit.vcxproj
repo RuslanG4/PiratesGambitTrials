@@ -153,6 +153,8 @@
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="BattleSceneTransition.cpp" />
     <ClCompile Include="BattleUIButton.cpp" />
+    <ClCompile Include="BirdBuilding.cpp" />
+    <ClCompile Include="BirdIcon.cpp" />
     <ClCompile Include="BirdUnit.cpp" />
     <ClCompile Include="BloodParticle.cpp" />
     <ClCompile Include="Boat.cpp" />
@@ -167,6 +169,8 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CannonBall.cpp" />
     <ClCompile Include="CannonBallItem.cpp" />
+    <ClCompile Include="CannonBuilding.cpp" />
+    <ClCompile Include="CannonIcon.cpp" />
     <ClCompile Include="CannonUnit.cpp" />
     <ClCompile Include="ChaseState.cpp" />
     <ClCompile Include="Coins.cpp" />
@@ -194,6 +198,8 @@
     <ClCompile Include="GunnerIcon.cpp" />
     <ClCompile Include="Harpoon.cpp" />
     <ClCompile Include="Harpooner.cpp" />
+    <ClCompile Include="HarpoonerBuilding.cpp" />
+    <ClCompile Include="HarpoonerIcon.cpp" />
     <ClCompile Include="HireRecruitUI.cpp" />
     <ClCompile Include="HitBox.cpp" />
     <ClCompile Include="HomeScreenButton.cpp" />
@@ -254,6 +260,8 @@
     <ClInclude Include="BattleScene.h" />
     <ClInclude Include="BattleSceneTransition.h" />
     <ClInclude Include="BattleUIButton.h" />
+    <ClInclude Include="BirdBuilding.h" />
+    <ClInclude Include="BirdIcon.h" />
     <ClInclude Include="BirdUnit.h" />
     <ClInclude Include="BloodParticle.h" />
     <ClInclude Include="Boat.h" />
@@ -268,6 +276,8 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CannonBall.h" />
     <ClInclude Include="CannonBallItem.h" />
+    <ClInclude Include="CannonBuilding.h" />
+    <ClInclude Include="CannonIcon.h" />
     <ClInclude Include="CannonUnit.h" />
     <ClInclude Include="ChaseState.h" />
     <ClInclude Include="Coins.h" />
@@ -298,6 +308,8 @@
     <ClInclude Include="GunnerIcon.h" />
     <ClInclude Include="Harpoon.h" />
     <ClInclude Include="Harpooner.h" />
+    <ClInclude Include="HarpoonerBuilding.h" />
+    <ClInclude Include="HarpoonerIcon.h" />
     <ClInclude Include="HireRecruitUI.h" />
     <ClInclude Include="HitBox.h" />
     <ClInclude Include="HomeScreenButton.h" />

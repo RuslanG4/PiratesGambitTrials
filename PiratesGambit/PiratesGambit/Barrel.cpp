@@ -8,8 +8,20 @@ Barrel::Barrel()
 {
 	inventory = std::make_unique<Inventory>();
 
-	inventory->addItem(std::make_unique<CannonBallItem>(6));
-	inventory->addItem(std::make_unique<Coins>(6000));
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+
+	std::uniform_int_distribution<> cannonBallDist(0, 4);
+	int randomCannonballs = cannonBallDist(gen);
+
+	std::uniform_int_distribution<> coinDist(150, 1000);
+	int randomCoins = coinDist(gen);
+
+	if (randomCannonballs > 0)
+		inventory->addItem(std::make_unique<CannonBallItem>(randomCannonballs));
+
+	inventory->addItem(std::make_unique<Coins>(randomCoins));
 
 	sprite.setTexture(TextureManager::getInstance().getTexture("BARREL"));
 	sprite.setScale(1.15f, 1.15f);

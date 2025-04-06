@@ -215,21 +215,42 @@ void Island::GenerateBuildings(int buildingCount, std::vector<std::shared_ptr<No
 			TownArea.clear();
 			continue; 
 		}
-		
-			bool placed = false;
-			for (auto& node : TownArea)
-			{
-				//node->debugShape->setFillColor(sf::Color::Blue);
-				node->UpdateIsBuildingArea(true);
-				if (!placed) {
-					auto building = std::make_shared<GunnerBuilding>(playerRef);
-					building->SetPosition(node->getMidPoint());
-					Mark3x3Area(node, building);
-					buildings.push_back(std::move(building));
-					placed = true;
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_int_distribution<> dist(0, 4);
+
+		bool placed = false;
+		for (auto& node : TownArea)
+		{
+			//node->debugShape->setFillColor(sf::Color::Blue);
+			node->UpdateIsBuildingArea(true);
+			if (!placed) {
+				std::shared_ptr<Building> building;
+
+				switch (dist(gen)) {
+				case 0:
+					building = std::make_shared<HarpoonerBuilding>(playerRef);
+					break;
+				case 1:
+					building = std::make_shared<GunnerBuilding>(playerRef);
+					break;
+				case 2:
+					building = std::make_shared<BuccaneerBuilding>(playerRef);
+					break;
+				case 3:
+					building = std::make_shared<BirdBuilding>(playerRef);
+					break;
+				case 4:
+					building = std::make_shared<CannonBuilding>(playerRef);
+					break;
 				}
 
+				building->SetPosition(node->getMidPoint());
+				Mark3x3Area(node, building);
+				buildings.push_back(std::move(building));
+				placed = true;
 			}
+		}
 
 	}
 }

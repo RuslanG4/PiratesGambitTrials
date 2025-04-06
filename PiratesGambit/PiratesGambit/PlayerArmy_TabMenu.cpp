@@ -55,6 +55,14 @@ void PlayerArmy_TabMenu::UpdateUnitAmount(const std::unique_ptr<Army>& _army)
 	}
 }
 
+void PlayerArmy_TabMenu::updateSlot(const std::unique_ptr<Army>& _army)
+{
+	for (int i = 0; i < _army->getArmy().size(); i++)
+	{
+		armySlots[i]->updateSlots(_army->getArmy()[i]->unitInformation.unitName, _army->getArmy()[i]->unitStats);
+	}
+}
+
 void PlayerArmy_TabMenu::Update()
 {
 	for(auto& slot : armySlots)

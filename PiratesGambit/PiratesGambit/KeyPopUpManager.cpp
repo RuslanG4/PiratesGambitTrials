@@ -5,7 +5,7 @@ void KeyPopUpManager::showKey(const sf::Vector2f& playerPos, std::string key)
 {
     keySprite.setTexture(TextureManager::getInstance().getTexture(key));
     keySprite.setOrigin(16, 16);
-    keySprite.setScale(0.5, 0.5);
+    keySprite.setScale(0.8, 0.8);
     keySprite.setPosition(playerPos + offset);
     isVisible = true;
 }

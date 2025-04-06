@@ -9,6 +9,7 @@ public:
 	PlayerArmy_TabMenu(const std::unique_ptr<Army>& _army, sf::Sprite _pos);
 
 	void UpdateUnitAmount(const std::unique_ptr<Army>& _army);
+	void updateSlot(const std::unique_ptr<Army>& _army);
 
 	void Update();
 	void Render(const std::unique_ptr<sf::RenderWindow>& _window) const;

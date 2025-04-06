@@ -48,11 +48,13 @@ void HireRecruitUI::SetUpUi()
 		TextureManager::getInstance().getTexture("MONEY_ICON"));
 }
 
-void HireRecruitUI::PassUI(UnitName _type, int _unitAmount, Building& building)
+void HireRecruitUI::PassUI(UnitName _type, int _unitAmount, Building& building, int _cost)
 {
 	unitsLeftReference = _unitAmount;
 	nameOfUnitSelling = _type;
 	buildingRef = &building;
+	costPerUnit = _cost;
+	costPerTroop->setText("Cost Per Troop", std::to_string(costPerUnit));
 
 	if(availableUnits <=0 && building.canBuyUnits())
 	{
@@ -75,7 +77,13 @@ void HireRecruitUI::SetCharacter()
 		unitIcon = std::make_unique<GunnerIcon>(sf::Vector2f(background.getPosition().x, background.getPosition().y - 200));
 		break;
 	case HARPOONER:
-		unitIcon = std::make_unique<GunnerIcon>(sf::Vector2f(background.getPosition().x, background.getPosition().y - 200));
+		unitIcon = std::make_unique<HarpoonerIcon>(sf::Vector2f(background.getPosition().x, background.getPosition().y - 200));
+		break;
+	case BIRD:
+		unitIcon = std::make_unique<BirdIcon>(sf::Vector2f(background.getPosition().x, background.getPosition().y - 200));
+		break;
+	case CANNON:
+		unitIcon = std::make_unique<CannonIcon>(sf::Vector2f(background.getPosition().x, background.getPosition().y - 200));
 		break;
 	}
 }
@@ -85,13 +93,19 @@ void HireRecruitUI::AddCharacterToPlayer() const
 	switch (nameOfUnitSelling)
 	{
 	case BUCCANEER:
-		playerRef->getArmy()->addUnit(std::make_unique<Buccaneer>(amountSlider->getValue(), RED_PLAYER));
+		playerRef->getArmy()->addUnit(std::make_unique<Buccaneer>(amountSlider->getValue(), HUMAN_PLAYER));
 		break;
 	case GUNNER:
-		playerRef->getArmy()->addUnit(std::make_unique<Gunner>(amountSlider->getValue(), RED_PLAYER));
+		playerRef->getArmy()->addUnit(std::make_unique<Gunner>(amountSlider->getValue(), HUMAN_PLAYER));
 		break;
 	case HARPOONER:
-		playerRef->getArmy()->addUnit(std::make_unique<Harpooner>(amountSlider->getValue(), RED_PLAYER));
+		playerRef->getArmy()->addUnit(std::make_unique<Harpooner>(amountSlider->getValue(), HUMAN_PLAYER));
+		break;
+	case BIRD:
+		playerRef->getArmy()->addUnit(std::make_unique<BirdUnit>(amountSlider->getValue(), HUMAN_PLAYER));
+		break;
+	case CANNON:
+		playerRef->getArmy()->addUnit(std::make_unique<CannonUnit>(amountSlider->getValue(), HUMAN_PLAYER));
 		break;
 	}
 }
@@ -129,12 +143,13 @@ void HireRecruitUI::Update(float _dt)
 		progressBar->PassProgress(buildingRef->getProgressValue());
 
 		recruit->UpdateText(std::to_string(amountSlider->getValue()));
-		totalCost->UpdateText(std::to_string(amountSlider->getValue() * 500)); //500 is per unit
+		totalCost->UpdateText(std::to_string(amountSlider->getValue() * costPerUnit)); 
 
 		cancel->Update();
 		if (cancel->IsTriggered() || sf::Keyboard::isKeyPressed((sf::Keyboard::Escape)))
 		{
 			cancel->ResetTrigger();
+			costPerUnit = 0;
 			CloseUI();
 		}
 
@@ -155,9 +170,9 @@ void HireRecruitUI::Update(float _dt)
 					});
 
 				if (it != playerRef->getInventory()->getItems().end()) {
-					if ((it->get()->getStackSize() - amountSlider->getValue() * 500) >= 0) {
+					if ((it->get()->getStackSize() - amountSlider->getValue() * costPerUnit) >= 0) {
 						std::cout << "prev stack size : " << it->get()->getStackSize() << "\n";
-						it->get()->removeFromCurrentStack(amountSlider->getValue() * 500);
+						it->get()->removeFromCurrentStack(amountSlider->getValue() * costPerUnit);
 						std::cout << "new stack size : " << it->get()->getStackSize() << "\n";
 						availableUnits -= amountSlider->getValue();
 						available->setText("Available", std::to_string(availableUnits));

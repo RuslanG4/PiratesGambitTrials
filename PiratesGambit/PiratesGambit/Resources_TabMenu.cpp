@@ -38,11 +38,6 @@ void Resources_TabMenu::UpdateMenu(const std::unique_ptr<Inventory>& _playerInve
 	}
 }
 
-void Resources_TabMenu::Update()
-{
-
-}
-
 void Resources_TabMenu::Render(const std::unique_ptr<sf::RenderWindow>& _window) const
 {
 	for(auto& slot : playerResources)
