@@ -192,7 +192,7 @@ void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 		HireRecruitUI::getInstance().Render(window);
 	}
 
-	if (!HireRecruitUI::getInstance().IsUIOpen() && !AllianceDialogueUI::getInstance().isMenuOpen() && !RenderableInventory::getInstance().isOpen() && !PlayerTabMenu::isMenuOpen())
+	if (!HireRecruitUI::getInstance().IsUIOpen() && !AllianceDialogueUI::getInstance().isMenuOpen() && !RenderableInventory::getInstance().isOpen() && !PlayerTabMenu::isMenuOpen() && !battle)
 	{
 		KeyPopUpManager::getInstance().Render(window);
 	}

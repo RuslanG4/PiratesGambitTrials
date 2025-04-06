@@ -156,6 +156,8 @@ private:
 
 	sf::Sprite background;
 
+	bool startUnit{ false };
+
 
 	bool showEndGame{ false };
 	sf::Clock endGameTimer;

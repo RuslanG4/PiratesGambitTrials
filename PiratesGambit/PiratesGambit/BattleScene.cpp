@@ -169,7 +169,12 @@ void BattleScene::updateNextTurn()
 	tacticsArmyUI->UpdateToInitiativeView();
 
 	//set next unit
+	if (!startUnit) {
 	currentSelectedUnit = tacticsArmyUI->initiativeSystem.getNextUnit();
+	}
+	else {
+		startUnit = false;
+	}
 
 	createMoveableArea(currentSelectedUnit);
 
@@ -304,9 +309,20 @@ void BattleScene::detectMouse()
 			placeUnits(enemyRef->getArmy(), true);
 			tacticsArmyUI->extend();
 			currentSelectedUnit = tacticsArmyUI->initiativeSystem.getNextUnit();
+
+			if (currentSelectedUnit->unitInformation.allegiance != HUMAN_PLAYER)
+			{
+				startEnemyTurnTimer = true;
+				enemyWaitTime.restart();
+				startUnit = true;
+				clearNodeArea(startArea);
+			}
+			else {
+				clearNodeArea(startArea);
+				createMoveableArea(currentSelectedUnit);
+			}
+			
 			UIInterface->updateModeString("Battle Mode");
-			clearNodeArea(startArea);
-			createMoveableArea(currentSelectedUnit);
 		}
 		sf::Vector2f mousePos = static_cast<sf::Vector2f>(Mouse::getInstance().getMousePosition());
 		switch (currentState)

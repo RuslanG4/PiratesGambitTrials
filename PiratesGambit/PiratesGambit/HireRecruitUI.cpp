@@ -170,7 +170,7 @@ void HireRecruitUI::Update(float _dt)
 					});
 
 				if (it != playerRef->getInventory()->getItems().end()) {
-					if ((it->get()->getStackSize() - amountSlider->getValue() * costPerUnit) >= 0) {
+					if ((it->get()->getStackSize() - amountSlider->getValue() * costPerUnit) > 0) {
 						std::cout << "prev stack size : " << it->get()->getStackSize() << "\n";
 						it->get()->removeFromCurrentStack(amountSlider->getValue() * costPerUnit);
 						std::cout << "new stack size : " << it->get()->getStackSize() << "\n";
