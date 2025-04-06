@@ -18,6 +18,8 @@ public:
 
 	void removeUnit(std::shared_ptr<PirateUnit> _unit);
 
+	bool isEmpty();
+
 	const std::vector<std::shared_ptr<PirateUnit>>& getArmy() const { return army; }
 
 private:

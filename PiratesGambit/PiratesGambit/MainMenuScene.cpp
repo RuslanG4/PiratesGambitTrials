@@ -8,8 +8,8 @@ MainMenuScene::MainMenuScene()
     background.setTexture(TextureManager::getInstance().getTexture("SEA_BG"));
     background.setScale(10, 9);
 
-    playButton = std::make_unique<Button>(sf::Vector2f(400, 300), "Play");
-    ExitButton = std::make_unique<Button>(sf::Vector2f(400, 475), "Quit");
+    playButton = std::make_unique<HomeScreenButton>(sf::Vector2f(400, 300), "Play");
+    ExitButton = std::make_unique<HomeScreenButton>(sf::Vector2f(400, 475), "Quit");
 }
 
 void MainMenuScene::handleInput(const std::unique_ptr<sf::RenderWindow>& window, sf::Event newEvent)

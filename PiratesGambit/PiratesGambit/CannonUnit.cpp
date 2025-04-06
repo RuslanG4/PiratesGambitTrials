@@ -69,19 +69,19 @@ void CannonUnit::animateSprite(float _dt)
 		}
 		break;
 	case DAMAGED:
-		Animator::getInstance().AnimateSprite(sprite, animationState, damagedAnimation, 2, 5, _dt);
+		Animator::getInstance().AnimateSprite(sprite, animationState, damagedAnimation, 2, 4, _dt);
 		if (damagedAnimation)
 		{
 			currentState = IDLE;
 		}
 		break;
 	case DEATH:
-		Animator::getInstance().AnimateSprite(sprite, animationState, deathAnimation, 4, 6, _dt);
+		Animator::getInstance().AnimateSprite(sprite, animationState, deathAnimation, 4, 5, _dt);
 		if (deathAnimation)
 		{
 			unitStats.isActive = false;
 			unitAmount->renderUnitAmount = false;
-			Animator::getInstance().AnimateDeath(sprite, 3, 6);
+			Animator::getInstance().AnimateDeath(sprite, 3, 5);
 		}
 		break;
 	}

@@ -47,6 +47,9 @@ void GamePlayScene::handleInput(const std::unique_ptr<sf::RenderWindow>& window,
 			transferInventoryItems();
 		}
 	}
+	if (battleScene) {
+		battleScene->handleEvent(newEvent);
+	}
 
 }
 
@@ -100,10 +103,15 @@ void GamePlayScene::update(float dt)
 		{
 			battle = true;
 		}
-
 	}
 	else {
 		battleScene->update(dt);
+		if (battleScene->isBattleOver()) {
+			battle = false;
+			auto enemyRef = battleScene->getEnemyRef();
+			enemies.erase(std::remove(enemies.begin(), enemies.end(), enemyRef), enemies.end());
+			battleScene->setEnemyRef(nullptr);
+		}
 	}
 	if (AllianceDialogueUI::getInstance().isMenuOpen())
 	{
@@ -612,6 +620,7 @@ void GamePlayScene::transitionToBattleMode(const std::shared_ptr<Node>& _node)
 			{
 				battleTransition.startTransition(1);
 				battleScene->setEnemyRef(enemy);
+				battleScene->resetBattle();
 			}
 		}
 	}

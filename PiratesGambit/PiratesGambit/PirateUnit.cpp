@@ -46,8 +46,9 @@ void PirateUnit::Attack(sf::Vector2f _targetDirection)
 	targetPosition = _targetDirection;
 }
 
-void PirateUnit::TakeDamage(int _totalDamage)
+int PirateUnit::TakeDamage(int _totalDamage)
 {
+	int stackLost = 0;
 	std::cout << "Current stack : " << unitStats.stackSize << " Current health : " << unitStats.health << "\n";
 
 	std::cout << "damage : " << _totalDamage << "\n";
@@ -56,6 +57,7 @@ void PirateUnit::TakeDamage(int _totalDamage)
 		if(_totalDamage - unitBaseStats.health >= 0)
 		{
 			unitStats.stackSize--;
+			stackLost++;
 			std::cout << "new stack (-10) : " << unitStats.stackSize << "\n";
 			_totalDamage -= unitBaseStats.health;
 		}else
@@ -66,6 +68,7 @@ void PirateUnit::TakeDamage(int _totalDamage)
 			{
 				unitStats.health = unitBaseStats.health + unitStats.health;
 				unitStats.stackSize--;
+				stackLost++;
 			}
 			_totalDamage = 0;
 		}
@@ -74,7 +77,7 @@ void PirateUnit::TakeDamage(int _totalDamage)
 			currentState = DEATH;
 			animationState.currentFrame = 0;
 			animationState.elapsedTime = 0;
-			return;
+			return stackLost;
 		}else
 		{
 			currentState = DAMAGED;
@@ -87,6 +90,8 @@ void PirateUnit::TakeDamage(int _totalDamage)
 
 	// Update the displayed stack size
 	unitAmount->updateAmount(unitStats.stackSize);
+
+	return stackLost;
 }
 
 void PirateUnit::render(const std::unique_ptr<sf::RenderWindow>& window) const

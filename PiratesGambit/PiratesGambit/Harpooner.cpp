@@ -69,19 +69,19 @@ void Harpooner::animateSprite(float _dt)
 		}
 		break;
 	case DAMAGED:
-		Animator::getInstance().AnimateSprite(sprite, animationState, damagedAnimation, 2, 6, _dt);
+		Animator::getInstance().AnimateSprite(sprite, animationState, damagedAnimation, 2, 5, _dt);
 		if (damagedAnimation)
 		{
 			currentState = IDLE;
 		}
 		break;
 	case DEATH:
-		Animator::getInstance().AnimateSprite(sprite, animationState, deathAnimation, 5, 7, _dt);
+		Animator::getInstance().AnimateSprite(sprite, animationState, deathAnimation, 5, 6, _dt);
 		if (deathAnimation)
 		{
 			unitStats.isActive = false;
 			unitAmount->renderUnitAmount = false;
-			Animator::getInstance().AnimateDeath(sprite, 4, 7);
+			Animator::getInstance().AnimateDeath(sprite, 4, 6);
 		}
 		break;
 	}

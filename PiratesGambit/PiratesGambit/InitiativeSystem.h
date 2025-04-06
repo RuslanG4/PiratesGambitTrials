@@ -4,7 +4,7 @@
 class InitiativeSystem
 {
 public:
-    void addUnit(const std::shared_ptr<PirateUnit>& unit) {
+    void addUnit(const std::shared_ptr<PirateUnit> unit) {
         units.push_back(unit);
         unit->unitStats.turnPoints = unit->unitStats.initiative;
     }
@@ -20,6 +20,10 @@ public:
             std::cout << "Unit not found.\n";
         }
     }
+
+    void ClearInitiative() {
+        units.clear();
+    };
 
     std::shared_ptr<PirateUnit> getNextUnit() {
         for (auto& unit : units) {

@@ -1,6 +1,28 @@
 #include "BattleScene.h"
 
 
+void BattleScene::resetBattle()
+{
+	for (auto& node : battleGrid)
+	{
+		node->updateOccupied(false);
+	}
+	showEndGame = false;
+	initialiseBattleGrid();
+	initialiseStartArea();
+
+	tacticsArmyUI->initiativeSystem.ClearInitiative();
+
+	placeUnits(playerRef->getArmy(), false);
+
+	currentState = PREP;
+}
+
+void BattleScene::handleEvent(const sf::Event& event)
+{
+	endBattleUI->HandleInput(event);
+}
+
 void BattleScene::placeUnits(const std::unique_ptr<Army>& _army, bool _isEnemy)
 {
 	auto area = _isEnemy ? enemyStartArea : startArea;
@@ -97,6 +119,7 @@ void BattleScene::update(float _dt)
 		}
 		break;
 	case END:
+		WaitForEndGameTimer();
 		break;
 	}
 	for (auto& unit : playerRef->getArmy()->getArmy())
@@ -134,6 +157,9 @@ void BattleScene::render(const std::unique_ptr<sf::RenderWindow>& window) const
 	tacticsArmyUI->render(window);
 	
 	UIInterface->render(window);
+
+	if(showEndGame)
+		endBattleUI->Render(window);
 }
 
 void BattleScene::updateNextTurn()
@@ -149,6 +175,10 @@ void BattleScene::updateNextTurn()
 
 	if (currentSelectedUnit->unitInformation.allegiance != HUMAN_PLAYER) {
 		EnemyTurn();
+		CheckBattleOver(playerRef->getArmy());
+	}
+	else {
+		CheckBattleOver(enemyRef->getArmy());
 	}
 }
 
@@ -655,24 +685,53 @@ void BattleScene::calculateDamage(const std::shared_ptr<PirateUnit>& _attacker, 
 {
 	int damage = DamageCalculations::calculateHitPointsLost(_attacker, _defender);
 
-	_defender->TakeDamage(damage);
+	int lostUnitsAmount = _defender->TakeDamage(damage);
+
+	assignDeadUnits(_defender, lostUnitsAmount);
 
 	if (_defender->currentState == DEATH) { //dead
 		tacticsArmyUI->initiativeSystem.removeUnit(_defender);
 		tacticsArmyUI->UpdateToInitiativeView();
 		newAreaSet = false;
-		if (_defender->unitInformation.allegiance == enemyRef->GetEnemyTeam())
-		{
-			battleGrid[_defender->getCurrentNodeId()]->updateOccupied(false);
-			enemyRef->getArmy()->removeUnit(_defender);
-			CheckBattleOver(enemyRef->getArmy());
-		}
-		else {
-			playerRef->getArmy()->removeUnit(_defender);
-			CheckBattleOver(playerRef->getArmy());
-		}
+		
 	}
 	currentDefendingUnit = nullptr;
+}
+
+void BattleScene::assignDeadUnits(const std::shared_ptr<PirateUnit>& _defender, int _amount)
+{
+	if (_amount > 0) {
+		if (_defender->unitInformation.allegiance == enemyRef->GetEnemyTeam())
+		{
+			pickPerciseUnit(_defender, enemyArmyDead, _amount);
+		}
+		else
+		{
+			pickPerciseUnit(_defender, playerArmyDead, _amount);
+		}
+	}
+}
+
+void BattleScene::pickPerciseUnit(const std::shared_ptr<PirateUnit>& _defender, const std::unique_ptr<Army>& _ref, int _amount)
+{
+	switch (_defender->unitInformation.unitName)
+	{
+	case BUCCANEER:
+		_ref->addUnit(std::make_shared<Buccaneer>(_amount, _defender->unitInformation.allegiance));
+		break;
+	case CANNON:
+		_ref->addUnit(std::make_shared<CannonUnit>(_amount, _defender->unitInformation.allegiance));
+		break;
+	case GUNNER:
+		_ref->addUnit(std::make_shared<Gunner>(_amount, _defender->unitInformation.allegiance));
+		break;
+	case BIRD:
+		_ref->addUnit(std::make_shared<BirdUnit>(_amount, _defender->unitInformation.allegiance));
+		break;
+	case HARPOONER:
+		_ref->addUnit(std::make_shared<Harpooner>(_amount, _defender->unitInformation.allegiance));
+		break;
+	}
 }
 
 std::shared_ptr<PirateUnit> BattleScene::selectUnit(sf::Vector2f _mousePos)
@@ -761,25 +820,61 @@ int BattleScene::SelectAttackNodeToWalkTo(const std::vector<std::shared_ptr<Pira
 
 void BattleScene::CheckBattleOver(const std::unique_ptr<Army>& _army)
 {
-	if (_army->getArmy().empty())
+	if (_army->isEmpty())
 	{
-		UIInterface->updateModeString("Player Wins");
+		endBattleUI->updateUnitsDestroyed(enemyArmyDead);
+		endBattleUI->updateUnitsLost(playerArmyDead);
+		
+		if (_army->getArmy()[0]->unitInformation.allegiance == HUMAN_PLAYER)
+		{
+			UIInterface->updateModeString("Enemy Wins");
+			RemoveDeadUnits();
+			endBattleUI->Lose();
+		}
+		else
+		{
+			UIInterface->updateModeString("Player Wins");
+			RemoveDeadUnits();
+			endBattleUI->Win();
+		}
 		currentState = END;
+		endGameTimer.restart();
 	}
-	else if (_army->getArmy().empty())
+}
+
+void BattleScene::RemoveDeadUnits()
+{
+	for (int i = 0; i < playerArmyDead->getArmy().size(); i++)
 	{
-		UIInterface->updateModeString("Enemy Wins");
-		currentState = END;
+		if (!playerArmyDead->getArmy()[i]->unitStats.isActive)
+		{
+			playerArmyDead->removeUnit(playerArmyDead->getArmy()[i]);
+		}
+	}
+	for (int i = 0; i < enemyArmyDead->getArmy().size(); i++)
+	{
+		if (!enemyArmyDead->getArmy()[i]->unitStats.isActive)
+		{
+			enemyArmyDead->removeUnit(enemyArmyDead->getArmy()[i]);
+		}
 	}
 }
 
 void BattleScene::WaitForTurn()
 {
-	if(enemyWaitTime.getElapsedTime().asSeconds() > 0.75f)
+	if(enemyWaitTime.getElapsedTime().asSeconds() > 0.85f)
 	{
 		updateNextTurn();
 		startEnemyTurnTimer = false;
 		hasAttacked = false;
+	}
+}
+
+void BattleScene::WaitForEndGameTimer()
+{
+	if (endGameTimer.getElapsedTime().asSeconds() > 0.75f)
+	{
+		showEndGame = true;
 	}
 }
 

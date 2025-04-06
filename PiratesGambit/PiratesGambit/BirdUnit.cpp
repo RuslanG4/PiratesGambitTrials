@@ -71,7 +71,7 @@ void BirdUnit::update(float _dt)
 			if (Utility::magnitude(velocity.x, velocity.y) > 0)
 			{
 				currentState = WALK;
-				if (velocity.x < 0) sprite.setScale(scaleX, scaleY);
+				if (velocity.x < 0) sprite.setScale(-scaleX, scaleY);
 				else sprite.setScale(scaleX, scaleY);
 			}
 			else

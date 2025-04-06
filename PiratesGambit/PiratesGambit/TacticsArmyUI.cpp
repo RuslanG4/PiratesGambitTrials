@@ -37,6 +37,11 @@ void TacticsArmyUI::update()
 
 void TacticsArmyUI::extend()
 {
+	if (armySlots.size() >= 10)
+	{
+		UpdateToInitiativeView();
+		return;
+	}
 	UnitStats stats;
 	for (int i = 0; i < 3; i++)
 	{

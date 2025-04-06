@@ -11,6 +11,7 @@
 #include "DamageCalculations.h"
 #include "EnemyMoveConditions.h"
 #include "ParticleManager.h"
+#include"EndBattleUI.h"
 
 class BattleScene
 {
@@ -19,18 +20,20 @@ public:
 	{
 		UIInterface = std::make_unique<BattleActionUI>();
 		tacticsArmyUI = std::make_unique<TacticsArmyUI>(_player->getArmy());
+		endBattleUI = std::make_unique<EndBattleUI>();
+
+		playerArmyDead = std::make_unique<Army>();
+		enemyArmyDead = std::make_unique<Army>();
 
 		attackIcon.setTexture(TextureManager::getInstance().getTexture("SWORD_ICON"));
 		attackIcon.setScale(2, 2);
 		attackIcon.setOrigin(16,16);
 
-		initialiseBattleGrid();
-		initialiseStartArea();
-
-		placeUnits(playerRef->getArmy(), false);
-
 		background.setTexture(TextureManager::getInstance().getTexture("background"));
 	}
+	void resetBattle();
+	bool isBattleOver() const { return endBattleUI->isOKClicked(); }
+	void handleEvent(const sf::Event& event);
 
 	void setEnemyRef(const std::shared_ptr<Enemy>& _enemy) { enemyRef = _enemy; }
 
@@ -76,6 +79,8 @@ public:
 	void EnemyTurn();
 
 	void calculateDamage(const std::shared_ptr<PirateUnit>& _attacker, const std::shared_ptr<PirateUnit>& _defender);
+	void assignDeadUnits(const std::shared_ptr<PirateUnit>& _defender, int _amount);
+	void pickPerciseUnit(const std::shared_ptr<PirateUnit>& _defender, const std::unique_ptr<Army>& _ref, int _amount);
 
 	std::shared_ptr<PirateUnit> selectUnit(sf::Vector2f _mousePos);
 
@@ -88,6 +93,9 @@ public:
 	int SelectAttackNodeToWalkTo(const std::vector<std::shared_ptr<PirateUnit>>& _possibleUnits) const;
 
 	void CheckBattleOver(const std::unique_ptr<Army>& _army);
+	void RemoveDeadUnits();
+
+	const std::shared_ptr<Enemy>& getEnemyRef() const { return enemyRef; }	
 
 private:
 	std::vector<std::shared_ptr<BattleGridNode>> battleGrid;
@@ -101,6 +109,8 @@ private:
 
 	std::vector<std::shared_ptr<BattleGridNode>> path;
 
+	std::unique_ptr<EndBattleUI> endBattleUI;
+
 	std::unique_ptr<BattleActionUI> UIInterface;
 
 	std::unique_ptr<TacticsArmyUI> tacticsArmyUI;
@@ -110,6 +120,8 @@ private:
 	std::shared_ptr<PirateUnit> currentSelectedUnit;
 	std::shared_ptr<PirateUnit> currentDefendingUnit;
 
+	std::unique_ptr<Army> playerArmyDead;
+	std::unique_ptr<Army> enemyArmyDead;
 
 	std::shared_ptr<Player> playerRef;
 	std::shared_ptr<Enemy> enemyRef;
@@ -143,5 +155,11 @@ private:
 	int attackNode = -1;
 
 	sf::Sprite background;
+
+
+	bool showEndGame{ false };
+	sf::Clock endGameTimer;
+	void WaitForEndGameTimer();
+
 };
 

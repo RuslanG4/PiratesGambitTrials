@@ -38,3 +38,10 @@ void Army::removeUnit(std::shared_ptr<PirateUnit> _unit)
 		army.erase(it);
 	}
 }
+
+bool Army::isEmpty()
+{
+    return std::find_if(army.begin(), army.end(), [](const auto& unit) {
+        return unit->unitStats.isActive;
+        }) == army.end();
+}

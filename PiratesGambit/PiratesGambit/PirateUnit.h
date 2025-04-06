@@ -65,7 +65,7 @@ public:
 	void moveUnit(sf::Vector2f _vel);
 	void Attack(sf::Vector2f _targetDirection);
 
-	void TakeDamage(int _totalDamage);
+	int TakeDamage(int _totalDamage);
 
 	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
 	void placeUnit(sf::Vector2f _pos);
@@ -74,7 +74,10 @@ public:
 	sf::Vector2f getPosition() const { return sprite.getPosition(); }
 	int getSpeed() const { return unitStats.speed; }
 	sf::FloatRect getGlobalBounds() const { return sprite.getGlobalBounds(); }
-	void setStackSize(int _size) { unitStats.stackSize = _size; }
+	void setStackSize(int _size) { 
+		unitStats.stackSize = _size;
+		unitAmount->updateAmount(unitStats.stackSize);
+	}
 
 	UnitState currentState = IDLE;
 

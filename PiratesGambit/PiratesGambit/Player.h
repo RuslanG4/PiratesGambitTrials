@@ -27,8 +27,8 @@ public:
 
 		playerArmy->addUnit(std::make_shared<Buccaneer>(12, HUMAN_PLAYER));
 		playerArmy->addUnitNoCombine(std::make_shared<Buccaneer>(12, HUMAN_PLAYER));
-		playerArmy->addUnit(std::make_shared<Gunner>(26, HUMAN_PLAYER));
-		playerArmy->addUnit(std::make_shared<Harpooner>(6, HUMAN_PLAYER));
+		playerArmy->addUnit(std::make_shared<Gunner>(126, HUMAN_PLAYER));
+		playerArmy->addUnit(std::make_shared<Harpooner>(116, HUMAN_PLAYER));
 		playerArmy->addUnit(std::make_shared<CannonUnit>(2, HUMAN_PLAYER));
 		playerArmy->addUnit(std::make_shared<BirdUnit>(6, HUMAN_PLAYER));
 

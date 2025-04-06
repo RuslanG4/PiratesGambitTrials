@@ -171,6 +171,8 @@
     <ClCompile Include="ChaseState.cpp" />
     <ClCompile Include="Coins.cpp" />
     <ClCompile Include="DamageCalculations.cpp" />
+    <ClCompile Include="EndBattleUI.cpp" />
+    <ClCompile Include="EndBattleUIButton.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyBoat.cpp" />
     <ClCompile Include="EnemyBoatWander.cpp" />
@@ -194,6 +196,7 @@
     <ClCompile Include="Harpooner.cpp" />
     <ClCompile Include="HireRecruitUI.cpp" />
     <ClCompile Include="HitBox.cpp" />
+    <ClCompile Include="HomeScreenButton.cpp" />
     <ClCompile Include="IconButton.cpp" />
     <ClCompile Include="IdleState.cpp" />
     <ClCompile Include="InfoBoxUI.cpp" />
@@ -271,6 +274,8 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="DamageCalculations.h" />
     <ClInclude Include="DiskSampling.h" />
+    <ClInclude Include="EndBattleUI.h" />
+    <ClInclude Include="EndBattleUIButton.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyBoat.h" />
     <ClInclude Include="EnemyBoatWander.h" />
@@ -295,6 +300,7 @@
     <ClInclude Include="Harpooner.h" />
     <ClInclude Include="HireRecruitUI.h" />
     <ClInclude Include="HitBox.h" />
+    <ClInclude Include="HomeScreenButton.h" />
     <ClInclude Include="IconButton.h" />
     <ClInclude Include="IdleState.h" />
     <ClInclude Include="Includes.h" />
