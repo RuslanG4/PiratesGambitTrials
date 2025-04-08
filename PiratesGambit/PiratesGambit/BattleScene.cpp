@@ -595,11 +595,6 @@ void BattleScene::moveUnit()
 
 void BattleScene::finalizeMoveUnit()
 {
-	if (attackNode != -1) {
-		TriggerAttack();
-		ParticleManager::getInstance().CreateBloodParticle(currentDefendingUnit->getPosition());
-		calculateDamage(currentSelectedUnit, currentDefendingUnit); //damage calc
-	}
 	//update new grid positions
 	currentSelectedUnit->moveUnit(sf::Vector2f(0, 0));
 	battleGrid[currentSelectedUnit->getCurrentNodeId()]->updateOccupied(false);
@@ -610,6 +605,15 @@ void BattleScene::finalizeMoveUnit()
 	battleGrid[currentSelectedUnit->getCurrentNodeId()]->updateOccupied(true);
 	battleGrid[currentSelectedUnit->getCurrentNodeId()]->updateAllegiance(currentSelectedUnit->unitInformation.allegiance);
 
+	if (scanForAttack) {
+		searchNeighboursToAttack();
+	}
+	else if (attackNode != -1) {
+		TriggerAttack();
+		ParticleManager::getInstance().CreateBloodParticle(currentDefendingUnit->getPosition());
+		calculateDamage(currentSelectedUnit, currentDefendingUnit); //damage calc
+	}
+
 	//reset
 	move = false;
 	currentNodeInPath = 0;
@@ -617,7 +621,22 @@ void BattleScene::finalizeMoveUnit()
 
 	//next turn
 	startEnemyTurnTimer = true;
+	scanForAttack = false;
 	enemyWaitTime.restart();
+}
+
+void BattleScene::searchNeighboursToAttack()
+{
+	auto nodeId = currentSelectedUnit->getCurrentNodeId();
+
+	for (auto& neighbour : battleGrid[nodeId]->getNeighbours()) {
+		if (currentDefendingUnit->getCurrentNodeId() == neighbour.first->getID() && currentDefendingUnit->unitStats.isActive) {
+			TriggerAttack();
+			ParticleManager::getInstance().CreateBloodParticle(currentDefendingUnit->getPosition());
+			calculateDamage(currentSelectedUnit, currentDefendingUnit); //damage calc
+			break;
+		}
+	}
 }
 
 void BattleScene::preGameStartUpPlacement(sf::Vector2f _mousePos)
@@ -688,6 +707,7 @@ void BattleScene::EnemyTurn()
 		{
 			selectedNode = SelectNodeToWalkTo();
 			//add ability to attack if you on edge node
+			scanForAttack = true;
 		}
 		else
 		{
@@ -806,11 +826,14 @@ int BattleScene::SelectNodeToWalkTo()
 {
 	int shortestDistance = 100;
 	int selectedID = -1;
+
+	std::shared_ptr<PirateUnit> selectedUnit = PickUnitToAttack(playerRef->getArmy()->getArmy());
 	for (auto& ID : walkableNodesIDs)
 	{
-		if (EnemyMoveConditions::distanceToEnemy(battleGrid[ID]->getMidPoint(), PickUnitToAttack(playerRef->getArmy()->getArmy())->getPosition()) < shortestDistance)
+		if (EnemyMoveConditions::distanceToEnemy(battleGrid[ID]->getMidPoint(), selectedUnit->getPosition()) < shortestDistance)
 		{
-			shortestDistance = EnemyMoveConditions::distanceToEnemy(battleGrid[ID]->getMidPoint(), PickUnitToAttack(playerRef->getArmy()->getArmy())->getPosition());
+			shortestDistance = EnemyMoveConditions::distanceToEnemy(battleGrid[ID]->getMidPoint(), selectedUnit->getPosition());
+			currentDefendingUnit = selectedUnit;
 			selectedID = ID;
 			canAttack = false;
 		}

@@ -68,6 +68,7 @@ public:
 
 	void moveUnit();
 	void finalizeMoveUnit();
+	void searchNeighboursToAttack();
 
 	void preGameStartUpPlacement(sf::Vector2f _mousePos);
 
@@ -157,6 +158,7 @@ private:
 	sf::Sprite background;
 
 	bool startUnit{ false };
+	bool scanForAttack{ false };
 
 
 	bool showEndGame{ false };
