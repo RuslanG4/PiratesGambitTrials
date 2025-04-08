@@ -28,9 +28,6 @@ void Boat::render(const std::unique_ptr<sf::RenderWindow>& window) const
 	window->draw(boatSprite);
 	window->draw(fireIndicator);
 	//myHitbox->render(window);
-	for (auto& cannonball : cannonBalls) {
-		cannonball->render(window);
-	}
 }
 
 void Boat::update(double dt)
@@ -56,10 +53,6 @@ void Boat::update(double dt)
 
 		myHitbox->setPosition(controller->getPosition());
 		myHitbox->setRotation(controller->getRotation());
-
-		for (auto& cannonball : cannonBalls) {
-			cannonball->update();
-		}
 	}
 	updateIndicator();
 }
@@ -76,11 +69,6 @@ bool Boat::checkCollision(const std::shared_ptr<Node>& _node, sf::Vector2f& _pos
 		}
 	}
 	return false;
-}
-
-void Boat::addCannonBall()
-{
-	cannonBalls.push_back(std::make_shared<CannonBall>(sf::Vector2f(-100, -100)));
 }
 
 void Boat::fireCannonBall(int _direction)
@@ -103,7 +91,7 @@ void Boat::fireCannonBall(int _direction)
 					velocity = { forwardY, -forwardX };
 				}
 		
-				BulletFactory::getInstance().createCannonBall(controller->getPosition(), Utility::unitVector2D(velocity) * 0.5f);
+				BulletFactory::getInstance().createCannonBall(fireIndicator.getPosition(), Utility::unitVector2D(velocity) * 0.5f, 0.85f);
 
 				currentPlayer->getInventory()->removeItemFromStack(CANNONBALLS);
 				ParticleManager::getInstance().CreateShootParticle(fireIndicator.getPosition());

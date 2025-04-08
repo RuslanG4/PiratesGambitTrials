@@ -1,6 +1,7 @@
 #pragma once
 #include "Includes.h"
 #include "TextureManager.h"
+#include"ParticleManager.h"
 
 /// <summary>
 /// Base class for projectiles in the game.
@@ -22,7 +23,7 @@ public:
     /// <summary>
     /// Updates the projectile's position based on its velocity.
     /// </summary>
-    void update();
+    void update(double dt);
 
     /// <summary>
     /// Renders the projectile on the given window.
@@ -66,6 +67,8 @@ protected:
     sf::Vector2f position;         // Current position of the projectile
     sf::Vector2f prevPosition;     // Previous position of the projectile
     sf::Vector2f velocity{ 0.f, 0.f };  // Velocity vector
+
+    float lifetime = 0;
 
     bool isActive{ false };        // Whether the projectile is active
 

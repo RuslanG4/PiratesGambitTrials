@@ -79,7 +79,7 @@ void Game::update(double t_deltaTime)
 	Mouse::getInstance().update(m_window);
 	SceneManager::getInstance().getCurrentScene()->update(t_deltaTime);
 	ParticleManager::getInstance().update(t_deltaTime);
-	BulletFactory::getInstance().update();
+	BulletFactory::getInstance().update(t_deltaTime);
 }
 
 /// <summary>

@@ -535,7 +535,11 @@ void BattleScene::adjustAttackIcon(int _pinPointID)
 		//Puts icon on first neighbour of unit to attack if on edge of area
 		{
 			for (auto& node : battleGrid[currentHoverNodeID]->getNeighbours()) {
-				if (std::find(walkableNodesIDs.begin(), walkableNodesIDs.end(), node.second) != walkableNodesIDs.end()) {
+				auto iconPlace = std::find_if(walkableNodesIDs.begin(), walkableNodesIDs.end(), [node](int id) {
+					return node.first->getID() == id;
+					});
+				if (iconPlace != walkableNodesIDs.end())
+				{
 					attackNode = node.first->getID();
 					attackIcon.setPosition(node.first->getMidPoint());
 					break;

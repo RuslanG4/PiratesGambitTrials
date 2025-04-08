@@ -100,17 +100,16 @@ void EnemyBoat::createSmokeParticles(double _dt)
 	std::uniform_real_distribution<float> chance(0.f, 1.f);
 	std::uniform_real_distribution<double> x(-10,10);
 
-	if (chance(gen) < emitionRate) // 0.15% chance per frame
+	if (chance(gen) < emitionRate)
 	{
-		sf::Vector2f leafPos = boatSprite.getPosition();
-		//leafPos.y -= (rand() % 20) + 30;
-		leafPos.x += x(gen);
-		smokeParticles.emplace_back(leafPos);
+		sf::Vector2f boatPos = boatSprite.getPosition();
+		boatPos.x += x(gen);
+		smokeParticles.emplace_back(boatPos);
 	}
 
-	for (auto& leaf : smokeParticles)
+	for (auto& particle : smokeParticles)
 	{
-		leaf.Update(_dt);
+		particle.Update(_dt);
 	}
 
 	std::erase_if(smokeParticles, [](const Particle& particle) {

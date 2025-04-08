@@ -13,7 +13,7 @@ public:
     /// </summary>
     /// <param name="_pos">Initial position of the cannonball.</param>
     /// <param name="_vel">Initial velocity of the cannonball (default is {0,0}).</param>
-    CannonBall(sf::Vector2f _pos, sf::Vector2f _vel = { 0,0 });
+    CannonBall(sf::Vector2f _pos, sf::Vector2f _vel = { 0,0 }, float lifetime = 100.f);
 
     /// <summary>
     /// Initializes the cannonball's properties such as sprite, texture, and physics settings.

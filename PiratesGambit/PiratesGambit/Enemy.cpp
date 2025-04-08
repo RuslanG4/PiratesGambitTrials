@@ -60,7 +60,7 @@ void Enemy::SetPosition(sf::Vector2f _pos)
 	}
 	body.setPosition(_pos);
 	myHitbox->setPosition(_pos);
-	enemyUI->setPosition(sf::Vector2f(_pos.x - 50, _pos.y - 20));
+	enemyUI->setPosition(sf::Vector2f(_pos.x, _pos.y - 30));
 }
 
 void Enemy::updateUpdateableArea(const std::shared_ptr<Node>& _startNode, int depth) const
@@ -94,7 +94,7 @@ void Enemy::boardBoat(const std::shared_ptr<EnemyBoat>& _boat)
 {
 	body.setPosition(_boat->getPosition());
 	myHitbox->setPosition(_boat->getPosition());
-	enemyUI->setPosition(sf::Vector2f(_boat->getPosition().x - 50, _boat->getPosition().y - 20));
+	enemyUI->setPosition(sf::Vector2f(_boat->getPosition().x, _boat->getPosition().y - 30));
 	onBoat = true;
 	boatRef = _boat;
 }

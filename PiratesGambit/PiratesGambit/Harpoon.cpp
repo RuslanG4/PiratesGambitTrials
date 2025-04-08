@@ -4,6 +4,8 @@ Harpoon::Harpoon(sf::Vector2f _pos, sf::Vector2f _vel)
 {
 	position = _pos;
 	velocity = _vel;
+
+	lifetime = 100.f;
 }
 
 void Harpoon::init()

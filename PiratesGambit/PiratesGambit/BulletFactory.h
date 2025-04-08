@@ -15,8 +15,8 @@ public:
         return instance;
     }
 
-    void createCannonBall(const sf::Vector2f& position, const sf::Vector2f& velocity) {
-        projectiles.push_back(std::make_unique<CannonBall>(position, velocity));
+    void createCannonBall(const sf::Vector2f& position, const sf::Vector2f& velocity, float _lifetime = 100.f) {
+        projectiles.push_back(std::make_unique<CannonBall>(position, velocity, _lifetime));
         projectiles.back()->init();
         projectiles.back()->fire(position, velocity);
     }
@@ -27,12 +27,16 @@ public:
         projectiles.back()->fire(position, velocity);
     }
 
-    void update() {
+    void update(double dt) {
         for (auto& proj : projectiles) {
             if (proj->getIsActive()) {
-                proj->update();
+                proj->update(dt);
             }
         }
+
+        std::erase_if(projectiles, [](const std::unique_ptr<Projectile>& projectile) {
+            return !projectile->getIsActive();
+            });
     }
 
     void render(const std::unique_ptr<sf::RenderWindow>& window) const {

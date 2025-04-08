@@ -1,10 +1,12 @@
 #include "CannonBall.h"
 
 
-CannonBall::CannonBall(sf::Vector2f _pos, sf::Vector2f _vel)
+CannonBall::CannonBall(sf::Vector2f _pos, sf::Vector2f _vel, float _lifetime)
 {
 	position = _pos;
 	velocity = _vel;
+
+	lifetime = _lifetime;
 }
 
 void CannonBall::init()

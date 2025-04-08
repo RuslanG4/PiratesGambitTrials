@@ -25,9 +25,6 @@ public:
 	const std::shared_ptr<Node>& getDockedNode() const { return dockedNode; }
 	bool isAlive() const { return totalHealth > 0; }
 
-	/*void addCannonBall();
-	void fireCannonBall(int _direction);*/
-
 	void setPosition(sf::Vector2f _pos) { position = _pos; boatSprite.setPosition(position); }
 	void setRotation(float _rotation) { boatSprite.setRotation(_rotation); }
 	void setDockedNode(const std::shared_ptr<Node>& _node) { dockedNode = _node; }

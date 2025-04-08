@@ -1,11 +1,18 @@
 #include "Projectile.h"
 
-void Projectile::update()
+void Projectile::update(double dt)
 {
 	if (isActive) {
 		prevPosition = position;
 		position += velocity;
 		body.setPosition(position);
+
+		ParticleManager::getInstance().CreateCannonBallTrailParticle(position, -velocity);
+
+		lifetime -= dt * 0.001;
+		if (lifetime <= 0) {
+			isActive = false;
+		}
 	}
 }
 

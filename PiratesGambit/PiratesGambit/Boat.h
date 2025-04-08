@@ -40,7 +40,6 @@ public:
 	BoatController* getController() const { return controller; }
 	const std::shared_ptr<Node>& getDockedNode() const { return dockedNode; }
 
-	void addCannonBall();
 	void fireCannonBall(int _direction);
 
 	void setPosition(sf::Vector2f _pos)

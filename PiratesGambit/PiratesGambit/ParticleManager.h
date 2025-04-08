@@ -6,6 +6,7 @@
 #include "LeafParticle.h"
 #include"ExplosionParticle.h"   
 #include"SmokeParticle.h"
+#include"CannonBallTrailParticle.h"
 
 /// <summary>
 /// Particle factory singleton to create and manage particles in the world.
@@ -33,6 +34,15 @@ public:
     void CreateBloodParticle(sf::Vector2f _pos)
     {
         particles.push_back(std::make_unique<BloodParticle>(_pos));
+    }
+
+    /// <summary>
+     /// Creates a cannon ball trail particle at the given position.
+    /// </summary>
+     /// <param name="_pos">The position to spawn the cannon ball particle.</param>
+    void CreateCannonBallTrailParticle(sf::Vector2f _pos, sf::Vector2f _vel)
+    {
+        particles.push_back(std::make_unique<CannonBallTrailParticle>(_pos, _vel));
     }
 
     /// <summary>

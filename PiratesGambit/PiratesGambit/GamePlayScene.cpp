@@ -19,8 +19,6 @@ GamePlayScene::GamePlayScene()
 
 	UpdateEnemiesCurrentNode();
 
-	//playerBoat->addCannonBall();
-
 	battleScene = std::make_unique<BattleScene>(myPlayer);
 }
 
@@ -139,13 +137,13 @@ void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 
 		playerBoat->render(window);
 
-		for (auto& enemy : enemies)
-		{
-			enemy->render(window);
-		}
 		for (auto& boat : enemyBoats)
 		{
 			boat->render(window);
+		}
+		for (auto& enemy : enemies)
+		{
+			enemy->render(window);
 		}
 
 		for (int index : visibleNodes) {

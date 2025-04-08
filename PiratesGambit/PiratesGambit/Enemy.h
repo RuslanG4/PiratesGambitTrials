@@ -46,7 +46,7 @@ public:
 
 		myHitbox = new HitBox(sf::Vector2f(22, 22));
 
-		enemyUI = std::make_unique<EnemyUI>(100, 5);
+		enemyUI = std::make_unique<EnemyUI>(100, 10);
 
 		ChangeState(new EnemyBoatWander(_playerRef));
 	}

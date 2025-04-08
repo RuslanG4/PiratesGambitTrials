@@ -11,6 +11,7 @@ EnemyUI::EnemyUI(float width, float height)
     healthBar.setFillColor(sf::Color::Green);
 
     allegianceIndicator.setRadius(height / 2);
+	allegianceIndicator.setOrigin(height / 2, height / 2);
     allegianceIndicator.setOutlineThickness(2);
     allegianceIndicator.setOutlineColor(sf::Color::Black);
 
@@ -20,9 +21,9 @@ EnemyUI::EnemyUI(float width, float height)
 
 void EnemyUI::setPosition(sf::Vector2f _pos)
 {
-	healthBarBackground.setPosition(_pos);
-	healthBar.setPosition(_pos);
-	allegianceIndicator.setPosition(_pos.x - allegianceIndicator.getRadius() - 10, _pos.y);
+	//healthBarBackground.setPosition(_pos);
+	//healthBar.setPosition(_pos);
+	allegianceIndicator.setPosition(_pos);
 }
 
 void EnemyUI::updateHealth(float _healthPercentage)

@@ -169,6 +169,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CannonBall.cpp" />
     <ClCompile Include="CannonBallItem.cpp" />
+    <ClCompile Include="CannonBallTrailParticle.cpp" />
     <ClCompile Include="CannonBuilding.cpp" />
     <ClCompile Include="CannonIcon.cpp" />
     <ClCompile Include="CannonUnit.cpp" />
@@ -276,6 +277,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CannonBall.h" />
     <ClInclude Include="CannonBallItem.h" />
+    <ClInclude Include="CannonBallTrailParticle.h" />
     <ClInclude Include="CannonBuilding.h" />
     <ClInclude Include="CannonIcon.h" />
     <ClInclude Include="CannonUnit.h" />

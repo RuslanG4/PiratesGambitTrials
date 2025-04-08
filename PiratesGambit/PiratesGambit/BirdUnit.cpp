@@ -57,7 +57,6 @@ void BirdUnit::animateSprite(float _dt)
 		{
 			unitStats.isActive = false;
 			unitAmount->renderUnitAmount = false;
-			Animator::getInstance().AnimateDeath(sprite, 3, 5);
 		}
 		break;
 	}
