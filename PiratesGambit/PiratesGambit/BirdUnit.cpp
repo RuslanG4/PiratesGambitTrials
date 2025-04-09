@@ -55,6 +55,7 @@ void BirdUnit::animateSprite(float _dt)
 		Animator::getInstance().AnimateSprite(sprite, animationState, deathAnimation, 11, 10, _dt);
 		if (deathAnimation)
 		{
+			sprite.setTexture(TextureManager::getInstance().getTexture("DEAD_BIRD"));
 			unitStats.isActive = false;
 			unitAmount->renderUnitAmount = false;
 		}

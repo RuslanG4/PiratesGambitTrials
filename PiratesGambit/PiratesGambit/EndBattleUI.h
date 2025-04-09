@@ -17,6 +17,7 @@ public:
 	void updateUnitsDestroyed(const std::unique_ptr<Army>& _army);
 
 	bool isOKClicked() const { return continueButton->isClicked(); }
+	bool isWin() const { return isWin; }
 
 	void Win();
 	void Lose();
@@ -36,6 +37,8 @@ private:
 	std::vector<std::unique_ptr<TacticsArmySlot>> destroyedUnits;
 
 	std::unique_ptr<EndBattleUIButton> continueButton;
+
+	bool isWin = false;
 
 };
 

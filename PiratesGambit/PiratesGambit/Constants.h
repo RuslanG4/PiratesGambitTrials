@@ -90,6 +90,7 @@ const char* const GUNNER_SPRITE = "ASSETS\\IMAGES\\Pirates\\MiniPirateGunner.png
 const char* const HARPOONER_SPRITE = "ASSETS\\IMAGES\\Pirates\\MiniPirateHarpooner.png";
 const char* const CANNON_UNIT_SPRITE = "ASSETS\\IMAGES\\Pirates\\MiniCannon.png";
 const char* const BIRD_SPRITE = "ASSETS\\IMAGES\\Pirates\\Bird.png";
+const char* const DEAD_BIRD = "ASSETS\\IMAGES\\Pirates\\DeadBird.png";
 //PARTICLES
 const char* const BLOOD_PARTICLES = "ASSETS\\IMAGES\\Particles\\BLOOD_PARTICLES.png";
 const char* const SHOOT_PARTICLES = "ASSETS\\IMAGES\\Particles\\848.png";

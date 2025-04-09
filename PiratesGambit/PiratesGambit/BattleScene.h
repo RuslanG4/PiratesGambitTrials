@@ -91,9 +91,9 @@ public:
 	std::shared_ptr<PirateUnit> PickUnitToAttack(const std::vector<std::shared_ptr<PirateUnit>>& _possibleUnits) const;
 
 	int SelectNodeToWalkTo();
-	int SelectAttackNodeToWalkTo(const std::vector<std::shared_ptr<PirateUnit>>& _possibleUnits) const;
+	int SelectAttackNodeToWalkTo(const std::vector<std::shared_ptr<PirateUnit>>& _possibleUnits);
 
-	void CheckBattleOver(const std::unique_ptr<Army>& _army);
+	bool CheckBattleOver(const std::unique_ptr<Army>& _army);
 	void RemoveDeadUnits();
 
 	const std::shared_ptr<Enemy>& getEnemyRef() const { return enemyRef; }	

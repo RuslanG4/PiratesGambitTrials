@@ -106,10 +106,15 @@ void GamePlayScene::update(float dt)
 	else {
 		battleScene->update(dt);
 		if (battleScene->isBattleOver()) {
-			battle = false;
-			auto enemyRef = battleScene->getEnemyRef();
-			enemies.erase(std::remove(enemies.begin(), enemies.end(), enemyRef), enemies.end());
-			battleScene->setEnemyRef(nullptr);
+			if (battleScene->isPlayerWin()) {
+				battle = false;
+				auto enemyRef = battleScene->getEnemyRef();
+				enemies.erase(std::remove(enemies.begin(), enemies.end(), enemyRef), enemies.end());
+				battleScene->setEnemyRef(nullptr);
+			}
+			else {
+				SceneManager::getInstance().setScene(new MainMenuScene());
+			}
 		}
 	}
 	if (AllianceDialogueUI::getInstance().isMenuOpen())

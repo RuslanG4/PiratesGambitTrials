@@ -15,7 +15,7 @@ Barrel::Barrel()
 	std::uniform_int_distribution<> cannonBallDist(0, 4);
 	int randomCannonballs = cannonBallDist(gen);
 
-	std::uniform_int_distribution<> coinDist(150, 1000);
+	std::uniform_int_distribution<> coinDist(150, 450);
 	int randomCoins = coinDist(gen);
 
 	if (randomCannonballs > 0)
