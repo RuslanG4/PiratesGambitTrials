@@ -189,6 +189,7 @@
     <ClCompile Include="EnemyUI.cpp" />
     <ClCompile Include="ExplosionParticle.cpp" />
     <ClCompile Include="FindBoatState.cpp" />
+    <ClCompile Include="FollowPlayerState.cpp" />
     <ClCompile Include="FullMap.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -301,6 +302,7 @@
     <ClInclude Include="Enums.h" />
     <ClInclude Include="ExplosionParticle.h" />
     <ClInclude Include="FindBoatState.h" />
+    <ClInclude Include="FollowPlayerState.h" />
     <ClInclude Include="FullMap.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />

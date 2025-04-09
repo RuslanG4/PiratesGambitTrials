@@ -1,5 +1,5 @@
 #include "AllianceDialogueUI.h"
-
+#include"FollowPlayerState.h"
 #include "TextureManager.h"
 
 void AllianceDialogueUI::Init()
@@ -29,7 +29,7 @@ void AllianceDialogueUI::Init()
         sf::Vector2f(dialogueBox.getPosition().x + dialogueBox.getGlobalBounds().width - 300, dialogueBox.getPosition().y + 600),
         TextureManager::getInstance().getTexture("MONEY_ICON"));
 
-    allianceStatus = std::make_unique<AllianceStatusUI>(characterPortrait.getPosition() + sf::Vector2f(300, 0));
+    allianceStatus = std::make_unique<AllianceStatusUI>(characterPortrait.getPosition() + sf::Vector2f(350, 0));
 
     UpdateText();
 }
@@ -65,11 +65,17 @@ void AllianceDialogueUI::Update()
         {
             CloseMenu();
         }
+        if (purchaseButton->IsTriggered()) {
+            enemyRef->ChangeState(new FollowPlayerState(playerRef));
+            CloseMenu();
+        }
     }
 }
 
-void AllianceDialogueUI::OpenMenu(const std::shared_ptr<Enemy>& _enemyRef)
+void AllianceDialogueUI::OpenMenu(const std::shared_ptr<Enemy>& _enemyRef, const std::shared_ptr<Player>& _playerRef)
 {
+    playerRef = _playerRef;
+    enemyRef = _enemyRef;
     dialogueText.setString("");
     isOpen = true;
     UpdateText();
@@ -81,6 +87,7 @@ void AllianceDialogueUI::CloseMenu()
 {
     isOpen = false;
     exitButton->ResetTrigger();
+    purchaseButton->ResetTrigger();
 }
 
 void AllianceDialogueUI::Render(const std::unique_ptr<sf::RenderWindow>& _window) const

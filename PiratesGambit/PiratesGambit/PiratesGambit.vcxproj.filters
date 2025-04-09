@@ -465,6 +465,9 @@
     <ClCompile Include="PauseScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FollowPlayerState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -807,6 +810,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PauseScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FollowPlayerState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

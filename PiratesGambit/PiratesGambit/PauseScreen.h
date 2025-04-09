@@ -38,8 +38,6 @@ public:
 			homeButton->resetButton();
 		}
 
-
-
 		bool currentEscapePressed = sf::Keyboard::isKeyPressed(sf::Keyboard::Escape);
 
 		if (currentEscapePressed && !previousEscapePressed)

@@ -10,7 +10,10 @@ public:
 	sf::RectangleShape getBackgroundSprite() const { return slotSprite; }
 	sf::Sprite getItemSprite() const { return ItemSprite; }
 	sf::Text getTest() const { return stackSize; }
-	void setSprite(const sf::Sprite& _sprite) { ItemSprite = _sprite; }
+	void setSprite(const sf::Sprite& _sprite) { 
+		ItemSprite = _sprite;
+		ItemSprite.setScale(2.f, 2.f);
+	}
 	void configureSprite(int _stackSize);
 	void setOccupiedBy(ItemName _who) { occupiedBy = _who; }
 	ItemName getOccupiedBy() const { return occupiedBy; }

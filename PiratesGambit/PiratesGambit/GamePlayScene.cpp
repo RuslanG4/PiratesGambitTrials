@@ -416,7 +416,7 @@ void GamePlayScene::processKeys()
 			{
 				if (enemy->getCurrentNode() == node && !enemy->GetPlayerAllegiance().isHostile())
 				{
-					AllianceDialogueUI::getInstance().OpenMenu(enemy);
+					AllianceDialogueUI::getInstance().OpenMenu(enemy, myPlayer);
 					enemy->ChangeState(new IdleState(myPlayer));
 				}
 			}

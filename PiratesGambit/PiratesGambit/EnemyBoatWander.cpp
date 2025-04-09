@@ -1,5 +1,5 @@
 #include "EnemyBoatWander.h"
-
+#include"FollowPlayerState.h"
 #include "ChaseState.h"
 #include "Enemy.h"
 #include "PathFindingFunctions.h"
@@ -11,6 +11,16 @@ void EnemyBoatWander::Enter(Enemy& enemy)
 
 void EnemyBoatWander::Update(Enemy& enemy, float deltaTime)
 {
+    if (path.empty()) {
+        targetNode = SelectNextTarget(enemy);
+        if (targetNode->getIsLand())
+            path = PathFindingFunctions<Node>::generalAStarPathFind(enemy.getCurrentNode(), targetNode);
+        else
+            path = PathFindingFunctions<Node>::aStarPathFind(enemy.getCurrentNode(), targetNode, enemy.isOnBoat());
+    }
+
+    MoveTowardsTarget(enemy);
+
     if (enemy.GetPlayerAllegiance().isHostile()) {
         for (auto& node : enemy.getUpdateableArea()->getUpdateableNodes())
         {
@@ -21,15 +31,6 @@ void EnemyBoatWander::Update(Enemy& enemy, float deltaTime)
             }
         }
     }
-   if (path.empty()) {
-        targetNode = SelectNextTarget(enemy);
-		if(targetNode->getIsLand()) 
-            path = PathFindingFunctions<Node>::generalAStarPathFind(enemy.getCurrentNode(), targetNode);
-        else 
-            path = PathFindingFunctions<Node>::aStarPathFind(enemy.getCurrentNode(), targetNode, enemy.isOnBoat());
-    }
-
-    MoveTowardsTarget(enemy);
 }
 
 void EnemyBoatWander::Exit(Enemy& enemy)

@@ -20,5 +20,7 @@ private:
 	std::shared_ptr<Node> targetNode;
 	std::vector<std::shared_ptr<Node>> path;
 	int currentNodeInPath = 0;
+
+	std::random_device rd;
 };
 

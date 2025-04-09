@@ -53,6 +53,8 @@ void Boat::update(double dt)
 
 		myHitbox->setPosition(controller->getPosition());
 		myHitbox->setRotation(controller->getRotation());
+
+		currentPlayer->UpdateDirection(desiredPosition);
 	}
 	updateIndicator();
 }

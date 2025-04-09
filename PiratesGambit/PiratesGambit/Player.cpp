@@ -159,4 +159,14 @@ void Player::disembarkBoat(const std::shared_ptr<Node>& _node)
 	body.setPosition(controller->getPosition());
 }
 
+void Player::UpdateDirection(sf::Vector2f _direction)
+{
+	if (std::abs(_direction.x) > std::abs(_direction.y)) {
+		direction = (_direction.x > 0) ? EAST : WEST;
+	}
+	else {
+		direction = (_direction.y > 0) ? SOUTH : NORTH;
+	}
+}
+
 

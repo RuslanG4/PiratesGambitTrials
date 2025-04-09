@@ -41,7 +41,7 @@ AllianceStatusUI::AllianceStatusUI(sf::Vector2f _pos)
 
 void AllianceStatusUI::Render(const std::unique_ptr<sf::RenderWindow>& _window) const
 {
-    _window->draw(background);
+    //_window->draw(background);
     _window->draw(costText);
     _window->draw(alligianceText);
     _window->draw(allegianceBar);

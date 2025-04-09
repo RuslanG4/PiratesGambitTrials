@@ -128,6 +128,12 @@ public:
 	void ClearSurroundingEnemies() { surroundingEnemies.clear(); }
 	void AddToSurroundingEnemies(const std::shared_ptr<Enemy>& _enemy) { surroundingEnemies.push_back(_enemy); };
 
+
+	void UpdateLeader(bool _value) { isLeader = _value; }
+	bool getIsLeader() const { return isLeader; }
+
+	void updateFollowing(bool _value) { isFollowing = _value; }
+	bool getIsFollowing() const { return isFollowing; }
 private:
 	sf::Sprite body;
 	std::string factionAllegiance = "";
@@ -177,6 +183,9 @@ private:
 	//Enemy Allegiance
 	UnitAllegiance enemyAllegiance;
 
+
+	bool isLeader{ false };
+	bool isFollowing{ false };
 };
 
 #endif 

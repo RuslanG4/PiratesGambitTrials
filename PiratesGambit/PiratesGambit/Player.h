@@ -17,6 +17,8 @@ class Boat; //forward ref
 
 class Player
 {
+
+
 public:
 	Player(sf::Vector2f _pos)
 	{
@@ -93,6 +95,11 @@ public:
 	//HitBox
 	sf::FloatRect GetHitBox() const { return myHitbox->GetGlobalBounds(); }
 
+	void UpdateDirection(sf::Vector2f _direction);
+	EnemyDirection GetDirection() const { return direction; }
+	void ChangeDirection(EnemyDirection _direction) { direction = _direction; }
+
+
 private:
 	sf::Sprite body;
 	AnimationState animationState;
@@ -110,6 +117,8 @@ private:
 	std::unique_ptr<Army> playerArmy;
 
 	int currentChunkId{-99};
+
+	EnemyDirection direction;
 
 	//animation
 	int animateTime = 0;

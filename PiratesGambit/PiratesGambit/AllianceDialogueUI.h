@@ -18,7 +18,7 @@ public:
 
     void Update();
 
-    void OpenMenu(const std::shared_ptr<Enemy>& _enemyRef);
+    void OpenMenu(const std::shared_ptr<Enemy>& _enemyRef, const std::shared_ptr<Player>& _playerRef);
     void CloseMenu();
 
     bool isMenuOpen() const { return isOpen; }
@@ -36,6 +36,9 @@ private:
     void ScaleTextToFit();
 
     bool isOpen = false;
+
+    std::shared_ptr<Player> playerRef;
+    std::shared_ptr<Enemy> enemyRef;
 
     sf::RectangleShape background;
     sf::Sprite dialogueBox;
