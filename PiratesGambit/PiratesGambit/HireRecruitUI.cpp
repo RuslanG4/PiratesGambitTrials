@@ -146,7 +146,7 @@ void HireRecruitUI::Update(float _dt)
 		totalCost->UpdateText(std::to_string(amountSlider->getValue() * costPerUnit)); 
 
 		cancel->Update();
-		if (cancel->IsTriggered() || sf::Keyboard::isKeyPressed((sf::Keyboard::Escape)))
+		if (cancel->IsTriggered())
 		{
 			cancel->ResetTrigger();
 			costPerUnit = 0;
@@ -205,6 +205,9 @@ void HireRecruitUI::CloseUI()
 {
 	uiOpen = false;
 	isMenuOpen = false;
+
+	cancel->ResetTrigger();
+	costPerUnit = 0;
 
 	amountSlider->ResetSlider();
 }

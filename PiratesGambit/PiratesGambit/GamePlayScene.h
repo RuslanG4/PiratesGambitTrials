@@ -16,6 +16,7 @@
 #include "json.hpp"
 #include"FindBoatState.h"
 #include"KeyPopUpManager.h"
+#include"PauseScreen.h"
 
 class PlayerTabMenu;
 
@@ -45,12 +46,16 @@ private:
 
 	void HandleMovement() const;
 
+	void HandlePauseScreen();
+
 	void HandleProjectiles();
 	void RemoveEnemy();
 
 	std::shared_ptr<Node> FindCurrentNode(sf::Vector2f _position) const;
 	void UpdatePlayerCurrentNode() const;
-	void UpdateEnemiesCurrentNode() const;
+	void UpdateEnemiesCurrentNode();
+
+	void LookForSurroundingEnemies(const std::shared_ptr<Enemy>& enemy);
 
 	void transitionToBattleMode(const std::shared_ptr<Node>& _node);
 
@@ -87,13 +92,14 @@ private:
 	//std::shared_ptr<Enemy> enemy;
 	//std::shared_ptr<EnemyBoat> enemyBoat;
 
-	std::weak_ptr<GameObject> currentObjectInteract;
+	std::shared_ptr<GameObject> currentObjectInteract;
 	std::shared_ptr<Building> currentBuildingInteract;
 
 	//battle scene
 	BattleSceneTransition battleTransition;
 	std::unique_ptr<BattleScene> battleScene;
 	bool battle = false;
+	bool previousEscapePressed = false;
 
 	int mapSize = 3;
 

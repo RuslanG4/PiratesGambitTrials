@@ -7,7 +7,6 @@ GamePlayScene::GamePlayScene()
 	//myPlayer->boardBoat(playerBoat);
 
 	playerMenu = std::make_unique<PlayerTabMenu>(myPlayer->getArmy(), myPlayer->getInventory());
-	RenderableInventory::getInstance().Init();
 	HireRecruitUI::getInstance().PassPlayer(myPlayer);
 
 	myMap = std::make_unique<FullMap>(mapSize, myPlayer);
@@ -41,7 +40,7 @@ void GamePlayScene::handleInput(const std::unique_ptr<sf::RenderWindow>& window,
 	if (sf::Event::MouseButtonPressed == newEvent.type) //user pressed mouse
 	{
 		Mouse::getInstance().processMouse(newEvent);
-		if (!battle && currentObjectInteract.lock()) {
+		if (!battle && currentObjectInteract) {
 			transferInventoryItems();
 		}
 	}
@@ -55,6 +54,8 @@ void GamePlayScene::update(float dt)
 {
 	Camera::getInstance().update(myPlayer->getPlayerController()->getPosition(), sf::Vector2f(mapSize * CHUNK_NODE_COLS * NODE_SIZE, mapSize * CHUNK_NODE_COLS * NODE_SIZE));
 	//Camera::getInstance().setCameraCenter(myPlayer->getPlayerController()->getPosition());
+
+	HandlePauseScreen();
 
 	if (!battle && !battleTransition.IsTransitionActive()) {
 		updateVisableNodes();
@@ -511,6 +512,37 @@ void GamePlayScene::HandleMovement() const
 	}
 }
 
+void GamePlayScene::HandlePauseScreen()
+{
+	bool currentEscapePressed = sf::Keyboard::isKeyPressed(sf::Keyboard::Escape);
+
+	if (currentEscapePressed && !previousEscapePressed)
+	{
+		if (Inventory::isInventoryOpen())
+		{
+			currentObjectInteract->getInventory()->closeInventory();
+		}
+		else if (HireRecruitUI::IsUIOpen())
+		{
+			HireRecruitUI::getInstance().CloseUI();
+		}
+		else if (PlayerTabMenu::isMenuOpen())
+		{
+			PlayerTabMenu::CloseMenu();
+		}
+		else if (AllianceDialogueUI::getInstance().isMenuOpen())
+		{
+			AllianceDialogueUI::getInstance().CloseMenu();
+		}
+		else if (!PauseScreen::getInstance().isOpened())
+		{
+			PauseScreen::getInstance().OpenMenu();
+		}
+	}
+
+	previousEscapePressed = currentEscapePressed;
+}
+
 void GamePlayScene::HandleProjectiles()
 {
 	bool found = false;
@@ -601,14 +633,33 @@ void GamePlayScene::UpdatePlayerCurrentNode() const
 	}
 }
 
-void GamePlayScene::UpdateEnemiesCurrentNode() const
+void GamePlayScene::UpdateEnemiesCurrentNode()
 {
 	for (auto& enemy : enemies)
 	{
 		auto enemyCurrentNode = FindCurrentNode(enemy->GetPosition());
 		if (enemy->getCurrentNode() != enemyCurrentNode) {
+			if (enemy->getCurrentNode() != nullptr)
+				enemy->getCurrentNode()->updateOccupied(false);
+			enemy->ClearSurroundingEnemies();
 			enemy->setCurrentNode(enemyCurrentNode);
+			enemy->getCurrentNode()->updateOccupied(true);
 			enemy->updateUpdateableArea(enemyCurrentNode, 6);
+			LookForSurroundingEnemies(enemy);
+			//std::cout << enemy->GetSurroundingEnemies().size();
+		}
+	}
+}
+
+void GamePlayScene::LookForSurroundingEnemies(const std::shared_ptr<Enemy>& enemy)
+{
+	for (auto& neighbour : enemy->getCurrentNode()->getNeighbours()) {
+		for (auto& nearEnemy : enemies) {
+			if(nearEnemy == enemy || nearEnemy->getCurrentNode() == nullptr)
+				continue;
+			if (neighbour.first->getID() == nearEnemy->getCurrentNode()->getID() || nearEnemy->getCurrentNode()->getID() == enemy->getCurrentNode()->getID()) {
+				enemy->AddToSurroundingEnemies(nearEnemy);
+			}
 		}
 	}
 }
@@ -731,7 +782,7 @@ void GamePlayScene::transferInventoryItems()
 		{
 			if (slot->getBackgroundSprite().getGlobalBounds().contains(mousePos))
 			{
-				std::unique_ptr<InventoryItem> item = currentObjectInteract.lock()->getInventory()->removeItem(slot->getOccupiedBy());
+				std::unique_ptr<InventoryItem> item = currentObjectInteract->getInventory()->removeItem(slot->getOccupiedBy());
 				slot->clearSlot();
 				myPlayer->getInventory()->addItem(std::move(item));
 			}

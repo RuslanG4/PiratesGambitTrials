@@ -124,6 +124,10 @@ public:
 
 	std::string GetPirateName() const { return pirateName; }
 
+	std::vector<std::shared_ptr<Enemy>>& GetSurroundingEnemies() { return surroundingEnemies; }
+	void ClearSurroundingEnemies() { surroundingEnemies.clear(); }
+	void AddToSurroundingEnemies(const std::shared_ptr<Enemy>& _enemy) { surroundingEnemies.push_back(_enemy); };
+
 private:
 	sf::Sprite body;
 	std::string factionAllegiance = "";
@@ -146,6 +150,8 @@ private:
 	std::unique_ptr<Army> army;
 
 	EnemyDirection currentDirection;
+
+	std::vector<std::shared_ptr<Enemy>> surroundingEnemies;
 
 	int scaleX = 2;
 	int scaleY = 2;

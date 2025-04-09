@@ -62,6 +62,11 @@ void Game::processEvents()
 	sf::Event newEvent;
 	while (m_window->pollEvent(newEvent))
 	{
+		if (PauseScreen::getInstance().isOpened())
+		{
+			PauseScreen::getInstance().Update(newEvent);
+			continue;
+		}
 		SceneManager::getInstance().getCurrentScene()->handleInput(m_window, newEvent);
 		if (sf::Event::MouseButtonReleased == newEvent.type)
 		{
@@ -76,10 +81,13 @@ void Game::processEvents()
 /// <param name="t_deltaTime">time interval per frame</param>
 void Game::update(double t_deltaTime)
 {
+	if (!PauseScreen::getInstance().isOpened())
+	{
+		SceneManager::getInstance().getCurrentScene()->update(t_deltaTime);
+		ParticleManager::getInstance().update(t_deltaTime);
+		BulletFactory::getInstance().update(t_deltaTime);
+	}
 	Mouse::getInstance().update(m_window);
-	SceneManager::getInstance().getCurrentScene()->update(t_deltaTime);
-	ParticleManager::getInstance().update(t_deltaTime);
-	BulletFactory::getInstance().update(t_deltaTime);
 }
 
 /// <summary>
@@ -89,6 +97,7 @@ void Game::render()
 {
 	m_window->clear(sf::Color::Black);
 	SceneManager::getInstance().getCurrentScene()->render(m_window);
+	PauseScreen::getInstance().Render(m_window);
 	m_window->setView(m_window->getDefaultView());
 	m_window->display();
 }

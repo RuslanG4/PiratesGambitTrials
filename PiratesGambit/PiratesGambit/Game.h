@@ -6,6 +6,7 @@
 #include "BulletFactory.h"
 #include "ParticleManager.h"
 #include "TextureManager.h"
+#include"PauseScreen.h"
 
 class Game
 {

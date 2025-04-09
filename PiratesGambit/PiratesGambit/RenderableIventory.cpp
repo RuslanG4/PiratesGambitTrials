@@ -24,7 +24,7 @@ void RenderableInventory::Init()
 			float posX = topLeftOfBG.x + x * (96 + padding);
 			float posY = topLeftOfBG.y + y * (96 + padding);
 
-			inventorySlots.push_back(new InventorySlot(posX, posY, x + y * 4));
+			inventorySlots.push_back(std::make_shared<InventorySlot>(posX, posY, x + y * 4));
 		}
 	}
 }

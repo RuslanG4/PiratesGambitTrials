@@ -48,7 +48,12 @@ void ChaseState::FindNewPath(Enemy& enemy)
         {
             if (node == playerRef->getCurrentNode())
             {
-                path = PathFindingFunctions<Node>::generalAStarPathFind(enemy.getCurrentNode(), playerRef->getCurrentNode());
+                if (enemy.isOnBoat()) {
+                    path = PathFindingFunctions<Node>::generalAStarPathFind(enemy.getCurrentNode(), playerRef->getCurrentNode());
+                }
+                else {
+                    path = PathFindingFunctions<Node>::aStarPathFind(enemy.getCurrentNode(), playerRef->getCurrentNode(), enemy.isOnBoat());
+                } 
                 currentNodeInPath = 0;
                 break;
             }
@@ -100,9 +105,24 @@ void ChaseState::ChasePlayer(Enemy& enemy)
 
     distance = Utility::unitVector2D(distance);
 
+    sf::Vector2f avoidance(0.f, 0.f);
+    for (const auto& other : enemy.GetSurroundingEnemies())
+    {
+        sf::Vector2f toOther = enemy.GetPosition() - other->GetPosition();
+        float distance = Utility::magnitude(toOther.x, toOther.y);
+        if (distance < 30.0f && distance > 0.01f)
+        {
+            toOther = Utility::unitVector2D(toOther);
+            avoidance += toOther * (30.0f - distance); 
+        }
+    }
+
+    sf::Vector2f finalMove = distance + avoidance * 0.1f;
+    finalMove = Utility::unitVector2D(finalMove);
+
     enemy.FaceDirection(distance);
 
-    enemy.SetPosition(enemy.GetPosition() + distance);
+    enemy.SetPosition(enemy.GetPosition() + finalMove);
 }
 
 

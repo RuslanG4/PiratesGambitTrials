@@ -61,10 +61,9 @@ void AllianceDialogueUI::Update()
         exitButton->Update();
         purchaseButton->Update();
 
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || exitButton->IsTriggered())
+        if(exitButton->IsTriggered())
         {
-            isOpen = false;
-            exitButton->ResetTrigger();
+            CloseMenu();
         }
     }
 }
@@ -81,6 +80,7 @@ void AllianceDialogueUI::OpenMenu(const std::shared_ptr<Enemy>& _enemyRef)
 void AllianceDialogueUI::CloseMenu()
 {
     isOpen = false;
+    exitButton->ResetTrigger();
 }
 
 void AllianceDialogueUI::Render(const std::unique_ptr<sf::RenderWindow>& _window) const

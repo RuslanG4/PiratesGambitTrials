@@ -68,7 +68,25 @@ void EnemyBoatWander::MoveTowardsTarget(Enemy& enemy)
     }
 
     distance = Utility::unitVector2D(distance);
-    enemy.SetPosition(enemy.GetBoat()->getPosition() + distance * 0.5f); // speed
+
+    sf::Vector2f avoidance(0.f, 0.f);
+    for (const auto& other : enemy.GetSurroundingEnemies())
+    {
+        sf::Vector2f toOther = enemy.GetPosition() - other->GetPosition();
+        float distance = Utility::magnitude(toOther.x, toOther.y);
+        if (distance < 30.0f && distance > 0.01f)
+        {
+            toOther = Utility::unitVector2D(toOther);
+            avoidance += toOther * (30.0f - distance);
+        }
+    }
+
+    sf::Vector2f finalMove = distance + avoidance * 0.1f;
+    finalMove = Utility::unitVector2D(finalMove);
+
+    distance = Utility::unitVector2D(distance);
+
+    enemy.SetPosition(enemy.GetPosition() + finalMove * 0.5f);
     enemy.UpdateDirection(distance);
 
 }

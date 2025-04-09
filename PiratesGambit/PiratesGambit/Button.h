@@ -11,6 +11,7 @@ public:
     void SetPosition(sf::Vector2f _pos);
     void draw(const std::unique_ptr<sf::RenderWindow>& window);
     bool isClicked() const { return clicked; }
+	void resetButton() { clicked = false; }
     void centerText(sf::Text& _text);
 
 protected:
