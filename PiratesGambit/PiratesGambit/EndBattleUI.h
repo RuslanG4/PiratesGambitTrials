@@ -17,7 +17,7 @@ public:
 	void updateUnitsDestroyed(const std::unique_ptr<Army>& _army);
 
 	bool isOKClicked() const { return continueButton->isClicked(); }
-	bool isWin() const { return isWin; }
+	bool isPlayerWin() const { return isWin; }
 
 	void Win();
 	void Lose();

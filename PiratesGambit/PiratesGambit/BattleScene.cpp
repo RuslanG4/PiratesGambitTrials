@@ -179,6 +179,8 @@ void BattleScene::updateNextTurn()
 	if (currentSelectedUnit->unitInformation.allegiance != HUMAN_PLAYER) {
 		if(!CheckBattleOver(playerRef->getArmy()))
 			EnemyTurn();
+		else
+			clearArea(walkableNodesIDs);
 	}
 	else {
 		CheckBattleOver(enemyRef->getArmy());

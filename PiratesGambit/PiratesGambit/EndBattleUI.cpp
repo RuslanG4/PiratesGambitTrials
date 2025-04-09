@@ -77,6 +77,7 @@ void EndBattleUI::updateUnitsDestroyed(const std::unique_ptr<Army>& _army)
 
 void EndBattleUI::Win()
 {
+	isWin = true;
 	icon.setTexture(TextureManager::getInstance().getTexture("CHEST_ICON"));
 	outcomeText.setString("Victory");
 	descriptionText.setString("The enemy has been defeated \n \nYou have gained gold");
@@ -84,6 +85,7 @@ void EndBattleUI::Win()
 
 void EndBattleUI::Lose()
 {
+	isWin = false;
 	icon.setTexture(TextureManager::getInstance().getTexture("SKULL_ICON"));
 	outcomeText.setString("Defeat");
 	descriptionText.setString("You have been defeated \n \nYou have gained gold");

@@ -56,6 +56,12 @@ void BirdUnit::animateSprite(float _dt)
 		if (deathAnimation)
 		{
 			sprite.setTexture(TextureManager::getInstance().getTexture("DEAD_BIRD"));
+			sf::IntRect rectSourceSprite;
+			rectSourceSprite.height = 64;
+			rectSourceSprite.width = 64;
+			rectSourceSprite.left = 0;
+			rectSourceSprite.top = 0;
+			sprite.setTextureRect(rectSourceSprite);
 			unitStats.isActive = false;
 			unitAmount->renderUnitAmount = false;
 		}

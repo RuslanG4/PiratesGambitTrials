@@ -33,6 +33,7 @@ public:
 	}
 	void resetBattle();
 	bool isBattleOver() const { return endBattleUI->isOKClicked(); }
+	bool isPlayerWin() const { return endBattleUI->isPlayerWin(); }
 	void handleEvent(const sf::Event& event);
 
 	void setEnemyRef(const std::shared_ptr<Enemy>& _enemy) { enemyRef = _enemy; }
