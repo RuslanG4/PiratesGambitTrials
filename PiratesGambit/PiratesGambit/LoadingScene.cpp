@@ -12,6 +12,7 @@ LoadingScene::LoadingScene()
         {
             std::lock_guard<std::mutex> lock(sceneMutex);
             nextScene = newScene;
+            sf::sleep(sf::milliseconds(1000));
             sceneReady = true;
         }
         });

@@ -8,7 +8,7 @@
 /// </summary>
 Game::Game()
 {
-	m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode( SCREEN_WIDTH,SCREEN_HEIGHT), 32U );
+	m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode( SCREEN_WIDTH,SCREEN_HEIGHT), 32U, sf::Style::Fullscreen);
 	if (!TextureManager::getInstance().loadAllResources()) {
 		std::cerr << "Failed to load all resources!";
 	}
