@@ -181,7 +181,8 @@ std::vector<int> PathFindingFunctions<NodeType>::BreathSearchNodes(
 
 				nodeQueue.emplace(_area[neighbourID.first], std::ceil(distance)); // std::ceil for rounding up
 
-				BreathArea.push_back(neighbourID.first);
+				if(!_area[neighbourID.first]->isOccupied())
+					BreathArea.push_back(neighbourID.first);
 			}
 		}
 	}
@@ -219,7 +220,7 @@ std::vector<int> PathFindingFunctions<NodeType>::BreathSearchEuclydianNodes(
 		auto neighbours = currentNode->getNodeData().neighbourIDs;
 		for (auto& neighbourID : neighbours)
 		{
-			if (!_area[neighbourID.first]->hasBeenTraversed() && neighbourID.second % 2 != 0 && !_area[neighbourID.first]->isOccupied())
+			if (!_area[neighbourID.first]->hasBeenTraversed() && neighbourID.second % 2 != 0)
 			{
 				_area[neighbourID.first]->updateTraversed(true);
 				allScannedNodes.push_back(_area[neighbourID.first]);
@@ -230,8 +231,8 @@ std::vector<int> PathFindingFunctions<NodeType>::BreathSearchEuclydianNodes(
 				float distance = std::hypotf(dx / 80, dy / 80);
 
 				nodeQueue.emplace(_area[neighbourID.first], std::ceil(distance)); // std::ceil for rounding up
-
-				BreathArea.push_back(neighbourID.first);
+				if(!_area[neighbourID.first]->isOccupied())
+					BreathArea.push_back(neighbourID.first);
 			}
 		}
 	}

@@ -863,7 +863,7 @@ std::shared_ptr<PirateUnit> BattleScene::PickUnitToAttack(const std::vector<std:
 
 int BattleScene::SelectNodeToWalkTo()
 {
-	int shortestDistance = 10000;
+	int shortestDistance = 1000;
 	int selectedID = -1;
 
 	std::shared_ptr<PirateUnit> selectedUnit = PickUnitToAttack(playerRef->getArmy()->getArmy());
@@ -884,7 +884,7 @@ int BattleScene::SelectNodeToWalkTo()
 
 int BattleScene::SelectAttackNodeToWalkTo(const std::vector<std::shared_ptr<PirateUnit>>& _possibleUnits) 
 {
-	float shortestDistance = 100.f;
+	int shortestDistance = 1000;
 	int selectedID = -1;
 
 	currentDefendingUnit = PickUnitToAttack(_possibleUnits);
@@ -896,6 +896,7 @@ int BattleScene::SelectAttackNodeToWalkTo(const std::vector<std::shared_ptr<Pira
 	{
 		if (EnemyMoveConditions::distanceToEnemy(battleGrid[ID]->getMidPoint(), currentSelectedUnit->getPosition()) < shortestDistance)
 		{
+			if(battleGrid[ID])
 			shortestDistance = EnemyMoveConditions::distanceToEnemy(battleGrid[ID]->getMidPoint(), currentSelectedUnit->getPosition());
 			selectedID = ID;
 		}
