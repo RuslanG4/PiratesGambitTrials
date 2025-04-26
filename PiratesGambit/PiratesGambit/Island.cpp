@@ -4,10 +4,10 @@
 
 void Island::render(const std::unique_ptr<sf::RenderWindow>& window) const
 {
-	//for(auto& node:landNodes)
-	//{
-	//	window->draw(*(node->debugShape));
-	//}
+	for(auto& node:landNodes)
+	{
+		window->draw(*(node->debugShape));
+	}
 	for (const auto& building : buildings)
 	{
 		building->Render(window);  // Draw buildings with camera view
@@ -62,6 +62,7 @@ void Island::GenerateTrees(std::vector<std::shared_ptr<Node>>& _nodes)
 		{
 			gameObjects.push_back(std::make_shared<Tree>());
 			node->updateOccupied(true);
+			node->debugShape->setFillColor(sf::Color::Red);
 			gameObjects.back()->setNodeId(node->getID());
 			gameObjects.back()->setPosition(node->getMidPoint());
 			node->AddPresentObject(gameObjects.back());

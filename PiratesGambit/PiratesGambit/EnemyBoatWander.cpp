@@ -75,10 +75,10 @@ void EnemyBoatWander::MoveTowardsTarget(Enemy& enemy)
     {
         sf::Vector2f toOther = enemy.GetPosition() - other->GetPosition();
         float distance = Utility::magnitude(toOther.x, toOther.y);
-        if (distance < 30.0f && distance > 0.01f)
+        if (distance < 45.0f && distance > 0.01f)
         {
             toOther = Utility::unitVector2D(toOther);
-            avoidance += toOther * (30.0f - distance);
+            avoidance += toOther * (45.0f - distance);
         }
     }
 

@@ -21,7 +21,7 @@ void UpdateableArea::updateVisibleNodes(const std::shared_ptr<Node>& _startNode,
 	updateArea.push_back(_startNode);
 
 	//debug
-	_startNode->debugShape->setFillColor(sf::Color(123, 123, 123, 180));
+	//_startNode->debugShape->setFillColor(sf::Color(123, 123, 123, 180));
 
 	while (!nodeQueue.empty() && iterCount < iterations) {
 		std::shared_ptr<Node> currentNode = nodeQueue.front();
@@ -33,7 +33,7 @@ void UpdateableArea::updateVisibleNodes(const std::shared_ptr<Node>& _startNode,
 			if (std::ranges::find(updateArea.begin(), updateArea.end(), neighbour.first) == updateArea.end() && iterCount < iterations) {
 
 				//debug
-				neighbour.first->debugShape->setFillColor(sf::Color(123, 123, 123, 180));
+				//neighbour.first->debugShape->setFillColor(sf::Color(123, 123, 123, 180));
 
 				iterCount++;
 

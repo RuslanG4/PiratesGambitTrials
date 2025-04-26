@@ -7,7 +7,7 @@
 void FindBoatState::Enter(Enemy& enemy)
 {
     std::cout << "Enemy is entering find boat state." <<"\n";
-    path = PathFindingFunctions<Node>::aStarPathFind(enemy.getCurrentNode(), enemy.GetBoat()->getDockedNode(), enemy.isOnBoat());
+    path = PathFindingFunctions<Node>::aStarPathFind(enemy.getCurrentNode(), enemy.GetBoat()->getDockedNode(), false);
     enemy.SetAnimationState(UnitState::WALK);
  
 }

@@ -12,56 +12,66 @@ std::vector<std::shared_ptr<NodeType>> PathFindingFunctions<NodeType>::aStarPath
 	std::vector<std::shared_ptr<NodeType>> allScannedNodes; //used for then clearing
 	std::vector<std::shared_ptr<NodeType>> path;
 
-	nodeQueue.push(_start);
 	_start->clearPrevious();
 	end->clearPrevious();
+
+	_start->setGCost(0.0f);
+
+	float dx = static_cast<float>(_start->getPosition().x - end->getPosition().x);
+	float dy = static_cast<float>(_start->getPosition().y - end->getPosition().y);
+	float hCost = (std::abs(dx) + std::abs(dy)) / _start->getNodeData().size;
+	_start->setHCost(hCost);
+	_start->setFCost(hCost);
+
+	nodeQueue.push(_start);
+
+	_start->updateTraversed(true);
+	allScannedNodes.push_back(_start);
 
 	while (!nodeQueue.empty()) {
 		std::shared_ptr<NodeType> currentTop = nodeQueue.top();
 		
 		nodeQueue.pop();
 
+		if (currentTop->isOccupied() && currentTop != _start) {
+			continue;
+		}
+
 		if (currentTop == end) { //found
 			break;
 		}
 
-		if (!currentTop->hasBeenTraversed()) {
-			currentTop->updateTraversed(true);
-			allScannedNodes.push_back(currentTop);
+		for (auto& [neighbor, direction] : currentTop->getNeighbours()) {
+			if (!neighbor) continue; // safety
 
-			auto neighbours = currentTop->getNeighbours();
+			float movementCost = (direction % 2 == 1) ? 1.0f : 1.4f;
+			float newGCost = currentTop->getNodeData().gCost + movementCost;
 
-			for (auto& neighbourNode : neighbours) {
+			bool isValidNode = (!isBoatMode && neighbor->getIsLand()) || (isBoatMode && !neighbor->getIsLand());
 
-					float movementCost = (neighbourNode.second == 1) ? 1.0f : 1.4f; // 1.0 for straight, 1.4 for diagonal
-					float newGCost = currentTop->getNodeData().gCost + movementCost;
+			if (!neighbor->isOccupied() && isValidNode)
+			{
+				if (!neighbor->hasBeenTraversed() || newGCost < neighbor->getNodeData().gCost) {
+					neighbor->setPrevious(currentTop);
+					neighbor->setGCost(newGCost);
 
-					bool isValidNode = (!isBoatMode && neighbourNode.first->getIsLand()) ||
-						(isBoatMode && !neighbourNode.first->getIsLand());
+					dx = static_cast<float>(neighbor->getPosition().x - end->getPosition().x);
+					dy = static_cast<float>(neighbor->getPosition().y - end->getPosition().y);
+					hCost = (std::abs(dx) + std::abs(dy)) / _start->getNodeData().size;
 
-					if ((!neighbourNode.first->hasBeenTraversed() || newGCost < neighbourNode.first->getNodeData().gCost ) 
-						&& !neighbourNode.first->isOccupied()
-						&& isValidNode) 
-					{
-						neighbourNode.first->setPrevious(currentTop);
-						neighbourNode.first->setGCost(newGCost);
+					neighbor->setHCost(hCost);
+					neighbor->setFCost(newGCost + hCost);
 
-						float dx = static_cast<float>(neighbourNode.first->getPosition().x - end->getPosition().x);
-						float dy = static_cast<float>(neighbourNode.first->getPosition().y - end->getPosition().y);
-				
-						float hCost = (std::abs(dx) + std::abs(dy)) / _start->getNodeData().size;
+					nodeQueue.push(neighbor);
 
-						neighbourNode.first->setHCost(hCost);
-						neighbourNode.first->setFCost(neighbourNode.first->getNodeData().gCost + neighbourNode.first->getNodeData().hCost);
-
-						nodeQueue.push(neighbourNode.first);
+					if (!neighbor->hasBeenTraversed()) {
+						neighbor->updateTraversed(true);
+						allScannedNodes.push_back(neighbor);
 					}
-				
+				}
 			}
 		}
 	}
-
-	ClearTraversedNodes(allScannedNodes);
 
 	std::shared_ptr<NodeType> current = end;
 	while (current->getPrevious() != nullptr)
@@ -71,6 +81,8 @@ std::vector<std::shared_ptr<NodeType>> PathFindingFunctions<NodeType>::aStarPath
 	}
 
 	std::ranges::reverse(path.begin(), path.end());
+
+	ClearTraversedNodes(allScannedNodes);
 
 	return path;
 }
@@ -103,7 +115,7 @@ inline std::vector<std::shared_ptr<NodeType>> PathFindingFunctions<NodeType>::ge
 
 			for (auto& neighbourNode : neighbours) {
 
-				float movementCost = (neighbourNode.second == 1) ? 1.0f : 1.4f; // 1.0 for straight, 1.4 for diagonal
+				float movementCost = (neighbourNode.second % 2 == 1) ? 1.0f : 1.4f; // 1.0 for straight, 1.4 for diagonal
 				float newGCost = currentTop->getNodeData().gCost + movementCost;
 
 				if ((!neighbourNode.first->hasBeenTraversed() || newGCost < neighbourNode.first->getNodeData().gCost)

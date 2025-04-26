@@ -231,11 +231,6 @@ void BattleScene::addNeighbours(int _currentNodeId) const
 	int col = _currentNodeId % colAmount;
 	int neighbourIndex = -1;
 
-	if(_currentNodeId ==60)
-	{
-		int d = 0;
-	}
-
 	//This neighbour algoritihim prioritises vertical/hjorizontal then diagonal
 	std::array<int, 8> directionOrder
 	{

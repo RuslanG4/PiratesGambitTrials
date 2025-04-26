@@ -26,11 +26,12 @@ void EnemyLandWander::Update(Enemy& enemy, float deltaTime)
         std::mt19937 gen(rd());
         std::uniform_int_distribution<> dis(1, 5); //20% chance for idle
         if (dis(gen) == 1) {
+            path.clear();
             enemy.ChangeState(new IdleState(playerRef));  
         }
         else {
             targetNode = SelectNextTarget(enemy);
-            path = PathFindingFunctions<Node>::aStarPathFind(enemy.getCurrentNode(), targetNode, enemy.isOnBoat());
+            path = PathFindingFunctions<Node>::aStarPathFind(enemy.getCurrentNode(), targetNode, false);
         }
     }
 

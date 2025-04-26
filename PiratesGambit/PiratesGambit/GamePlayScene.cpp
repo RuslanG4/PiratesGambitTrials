@@ -144,7 +144,7 @@ void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 
 			window->draw(*(node->waterBackSprite));
 			window->draw(*(node->drawableNode));
-
+			//window->draw(*(node->debugShape));
 		}
 
 		myPlayer->render(window);
@@ -673,11 +673,11 @@ void GamePlayScene::UpdateEnemiesCurrentNode()
 	{
 		auto enemyCurrentNode = FindCurrentNode(enemy->GetPosition());
 		if (enemy->getCurrentNode() != enemyCurrentNode) {
-			if (enemy->getCurrentNode() != nullptr)
-				enemy->getCurrentNode()->updateOccupied(false);
+			//if (enemy->getCurrentNode() != nullptr)
+				//enemy->getCurrentNode()->updateOccupied(false);
 			enemy->ClearSurroundingEnemies();
 			enemy->setCurrentNode(enemyCurrentNode);
-			enemy->getCurrentNode()->updateOccupied(true);
+			//enemy->getCurrentNode()->updateOccupied(true);
 			enemy->updateUpdateableArea(enemyCurrentNode, 6);
 			LookForSurroundingEnemies(enemy);
 			//std::cout << enemy->GetSurroundingEnemies().size();
