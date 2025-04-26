@@ -2,12 +2,14 @@
 
 #include "Enemy.h"
 #include "PathFindingFunctions.h"
+#include"FollowPlayerState.h"
 
 void FindBoatState::Enter(Enemy& enemy)
 {
     std::cout << "Enemy is entering find boat state." <<"\n";
     path = PathFindingFunctions<Node>::aStarPathFind(enemy.getCurrentNode(), enemy.GetBoat()->getDockedNode(), enemy.isOnBoat());
     enemy.SetAnimationState(UnitState::WALK);
+ 
 }
 
 void FindBoatState::Update(Enemy& enemy, float deltaTime)
@@ -18,7 +20,21 @@ void FindBoatState::Update(Enemy& enemy, float deltaTime)
     }else
     {
         enemy.boardBoat(enemy.GetBoat());
-        enemy.ChangeState(new IdleState(playerRef));
+        if (enemy.getHiredStatus())
+        {
+            for (auto& node : enemy.getUpdateableArea()->getUpdateableNodes())
+            {
+
+                if (node == playerRef->getCurrentNode())
+                {
+                    enemy.ChangeState(new FollowPlayerState(playerRef));
+                }
+            }
+        }
+        else {
+
+            enemy.ChangeState(new IdleState(playerRef));
+        }
     }
 }
 

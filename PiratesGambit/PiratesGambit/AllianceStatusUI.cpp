@@ -91,6 +91,7 @@ void AllianceStatusUI::PlaceIndicatorOnAllegianceBar(int _value)
     int cost = static_cast<int>(baseCost * multiplier);
 
 	costText.setString(std::to_string(cost));
+    costAmount = cost;
 }
 
 void AllianceStatusUI::CenterTexts()

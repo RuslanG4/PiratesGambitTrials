@@ -36,10 +36,20 @@ void AllianceDialogueUI::Init()
 
 void AllianceDialogueUI::UpdateText()
 {
-    fullText = "Arr, ye be lookin’ for a crew, eh? \n"
-			   "I’ve got me finest scallywags,\n"
-	  "but they don’t work for free!\n"
-   "Pay up, or walk the plank!";
+	if (enemyRef != nullptr && enemyRef->getHiredStatus()) {
+		fullText = "Arr yah stopping to have a chat? \n"
+			"I dont have all day now.\n"
+			"You better find me some booty,\n"
+			"I'll leave yah where you stand";
+	}
+	else
+	{
+		fullText = "Arr, ye be lookin’ for a crew, eh? \n"
+			"I’ve got me finest scallywags,\n"
+			"but they don’t work for free!\n"
+			"Pay up, or walk the plank!";
+	}
+
     currentText = "";
     charIndex = 0;
     clock.restart();
@@ -66,8 +76,17 @@ void AllianceDialogueUI::Update()
             CloseMenu();
         }
         if (purchaseButton->IsTriggered()) {
-            enemyRef->ChangeState(new FollowPlayerState(playerRef));
-            CloseMenu();
+            auto it = std::ranges::find_if(playerRef->getInventory()->getItems(), [&](const std::unique_ptr<InventoryItem>& item) {
+                return item->getItemName() == COINS;
+                });
+
+            if (it != playerRef->getInventory()->getItems().end()) {
+                if ((it->get()->getStackSize() - allianceStatus->getCostAmount()) > 0) {
+                    enemyRef->ChangeState(new FollowPlayerState(playerRef));
+                    enemyRef->updateHiredStatus(true);
+                    CloseMenu();
+                }
+            }
         }
     }
 }

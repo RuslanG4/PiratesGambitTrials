@@ -128,6 +128,8 @@ public:
 	void ClearSurroundingEnemies() { surroundingEnemies.clear(); }
 	void AddToSurroundingEnemies(const std::shared_ptr<Enemy>& _enemy) { surroundingEnemies.push_back(_enemy); };
 
+	void updateHiredStatus(bool _value) { isHired = _value; }
+	bool getHiredStatus() const { return isHired; }
 
 	void UpdateLeader(bool _value) { isLeader = _value; }
 	bool getIsLeader() const { return isLeader; }
@@ -182,6 +184,7 @@ private:
 
 	//Enemy Allegiance
 	UnitAllegiance enemyAllegiance;
+	bool isHired{ false };
 
 
 	bool isLeader{ false };

@@ -75,7 +75,7 @@ std::shared_ptr<Node> EnemyLandWander::SelectNextTarget(Enemy& enemy)
 
     for(auto& node : enemy.getUpdateableArea()->getUpdateableNodes())
     {
-	    if(node->getIsLand())
+	    if(node->getIsLand() && !node->isOccupied())
 	    {
             possibleNodes.push_back(node);
 	    }

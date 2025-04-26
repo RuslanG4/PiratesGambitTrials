@@ -9,51 +9,68 @@
 
 void FollowPlayerState::Enter(Enemy& enemy)
 {
-    std::cout << "Enemy is entering Fleet state." << std::endl;
-    detectPlayerClock.restart();
+	std::cout << "Enemy is entering Fleet state." << std::endl;
+	enemy.SetAnimationState(UnitState::WALK);
+	detectPlayerClock.restart();
 	targetNode = playerRef->getCurrentNode();
-    FindNewPath(enemy);
+	FindNewPath(enemy);
 }
 
 void FollowPlayerState::Update(Enemy& enemy, float deltaTime)
 {
 	if (targetNode != playerRef->getCurrentNode()) {
 		FindNewPath(enemy);
-
-		// If player has gone out of update radius
-		auto playerTooFar = std::find_if(enemy.getUpdateableArea()->getUpdateableNodes().begin(),
-			enemy.getUpdateableArea()->getUpdateableNodes().end(),
-			[&](const std::shared_ptr<Node>& node) {
-				return node->getID() == playerRef->getCurrentNode()->getID();
-			});
-		// back to wandering, minus player rep
-		if (playerTooFar == enemy.getUpdateableArea()->getUpdateableNodes().end()) {
-			enemy.updateAllegiance(-10);
-			enemy.ChangeState(new EnemyBoatWander(playerRef));
-			return;
+		if (playerRef->isOnBoat() && !enemy.isOnBoat())
+		{
+			path.clear();
 		}
+		else {
 
-		if (enemy.GetPlayerAllegiance().isHostile()) {
-			for (auto& node : enemy.getUpdateableArea()->getUpdateableNodes())
-			{
-				if (node == playerRef->getCurrentNode())
+			// If player has gone out of update radius
+			auto playerTooFar = std::find_if(enemy.getUpdateableArea()->getUpdateableNodes().begin(),
+				enemy.getUpdateableArea()->getUpdateableNodes().end(),
+				[&](const std::shared_ptr<Node>& node) {
+					return node->getID() == playerRef->getCurrentNode()->getID();
+				});
+			// back to wandering, minus player rep
+			if (playerTooFar == enemy.getUpdateableArea()->getUpdateableNodes().end()) {
+				enemy.updateAllegiance(-10);
+				enemy.updateHiredStatus(false);
+				if (enemy.isOnBoat()) {
+					enemy.ChangeState(new IdleState(playerRef));
+				}
+				else {
+					enemy.ChangeState(new EnemyBoatWander(playerRef));
+				}
+				return;
+			}
+
+			if (enemy.GetPlayerAllegiance().isHostile()) {
+				for (auto& node : enemy.getUpdateableArea()->getUpdateableNodes())
 				{
-					enemy.ChangeState(new ChaseState(playerRef));
-					break;
+					if (node == playerRef->getCurrentNode())
+					{
+						enemy.ChangeState(new ChaseState(playerRef));
+						break;
+					}
 				}
 			}
 		}
-		
+
+	}
+	if (playerRef->isOnBoat() && !enemy.isOnBoat())
+	{
+		enemy.ChangeState(new FindBoatState(playerRef));
 	}
 
-    if (!path.empty()) {
-        FollowLeader(enemy);
-    }
+	else if (!path.empty()) {
+		FollowLeader(enemy);
+	}
 }
 
 void FollowPlayerState::Exit(Enemy& enemy)
 {
-    std::cout << "Enemy is leaving chase state.";
+	std::cout << "Enemy is leaving chase state.";
 }
 
 void FollowPlayerState::FindNewPath(Enemy& enemy)
@@ -112,20 +129,46 @@ void FollowPlayerState::FindNewPath(Enemy& enemy)
 
 	path.clear();
 
-	path = PathFindingFunctions<Node>::aStarPathFind(enemy.getCurrentNode(), destinationNode, enemy.isOnBoat());
-    
+	if (!playerRef->isOnBoat())
+	{
+		if (enemy.isOnBoat()) {
+			path = PathFindingFunctions<Node>::generalAStarPathFind(enemy.getCurrentNode(), playerRef->getCurrentNode());
+		}
+		else {
+			path = PathFindingFunctions<Node>::aStarPathFind(enemy.getCurrentNode(), playerRef->getCurrentNode(), enemy.isOnBoat());
+		}
+		currentNodeInPath = 0;
+
+	}
+	else if (playerRef->isOnBoat() && enemy.isOnBoat())
+	{
+		path = PathFindingFunctions<Node>::aStarPathFind(enemy.getCurrentNode(), destinationNode, enemy.isOnBoat());
+	}
+
+
+	//path = PathFindingFunctions<Node>::aStarPathFind(enemy.getCurrentNode(), destinationNode, enemy.isOnBoat());
+
 }
 
 void FollowPlayerState::FollowLeader(Enemy& enemy)
 {
 	float speed = 0.8f;
-    if (currentNodeInPath >= path.size()) {
-        path.clear();
-        return;
-    }
+	enemy.SetAnimationState(UnitState::WALK);
+	if (currentNodeInPath >= path.size()) {
+		path.clear();
+		return;
+	}
+	// Handle disembarking if the next node is land
+	if (path[currentNodeInPath]->getIsLand() && enemy.isOnBoat())
+	{
+		enemy.disembarkBoat(path[currentNodeInPath]);
+		path.clear();
+		detectPlayerClock.restart();
+		return;
+	}
 
-    sf::Vector2f distance = path[currentNodeInPath]->getMidPoint() - enemy.GetPosition();
-    float magnitude = Utility::magnitude(distance.x, distance.y);
+	sf::Vector2f distance = path[currentNodeInPath]->getMidPoint() - enemy.GetPosition();
+	float magnitude = Utility::magnitude(distance.x, distance.y);
 
 	sf::Vector2f distanceToPlayer = enemy.GetPosition() - playerRef->getPlayerController()->getPosition();
 	float magnitudeToPlayer = Utility::magnitude(distanceToPlayer.x, distanceToPlayer.y);
@@ -133,22 +176,23 @@ void FollowPlayerState::FollowLeader(Enemy& enemy)
 	if (magnitudeToPlayer < 60.0f) {
 		speed = 0.3f;
 	}
-		
 
-    if (magnitude < 1.0f) {
-        currentNodeInPath++;
 
-        // Ensure we don't go out of bounds
-        if (currentNodeInPath >= path.size()) {
-            path.clear();
-            return;
-        }
-        distance = path[currentNodeInPath]->getMidPoint() - enemy.GetPosition();
-    }
+	if (magnitude < 1.0f) {
+		currentNodeInPath++;
 
-    distance = Utility::unitVector2D(distance);
+		// Ensure we don't go out of bounds
+		if (currentNodeInPath >= path.size()) {
+			enemy.SetAnimationState(UnitState::IDLE);
+			path.clear();
+			return;
+		}
+		distance = path[currentNodeInPath]->getMidPoint() - enemy.GetPosition();
+	}
 
-    enemy.FaceDirection(distance);
+	distance = Utility::unitVector2D(distance);
 
-    enemy.SetPosition(enemy.GetPosition() + distance * speed);
+	enemy.FaceDirection(distance);
+
+	enemy.SetPosition(enemy.GetPosition() + distance * speed);
 }

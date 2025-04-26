@@ -433,7 +433,9 @@ void GamePlayScene::processKeys()
 				if (enemy->getCurrentNode() == node && !enemy->GetPlayerAllegiance().isHostile())
 				{
 					AllianceDialogueUI::getInstance().OpenMenu(enemy, myPlayer);
-					enemy->ChangeState(new IdleState(myPlayer));
+					if (!enemy->getHiredStatus()) {
+						enemy->ChangeState(new IdleState(myPlayer));
+					}
 				}
 			}
 		}
@@ -702,7 +704,7 @@ void GamePlayScene::transitionToBattleMode(const std::shared_ptr<Node>& _node)
 	{
 		if (_node->getID() == enemy->getCurrentNode()->getID())
 		{
-			if (enemy->GetGlobalBounds().intersects(myPlayer->GetHitBox()))
+			if (enemy->GetGlobalBounds().intersects(myPlayer->GetHitBox()) && enemy->GetPlayerAllegiance().isHostile())
 			{
 				battleTransition.startTransition(1);
 				battleScene->setEnemyRef(enemy);

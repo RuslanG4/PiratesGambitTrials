@@ -10,6 +10,8 @@ public:
 	void updateAllegianceLevel(const AllegianceLevel& _level);
 	void PlaceIndicatorOnAllegianceBar(int _value);
 
+	int getCostAmount() const { return costAmount; }
+
 private:
 	void ScaleAllegianceBar();
 
@@ -17,6 +19,8 @@ private:
 
 	sf::Text costText;
 	sf::Text alligianceText;
+
+	int costAmount;
 
 	sf::RectangleShape background;
 

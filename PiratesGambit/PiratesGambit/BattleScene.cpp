@@ -896,7 +896,6 @@ int BattleScene::SelectAttackNodeToWalkTo(const std::vector<std::shared_ptr<Pira
 	{
 		if (EnemyMoveConditions::distanceToEnemy(battleGrid[ID]->getMidPoint(), currentSelectedUnit->getPosition()) < shortestDistance)
 		{
-			if(battleGrid[ID])
 			shortestDistance = EnemyMoveConditions::distanceToEnemy(battleGrid[ID]->getMidPoint(), currentSelectedUnit->getPosition());
 			selectedID = ID;
 		}
