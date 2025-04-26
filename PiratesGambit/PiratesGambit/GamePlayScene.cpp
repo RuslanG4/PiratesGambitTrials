@@ -11,6 +11,10 @@ GamePlayScene::GamePlayScene()
 
 	myMap = std::make_unique<FullMap>(mapSize, myPlayer);
 
+	
+	MiniMapMenu::getInstance().createMiniMap(mapSize, miniMapNodeSize);
+	gameOverLay = std::make_unique<GameOverLay>();
+
 	SpawnPlayer();
 	UpdatePlayerCurrentNode(); // sets player current Node
 
@@ -66,6 +70,9 @@ void GamePlayScene::update(float dt)
 
 		for (int index : visibleNodes) {
 			std::shared_ptr<Node> node = myMap->getFullMap()[index];
+
+			MiniMapMenu::getInstance().GetMiniMap()->updateColor(index, node);
+			MiniMapMenu::getInstance().GetMiniMap()->updatePlayerLocation(myPlayer->getCurrentNode()->getID());
 
 			if (node->GetBuilding())
 				node->GetBuilding()->Update(dt);
@@ -123,6 +130,7 @@ void GamePlayScene::update(float dt)
 	}
 	HireRecruitUI::getInstance().Update(dt);
 	KeyPopUpManager::getInstance().Update(dt);
+	MiniMapMenu::getInstance().Update();
 }
 
 void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
@@ -166,11 +174,15 @@ void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 
 		
 		playerMenu->Render(window);
+		gameOverLay->Render(window);
+		window->setView(Camera::getInstance().getCamera());
 	}
 	else
 	{
 		battleScene->render(window);
+		window->setView(window->getDefaultView());
 	}
+	
 	BulletFactory::getInstance().render(window);
 	ParticleManager::getInstance().render(window);
 
@@ -199,6 +211,10 @@ void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 	if (!HireRecruitUI::getInstance().IsUIOpen() && !AllianceDialogueUI::getInstance().isMenuOpen() && !RenderableInventory::getInstance().isOpen() && !PlayerTabMenu::isMenuOpen() && !battle)
 	{
 		KeyPopUpManager::getInstance().Render(window);
+	}
+	if (MiniMapMenu::getInstance().isOpened())
+	{
+		MiniMapMenu::getInstance().Render(window);
 	}
 	
 }
@@ -423,6 +439,12 @@ void GamePlayScene::processKeys()
 		}
 	}
 
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::M) && !MiniMapMenu::getInstance().isOpened())
+	{
+		MiniMapMenu::getInstance().OpenMenu();
+	}
+
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tab) && !interactWithObject && !Inventory::isInventoryOpen() && !HireRecruitUI::IsUIOpen() && !PlayerTabMenu::isMenuOpen())
 	{
 		interactWithObject = true;
@@ -539,10 +561,15 @@ void GamePlayScene::HandlePauseScreen()
 		{
 			AllianceDialogueUI::getInstance().CloseMenu();
 		}
+		else if (MiniMapMenu::getInstance().isOpened())
+		{
+			MiniMapMenu::getInstance().CloseMenu();
+		}
 		else if (!PauseScreen::getInstance().isOpened())
 		{
 			PauseScreen::getInstance().OpenMenu();
 		}
+
 	}
 
 	previousEscapePressed = currentEscapePressed;

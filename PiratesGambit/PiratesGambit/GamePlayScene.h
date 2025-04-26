@@ -17,7 +17,8 @@
 #include"FindBoatState.h"
 #include"KeyPopUpManager.h"
 #include"PauseScreen.h"
-
+#include"MiniMapMenu.h"
+#include"GameOverLay.h"
 class PlayerTabMenu;
 
 class GamePlayScene :
@@ -92,6 +93,7 @@ private:
 	//std::shared_ptr<Enemy> enemy;
 	//std::shared_ptr<EnemyBoat> enemyBoat;
 
+	std::unique_ptr<GameOverLay> gameOverLay;
 	std::shared_ptr<GameObject> currentObjectInteract;
 	std::shared_ptr<Building> currentBuildingInteract;
 
@@ -101,7 +103,10 @@ private:
 	bool battle = false;
 	bool previousEscapePressed = false;
 
-	int mapSize = 3;
+	int mapSize = 5;
+
+	int miniMapNodeSize = 4;
+	std::unique_ptr<MiniMap> miniMap;
 
 	int enemiesPerFrame = 5;
 	int enemyIndex = 0;

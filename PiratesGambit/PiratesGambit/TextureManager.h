@@ -79,6 +79,10 @@ public:
         texturesLoaded &= loadTexture("V-KEY", V_KEY);
         texturesLoaded &= loadTexture("X-KEY", X_KEY);
         texturesLoaded &= loadTexture("E-KEY", E_KEY);
+        texturesLoaded &= loadTexture("TAB_KEY", TAB_KEY);
+        texturesLoaded &= loadTexture("EQ_KEY", EQ_KEY);
+        texturesLoaded &= loadTexture("M_KEY", M_KEY);
+        texturesLoaded &= loadTexture("SPACE_KEY", SPACE_KEY);
     //Boats
         texturesLoaded &= loadBoatTexture("Red","HEALTHY", RED_SHIP_HEALTHY);
         texturesLoaded &= loadBoatTexture("Red", "DAMAGED", RED_SHIP_DAMAGED);

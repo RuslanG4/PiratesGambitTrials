@@ -863,7 +863,7 @@ std::shared_ptr<PirateUnit> BattleScene::PickUnitToAttack(const std::vector<std:
 
 int BattleScene::SelectNodeToWalkTo()
 {
-	int shortestDistance = 100;
+	int shortestDistance = 10000;
 	int selectedID = -1;
 
 	std::shared_ptr<PirateUnit> selectedUnit = PickUnitToAttack(playerRef->getArmy()->getArmy());
@@ -951,7 +951,7 @@ void BattleScene::RemoveDeadUnits()
 
 void BattleScene::WaitForTurn()
 {
-	if(enemyWaitTime.getElapsedTime().asSeconds() > 0.85f)
+	if(enemyWaitTime.getElapsedTime().asSeconds() > 0.95f)
 	{
 		updateNextTurn();
 		startEnemyTurnTimer = false;

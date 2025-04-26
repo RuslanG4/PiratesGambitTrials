@@ -195,6 +195,8 @@
     <ClCompile Include="FullMap.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameOverLay.cpp" />
+    <ClCompile Include="GameOverLayButtonHelp.cpp" />
     <ClCompile Include="GamePlayScene.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Gunner.cpp" />
@@ -220,6 +222,9 @@
     <ClCompile Include="LoadingScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenuScene.cpp" />
+    <ClCompile Include="MiniMap.cpp" />
+    <ClCompile Include="MiniMapMenu.cpp" />
+    <ClCompile Include="MiniMapNode.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Particle.cpp" />
@@ -310,6 +315,8 @@
     <ClInclude Include="FullMap.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameOverLay.h" />
+    <ClInclude Include="GameOverLayButtonHelp.h" />
     <ClInclude Include="GamePlayScene.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Gunner.h" />
@@ -335,6 +342,9 @@
     <ClInclude Include="LeafParticle.h" />
     <ClInclude Include="LoadingScene.h" />
     <ClInclude Include="MainMenuScene.h" />
+    <ClInclude Include="MiniMap.h" />
+    <ClInclude Include="MiniMapMenu.h" />
+    <ClInclude Include="MiniMapNode.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Particle.h" />

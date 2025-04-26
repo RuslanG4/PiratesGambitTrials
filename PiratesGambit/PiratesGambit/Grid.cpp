@@ -514,6 +514,7 @@ void Grid::determineWaterTileType(const std::shared_ptr<Node>& _node) const
 {
 	if(!_node->getIsLand())
 	{
+		_node->setParentTileType(WATER);
 		_node->setTileType(DEFAULT_WATER);
 	}
 }

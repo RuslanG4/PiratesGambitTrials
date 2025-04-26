@@ -30,6 +30,10 @@ const char* const HARPOON = "ASSETS\\IMAGES\\Pirates\\MiniHarpoon.png";
 const char* const V_KEY = "ASSETS\\IMAGES\\KEYS\\V-Key.png";
 const char* const X_KEY = "ASSETS\\IMAGES\\KEYS\\X-Key.png";
 const char* const E_KEY = "ASSETS\\IMAGES\\KEYS\\E-Key.png";
+const char* const M_KEY = "ASSETS\\IMAGES\\KEYS\\MSOLO.png";
+const char* const TAB_KEY = "ASSETS\\IMAGES\\KEYS\\TAB.png";
+const char* const EQ_KEY = "ASSETS\\IMAGES\\KEYS\\EQ.png";
+const char* const SPACE_KEY = "ASSETS\\IMAGES\\KEYS\\SPACE.png";
 
 //Menus
 const char* const SEA_BG = "ASSETS\\IMAGES\\MENU\\sea.png";
