@@ -93,9 +93,9 @@ void BattleScene::placeUnits(const std::unique_ptr<Army>& _army, bool _isEnemy)
 void BattleScene::update(float _dt)
 {
 	tacticsArmyUI->update();
+	UIInterface->update();
 	switch (currentState) {
 	case PREP:
-		UIInterface->update();
 		break;
 
 	case BATTLE:
@@ -129,6 +129,15 @@ void BattleScene::update(float _dt)
 	{
 		unit->update(_dt);
 	}
+	for (auto& number : floatingNumbers)
+	{
+		if (number->isMarkedForDelete())
+		{
+			floatingNumbers.erase(std::remove(floatingNumbers.begin(), floatingNumbers.end(), number), floatingNumbers.end());
+			break;
+		}
+		number->update(_dt);
+	}
 	detectMouse();
 }
 
@@ -156,6 +165,11 @@ void BattleScene::render(const std::unique_ptr<sf::RenderWindow>& window) const
 	tacticsArmyUI->render(window);
 	
 	UIInterface->render(window);
+
+	for (auto& number : floatingNumbers)
+	{
+		number->render(window);
+	}
 
 	if(showEndGame)
 		endBattleUI->Render(window);
@@ -305,7 +319,7 @@ void BattleScene::detectMouse()
 {
 	if (Mouse::getInstance().LeftClicked())
 	{
-		if (UIInterface->UIPressed() && currentState == PREP)
+		if (UIInterface->UIAttackPressed() && currentState == PREP)
 		{
 			currentState = BATTLE;
 			placeUnits(enemyRef->getArmy(), true);
@@ -334,9 +348,14 @@ void BattleScene::detectMouse()
 			preGameStartUpPlacement(mousePos);
 			break;
 		case BATTLE:
-			if(currentHoverNodeID != -1 && battleGrid[currentHoverNodeID]->debugShape->getGlobalBounds().contains(mousePos) && !hasAttacked)
-			{
-				TakeUnitAction(battleGrid[currentHoverNodeID]);
+			if (UIInterface->UIWaitPressed() && !hasAttacked)
+				SkipTurn();
+			else {
+				if (currentHoverNodeID != -1 && battleGrid[currentHoverNodeID]->debugShape->getGlobalBounds().contains(mousePos) && !hasAttacked)
+				{
+
+					TakeUnitAction(battleGrid[currentHoverNodeID]);
+				}
 			}
 			break;
 		case END:
@@ -693,6 +712,22 @@ void BattleScene::TriggerAttack()
 }
 
 
+void BattleScene::SkipTurn()
+{
+	currentSelectedUnit = nullptr;
+	attackNode = -1;
+	move = false;
+	canAttack = false;
+	hasAttacked = false;
+	currentNodeInPath = 0;
+	clearArea(walkableNodesIDs);
+
+	//next turn
+	startEnemyTurnTimer = true;
+	scanForAttack = false;
+	enemyWaitTime.restart();
+}
+
 void BattleScene::EnemyTurn()
 {
 	//Ranged Unit Attack
@@ -731,6 +766,7 @@ void BattleScene::calculateDamage(const std::shared_ptr<PirateUnit>& _attacker, 
 	int damage = DamageCalculations::calculateHitPointsLost(_attacker, _defender);
 
 	int lostUnitsAmount = _defender->TakeDamage(damage);
+	floatingNumbers.push_back(std::make_unique<FloatingNumber>(_defender->getPosition(), lostUnitsAmount));
 
 	assignDeadUnits(_defender, lostUnitsAmount);
 
@@ -886,6 +922,7 @@ bool BattleScene::CheckBattleOver(const std::unique_ptr<Army>& _army)
 			UIInterface->updateModeString("Player Wins");
 			RemoveDeadUnits();
 			endBattleUI->Win();
+			playerRef->getInventory()->addItem(std::make_unique<Coins>(2000));
 		}
 		currentState = END;
 		endGameTimer.restart();

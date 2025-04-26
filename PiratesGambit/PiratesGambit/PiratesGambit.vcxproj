@@ -148,6 +148,7 @@
     <ClCompile Include="Barrel.cpp" />
     <ClCompile Include="BarrelInventory.cpp" />
     <ClCompile Include="BaseNode.cpp" />
+    <ClCompile Include="BattleActionButton.cpp" />
     <ClCompile Include="BattleActionUI.cpp" />
     <ClCompile Include="BattleGridNode.cpp" />
     <ClCompile Include="BattleScene.cpp" />
@@ -189,6 +190,7 @@
     <ClCompile Include="EnemyUI.cpp" />
     <ClCompile Include="ExplosionParticle.cpp" />
     <ClCompile Include="FindBoatState.cpp" />
+    <ClCompile Include="FloatingNumber.cpp" />
     <ClCompile Include="FollowPlayerState.cpp" />
     <ClCompile Include="FullMap.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -258,6 +260,7 @@
     <ClInclude Include="Barrel.h" />
     <ClInclude Include="BarrelInventory.h" />
     <ClInclude Include="BaseNode.h" />
+    <ClInclude Include="BattleActionButton.h" />
     <ClInclude Include="BattleActionUI.h" />
     <ClInclude Include="BattleGridNode.h" />
     <ClInclude Include="BattleScene.h" />
@@ -302,6 +305,7 @@
     <ClInclude Include="Enums.h" />
     <ClInclude Include="ExplosionParticle.h" />
     <ClInclude Include="FindBoatState.h" />
+    <ClInclude Include="FloatingNumber.h" />
     <ClInclude Include="FollowPlayerState.h" />
     <ClInclude Include="FullMap.h" />
     <ClInclude Include="Game.h" />

@@ -51,9 +51,11 @@ public:
         texturesLoaded &= loadTexture("CANNON_BALL_ICON", CANNON_BALL_ICON);
         texturesLoaded &= loadTexture("INDICATOR_ICON", INDICATOR_ICON);
         texturesLoaded &= loadTexture("SWORD_ICON", SWORD_ICON);
+        texturesLoaded &= loadTexture("WAIT_ICON", WAIT_ICON);
         texturesLoaded &= loadTexture("SHOOT_ICON", SHOOT_ICON);
         texturesLoaded &= loadTexture("MONEY_ICON", MONEY_ICON);
         texturesLoaded &= loadTexture("CHEST_ICON", CHEST_ICON);
+        texturesLoaded &= loadTexture("CLOSE_ICON", CLOSE_ICON);
         texturesLoaded &= loadTexture("COIN_ICON", COIN_ICON);
         texturesLoaded &= loadTexture("SKULL_ICON", SKULL_ICON);
         texturesLoaded &= loadTexture("ACTION_BORDER", ACTION_BORDER);

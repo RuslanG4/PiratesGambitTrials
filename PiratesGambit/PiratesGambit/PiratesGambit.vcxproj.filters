@@ -468,6 +468,12 @@
     <ClCompile Include="FollowPlayerState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FloatingNumber.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleActionButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -813,6 +819,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FollowPlayerState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FloatingNumber.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleActionButton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

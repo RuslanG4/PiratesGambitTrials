@@ -23,7 +23,7 @@ void AllianceDialogueUI::Init()
 
     exitButton = std::make_unique<IconButton>(2, 2,
         sf::Vector2f(dialogueBox.getPosition().x + 300, dialogueBox.getPosition().y + 600),
-        TextureManager::getInstance().getTexture("MONEY_ICON"));
+        TextureManager::getInstance().getTexture("CLOSE_ICON"));
 
     purchaseButton = std::make_unique<IconButton>(2, 2,
         sf::Vector2f(dialogueBox.getPosition().x + dialogueBox.getGlobalBounds().width - 300, dialogueBox.getPosition().y + 600),

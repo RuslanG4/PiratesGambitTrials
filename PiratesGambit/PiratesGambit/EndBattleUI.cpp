@@ -80,7 +80,7 @@ void EndBattleUI::Win()
 	isWin = true;
 	icon.setTexture(TextureManager::getInstance().getTexture("CHEST_ICON"));
 	outcomeText.setString("Victory");
-	descriptionText.setString("The enemy has been defeated \n \nYou have gained gold");
+	descriptionText.setString("The enemy has been defeated \n \nYou have gained 2000 gold");
 }
 
 void EndBattleUI::Lose()
@@ -88,7 +88,7 @@ void EndBattleUI::Lose()
 	isWin = false;
 	icon.setTexture(TextureManager::getInstance().getTexture("SKULL_ICON"));
 	outcomeText.setString("Defeat");
-	descriptionText.setString("You have been defeated \n \nYou have gained gold");
+	descriptionText.setString("You have been defeated");
 }
 
 void EndBattleUI::postionText()

@@ -42,12 +42,14 @@ const char* const TREE1 = "ASSETS\\IMAGES\\GameObjects\\TREE1.png";
 //icons
 const char* const CANNON_BALL_ICON = "ASSETS\\IMAGES\\ICONS\\CANNON_BALL.png";
 const char* const SWORD_ICON = "ASSETS\\IMAGES\\ICONS\\FIGHT.png";
+const char* const WAIT_ICON = "ASSETS\\IMAGES\\ICONS\\WAIT.png";
 const char* const SHOOT_ICON = "ASSETS\\IMAGES\\ICONS\\SHOOT.png";
 const char* const MONEY_ICON = "ASSETS\\IMAGES\\ICONS\\MONEY.png";
 const char* const COIN_ICON = "ASSETS\\IMAGES\\ICONS\\COIN.png";
 const char* const SKULL_ICON = "ASSETS\\IMAGES\\ICONS\\SKULL.png";
 const char* const INDICATOR_ICON = "ASSETS\\IMAGES\\ICONS\\Indicator.png";
 const char* const CHEST_ICON = "ASSETS\\IMAGES\\ICONS\\Chest.png";
+const char* const CLOSE_ICON = "ASSETS\\IMAGES\\ICONS\\CloseIcon.png";
 
 //Enemy Ships
 const char* const RED_SHIP_HEALTHY = "ASSETS\\IMAGES\\Enemy\\RedShip.png";

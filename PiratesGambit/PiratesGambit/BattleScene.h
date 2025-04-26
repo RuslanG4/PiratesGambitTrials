@@ -12,6 +12,7 @@
 #include "EnemyMoveConditions.h"
 #include "ParticleManager.h"
 #include"EndBattleUI.h"
+#include"FloatingNumber.h"
 
 class BattleScene
 {
@@ -78,6 +79,7 @@ public:
 
 	void TriggerAttack();
 
+	void SkipTurn();
 	void EnemyTurn();
 
 	void calculateDamage(const std::shared_ptr<PirateUnit>& _attacker, const std::shared_ptr<PirateUnit>& _defender);
@@ -104,6 +106,8 @@ private:
 
 	std::vector<std::shared_ptr<BattleGridNode>> startArea;
 	std::vector<std::shared_ptr<BattleGridNode>> enemyStartArea;
+
+	std::vector<std::unique_ptr<FloatingNumber>> floatingNumbers;
 
 	std::vector<int> walkableNodesIDs;
 

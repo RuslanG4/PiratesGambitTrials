@@ -2,6 +2,7 @@
 #include "Includes.h"
 #include "TextureManager.h"
 #include"Mouse.h"
+#include"BattleActionButton.h"
 
 class BattleActionUI
 {
@@ -10,14 +11,14 @@ public:
 	void render(const std::unique_ptr<sf::RenderWindow>& _win) const;
 	void update();
 
-	bool UIPressed() const { return buttonPressed; }
+	bool UIAttackPressed() const { return attackButton->UIPressed(); }
+	bool UIWaitPressed() const { return waitButton->UIPressed(); }
 	void updateModeString(const std::string _text) { currentMode.setString(_text); }
 private:
-	sf::Sprite uiBorder;
-	sf::Sprite attackSprite;
-
 	sf::Text currentMode;
 
-	bool buttonPressed{ false };
+	std::unique_ptr<BattleActionButton> attackButton;
+	std::unique_ptr<BattleActionButton> waitButton;
+
 };
 

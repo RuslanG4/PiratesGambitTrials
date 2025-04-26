@@ -45,7 +45,7 @@ void HireRecruitUI::SetUpUi()
 
 	cancel = std::make_unique<IconButton>(1.5, 1.5,
 		sf::Vector2f(background.getPosition().x - 60, background.getPosition().y + 200),
-		TextureManager::getInstance().getTexture("MONEY_ICON"));
+		TextureManager::getInstance().getTexture("CLOSE_ICON"));
 }
 
 void HireRecruitUI::PassUI(UnitName _type, int _unitAmount, Building& building, int _cost)
