@@ -29,15 +29,6 @@ public:
 
     void Update() {
 
-        bool currentEscapePressed = sf::Keyboard::isKeyPressed(sf::Keyboard::Escape);
-
-        if (currentEscapePressed && !previousEscapePressed)
-        {
-            CloseMenu();
-        }
-
-        previousEscapePressed = currentEscapePressed;
-
     };
 
     void OpenMenu() { isOpen = true; }

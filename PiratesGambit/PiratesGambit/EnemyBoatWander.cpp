@@ -87,6 +87,14 @@ void EnemyBoatWander::MoveTowardsTarget(Enemy& enemy)
 
     distance = Utility::unitVector2D(distance);
 
+    float tooClose = Utility::magnitude(finalMove.x, finalMove.y);
+	if (tooClose < 0.1f)
+	{
+        path.clear();
+        currentNodeInPath = 0;
+        return;
+	}
+
     enemy.SetPosition(enemy.GetPosition() + finalMove * 0.5f);
     enemy.UpdateDirection(distance);
 

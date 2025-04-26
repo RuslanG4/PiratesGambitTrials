@@ -103,7 +103,7 @@ private:
 	bool battle = false;
 	bool previousEscapePressed = false;
 
-	int mapSize = 3;
+	int mapSize = 5;
 
 	int miniMapNodeSize = 4;
 	std::unique_ptr<MiniMap> miniMap;

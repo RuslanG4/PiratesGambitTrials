@@ -27,6 +27,7 @@ void UnitStatsDisplay::Render(const std::unique_ptr<sf::RenderWindow>& _win) con
 {
 	if(isOpen)
 	{
+        _win->setView(_win->getDefaultView());
 		_win->draw(background);
 		_win->draw(speedText);
 		_win->draw(attackText);
