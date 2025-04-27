@@ -31,6 +31,12 @@ TacticsArmySlot::TacticsArmySlot(UnitName _type, UnitStats _stats, sf::Vector2f 
 
 }
 
+void TacticsArmySlot::reset()
+{
+	unitAmountUI.renderUnitAmount = false;
+	occupied = false;
+}
+
 void TacticsArmySlot::update()
 {
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(Mouse::getInstance().getMousePosition());

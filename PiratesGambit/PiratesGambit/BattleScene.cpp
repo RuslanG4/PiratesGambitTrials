@@ -1,19 +1,32 @@
 #include "BattleScene.h"
 
 
+void BattleScene::endBattle()
+{
+	clearArea(walkableNodesIDs);
+}
+
 void BattleScene::resetBattle()
 {
 	for (auto& node : battleGrid)
 	{
 		node->updateOccupied(false);
 	}
+	
 	showEndGame = false;
 	initialiseBattleGrid();
 	initialiseStartArea();
 
-	tacticsArmyUI->initiativeSystem.ClearInitiative();
-
+	tacticsArmyUI.reset();
+	tacticsArmyUI = std::make_unique<TacticsArmyUI>(playerRef->getArmy());
+	
 	placeUnits(playerRef->getArmy(), false);
+
+	endBattleUI.reset();
+	endBattleUI = std::make_unique<EndBattleUI>();
+
+	playerArmyDead->clearArmy();
+	enemyArmyDead->clearArmy();
 
 	currentState = PREP;
 }
@@ -158,7 +171,7 @@ void BattleScene::render(const std::unique_ptr<sf::RenderWindow>& window) const
 	{
 		unit->render(window);
 	}
-	if(canAttack && currentSelectedUnit->unitInformation.allegiance == HUMAN_PLAYER)
+	if(canAttack && currentSelectedUnit && currentSelectedUnit->unitInformation.allegiance == HUMAN_PLAYER)
 	{
 		window->draw(attackIcon);
 	}

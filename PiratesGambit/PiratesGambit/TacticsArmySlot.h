@@ -11,6 +11,7 @@ public:
 	TacticsArmySlot(UnitName _type, UnitStats _stats, sf::Vector2f _pos, bool _mainIcon);
 	TacticsArmySlot(UnitName _type, UnitStats _stats, sf::Vector2f _pos);
 
+	void reset();
 	void update();
 	void init();
 	void updateSlots(UnitName _type, UnitStats _stats);

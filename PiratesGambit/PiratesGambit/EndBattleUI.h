@@ -13,6 +13,7 @@ public:
 
 	void HandleInput(sf::Event newEvent);
 
+	void Reset();
 	void updateUnitsLost(const std::unique_ptr<Army>& _army);
 	void updateUnitsDestroyed(const std::unique_ptr<Army>& _army);
 

@@ -122,6 +122,7 @@ void GamePlayScene::update(float dt)
 			else {
 				SceneManager::getInstance().setScene(new MainMenuScene());
 			}
+			battleScene->endBattle();
 		}
 	}
 	if (AllianceDialogueUI::getInstance().isMenuOpen())
@@ -707,8 +708,9 @@ void GamePlayScene::transitionToBattleMode(const std::shared_ptr<Node>& _node)
 			if (enemy->GetGlobalBounds().intersects(myPlayer->GetHitBox()) && enemy->GetPlayerAllegiance().isHostile())
 			{
 				battleTransition.startTransition(1);
-				battleScene->setEnemyRef(enemy);
 				battleScene->resetBattle();
+				battleScene->setEnemyRef(enemy);
+
 			}
 		}
 	}

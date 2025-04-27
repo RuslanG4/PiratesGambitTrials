@@ -59,5 +59,5 @@ private:
 
     float zoomLevel = 1.0f;  ///< Current zoom level
     const float minZoom = 1.f;  ///< Minimum zoom level (zoomed in)
-    const float maxZoom = 3.0f;  ///< Maximum zoom level (zoomed out)
+    const float maxZoom = 2.0f;  ///< Maximum zoom level (zoomed out)
 };

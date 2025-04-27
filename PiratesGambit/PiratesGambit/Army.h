@@ -10,6 +10,11 @@ public:
 		
 	}
 
+	void clearArmy()
+	{
+		army.clear();
+	}
+
 	void addUnit(std::shared_ptr<PirateUnit> _unit);
 
 	void addUnitNoCombine(std::shared_ptr<PirateUnit> _unit);

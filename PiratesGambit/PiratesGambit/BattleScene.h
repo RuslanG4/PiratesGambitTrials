@@ -32,6 +32,7 @@ public:
 
 		background.setTexture(TextureManager::getInstance().getTexture("background"));
 	}
+	void endBattle();
 	void resetBattle();
 	bool isBattleOver() const { return endBattleUI->isOKClicked(); }
 	bool isPlayerWin() const { return endBattleUI->isPlayerWin(); }

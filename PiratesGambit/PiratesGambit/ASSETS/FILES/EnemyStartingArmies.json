@@ -15,18 +15,18 @@
                 "EnemyId": 1,
                 "name" : "Steve",
                 "army": [
-                    { "unittype": "Buccaneer", "amount": 12 },
-                    { "unittype": "Buccaneer", "amount": 12 },
-                    { "unittype": "Buccaneer", "amount": 12 }
+                    { "unittype": "Buccaneer", "amount": 8 },
+                    { "unittype": "Buccaneer", "amount": 8 },
+                    { "unittype": "Buccaneer", "amount": 8 }
                 ]
             },
             {
                 "EnemyId": 2,
                 "name" : "John",
                 "army": [
-                    { "unittype": "Buccaneer", "amount": 30 },
+                    { "unittype": "Buccaneer", "amount": 26 },
                     { "unittype": "Gunner", "amount": 12 },
-                    { "unittype": "Harpooner", "amount": 5 }
+                    { "unittype": "Harpooner", "amount": 4 }
                 ]
             },
             {
@@ -35,7 +35,7 @@
                 "army": [
                     { "unittype": "Gunner", "amount": 30 },
                     { "unittype": "Buccaneer", "amount": 22 },
-                    { "unittype": "Cannon", "amount": 6 }
+                    { "unittype": "Cannon", "amount": 3 }
                 ]
             }
         ]
@@ -48,36 +48,36 @@
                 "EnemyId": 0,
                 "name" : "George",
                 "army": [
-                    { "unittype": "Buccaneer", "amount": 24 },
-                    { "unittype": "Gunner", "amount": 12 }
+                    { "unittype": "Buccaneer", "amount": 28 },
+                    { "unittype": "Gunner", "amount": 26 }
                 ]
             },
             {
                 "EnemyId": 1,
                 "name" : "Jason",
                 "army": [
-                    { "unittype": "Gunner", "amount": 18 },
-                    { "unittype": "Gunner", "amount": 18 },
-                    { "unittype": "Gunner", "amount": 18 }
+                    { "unittype": "Gunner", "amount": 26 },
+                    { "unittype": "Gunner", "amount": 26 },
+                    { "unittype": "Gunner", "amount": 26 }
                 ]
             },
             {
                 "EnemyId": 2,
                 "name" : "Fred",
                 "army": [
-                    { "unittype": "Buccaneer", "amount": 18 },
-                    { "unittype": "Buccaneer", "amount": 18 },
-                    { "unittype": "Harpooner", "amount": 4 },
-                    { "unittype": "Harpooner", "amount": 4 }
+                    { "unittype": "Buccaneer", "amount": 32 },
+                    { "unittype": "Buccaneer", "amount": 32 },
+                    { "unittype": "Harpooner", "amount": 7 },
+                    { "unittype": "Harpooner", "amount": 7 }
                 ]
             },
             {
                 "EnemyId": 3,
                 "name" : "Charlie",
                 "army": [
-                    { "unittype": "Bird", "amount": 6 },
-                    { "unittype": "Bird", "amount": 6 },
-                    { "unittype": "Bird", "amount": 6 }
+                    { "unittype": "Bird", "amount": 9 },
+                    { "unittype": "Bird", "amount": 9 },
+                    { "unittype": "Bird", "amount": 9 }
                 ]
             }
         ]
@@ -90,15 +90,15 @@
                 "EnemyId": 0,
                 "name" : "Angus",
                 "army": [
-                    { "unittype": "Buccaneer", "amount": 12 },
-                    { "unittype": "Buccaneer", "amount": 12 }
+                    { "unittype": "Buccaneer", "amount": 16 },
+                    { "unittype": "Buccaneer", "amount": 16 }
                 ]
             },
             {
                 "EnemyId": 1,
                 "name" : "Peter",
                 "army": [
-                    { "unittype": "Gunner", "amount": 18 },
+                    { "unittype": "Gunner", "amount": 28 },
                     { "unittype": "Bird", "amount": 18 }
                 ]
             },
@@ -106,8 +106,8 @@
                 "EnemyId": 2,
                 "name" : "Cornelius",
                 "army": [
-                    { "unittype": "Gunner", "amount": 21 },
-                    { "unittype": "Buccaneer", "amount": 17 },
+                    { "unittype": "Gunner", "amount": 26 },
+                    { "unittype": "Buccaneer", "amount": 26 },
                     { "unittype": "Cannon", "amount": 8 }
                 ]
             },

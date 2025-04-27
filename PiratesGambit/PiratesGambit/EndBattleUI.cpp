@@ -57,6 +57,18 @@ void EndBattleUI::HandleInput(sf::Event newEvent)
 	continueButton->handleEvent(newEvent);
 }
 
+void EndBattleUI::Reset()
+{
+	for (auto& slot : lostUnits)
+	{
+		slot->reset();
+	}
+	for (auto& slot : destroyedUnits)
+	{
+		slot->reset();
+	}
+}
+
 void EndBattleUI::updateUnitsLost(const std::unique_ptr<Army>& _army)
 {
 	for (int i = 0; i < _army->getArmy().size(); i++)
