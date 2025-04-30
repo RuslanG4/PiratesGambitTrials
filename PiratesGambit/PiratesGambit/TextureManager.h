@@ -62,6 +62,8 @@ public:
         texturesLoaded &= loadTexture("BULKY_BORDER", BULKY_BORDER);
         texturesLoaded &= loadTexture("BLOOD_PARTICLES", BLOOD_PARTICLES);
         texturesLoaded &= loadTexture("SHOOT_PARTICLES", SHOOT_PARTICLES);
+        texturesLoaded &= loadTexture("BOAT_TRAIL_PARTICLE", BOAT_TRAIL_PARTICLE);
+        texturesLoaded &= loadTexture("CLOUD", CLOUD);
         texturesLoaded &= loadTexture("EXPLOSION_PARTICLE", EXPLOSION_PARTICLE);
         texturesLoaded &= loadTexture("LEAF_PARTICLE", LEAF_PARTICLE);
         texturesLoaded &= loadTexture("SMOKE_PARTICLE", SMOKE_PARTICLE);

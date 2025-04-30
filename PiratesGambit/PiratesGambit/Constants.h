@@ -43,6 +43,8 @@ const char* const BARREL_SPRITE = "ASSETS\\IMAGES\\GameObjects\\BARREL.png";
 const char* const TREE0 = "ASSETS\\IMAGES\\GameObjects\\TREE0.png";
 const char* const TREE1 = "ASSETS\\IMAGES\\GameObjects\\TREE1.png";
 
+
+
 //icons
 const char* const CANNON_BALL_ICON = "ASSETS\\IMAGES\\ICONS\\CANNON_BALL.png";
 const char* const SWORD_ICON = "ASSETS\\IMAGES\\ICONS\\FIGHT.png";
@@ -103,7 +105,8 @@ const char* const SHOOT_PARTICLES = "ASSETS\\IMAGES\\Particles\\848.png";
 const char* const LEAF_PARTICLE = "ASSETS\\IMAGES\\Particles\\leaf.png";
 const char* const SMOKE_PARTICLE = "ASSETS\\IMAGES\\Particles\\Smoke.png";
 const char* const EXPLOSION_PARTICLE = "ASSETS\\IMAGES\\Particles\\explosion.png";
-
+const char* const BOAT_TRAIL_PARTICLE = "ASSETS\\IMAGES\\Particles\\WaterTrail.png";
+const char* const CLOUD = "ASSETS\\IMAGES\\Particles\\CLOUD.png";
 //BUILDINGS
 const char* const BUILDINGS = "ASSETS\\IMAGES\\Buildings\\Buildings.png";
 

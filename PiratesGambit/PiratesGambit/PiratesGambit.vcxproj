@@ -160,6 +160,7 @@
     <ClCompile Include="BloodParticle.cpp" />
     <ClCompile Include="Boat.cpp" />
     <ClCompile Include="BoatController.cpp" />
+    <ClCompile Include="BoatTrailParticle.cpp" />
     <ClCompile Include="Buccaneer.cpp" />
     <ClCompile Include="BuccaneerBuilding.cpp" />
     <ClCompile Include="BuccaneerIcon.cpp" />
@@ -175,6 +176,7 @@
     <ClCompile Include="CannonIcon.cpp" />
     <ClCompile Include="CannonUnit.cpp" />
     <ClCompile Include="ChaseState.cpp" />
+    <ClCompile Include="Cloud.cpp" />
     <ClCompile Include="Coins.cpp" />
     <ClCompile Include="DamageCalculations.cpp" />
     <ClCompile Include="EndBattleUI.cpp" />
@@ -277,6 +279,7 @@
     <ClInclude Include="BloodParticle.h" />
     <ClInclude Include="Boat.h" />
     <ClInclude Include="BoatController.h" />
+    <ClInclude Include="BoatTrailParticle.h" />
     <ClInclude Include="Buccaneer.h" />
     <ClInclude Include="BuccaneerBuilding.h" />
     <ClInclude Include="BuccaneerIcon.h" />
@@ -292,6 +295,7 @@
     <ClInclude Include="CannonIcon.h" />
     <ClInclude Include="CannonUnit.h" />
     <ClInclude Include="ChaseState.h" />
+    <ClInclude Include="Cloud.h" />
     <ClInclude Include="Coins.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="DamageCalculations.h" />

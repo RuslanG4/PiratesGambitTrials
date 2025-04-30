@@ -6,6 +6,7 @@
 #include"Node.h"
 #include"HitBox.h"
 #include"CannonBall.h"
+#include"BoatTrailParticle.h"
 
 class Player; 
 
@@ -33,6 +34,7 @@ public:
 
 	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
 	void update(double dt);
+	void handleParticles(double dt, sf::Vector2f _vel);
 
 	bool checkCollision(const std::shared_ptr<Node>& _node, sf::Vector2f& _pos);
 
@@ -85,6 +87,8 @@ private:
 	std::shared_ptr<Player> currentPlayer;
 
 	int health = 100;
+
+	std::vector<BoatTrailParticle> waterTrails;
 
 };
 

@@ -14,6 +14,9 @@ EnemyBoat::EnemyBoat(const std::shared_ptr<Enemy>& _refEnemy, const UnitAllegian
 
 void EnemyBoat::render(const std::unique_ptr<sf::RenderWindow>& window) const
 {
+	for (auto& trail : waterTrails) {
+		trail.Render(window);
+	}
 	window->draw(boatSprite);
 	for (auto& leaf : smokeParticles)
 	{
@@ -23,6 +26,15 @@ void EnemyBoat::render(const std::unique_ptr<sf::RenderWindow>& window) const
 
 void EnemyBoat::update(double dt)
 {
+	for (auto& particle : waterTrails)
+	{
+		particle.Update(dt);
+	}
+
+	std::erase_if(waterTrails, [](const Particle& particle) {
+		return particle.isMarkedForDeletion();
+		});
+
 	createSmokeParticles(dt);
 }
 
@@ -67,6 +79,32 @@ void EnemyBoat::RotateTowardsPlayer(sf::Vector2f _pos)
 
         boatSprite.setRotation(newAngle);
     }
+}
+
+void EnemyBoat::setPosition(sf::Vector2f _pos)
+{
+	
+	if (Utility::magnitude(_pos.x, _pos.y) > 0.1f) {
+
+		sf::Vector2f vel = Utility::unitVector2D(_pos);
+
+		sf::Vector2f perp(-vel.y, vel.x);
+
+		sf::Vector2f baseVel = -vel * 1.9f;
+
+		float angleOffset = 10.f * Utility::DEG_TO_RADIAN;
+
+		sf::Vector2f vell(
+			baseVel.x * cos(angleOffset) - baseVel.y * sin(angleOffset),
+			baseVel.x * sin(angleOffset) + baseVel.y * cos(angleOffset)
+		);
+
+		waterTrails.emplace_back(boatSprite.getPosition(), vell);
+	}
+	position = _pos;
+	boatSprite.setPosition(position);
+
+
 }
 
 void EnemyBoat::setShipTexture(const UnitAllegiance& _allegiance)

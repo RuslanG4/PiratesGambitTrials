@@ -5,6 +5,7 @@
 #include"HitBox.h"
 #include"CannonBall.h"
 #include"SmokeParticle.h"
+#include"BoatTrailParticle.h"
 
 class Enemy;
 
@@ -25,13 +26,13 @@ public:
 	const std::shared_ptr<Node>& getDockedNode() const { return dockedNode; }
 	bool isAlive() const { return totalHealth > 0; }
 
-	void setPosition(sf::Vector2f _pos) { position = _pos; boatSprite.setPosition(position); }
+	void setPosition(sf::Vector2f _pos);
 	void setRotation(float _rotation) { boatSprite.setRotation(_rotation); }
 	void setDockedNode(const std::shared_ptr<Node>& _node) { dockedNode = _node; }
 	std::shared_ptr<Node> GetDockedNode() const { return dockedNode; }
 
 	sf::FloatRect GetGlobalBounds() const { return boatSprite.getGlobalBounds(); }
-
+	sf::Vector2f getPosition() { return boatSprite.getPosition(); }
 	const std::shared_ptr<Enemy>& getEnemyRef() const { return enemyRef; }
 
 
@@ -57,5 +58,7 @@ private:
 	float emitionRate;
 
 	int totalHealth = 100;
+
+	std::vector<BoatTrailParticle> waterTrails;
 };
 #endif // ENEMYBOAT_H

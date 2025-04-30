@@ -100,6 +100,8 @@ void GamePlayScene::update(float dt)
 
 		UpdateEnemies(dt);
 		HandleProjectiles();
+		//updatedClouds(dt);
+		//SpawnClouds();
 
 	}
 	else if (battleTransition.IsTransitionActive())
@@ -174,6 +176,10 @@ void GamePlayScene::render(const std::unique_ptr<sf::RenderWindow>& window)
 			}
 		}
 
+		/*for (auto& cloud : clouds)
+		{
+			cloud.Render(window);
+		}*/
 		
 		playerMenu->Render(window);
 		gameOverLay->Render(window);
@@ -857,6 +863,60 @@ void GamePlayScene::UpdateEnemies(double _dt)
 	for (auto& boat : enemyBoats)
 	{
 		boat->update(_dt);
+	}
+}
+
+void GamePlayScene::updatedClouds(double _dt)
+{
+	for (auto& particle : clouds)
+	{
+		particle.Update(_dt);
+	}
+
+	std::erase_if(clouds, [](const Cloud& particle) {
+		return particle.isMarkedForDeletion();
+		});
+}
+
+void GamePlayScene::SpawnClouds()
+{
+	if (cloudClock.getElapsedTime().asSeconds() > cloudSpawnInterval) {
+		cloudClock.restart();
+
+		
+
+		int side = rand() % 2;
+		sf::Vector2f spawnPos;
+		sf::Vector2f velocity;
+		float cloudSpeed;
+
+		float offset = 100.0f;
+
+		sf::Vector2f playerPos = myPlayer->getPlayerController()->getPosition();
+		sf::Vector2f cameraSize = Camera::getInstance().getCamera().getSize();
+
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_real_distribution<float> cloudPosDist(playerPos.y - cameraSize.y / 2, playerPos.y + cameraSize.y / 2);
+		std::uniform_real_distribution<float> cloudSpeedDist(1.f,1.75f);
+		std::uniform_real_distribution<float> cloudSpawnIntervalDist(5.f, 10.f);
+
+		cloudSpawnInterval = cloudSpawnIntervalDist(gen);
+
+		switch (side) {
+		case 0: 
+			spawnPos = { playerPos.x - cameraSize.x / 2 - offset, cloudPosDist(gen)};
+			cloudSpeed = cloudSpeedDist(gen);
+			velocity = { cloudSpeed, 0.f };
+			break;
+		case 1: 
+			spawnPos = { playerPos.x + cameraSize.x / 2 + offset, cloudPosDist(gen) };
+			cloudSpeed = cloudSpeedDist(gen);
+			velocity = { -cloudSpeed, 0.f };
+			break;
+		}
+
+		clouds.emplace_back(spawnPos, velocity);
 	}
 }
 

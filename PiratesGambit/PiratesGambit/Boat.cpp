@@ -25,14 +25,19 @@ void Boat::processKeyUp(sf::Event t_event)
 
 void Boat::render(const std::unique_ptr<sf::RenderWindow>& window) const
 {
+	for (auto& trail : waterTrails) {
+		trail.Render(window);
+	}
 	window->draw(boatSprite);
 	window->draw(fireIndicator);
-	//myHitbox->render(window);
+	myHitbox->render(window);
 }
 
 void Boat::update(double dt)
 {
 	sf::Vector2f desiredPosition = controller->move(dt);
+
+	handleParticles(dt, desiredPosition);
 
 	for (auto& node : currentPlayer->getUpdateableArea()->getUpdateableNodes())
 	{
@@ -57,6 +62,34 @@ void Boat::update(double dt)
 		currentPlayer->UpdateDirection(desiredPosition);
 	}
 	updateIndicator();
+}
+
+void Boat::handleParticles(double dt, sf::Vector2f _vel)
+{
+	if (Utility::magnitude(_vel.x, _vel.y) > 0.1f) {
+
+		sf::Vector2f perp(-_vel.y, _vel.x);
+
+		sf::Vector2f baseVel = -_vel * 1.6f;
+
+		float angleOffset = 10.f * Utility::DEG_TO_RADIAN;
+
+		sf::Vector2f vel(
+			baseVel.x * cos(angleOffset) - baseVel.y * sin(angleOffset),
+			baseVel.x * sin(angleOffset) + baseVel.y * cos(angleOffset)
+		);
+
+		waterTrails.emplace_back(controller->getPosition(), vel);
+	}
+	for (auto& particle : waterTrails)
+	{
+		particle.Update(dt);
+	}
+
+	std::erase_if(waterTrails, [](const Particle& particle) {
+		return particle.isMarkedForDeletion();
+		});
+
 }
 
 bool Boat::checkCollision(const std::shared_ptr<Node>& _node, sf::Vector2f& _pos)

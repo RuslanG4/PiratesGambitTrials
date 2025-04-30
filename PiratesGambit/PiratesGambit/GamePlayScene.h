@@ -19,6 +19,7 @@
 #include"PauseScreen.h"
 #include"MiniMapMenu.h"
 #include"GameOverLay.h"
+#include"Cloud.h"
 class PlayerTabMenu;
 
 class GamePlayScene :
@@ -70,6 +71,9 @@ private:
 
 	void UpdateEnemies(double _dt);
 
+	void updatedClouds(double _dt);
+	void SpawnClouds();
+
 	int FindCurrentTeamSize(nlohmann::json& jsonData, const UnitAllegiance& _allegiance);
 
 	std::set<int> visibleNodes;
@@ -104,6 +108,9 @@ private:
 	int miniMapNodeSize = 4;
 	std::unique_ptr<MiniMap> miniMap;
 
+	std::vector<Cloud> clouds;
+	sf::Clock cloudClock;
+	float cloudSpawnInterval = 2.f;
 
 	std::random_device rd;
 };
