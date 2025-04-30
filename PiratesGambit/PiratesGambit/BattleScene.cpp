@@ -948,6 +948,13 @@ void BattleScene::RemoveDeadUnits()
 			playerArmyDead->removeUnit(playerArmyDead->getArmy()[i]);
 		}
 	}
+	for (int i = 0; i < playerRef->getArmy()->getArmy().size(); i++)
+	{
+		if (!playerRef->getArmy()->getArmy()[i]->unitStats.isActive)
+		{
+			playerRef->getArmy()->removeUnit(playerRef->getArmy()->getArmy()[i]);
+		}
+	}
 	for (int i = 0; i < enemyArmyDead->getArmy().size(); i++)
 	{
 		if (!enemyArmyDead->getArmy()[i]->unitStats.isActive)

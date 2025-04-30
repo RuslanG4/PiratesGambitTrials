@@ -44,6 +44,11 @@ void PlayerTabMenu::Interact(const std::shared_ptr<Player>& _player)
 	}
 }
 
+void PlayerTabMenu::RefreshArmyAfterBattle(const std::unique_ptr<Army>& _army)
+{
+	armyMenu->RefreshSlots(_army);
+}
+
 void PlayerTabMenu::UpdateSlots(const std::unique_ptr<Army>& _army)
 {
 	armyMenu->updateSlot(_army);

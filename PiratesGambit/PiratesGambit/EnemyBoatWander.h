@@ -21,6 +21,9 @@ private:
 	std::vector<std::shared_ptr<Node>> path;
 	int currentNodeInPath = 0;
 
+	sf::Clock boatStuckTimer;
+	bool startTimer{ false };
+
 	std::random_device rd;
 };
 

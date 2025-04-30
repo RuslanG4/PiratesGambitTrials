@@ -113,6 +113,7 @@ void GamePlayScene::update(float dt)
 	else {
 		battleScene->update(dt);
 		if (battleScene->isBattleOver()) {
+			playerMenu->RefreshArmyAfterBattle(myPlayer->getArmy());
 			if (battleScene->isPlayerWin()) {
 				battle = false;
 				auto enemyRef = battleScene->getEnemyRef();
@@ -290,7 +291,7 @@ void GamePlayScene::SpawnEnemies()
 		availableChunkIndices.erase(availableChunkIndices.begin() + selectedIndex);
 		};
 
-	std::vector<UnitAllegiance> enemyAllegiances = { BLUE_PLAYER, BLACK_PLAYER, RED_PLAYER };
+	std::vector<UnitAllegiance> enemyAllegiances = { BLUE_PLAYER, BLACK_PLAYER, RED_PLAYER, GREEN_PLAYER };
 
 	for (const auto& allegiance : enemyAllegiances)
 	{

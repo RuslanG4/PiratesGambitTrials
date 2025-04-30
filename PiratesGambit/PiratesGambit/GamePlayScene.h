@@ -77,10 +77,6 @@ private:
 	bool keyUp = true;
 	bool interactWithObject = false;
 
-	std::set<Node*> updateArea{ nullptr };
-
-	Node* currentNode;
-
 	std::shared_ptr<Island> currentIsland;
 
 	std::unique_ptr<FullMap> myMap;
@@ -108,8 +104,6 @@ private:
 	int miniMapNodeSize = 4;
 	std::unique_ptr<MiniMap> miniMap;
 
-	int enemiesPerFrame = 5;
-	int enemyIndex = 0;
 
 	std::random_device rd;
 };

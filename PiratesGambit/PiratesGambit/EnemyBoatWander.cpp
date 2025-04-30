@@ -21,6 +21,15 @@ void EnemyBoatWander::Update(Enemy& enemy, float deltaTime)
 
     MoveTowardsTarget(enemy);
 
+    if (startTimer) {
+		if (boatStuckTimer.getElapsedTime().asSeconds() > 3.0f)
+		{
+			path.clear();
+			currentNodeInPath = 0;
+			startTimer = false;
+		}
+    }
+
     if (enemy.GetPlayerAllegiance().isHostile()) {
         for (auto& node : enemy.getUpdateableArea()->getUpdateableNodes())
         {
@@ -79,6 +88,12 @@ void EnemyBoatWander::MoveTowardsTarget(Enemy& enemy)
         {
             toOther = Utility::unitVector2D(toOther);
             avoidance += toOther * (45.0f - distance);
+			if (!startTimer)
+				boatStuckTimer.restart();
+            startTimer = true;
+        }
+        else {
+			startTimer = false;
         }
     }
 

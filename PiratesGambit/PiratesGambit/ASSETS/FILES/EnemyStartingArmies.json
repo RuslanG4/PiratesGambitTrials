@@ -83,6 +83,49 @@
         ]
     },
     {
+        "Allegiance": "Green",
+        "PlayerReputation":70,
+        "Enemies": [
+            {
+                "EnemyId": 0,
+                "name" : "Farrel",
+                "army": [
+                    { "unittype": "Harpooner", "amount": 8 },
+                    { "unittype": "Buccaneer", "amount": 26 },
+                    { "unittype": "Buccaneer", "amount": 26 }
+                ]
+            },
+            {
+                "EnemyId": 1,
+                "name" : "Abynth",
+                "army": [
+                    { "unittype": "Cannon", "amount": 6 },
+                    { "unittype": "Gunner", "amount": 26 },
+                    { "unittype": "Cannon", "amount": 6 }
+                ]
+            },
+            {
+                "EnemyId": 2,
+                "name" : "Steller",
+                "army": [
+                    { "unittype": "Buccaneer", "amount": 20 },
+                    { "unittype": "Buccaneer", "amount": 20 },
+                    { "unittype": "Buccaneer", "amount": 20 },
+                    { "unittype": "Buccaneer", "amount": 20 }
+                ]
+            },
+            {
+                "EnemyId": 3,
+                "name" : "Anne",
+                "army": [
+                    { "unittype": "Bird", "amount": 18 },
+                    { "unittype": "Gunner", "amount": 5 },
+                    { "unittype": "Gunner", "amount": 8 }
+                ]
+            }
+        ]
+    },
+    {
         "Allegiance": "Red",
         "PlayerReputation":50,
         "Enemies": [

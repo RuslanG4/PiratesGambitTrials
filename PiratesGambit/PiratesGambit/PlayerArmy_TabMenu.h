@@ -8,6 +8,7 @@ class PlayerArmy_TabMenu
 public:
 	PlayerArmy_TabMenu(const std::unique_ptr<Army>& _army, sf::Sprite _pos);
 
+	void RefreshSlots(const std::unique_ptr<Army>& _army);
 	void UpdateUnitAmount(const std::unique_ptr<Army>& _army);
 	void updateSlot(const std::unique_ptr<Army>& _army);
 
