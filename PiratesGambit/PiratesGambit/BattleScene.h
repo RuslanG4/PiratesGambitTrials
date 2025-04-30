@@ -158,6 +158,7 @@ private:
 
 	bool startEnemyTurnTimer{ false };
 	sf::Clock enemyWaitTime;
+	float turnWaitTime = 1.f;
 	void WaitForTurn();
 	int attackNode = -1;
 
@@ -166,6 +167,10 @@ private:
 	bool startUnit{ false };
 	bool scanForAttack{ false };
 
+	bool removeUnitAnimation = false;
+	std::shared_ptr<PirateUnit> unitToRemove;
+	std::shared_ptr<PirateUnit> lastAttackedUnit;
+	void WaitForRemoveUnitAnimation();
 
 	bool showEndGame{ false };
 	sf::Clock endGameTimer;

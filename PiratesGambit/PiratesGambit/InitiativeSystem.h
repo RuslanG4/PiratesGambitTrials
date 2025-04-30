@@ -9,6 +9,19 @@ public:
         unit->unitStats.turnPoints = unit->unitStats.initiative;
     }
 
+    int findUnitIndex(const std::shared_ptr<PirateUnit>& unit)
+    {
+        std::vector<std::shared_ptr<PirateUnit>> sorted = getTurnOrder();
+        auto it = std::ranges::find(sorted, unit);
+        if (it != sorted.end()) {
+            return static_cast<int>(std::distance(sorted.begin(), it));
+        }
+        else {
+            std::cout << "Unit not found in turn order.\n";
+            return -1;
+        }
+    }
+
     void removeUnit(const std::shared_ptr<PirateUnit>& unit)
     {
         auto it = std::ranges::find(units, unit);

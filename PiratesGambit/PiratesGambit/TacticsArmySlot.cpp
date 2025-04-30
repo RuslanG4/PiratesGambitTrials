@@ -209,6 +209,7 @@ void TacticsArmySlot::ResetFade()
 {
 	timeAlive = 0;
 	unitSprite.setColor(sf::Color(255, 255, 255, 255));
+	isMoving = true;
 }
 
 void TacticsArmySlot::ResetMove()

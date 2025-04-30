@@ -23,8 +23,10 @@ GamePlayScene::GamePlayScene()
 	UpdateEnemiesCurrentNode();
 
 	battleScene = std::make_unique<BattleScene>(myPlayer);
-	battleScene->resetBattle();
-	battleScene->setEnemyRef(enemies[0]);
+	if (battle) {
+		battleScene->resetBattle();
+		battleScene->setEnemyRef(enemies[14]);
+	}
 }
 
 void GamePlayScene::handleInput(const std::unique_ptr<sf::RenderWindow>& window, sf::Event newEvent)
@@ -111,8 +113,8 @@ void GamePlayScene::update(float dt)
 	else {
 		battleScene->update(dt);
 		if (battleScene->isBattleOver()) {
-			playerMenu->RefreshArmyAfterBattle(myPlayer->getArmy());
 			if (battleScene->isPlayerWin()) {
+				playerMenu->RefreshArmyAfterBattle(myPlayer->getArmy());
 				battle = false;
 				auto enemyRef = battleScene->getEnemyRef();
 				if (enemyRef->isOnBoat()) {
@@ -120,11 +122,11 @@ void GamePlayScene::update(float dt)
 				}
 				enemies.erase(std::remove(enemies.begin(), enemies.end(), enemyRef), enemies.end());
 				battleScene->setEnemyRef(nullptr);
+				battleScene->endBattle();
 			}
 			else {
 				SceneManager::getInstance().setScene(new MainMenuScene());
 			}
-			battleScene->endBattle();
 		}
 	}
 	if (AllianceDialogueUI::getInstance().isMenuOpen())

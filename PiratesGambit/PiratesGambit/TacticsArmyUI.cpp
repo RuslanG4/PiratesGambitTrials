@@ -65,6 +65,40 @@ void TacticsArmyUI::UpdateToInitiativeView()
 			firstSlot->updateSlots(turnOrder[slotIndex]->unitInformation.unitName, turnOrder[slotIndex]->unitStats);
 			firstSlot->updateAllegianceColor(turnOrder[slotIndex]->unitInformation.allegiance);
 		}
+		slot->ResetFade();
+		slot->ResetMove();
+		slot->updateSlots(turnOrder[slotIndex]->unitInformation.unitName, turnOrder[slotIndex]->unitStats);
+		slot->updateAllegianceColor(turnOrder[slotIndex]->unitInformation.allegiance);
+		slotIndex++;
+		if (slotIndex >= turnOrder.size()) {
+			slotIndex = 0;
+		}
+	}
+}
+
+void TacticsArmyUI::UpdateToInitiativeViewAfterUnitRemoved(const std::shared_ptr<PirateUnit>& _unit)
+{
+	int slotIndex = 0;
+	std::vector<std::shared_ptr<PirateUnit>> turnOrder;
+
+	turnOrder.push_back(_unit);
+
+	for (auto& unit : initiativeSystem.getTurnOrder())
+	{
+		if (unit != _unit)
+		{
+			turnOrder.push_back(unit);
+		}
+	}
+
+	for (auto& slot : armySlots) {
+		if (slot == armySlots[0])
+		{
+			firstSlot->ResetFade();
+			firstSlot->updateSlots(turnOrder[slotIndex]->unitInformation.unitName, turnOrder[slotIndex]->unitStats);
+			firstSlot->updateAllegianceColor(turnOrder[slotIndex]->unitInformation.allegiance);
+		}
+		slot->ResetFade();
 		slot->ResetMove();
 		slot->updateSlots(turnOrder[slotIndex]->unitInformation.unitName, turnOrder[slotIndex]->unitStats);
 		slot->updateAllegianceColor(turnOrder[slotIndex]->unitInformation.allegiance);
@@ -78,6 +112,27 @@ void TacticsArmyUI::UpdateToInitiativeView()
 void TacticsArmyUI::startAnimation()
 {
 	animateSlots = true;
+}
+
+void TacticsArmyUI::startRemoveUnitAnimation(const std::shared_ptr<PirateUnit>& _unit)
+{
+	animateRemoveUnit = true;
+	removedUnitIndex = initiativeSystem.findUnitIndex(_unit) + 1 ;
+}
+
+void TacticsArmyUI::AnimateRemoveUnit(double dt)
+{
+	if (!armySlots.back()->isStillMoving())
+	{
+		animateRemoveUnit = false;
+		finsihedAnimation = true;
+		return;
+	}
+	armySlots[removedUnitIndex]->FadeOut(dt);
+	for (int i = removedUnitIndex; i < armySlots.size(); i++)
+	{
+		armySlots[i]->MoveSlot();
+	}
 }
 
 void TacticsArmyUI::AnimateInitiativeBar(double dt)

@@ -155,6 +155,8 @@ void BattleScene::update(float _dt)
 
 	if (tacticsArmyUI->animateSlots) {
 		tacticsArmyUI->AnimateInitiativeBar(_dt);
+	} if (tacticsArmyUI->animateRemoveUnit) {
+		tacticsArmyUI->AnimateRemoveUnit(_dt);
 	}
 }
 
@@ -652,6 +654,8 @@ void BattleScene::finalizeMoveUnit()
 		calculateDamage(currentSelectedUnit, currentDefendingUnit); //damage calc
 	}
 
+	lastAttackedUnit = currentSelectedUnit;
+
 	//reset
 	move = false;
 	currentNodeInPath = 0;
@@ -666,8 +670,10 @@ void BattleScene::finalizeMoveUnit()
 	enemyWaitTime.restart();
 	std::cout << "After restart: " << enemyWaitTime.getElapsedTime().asSeconds() << std::endl;
 
-
-	tacticsArmyUI->startAnimation();
+	if(!removeUnitAnimation)
+		tacticsArmyUI->startAnimation();
+	else
+		tacticsArmyUI->startRemoveUnitAnimation(unitToRemove);
 }
 
 void BattleScene::searchNeighboursToAttack()
@@ -795,8 +801,8 @@ void BattleScene::calculateDamage(const std::shared_ptr<PirateUnit>& _attacker, 
 	assignDeadUnits(_defender, lostUnitsAmount);
 
 	if (_defender->currentState == DEATH) { //dead
-		tacticsArmyUI->initiativeSystem.removeUnit(_defender);
-		tacticsArmyUI->UpdateToInitiativeView();
+		removeUnitAnimation = true;
+		unitToRemove = _defender;
 		newAreaSet = false;
 	}
 }
@@ -982,13 +988,32 @@ void BattleScene::RemoveDeadUnits()
 
 void BattleScene::WaitForTurn()
 {
-	if(enemyWaitTime.getElapsedTime().asSeconds() > 1.f)
+	if(enemyWaitTime.getElapsedTime().asSeconds() > turnWaitTime)
 	{
-		if (updateNextTurn()) {
+		if (removeUnitAnimation) {
+			if (tacticsArmyUI->finsihedAnimation) {
+				removeUnitAnimation = false;
+				enemyWaitTime.restart();
+				tacticsArmyUI->finsihedAnimation = false;
+				tacticsArmyUI->animateRemoveUnit = false;
+				tacticsArmyUI->initiativeSystem.removeUnit(unitToRemove);
+				tacticsArmyUI->UpdateToInitiativeViewAfterUnitRemoved(lastAttackedUnit);
+				unitToRemove = nullptr;
+				tacticsArmyUI->startAnimation();
+				turnWaitTime = 1.f;
+			}
+		}
+		else if (updateNextTurn()) {
+			turnWaitTime = 1.f;
 			startEnemyTurnTimer = false;
 			hasAttacked = false;
 		}
 	}
+}
+
+void BattleScene::WaitForRemoveUnitAnimation()
+{
+	
 }
 
 void BattleScene::WaitForEndGameTimer()

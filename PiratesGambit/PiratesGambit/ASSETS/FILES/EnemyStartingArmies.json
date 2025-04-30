@@ -109,9 +109,9 @@
                 "name" : "Steller",
                 "army": [
                     { "unittype": "Buccaneer", "amount": 20 },
-                    { "unittype": "Buccaneer", "amount": 20 },
-                    { "unittype": "Buccaneer", "amount": 20 },
-                    { "unittype": "Buccaneer", "amount": 20 }
+                    { "unittype": "Gunner", "amount": 20 },
+                    { "unittype": "Cannon", "amount": 20 },
+                    { "unittype": "Harpooner", "amount": 20 }
                 ]
             },
             {
