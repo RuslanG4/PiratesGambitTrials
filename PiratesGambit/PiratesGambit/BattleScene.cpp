@@ -152,6 +152,10 @@ void BattleScene::update(float _dt)
 		number->update(_dt);
 	}
 	detectMouse();
+
+	if (tacticsArmyUI->animateSlots) {
+		tacticsArmyUI->AnimateInitiativeBar(_dt);
+	}
 }
 
 void BattleScene::render(const std::unique_ptr<sf::RenderWindow>& window) const
@@ -188,32 +192,37 @@ void BattleScene::render(const std::unique_ptr<sf::RenderWindow>& window) const
 		endBattleUI->Render(window);
 }
 
-void BattleScene::updateNextTurn()
+bool BattleScene::updateNextTurn()
 {
 	Mouse::getInstance().SetToDefault();
 	//update initiative
-	tacticsArmyUI->UpdateToInitiativeView();
+	if (tacticsArmyUI->finsihedAnimation) {
+		tacticsArmyUI->finsihedAnimation = false;
+		tacticsArmyUI->animateSlots = false;
+		tacticsArmyUI->UpdateToInitiativeView();
 
-	//set next unit
-	if (!startUnit) {
-	currentSelectedUnit = tacticsArmyUI->initiativeSystem.getNextUnit();
-	}
-	else {
-		startUnit = false;
-	}
-	createMoveableArea(currentSelectedUnit);
+		//set next unit
+		if (!startUnit) {
 
-	if (currentSelectedUnit->unitInformation.allegiance != HUMAN_PLAYER) {
-		if(!CheckBattleOver(playerRef->getArmy()))
-			EnemyTurn();
-		else
-			clearArea(walkableNodesIDs);
-	}
-	else {
-		CheckBattleOver(enemyRef->getArmy());
-	}
+			currentSelectedUnit = tacticsArmyUI->initiativeSystem.getNextUnit();
+		}
+		else {
+			startUnit = false;
+		}
+		createMoveableArea(currentSelectedUnit);
 
-	
+		if (currentSelectedUnit->unitInformation.allegiance != HUMAN_PLAYER) {
+			if (!CheckBattleOver(playerRef->getArmy()))
+				EnemyTurn();
+			else
+				clearArea(walkableNodesIDs);
+		}
+		else {
+			CheckBattleOver(enemyRef->getArmy());
+		}
+		return true;
+	}	
+	return false;
 }
 
 void BattleScene::initialiseBattleGrid()
@@ -653,7 +662,12 @@ void BattleScene::finalizeMoveUnit()
 	//next turn
 	startEnemyTurnTimer = true;
 	scanForAttack = false;
+	std::cout << "Before restart: " << enemyWaitTime.getElapsedTime().asSeconds() << std::endl;
 	enemyWaitTime.restart();
+	std::cout << "After restart: " << enemyWaitTime.getElapsedTime().asSeconds() << std::endl;
+
+
+	tacticsArmyUI->startAnimation();
 }
 
 void BattleScene::searchNeighboursToAttack()
@@ -734,6 +748,8 @@ void BattleScene::SkipTurn()
 	startEnemyTurnTimer = true;
 	scanForAttack = false;
 	enemyWaitTime.restart();
+
+	tacticsArmyUI->startAnimation();
 }
 
 void BattleScene::EnemyTurn()
@@ -966,11 +982,12 @@ void BattleScene::RemoveDeadUnits()
 
 void BattleScene::WaitForTurn()
 {
-	if(enemyWaitTime.getElapsedTime().asSeconds() > 0.95f)
+	if(enemyWaitTime.getElapsedTime().asSeconds() > 1.f)
 	{
-		updateNextTurn();
-		startEnemyTurnTimer = false;
-		hasAttacked = false;
+		if (updateNextTurn()) {
+			startEnemyTurnTimer = false;
+			hasAttacked = false;
+		}
 	}
 }
 

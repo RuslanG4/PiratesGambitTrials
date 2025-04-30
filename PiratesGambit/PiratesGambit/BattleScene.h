@@ -47,7 +47,7 @@ public:
 	void update(float _dt);
 	void render(const std::unique_ptr<sf::RenderWindow>& window) const;
 
-	void updateNextTurn();
+	bool updateNextTurn();
 
 	void initialiseBattleGrid();
 	void addNeighbours(int _currentNodeId) const;

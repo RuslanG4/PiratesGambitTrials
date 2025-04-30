@@ -61,9 +61,11 @@ void TacticsArmyUI::UpdateToInitiativeView()
 	for (auto& slot : armySlots) {
 		if (slot == armySlots[0])
 		{
+			firstSlot->ResetFade();
 			firstSlot->updateSlots(turnOrder[slotIndex]->unitInformation.unitName, turnOrder[slotIndex]->unitStats);
 			firstSlot->updateAllegianceColor(turnOrder[slotIndex]->unitInformation.allegiance);
 		}
+		slot->ResetMove();
 		slot->updateSlots(turnOrder[slotIndex]->unitInformation.unitName, turnOrder[slotIndex]->unitStats);
 		slot->updateAllegianceColor(turnOrder[slotIndex]->unitInformation.allegiance);
 		slotIndex++;
@@ -73,12 +75,32 @@ void TacticsArmyUI::UpdateToInitiativeView()
 	}
 }
 
+void TacticsArmyUI::startAnimation()
+{
+	animateSlots = true;
+}
+
+void TacticsArmyUI::AnimateInitiativeBar(double dt)
+{
+	if (!armySlots[0]->isStillMoving())
+	{
+		animateSlots = false;
+		finsihedAnimation = true;
+		return;
+	}
+	firstSlot->FadeOut(dt);
+	for (auto& slot : armySlots)
+	{
+		slot->MoveSlot();
+	}
+}
+
 void TacticsArmyUI::render(const std::unique_ptr<sf::RenderWindow>& _win) const
 {
-	for(auto& slot : armySlots)
+	for (auto it = armySlots.rbegin(); it != armySlots.rend(); ++it)
 	{
-		firstSlot->render(_win);
-		slot->render(_win);
+		(*it)->render(_win);
 	}
+	firstSlot->render(_win);
 }
 

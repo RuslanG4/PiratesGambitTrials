@@ -23,6 +23,8 @@ GamePlayScene::GamePlayScene()
 	UpdateEnemiesCurrentNode();
 
 	battleScene = std::make_unique<BattleScene>(myPlayer);
+	battleScene->resetBattle();
+	battleScene->setEnemyRef(enemies[0]);
 }
 
 void GamePlayScene::handleInput(const std::unique_ptr<sf::RenderWindow>& window, sf::Event newEvent)

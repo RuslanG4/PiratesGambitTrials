@@ -18,17 +18,29 @@ public:
 	void updateUnitAmount(int _amount);
 	void updateAllegianceColor(UnitAllegiance _allegiance);
 	void render(const std::unique_ptr<sf::RenderWindow>& _win) const;
-	sf::Vector2f getPosition() const { return boxBorder.getPosition(); }
 
+	void FadeOut(double dt);
+	void MoveSlot();
+	void ResetFade();
+	void ResetMove();
+
+	sf::Vector2f getPosition() const { return boxBorder.getPosition(); }
+	bool isStillMoving() const { return isMoving; }
 	sf::Sprite unitSprite;
 private:
 	sf::Sprite boxBorder;
 	sf::RectangleShape teamColor;
+	sf::RectangleShape bgColor;
 
 	UnitStats stats;
 
 	bool occupied = true;
 	bool mainIcon = false;
+
+	float totalMoved = 0.0f;
+	bool isMoving = true;
+
+	float timeAlive = 0.f;
 
 	UnitAmount unitAmountUI;
 	

@@ -10,6 +10,9 @@ TacticsArmySlot::TacticsArmySlot(UnitName _type, UnitStats _stats, sf::Vector2f 
 	updateSlots(_type, stats);
 	boxBorder.setScale(5, 5);
 	boxBorder.setPosition(_pos);
+
+	bgColor.setScale(5, 5);
+	bgColor.setPosition(boxBorder.getPosition());
 	teamColor.setScale(5, 5);
 	teamColor.setPosition(boxBorder.getPosition());
 	
@@ -23,6 +26,9 @@ TacticsArmySlot::TacticsArmySlot(UnitName _type, UnitStats _stats, sf::Vector2f 
 	updateSlots(_type, stats);
 	boxBorder.setScale(2.5, 2.5);
 	boxBorder.setPosition(_pos);
+
+	bgColor.setScale(2.5, 2.5);
+	bgColor.setPosition(boxBorder.getPosition());
 	teamColor.setScale(2.5, 2.5);
 	teamColor.setPosition(boxBorder.getPosition());
 	unitSprite.setPosition(boxBorder.getPosition());
@@ -69,6 +75,10 @@ void TacticsArmySlot::init()
 	teamColor.setSize(sf::Vector2f(48, 48));
 	teamColor.setOrigin(24, 24);
 	teamColor.setFillColor(sf::Color(84, 76, 84));
+
+	bgColor.setSize(sf::Vector2f(48, 48));
+	bgColor.setOrigin(24, 24);
+	bgColor.setFillColor(sf::Color(84, 76, 84));
 
 	unitAmountUI.renderUnitAmount = false;
 }
@@ -164,8 +174,50 @@ void TacticsArmySlot::updateAllegianceColor(UnitAllegiance _allegiance)
 
 void TacticsArmySlot::render(const std::unique_ptr<sf::RenderWindow>& _win) const
 {
+	//_win->draw(bgColor);
 	_win->draw(teamColor);
 	_win->draw(boxBorder);
 	_win->draw(unitSprite);
 	unitAmountUI.render(_win);
+}
+
+void TacticsArmySlot::FadeOut(double dt)
+{
+	timeAlive += dt * 0.001f;
+	float alpha = 255 * (1.0f - (timeAlive / 1.f)); // Fade out over 0.5 seconds
+	alpha = std::clamp(alpha, 0.0f, 255.0f); 
+
+	unitSprite.setColor(sf::Color(255, 255, 255, static_cast<sf::Uint8>(alpha)));
+}
+
+void TacticsArmySlot::MoveSlot()
+{
+	float moveStep = -1.75f;
+	float remaining = 120.0f - std::abs(totalMoved);
+
+	if (std::abs(moveStep) > remaining) {
+		moveStep = -remaining;
+		isMoving = false;     
+	}
+
+	unitSprite.move(moveStep, 0);
+	teamColor.move(moveStep, 0);
+	totalMoved += moveStep;
+}
+
+void TacticsArmySlot::ResetFade()
+{
+	timeAlive = 0;
+	unitSprite.setColor(sf::Color(255, 255, 255, 255));
+}
+
+void TacticsArmySlot::ResetMove()
+{
+	float offset = -totalMoved;
+
+	unitSprite.move(offset, 0);
+	teamColor.move(offset, 0);
+
+	totalMoved = 0.0f;
+	isMoving = true;
 }
