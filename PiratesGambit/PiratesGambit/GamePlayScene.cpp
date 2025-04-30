@@ -87,14 +87,8 @@ void GamePlayScene::update(float dt)
 		}
 		handleKeyPopUps();
 
-		if (myPlayer->isOnBoat())
-		{
-			playerBoat->update(dt);
-		}
-		else
-		{
-			myPlayer->update(dt);
-		}
+		myPlayer->update(dt);
+		playerBoat->update(dt);
 
 		playerMenu->Update();
 
@@ -119,6 +113,9 @@ void GamePlayScene::update(float dt)
 			if (battleScene->isPlayerWin()) {
 				battle = false;
 				auto enemyRef = battleScene->getEnemyRef();
+				if (enemyRef->isOnBoat()) {
+					enemyRef->GetBoat()->sinkBoat();
+				}
 				enemies.erase(std::remove(enemies.begin(), enemies.end(), enemyRef), enemies.end());
 				battleScene->setEnemyRef(nullptr);
 			}

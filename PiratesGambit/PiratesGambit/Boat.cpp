@@ -30,7 +30,7 @@ void Boat::render(const std::unique_ptr<sf::RenderWindow>& window) const
 	}
 	window->draw(boatSprite);
 	window->draw(fireIndicator);
-	myHitbox->render(window);
+	//myHitbox->render(window);
 }
 
 void Boat::update(double dt)
@@ -52,6 +52,8 @@ void Boat::update(double dt)
 		controller->update_speed();
 
 		currentPlayer->getPlayerController()->setCurrentPosition(controller->getPosition() + desiredPosition);
+		currentPlayer->GetHitBoxPtr()->setPosition(controller->getPosition() + desiredPosition);
+
 
 		boatSprite.setPosition(controller->getPosition());
 		boatSprite.setRotation(controller->getRotation());

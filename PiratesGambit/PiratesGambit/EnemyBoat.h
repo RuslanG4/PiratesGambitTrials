@@ -18,6 +18,7 @@ public:
 	void update(double dt);
 
 	void takeDamage();
+	void sinkBoat();
 	void decideSprite();
 
 	void RotateTowardsPlayer(sf::Vector2f _pos);

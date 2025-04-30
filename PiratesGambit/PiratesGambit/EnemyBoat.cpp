@@ -44,6 +44,12 @@ void EnemyBoat::takeDamage()
 	decideSprite();
 }
 
+void EnemyBoat::sinkBoat()
+{
+	totalHealth -= 100;
+	decideSprite();
+}
+
 void EnemyBoat::decideSprite()
 {
 	if (totalHealth <= 40)

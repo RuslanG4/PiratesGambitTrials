@@ -95,6 +95,8 @@ public:
 	//HitBox
 	sf::FloatRect GetHitBox() const { return myHitbox->GetGlobalBounds(); }
 
+	HitBox* GetHitBoxPtr() { return myHitbox; }
+
 	void UpdateDirection(sf::Vector2f _direction);
 	EnemyDirection GetDirection() const { return direction; }
 	void ChangeDirection(EnemyDirection _direction) { direction = _direction; }
