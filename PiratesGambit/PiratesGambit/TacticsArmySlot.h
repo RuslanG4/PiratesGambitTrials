@@ -17,10 +17,17 @@ public:
 	void updateSlots(UnitName _type, UnitStats _stats);
 	void updateUnitAmount(int _amount);
 	void updateAllegianceColor(UnitAllegiance _allegiance);
+
+	//Fade in extra unit
+	void updateNextSlot(UnitName _type, UnitStats _stats);
+	void updateNextAllegianceColor(UnitAllegiance _allegiance);
+
 	void render(const std::unique_ptr<sf::RenderWindow>& _win) const;
 
 	void FadeOut(double dt);
-	void MoveSlot();
+	void FadeIn(double dt);
+	void FadeInMain(double dt);
+	void MoveSlot(int multiplier);
 	void ResetFade();
 	void ResetMove();
 
@@ -32,10 +39,15 @@ private:
 	sf::RectangleShape teamColor;
 	sf::RectangleShape bgColor;
 
+	sf::RectangleShape nextTeamColor;
+	sf::Sprite nextTeamUnitSprite;
+
 	UnitStats stats;
 
 	bool occupied = true;
 	bool mainIcon = false;
+
+	bool fadeIn = false;
 
 	float totalMoved = 0.0f;
 	bool isMoving = true;

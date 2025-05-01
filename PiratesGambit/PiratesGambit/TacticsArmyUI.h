@@ -31,9 +31,11 @@ public:
 	bool finsihedAnimation = true;
 private:
 	sf::Clock clock;
-	std::vector<std::unique_ptr<TacticsArmySlot>> armySlots;
+	std::vector<std::shared_ptr<TacticsArmySlot>> armySlots;
 	std::unique_ptr<TacticsArmySlot> firstSlot;
 
 	int removedUnitIndex=0;
+	int extendedDupeUnitIndex = 0;
+	int mutliplier = 1;
 };
 
