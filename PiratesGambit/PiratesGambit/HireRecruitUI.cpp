@@ -153,7 +153,7 @@ void HireRecruitUI::Update(float _dt)
 			CloseUI();
 		}
 
-		if (buildingRef->canBuyUnits()) {
+		else if (buildingRef->canBuyUnits()) {
 			if (resetValue)
 			{
 				availableUnits = unitsLeftReference;
@@ -210,4 +210,5 @@ void HireRecruitUI::CloseUI()
 	costPerUnit = 0;
 
 	amountSlider->ResetSlider();
+	purchase->ResetTrigger();
 }
