@@ -25,7 +25,7 @@ GamePlayScene::GamePlayScene()
 	battleScene = std::make_unique<BattleScene>(myPlayer);
 	if (battle) {
 		battleScene->resetBattle();
-		battleScene->setEnemyRef(enemies[0]);
+		battleScene->setEnemyRef(enemies[14]);
 	}
 }
 

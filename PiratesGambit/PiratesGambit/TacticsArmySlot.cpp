@@ -170,22 +170,22 @@ void TacticsArmySlot::updateAllegianceColor(UnitAllegiance _allegiance)
 	switch (_allegiance)
 	{
 	case HUMAN_PLAYER:
-		teamColor.setFillColor(sf::Color::Cyan);
+		teamColor.setFillColor(sf::Color(246, 232, 205));
 		break;
 	case RED_PLAYER:
-		teamColor.setFillColor(sf::Color::Red);
+		teamColor.setFillColor(sf::Color(207, 94, 83, 255));
 		break;
 	case BLUE_PLAYER:
-		teamColor.setFillColor(sf::Color::Blue);
+		teamColor.setFillColor(sf::Color(107, 147, 184, 255));
 		break;
 	case GREEN_PLAYER:
-		teamColor.setFillColor(sf::Color::Green);
+		teamColor.setFillColor(sf::Color(112, 180, 76, 255));
 		break;
 	case YELLOW_PLAYER:
-		teamColor.setFillColor(sf::Color::Yellow);
+		teamColor.setFillColor(sf::Color(224, 180, 35, 255));
 		break;
 	case BLACK_PLAYER:
-		teamColor.setFillColor(sf::Color::Black);
+		teamColor.setFillColor(sf::Color(95, 115, 116, 255));
 		break;
 	}
 }
@@ -257,22 +257,22 @@ void TacticsArmySlot::updateNextAllegianceColor(UnitAllegiance _allegiance)
 	switch (_allegiance)
 	{
 	case HUMAN_PLAYER:
-		nextTeamColor.setFillColor(sf::Color::Cyan);
+		nextTeamColor.setFillColor(sf::Color(246, 232, 205));
 		break;
 	case RED_PLAYER:
-		nextTeamColor.setFillColor(sf::Color::Red);
+		nextTeamColor.setFillColor(sf::Color(207, 94, 83, 255));
 		break;
 	case BLUE_PLAYER:
-		nextTeamColor.setFillColor(sf::Color::Blue);
+		nextTeamColor.setFillColor(sf::Color(107, 147, 184, 255));
 		break;
 	case GREEN_PLAYER:
-		nextTeamColor.setFillColor(sf::Color::Green);
+		nextTeamColor.setFillColor(sf::Color(112, 180, 76, 255));
 		break;
 	case YELLOW_PLAYER:
-		nextTeamColor.setFillColor(sf::Color::Yellow);
+		nextTeamColor.setFillColor(sf::Color(224, 180, 35, 255));
 		break;
 	case BLACK_PLAYER:
-		nextTeamColor.setFillColor(sf::Color::Black);
+		nextTeamColor.setFillColor(sf::Color(95, 115, 116, 255));
 		break;
 	}
 }
