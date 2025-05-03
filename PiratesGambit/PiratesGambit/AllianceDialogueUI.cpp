@@ -83,7 +83,7 @@ void AllianceDialogueUI::Update()
             if (it != playerRef->getInventory()->getItems().end()) {
                 if ((it->get()->getStackSize() - allianceStatus->getCostAmount()) > 0) {
                     enemyRef->ChangeState(new FollowPlayerState(playerRef));
-                    enemyRef->updateHiredStatus(true);
+					playerRef->hireEnemy(enemyRef);
                     CloseMenu();
                 }
             }

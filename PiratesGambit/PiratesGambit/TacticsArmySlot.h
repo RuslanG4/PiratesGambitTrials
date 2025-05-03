@@ -31,6 +31,8 @@ public:
 	void ResetFade();
 	void ResetMove();
 
+	void SetMainSpriteTransparent();
+
 	sf::Vector2f getPosition() const { return boxBorder.getPosition(); }
 	bool isStillMoving() const { return isMoving; }
 	sf::Sprite unitSprite;
@@ -53,6 +55,7 @@ private:
 	bool isMoving = true;
 
 	float timeAlive = 0.f;
+	float timeAliveNext = 0.f;
 
 	UnitAmount unitAmountUI;
 	

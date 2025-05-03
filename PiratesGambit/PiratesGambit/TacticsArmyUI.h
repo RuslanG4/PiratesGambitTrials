@@ -32,6 +32,7 @@ public:
 private:
 	sf::Clock clock;
 	std::vector<std::shared_ptr<TacticsArmySlot>> armySlots;
+	std::vector<std::shared_ptr<TacticsArmySlot>> slotsToFade;
 	std::unique_ptr<TacticsArmySlot> firstSlot;
 
 	int removedUnitIndex=0;

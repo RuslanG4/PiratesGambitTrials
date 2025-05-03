@@ -98,6 +98,7 @@ public:
 	int SelectAttackNodeToWalkTo(const std::vector<std::shared_ptr<PirateUnit>>& _possibleUnits);
 
 	bool CheckBattleOver(const std::unique_ptr<Army>& _army);
+	void AddCoinsToPlayer();
 	void RemoveDeadUnits();
 
 	const std::shared_ptr<Enemy>& getEnemyRef() const { return enemyRef; }	
@@ -170,7 +171,6 @@ private:
 	bool removeUnitAnimation = false;
 	std::shared_ptr<PirateUnit> unitToRemove;
 	std::shared_ptr<PirateUnit> lastAttackedUnit;
-	void WaitForRemoveUnitAnimation();
 
 	bool showEndGame{ false };
 	sf::Clock endGameTimer;

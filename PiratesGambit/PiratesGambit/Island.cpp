@@ -52,11 +52,11 @@ void Island::GenerateTrees(std::vector<std::shared_ptr<Node>>& _nodes)
 
 	std::vector<int> clumps;
 
-	totalTrees <= 1 ? clumps = { 1 } : clumps = DistributeTreesIntoClumps(totalTrees);
+	totalTrees <= 1 ? clumps = { 1 } : clumps = DistributeTreesIntoClumps(totalTrees); //more than one clump
 
 	for(int clump : clumps)
 	{
-		std::vector<std::shared_ptr<Node>> PossibleNodes = ObjectPlacement::placeTrees(_nodes, clump);
+		std::vector<std::shared_ptr<Node>> PossibleNodes = ObjectPlacement::placeTrees(_nodes, clump); //get nodes to place trees
 
 		for(auto &node: PossibleNodes)
 		{
@@ -70,7 +70,7 @@ void Island::GenerateTrees(std::vector<std::shared_ptr<Node>>& _nodes)
 	}
 
 	ClearIslandNodeConditions();
-	MarkAreaAroundTrees();
+	MarkAreaAroundTrees(); //marks area aound trees as occupied
 }
 
 void Island::MarkAreaAroundTrees()

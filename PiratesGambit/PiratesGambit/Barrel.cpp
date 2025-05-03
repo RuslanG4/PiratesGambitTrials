@@ -1,6 +1,4 @@
 #include "Barrel.h"
-
-#include "BarrelInventory.h"
 #include "Camera.h"
 #include "Coins.h"
 

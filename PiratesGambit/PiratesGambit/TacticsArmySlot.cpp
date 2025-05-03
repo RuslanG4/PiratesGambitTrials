@@ -302,11 +302,16 @@ void TacticsArmySlot::FadeOut(double dt)
 void TacticsArmySlot::FadeIn(double dt)
 {
 	fadeIn = true;
-	timeAlive += dt * 0.001f;
-	float alpha = 255 * (timeAlive / 1.f); // Fade in over 1 second
+	timeAliveNext += dt * 0.001f;
+	float alpha = 255 * (timeAliveNext / 1.f); // Fade in over 1 second
 	alpha = std::clamp(alpha, 0.0f, 255.0f);
 
 	nextTeamUnitSprite.setColor(sf::Color(255, 255, 255, static_cast<sf::Uint8>(alpha)));
+
+
+	sf::Color color = nextTeamColor.getFillColor();
+	color.a = static_cast<sf::Uint8>(alpha);
+	nextTeamColor.setFillColor(color);
 }
 
 void TacticsArmySlot::FadeInMain(double dt)
@@ -317,6 +322,10 @@ void TacticsArmySlot::FadeInMain(double dt)
 	alpha = std::clamp(alpha, 0.0f, 255.0f);
 
 	unitSprite.setColor(sf::Color(255, 255, 255, static_cast<sf::Uint8>(alpha)));
+
+	sf::Color color = teamColor.getFillColor();
+	color.a = static_cast<sf::Uint8>(alpha);
+	teamColor.setFillColor(color);
 }
 
 void TacticsArmySlot::MoveSlot(int multiplier)
@@ -337,7 +346,11 @@ void TacticsArmySlot::MoveSlot(int multiplier)
 void TacticsArmySlot::ResetFade()
 {
 	timeAlive = 0;
+	timeAliveNext = 0;
 	unitSprite.setColor(sf::Color(255, 255, 255, 255));
+	sf::Color color = nextTeamColor.getFillColor();
+	color.a = 255;
+	nextTeamColor.setFillColor(color);
 	fadeIn = false;
 	isMoving = true;
 }
@@ -351,5 +364,17 @@ void TacticsArmySlot::ResetMove()
 
 	totalMoved = 0.0f;
 	isMoving = true;
+}
+
+void TacticsArmySlot::SetMainSpriteTransparent()
+{
+	unitSprite.setColor(sf::Color(255, 255, 255, 0));
+	nextTeamUnitSprite.setColor(sf::Color(255, 255, 255, 0));
+	sf::Color color = nextTeamColor.getFillColor();
+	color.a = 0;
+	nextTeamColor.setFillColor(color);
+	color = teamColor.getFillColor();
+	color.a = 0;
+	teamColor.setFillColor(color);
 }
 

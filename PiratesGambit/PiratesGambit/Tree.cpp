@@ -1,6 +1,4 @@
 #include "Tree.h"
-
-#include "BarrelInventory.h"
 #include "Camera.h"
 #include "ParticleManager.h"
 #include "TextureManager.h"

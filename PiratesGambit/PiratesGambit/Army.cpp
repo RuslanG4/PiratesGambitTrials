@@ -29,14 +29,26 @@ bool Army::combineUnits(std::shared_ptr<PirateUnit> _unit)
     return false; // No matching unit found
 }
 
-void Army::removeUnit(std::shared_ptr<PirateUnit> _unit)
+std::shared_ptr<PirateUnit> Army::removeUnit(std::shared_ptr<PirateUnit> _unit)
 {
 	auto it = std::ranges::find_if(army, [&](const std::shared_ptr<PirateUnit>& unit) {
 		return unit->unitInformation.id == _unit->unitInformation.id;
 		});
 	if (it != army.end()) {
-		army.erase(it);
+        std::shared_ptr<PirateUnit> removedUnit = *it;
+        army.erase(it);
+        return removedUnit;
 	}
+}
+
+void Army::deleteUnit(std::shared_ptr<PirateUnit> _unit)
+{
+    auto it = std::ranges::find_if(army, [&](const std::shared_ptr<PirateUnit>& unit) {
+        return unit->unitInformation.id == _unit->unitInformation.id;
+        });
+    if (it != army.end()) {
+        army.erase(it);
+    }
 }
 
 bool Army::isEmpty()

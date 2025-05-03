@@ -12,7 +12,7 @@
 #include"CannonBallItem.h"
 #include"Structs.h"
 
-
+class Enemy; //forward ref
 class Boat; //forward ref
 
 class Player
@@ -30,7 +30,7 @@ public:
 		playerArmy->addUnitNoCombine(std::make_shared<Buccaneer>(12, HUMAN_PLAYER));
 		playerArmy->addUnit(std::make_shared<Gunner>(18, HUMAN_PLAYER));
 
-		inventory->addItem(std::make_unique<Coins>(1000));
+		inventory->addItem(std::make_unique<Coins>(10000));
 		inventory->addItem(std::make_unique<CannonBallItem>(3));
 
 		//inventory = new Inventory();
@@ -92,6 +92,13 @@ public:
 	//Army
 	const std::unique_ptr<Army>& getArmy() const { return playerArmy; }
 
+	//Hiring enemy
+	void hireEnemy(const std::shared_ptr<Enemy>& _enemy);
+	void disbandEnemy();
+	void addRandomEnemyUnitToArmy();
+	void removeEnemyUnitFromArmy();
+	std::shared_ptr<Enemy> getHiredEnemy() const { return hiredEnemy; }
+
 	//HitBox
 	sf::FloatRect GetHitBox() const { return myHitbox->GetGlobalBounds(); }
 
@@ -117,6 +124,9 @@ private:
 	std::shared_ptr<Node> currentNode{nullptr};
 
 	std::unique_ptr<Army> playerArmy;
+
+	std::shared_ptr<Enemy> hiredEnemy{ nullptr };
+	std::shared_ptr<PirateUnit> enemyUnit{ nullptr };
 
 	int currentChunkId{-99};
 

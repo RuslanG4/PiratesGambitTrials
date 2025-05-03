@@ -60,6 +60,14 @@ public:
 	virtual void animateSprite(float _dt) = 0;
 
 	void updateUnitAmount(int _amount);
+	void updateUnitAllegiance(UnitAllegiance _allegiance) {
+		unitInformation.allegiance = _allegiance;
+	};
+	void updateUnitFacingDirection() {
+		scaleX = -scaleX;
+		facingDirection = -facingDirection;
+		sprite.setScale(scaleX, scaleY);
+	};
 	void placeUnitAmountText();
 
 	void moveUnit(sf::Vector2f _vel);

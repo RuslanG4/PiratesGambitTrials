@@ -53,7 +53,6 @@ private:
 
             if (area.size() >= 6 && isAreaValid(area)) {
                 for (auto& node : area) {
-                    //node->debugShape->setFillColor(sf::Color::Yellow); //debug
                     node->UpdateIsBuildingArea(true); //mark area as in use
                 }
                 return startNode; //return node

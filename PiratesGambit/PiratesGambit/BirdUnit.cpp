@@ -16,6 +16,7 @@ void BirdUnit::init()
 
 	if (unitInformation.allegiance != HUMAN_PLAYER) {
 		scaleX = -scaleX;
+		facingDirection = -facingDirection;
 	}
 	sprite.setScale(scaleX, scaleY);
 	sprite.setOrigin(32, 32);

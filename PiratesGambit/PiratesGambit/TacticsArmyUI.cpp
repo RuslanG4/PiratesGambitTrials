@@ -106,7 +106,15 @@ void TacticsArmyUI::UpdateToInitiativeViewAfterUnitRemoved(const std::shared_ptr
 		}
 		slot->updateNextSlot(turnOrder[slotIndex]->unitInformation.unitName, turnOrder[slotIndex]->unitStats);
 		slot->updateNextAllegianceColor(turnOrder[slotIndex]->unitInformation.allegiance);
+		for (auto& fadeSlot : slotsToFade)
+		{
+			if (slot == fadeSlot) {
+				slot->SetMainSpriteTransparent();
+			}
+		}
+		
 	}
+	armySlots.back()->SetMainSpriteTransparent();
 }
 
 void TacticsArmyUI::startAnimation()
@@ -117,8 +125,8 @@ void TacticsArmyUI::startAnimation()
 void TacticsArmyUI::startRemoveUnitAnimation(const std::shared_ptr<PirateUnit>& _unit)
 {
 	animateRemoveUnit = true;
-	removedUnitIndex = initiativeSystem.findUnitIndex(_unit) + 1 ;
-	extendedDupeUnitIndex = initiativeSystem.getTurnOrder().size();
+	removedUnitIndex = initiativeSystem.findUnitIndex(_unit) + 1 ; //slot to fade out
+	extendedDupeUnitIndex = initiativeSystem.getTurnOrder().size(); //incase that unit is displayed more than once
 }
 
 void TacticsArmyUI::AnimateRemoveUnit(double dt)
@@ -127,6 +135,11 @@ void TacticsArmyUI::AnimateRemoveUnit(double dt)
 	{
 		animateRemoveUnit = false;
 		finsihedAnimation = true;
+		for (int i = armySlots.size() - (mutliplier - 1) ; i < armySlots.size() - 1; ++i)
+		{
+			//pushes back all slots between the last slot still rendered and the last slot
+			slotsToFade.push_back(armySlots[i]);
+		}
 		return;
 	}
 	int multiplier = 1;
@@ -134,7 +147,7 @@ void TacticsArmyUI::AnimateRemoveUnit(double dt)
 		armySlots[i]->FadeOut(dt);
 		for (int j = i; j < i + extendedDupeUnitIndex && j < armySlots.size(); j++)
 		{
-			armySlots[j]->MoveSlot(multiplier);
+			armySlots[j]->MoveSlot(multiplier); //moves all slots after the fading one
 		}
 		multiplier++;
 	}
@@ -148,6 +161,7 @@ void TacticsArmyUI::AnimateInitiativeBar(double dt)
 		animateSlots = false;
 		finsihedAnimation = true;
 		mutliplier = 1;
+		slotsToFade.clear();
 		return;
 	}
 	firstSlot->FadeOut(dt);
@@ -155,6 +169,12 @@ void TacticsArmyUI::AnimateInitiativeBar(double dt)
 	{
 		slot->MoveSlot(1);
 	}
+	for (auto& fadeSlot : slotsToFade)
+	{
+		fadeSlot->FadeInMain(dt);
+	}
+	if (!slotsToFade.empty())
+		armySlots.back()->FadeInMain(dt);
 	armySlots.back()->FadeIn(dt);
 }
 

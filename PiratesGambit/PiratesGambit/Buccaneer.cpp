@@ -13,6 +13,7 @@ void Buccaneer::init()
 
 	if (unitInformation.allegiance != HUMAN_PLAYER) {
 		scaleX = -scaleX;
+		facingDirection = -facingDirection;
 	}
 	sprite.setScale(scaleX, scaleY);
 	sprite.setOrigin(16, 24);

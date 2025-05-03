@@ -116,6 +116,14 @@ void GamePlayScene::update(float dt)
 			if (battleScene->isPlayerWin()) {
 				playerMenu->RefreshArmyAfterBattle(myPlayer->getArmy());
 				battle = false;
+				if(myPlayer->isOnBoat())
+					myPlayer->getHiredEnemy()->ChangeState(new EnemyBoatWander(myPlayer));
+				else
+					myPlayer->getHiredEnemy()->ChangeState(new IdleState(myPlayer));
+
+				myPlayer->removeEnemyUnitFromArmy();
+				myPlayer->disbandEnemy();
+
 				auto enemyRef = battleScene->getEnemyRef();
 				if (enemyRef->isOnBoat()) {
 					enemyRef->GetBoat()->sinkBoat();
@@ -716,9 +724,10 @@ void GamePlayScene::transitionToBattleMode(const std::shared_ptr<Node>& _node)
 			if (enemy->GetGlobalBounds().intersects(myPlayer->GetHitBox()) && enemy->GetPlayerAllegiance().isHostile())
 			{
 				battleTransition.startTransition(1);
+				if (myPlayer->getHiredEnemy())
+					myPlayer->addRandomEnemyUnitToArmy();
 				battleScene->resetBattle();
 				battleScene->setEnemyRef(enemy);
-
 			}
 		}
 	}
@@ -836,7 +845,8 @@ void GamePlayScene::transferInventoryItems()
 
 void GamePlayScene::updateVisableNodes()
 {
-	sf::FloatRect viewBounds(Camera::getInstance().getCamera().getCenter() - (Camera::getInstance().getCamera().getSize() + sf::Vector2f(128, 128)) / 2.0f, Camera::getInstance().getCamera().getSize() + sf::Vector2f(128, 128));
+	sf::FloatRect viewBounds(Camera::getInstance().getCamera().getCenter() - (Camera::getInstance().getCamera().getSize() + sf::Vector2f(128, 128)) / 2.0f,
+		Camera::getInstance().getCamera().getSize() + sf::Vector2f(128, 128));
 
 	int minX = std::max(0, static_cast<int>(viewBounds.left / NODE_SIZE));
 	int maxX = std::min(NODE_SIZE * mapSize - 1, static_cast<int>((viewBounds.left + viewBounds.width) / NODE_SIZE));

@@ -38,9 +38,11 @@ void FollowPlayerState::Update(Enemy& enemy, float deltaTime)
 				enemy.updateHiredStatus(false);
 				if (enemy.isOnBoat()) {
 					enemy.ChangeState(new IdleState(playerRef));
+					playerRef->disbandEnemy();
 				}
 				else {
 					enemy.ChangeState(new EnemyBoatWander(playerRef));
+					playerRef->disbandEnemy();
 				}
 				return;
 			}
@@ -51,6 +53,7 @@ void FollowPlayerState::Update(Enemy& enemy, float deltaTime)
 					if (node == playerRef->getCurrentNode())
 					{
 						enemy.ChangeState(new ChaseState(playerRef));
+						playerRef->disbandEnemy();
 						break;
 					}
 				}

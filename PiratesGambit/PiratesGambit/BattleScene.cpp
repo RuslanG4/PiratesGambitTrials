@@ -952,7 +952,8 @@ bool BattleScene::CheckBattleOver(const std::unique_ptr<Army>& _army)
 			UIInterface->updateModeString("Player Wins");
 			RemoveDeadUnits();
 			endBattleUI->Win();
-			playerRef->getInventory()->addItem(std::make_unique<Coins>(2000));
+			AddCoinsToPlayer();
+			
 		}
 		currentState = END;
 		endGameTimer.restart();
@@ -961,27 +962,38 @@ bool BattleScene::CheckBattleOver(const std::unique_ptr<Army>& _army)
 	return false;
 }
 
+void BattleScene::AddCoinsToPlayer()
+{
+	int totalGoldWin = 2000;
+	if (playerRef->getHiredEnemy())
+		totalGoldWin = 1000;
+	else
+		totalGoldWin = 2000;
+
+	playerRef->getInventory()->addItem(std::make_unique<Coins>(totalGoldWin));
+}
+
 void BattleScene::RemoveDeadUnits()
 {
 	for (int i = 0; i < playerArmyDead->getArmy().size(); i++)
 	{
 		if (!playerArmyDead->getArmy()[i]->unitStats.isActive)
 		{
-			playerArmyDead->removeUnit(playerArmyDead->getArmy()[i]);
+			playerArmyDead->deleteUnit(playerArmyDead->getArmy()[i]);
 		}
 	}
 	for (int i = 0; i < playerRef->getArmy()->getArmy().size(); i++)
 	{
 		if (!playerRef->getArmy()->getArmy()[i]->unitStats.isActive)
 		{
-			playerRef->getArmy()->removeUnit(playerRef->getArmy()->getArmy()[i]);
+			playerRef->getArmy()->deleteUnit(playerRef->getArmy()->getArmy()[i]);
 		}
 	}
 	for (int i = 0; i < enemyArmyDead->getArmy().size(); i++)
 	{
 		if (!enemyArmyDead->getArmy()[i]->unitStats.isActive)
 		{
-			enemyArmyDead->removeUnit(enemyArmyDead->getArmy()[i]);
+			enemyArmyDead->deleteUnit(enemyArmyDead->getArmy()[i]);
 		}
 	}
 }
@@ -1009,11 +1021,6 @@ void BattleScene::WaitForTurn()
 			hasAttacked = false;
 		}
 	}
-}
-
-void BattleScene::WaitForRemoveUnitAnimation()
-{
-	
 }
 
 void BattleScene::WaitForEndGameTimer()

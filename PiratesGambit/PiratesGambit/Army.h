@@ -21,7 +21,9 @@ public:
 
 	bool combineUnits(std::shared_ptr<PirateUnit> _unit);
 
-	void removeUnit(std::shared_ptr<PirateUnit> _unit);
+	std::shared_ptr<PirateUnit> removeUnit(std::shared_ptr<PirateUnit> _unit);
+
+	void deleteUnit(std::shared_ptr<PirateUnit> _unit);
 
 	bool isEmpty();
 

@@ -4,16 +4,6 @@
 
 ResourceSlotUI::ResourceSlotUI(const sf::Texture& _icon, int _amount)
 {
-	//boundingBox.setSize(sf::Vector2f(96, 32));
-	//boundingBox.setOutlineColor(sf::Color::Black);
-	//boundingBox.setFillColor(sf::Color::Transparent);
-	//boundingBox.setOutlineThickness(3);
-
-	//textBoundingBox.setSize(sf::Vector2f(62, 32));
-	//textBoundingBox.setOutlineColor(sf::Color::Black);
-	//textBoundingBox.setFillColor(sf::Color::Transparent);
-	//textBoundingBox.setOutlineThickness(3);
-
 	amountText.setFont(TextureManager::getInstance().getFont("Comic"));
 	amountText.setCharacterSize(30U);
 	amountText.setString(std::to_string(_amount));

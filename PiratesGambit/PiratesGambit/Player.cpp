@@ -1,7 +1,7 @@
 #include "Player.h"
-
 #include "Boat.h"
 #include "Building.h"
+#include"Enemy.h"
 
 void Player::update(double dt)
 {
@@ -157,6 +157,41 @@ void Player::disembarkBoat(const std::shared_ptr<Node>& _node)
 	controller->setCurrentPosition(_node->getMidPoint());
 	myHitbox->setPosition(controller->getPosition());
 	body.setPosition(controller->getPosition());
+}
+
+void Player::hireEnemy(const std::shared_ptr<Enemy>& _enemy)
+{
+	hiredEnemy = _enemy;
+	hiredEnemy->updateHiredStatus(true);
+}
+
+void Player::disbandEnemy()
+{
+	hiredEnemy->updateHiredStatus(false);
+	hiredEnemy = nullptr;
+}
+
+void Player::addRandomEnemyUnitToArmy()
+{
+	int armySize = hiredEnemy->getArmy()->getArmy().size();
+	auto unitRef = hiredEnemy->getArmy()->getArmy()[rand() % armySize];
+	enemyUnit = hiredEnemy->getArmy()->removeUnit(unitRef);
+	enemyUnit->updateUnitAllegiance(HUMAN_PLAYER);
+	enemyUnit->updateUnitFacingDirection();
+	playerArmy->addUnitNoCombine(enemyUnit);
+}
+
+void Player::removeEnemyUnitFromArmy()
+{
+	if (enemyUnit != nullptr)
+	{
+		playerArmy->removeUnit(enemyUnit);
+		if(enemyUnit->unitStats.isActive)
+			hiredEnemy->getArmy()->addUnitNoCombine(enemyUnit);
+		enemyUnit->updateUnitAllegiance(hiredEnemy->GetEnemyTeam());
+		enemyUnit->updateUnitFacingDirection();
+		enemyUnit = nullptr;
+	}
 }
 
 void Player::UpdateDirection(sf::Vector2f _direction)

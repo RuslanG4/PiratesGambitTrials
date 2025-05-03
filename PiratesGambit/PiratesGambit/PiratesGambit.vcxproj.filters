@@ -171,9 +171,6 @@
     <ClCompile Include="UpdateableArea.cpp">
       <Filter>Source Files\Player</Filter>
     </ClCompile>
-    <ClCompile Include="HitBox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BoatController.cpp">
       <Filter>Source Files\Boat</Filter>
     </ClCompile>
@@ -191,15 +188,6 @@
     </ClCompile>
     <ClCompile Include="Island.cpp">
       <Filter>Source Files\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="CannonBallItem.cpp">
-      <Filter>Source Files\Inventory\Items</Filter>
-    </ClCompile>
-    <ClCompile Include="InventoryItem.cpp">
-      <Filter>Source Files\Inventory\Items</Filter>
     </ClCompile>
     <ClCompile Include="Utility.cpp">
       <Filter>Source Files\Globals</Filter>
@@ -231,9 +219,6 @@
     <ClCompile Include="BattleGridNode.cpp">
       <Filter>Source Files\Battle</Filter>
     </ClCompile>
-    <ClCompile Include="BaseNode.cpp">
-      <Filter>Source Files\Map</Filter>
-    </ClCompile>
     <ClCompile Include="BattleActionUI.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
@@ -246,23 +231,14 @@
     <ClCompile Include="TacticsArmySlot.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="PathFindingFunctions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DamageCalculations.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InitiativeSystem.cpp">
-      <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
       <Filter>Source Files\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="EnemyMoveConditions.cpp">
       <Filter>Source Files\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleManager.cpp">
-      <Filter>Source Files\Particles</Filter>
     </ClCompile>
     <ClCompile Include="Particle.cpp">
       <Filter>Source Files\Particles\BaseParticle</Filter>
@@ -291,12 +267,6 @@
     <ClCompile Include="BattleSceneTransition.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Coins.cpp">
-      <Filter>Source Files\Inventory\Items</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyState.cpp">
-      <Filter>Source Files\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="EnemyBoat.cpp">
       <Filter>Source Files\Boat</Filter>
     </ClCompile>
@@ -306,17 +276,11 @@
     <ClCompile Include="AnimatedCharacterIcon.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="BarrelInventory.cpp">
-      <Filter>Source Files\UI</Filter>
-    </ClCompile>
     <ClCompile Include="BuccaneerBuilding.cpp">
       <Filter>Source Files\Buildings</Filter>
     </ClCompile>
     <ClCompile Include="BuccaneerIcon.cpp">
       <Filter>Source Files\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="BulletFactory.cpp">
-      <Filter>Source Files\Projectile</Filter>
     </ClCompile>
     <ClCompile Include="Button.cpp">
       <Filter>Source Files\UI</Filter>
@@ -360,9 +324,6 @@
     <ClCompile Include="PlayerAllegiance.cpp">
       <Filter>Source Files\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Source Files\Scenes</Filter>
-    </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
@@ -386,9 +347,6 @@
     </ClCompile>
     <ClCompile Include="PlayerTabMenu.cpp">
       <Filter>Source Files\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerInventory.cpp">
-      <Filter>Source Files\Player</Filter>
     </ClCompile>
     <ClCompile Include="PlayerArmy_TabMenu.cpp">
       <Filter>Source Files\UI</Filter>
@@ -426,9 +384,6 @@
     <ClCompile Include="SmokeParticle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BattleUIButton.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="KeyPopUpManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -462,9 +417,6 @@
     <ClCompile Include="CannonBallTrailParticle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PauseScreen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FollowPlayerState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -480,9 +432,6 @@
     <ClCompile Include="MiniMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MiniMapMenu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GameOverLay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -490,9 +439,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BoatTrailParticle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Cloud.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -668,9 +614,6 @@
     <ClInclude Include="BuccaneerIcon.h">
       <Filter>Header Files\UI\Building Menus\Icons</Filter>
     </ClInclude>
-    <ClInclude Include="BarrelInventory.h">
-      <Filter>Header Files\GameObjects</Filter>
-    </ClInclude>
     <ClInclude Include="DiskSampling.h">
       <Filter>Header Files\Singletons</Filter>
     </ClInclude>
@@ -685,9 +628,6 @@
     </ClInclude>
     <ClInclude Include="ResourceSlotUI.h">
       <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerInventory.h">
-      <Filter>Header Files\Player</Filter>
     </ClInclude>
     <ClInclude Include="Tree.h">
       <Filter>Header Files\GameObjects</Filter>
@@ -798,9 +738,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SmokeParticle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BattleUIButton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="KeyPopUpManager.h">
