@@ -14,6 +14,14 @@ void Camera::handleZooming(sf::Event event)
     }
 }
 
+void Camera::shakeCamera(sf::Vector2f direction)
+{
+    shakeStartOffset = (-direction * 15.f);
+    shakeTargetOffset = { 0.f, 0.f };
+    shakeClock.restart();
+    isShaking = true;
+}
+
 void Camera::update(sf::Vector2f playerPos, sf::Vector2f _worldSize)
 {
     sf::Vector2f cameraPos = camera.getCenter();
@@ -32,5 +40,17 @@ void Camera::update(sf::Vector2f playerPos, sf::Vector2f _worldSize)
     targetCameraPos.x = std::clamp(targetCameraPos.x, minX + borderMarginX, maxX - borderMarginX);
     targetCameraPos.y = std::clamp(targetCameraPos.y, minY + borderMarginY, maxY - borderMarginY);
 
-    camera.setCenter(targetCameraPos);
+    sf::Vector2f finalOffset = { 0.f, 0.f };
+
+    if (isShaking)
+    {
+        float time = shakeClock.getElapsedTime().asSeconds() / totalShakeDuration;
+
+        if (time >= 1.0f)
+            isShaking = false;
+        else
+            finalOffset = shakeStartOffset * (1.0f - time); //lerp
+    }
+
+    camera.setCenter(targetCameraPos + finalOffset);
 }

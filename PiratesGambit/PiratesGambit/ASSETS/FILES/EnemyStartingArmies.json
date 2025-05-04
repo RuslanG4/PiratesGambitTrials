@@ -37,6 +37,15 @@
                     { "unittype": "Buccaneer", "amount": 22 },
                     { "unittype": "Cannon", "amount": 3 }
                 ]
+            },
+            {
+                "EnemyId": 4,
+                "name" : "Grimace",
+                "army": [
+                    { "unittype": "Buccaneer", "amount": 30 },
+                    { "unittype": "Gunner", "amount": 22 },
+                    { "unittype": "Harpooner", "amount": 3 }
+                ]
             }
         ]
     },
@@ -78,6 +87,70 @@
                     { "unittype": "Bird", "amount": 9 },
                     { "unittype": "Bird", "amount": 9 },
                     { "unittype": "Bird", "amount": 9 }
+                ]
+            },
+            {
+                "EnemyId": 4,
+                "name" : "Hilda",
+                "army": [
+                    { "unittype": "Buccaneer", "amount": 32 },
+                    { "unittype": "Buccaneer", "amount": 32 },
+                    { "unittype": "Gunner", "amount": 55 }
+                ]
+            }
+        ]
+    },
+    {
+        "Allegiance": "Yellow",
+        "PlayerReputation":55,
+        "Enemies": [
+            {
+                "EnemyId": 0,
+                "name" : "Yvonne",
+                "army": [
+                    { "unittype": "Bird", "amount": 8 },
+                    { "unittype": "Buccaneer", "amount": 26 },
+                    { "unittype": "Buccaneer", "amount": 26 }
+                ]
+            },
+            {
+                "EnemyId": 1,
+                "name" : "Discus",
+                "army": [
+                    { "unittype": "Cannon", "amount": 4 },
+                    { "unittype": "Cannon", "amount": 4 },
+                    { "unittype": "Cannon", "amount": 4 }
+                ]
+            },
+            {
+                "EnemyId": 2,
+                "name" : "Alphonse",
+                "army": [
+                    { "unittype": "Buccaneer", "amount": 20 },
+                    { "unittype": "Buccaneer", "amount": 20 },
+                    { "unittype": "Buccaneer", "amount": 20 },
+                    { "unittype": "Buccaneer", "amount": 20 },
+                    { "unittype": "Buccaneer", "amount": 20 }
+                ]
+            },
+            {
+                "EnemyId": 3,
+                "name" : "Freida",
+                "army": [
+                    { "unittype": "Gunner", "amount": 18 },
+                    { "unittype": "Gunner", "amount": 18 },
+                    { "unittype": "Gunner", "amount": 18 }
+                ]
+            },
+            {
+                "EnemyId": 4,
+                "name" : "Albania",
+                "army": [
+                    { "unittype": "Bird", "amount": 8 },
+                    { "unittype": "Buccaneer", "amount": 20 },
+                    { "unittype": "Gunner", "amount": 32 },
+                    { "unittype": "Harpooner", "amount": 5 },
+                    { "unittype": "Harpooner", "amount": 5 }
                 ]
             }
         ]

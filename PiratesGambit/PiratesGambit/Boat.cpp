@@ -129,6 +129,7 @@ void Boat::fireCannonBall(int _direction)
 				}
 		
 				BulletFactory::getInstance().createCannonBall(fireIndicator.getPosition(), Utility::unitVector2D(velocity) * 0.5f, 0.85f);
+				Camera::getInstance().shakeCamera(Utility::unitVector2D(velocity));
 
 				currentPlayer->getInventory()->removeItemFromStack(CANNONBALLS);
 				ParticleManager::getInstance().CreateShootParticle(fireIndicator.getPosition());

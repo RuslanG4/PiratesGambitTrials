@@ -210,6 +210,7 @@ bool BattleScene::updateNextTurn()
 		}
 		else {
 			startUnit = false;
+			tacticsArmyUI->initiativeSystem.getNextUnit();
 		}
 		createMoveableArea(currentSelectedUnit);
 
@@ -343,7 +344,7 @@ void BattleScene::detectMouse()
 			currentState = BATTLE;
 			placeUnits(enemyRef->getArmy(), true);
 			tacticsArmyUI->extend();
-			currentSelectedUnit = tacticsArmyUI->initiativeSystem.getNextUnit();
+			currentSelectedUnit = tacticsArmyUI->initiativeSystem.getTurnOrder()[0];
 
 			if (currentSelectedUnit->unitInformation.allegiance != HUMAN_PLAYER)
 			{
@@ -353,6 +354,7 @@ void BattleScene::detectMouse()
 				clearNodeArea(startArea);
 			}
 			else {
+				tacticsArmyUI->initiativeSystem.getNextUnit();
 				clearNodeArea(startArea);
 				createMoveableArea(currentSelectedUnit);
 			}
@@ -372,7 +374,6 @@ void BattleScene::detectMouse()
 			else {
 				if (currentHoverNodeID != -1 && battleGrid[currentHoverNodeID]->debugShape->getGlobalBounds().contains(mousePos) && !hasAttacked)
 				{
-
 					TakeUnitAction(battleGrid[currentHoverNodeID]);
 				}
 			}

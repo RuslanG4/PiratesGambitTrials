@@ -167,8 +167,10 @@ void Player::hireEnemy(const std::shared_ptr<Enemy>& _enemy)
 
 void Player::disbandEnemy()
 {
-	hiredEnemy->updateHiredStatus(false);
-	hiredEnemy = nullptr;
+	if (hiredEnemy) {
+		hiredEnemy->updateHiredStatus(false);
+		hiredEnemy = nullptr;
+	}
 }
 
 void Player::addRandomEnemyUnitToArmy()

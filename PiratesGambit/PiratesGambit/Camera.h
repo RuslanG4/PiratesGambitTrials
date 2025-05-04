@@ -43,6 +43,8 @@ public:
 
     void handleZooming(sf::Event event);
 
+    void shakeCamera(sf::Vector2f direction);
+
     void update(sf::Vector2f playerPos, sf::Vector2f _worldSize);
 
 private:
@@ -56,6 +58,13 @@ private:
     }
 
     sf::View camera; ///< SFML view representing the camera.
+
+    bool isShaking = false;
+    sf::Clock shakeClock;
+    float totalShakeDuration = 0.4f;
+    sf::Vector2f shakeStartOffset;
+    sf::Vector2f shakeTargetOffset;
+
 
     float zoomLevel = 1.0f;  ///< Current zoom level
     const float minZoom = 1.f;  ///< Minimum zoom level (zoomed in)

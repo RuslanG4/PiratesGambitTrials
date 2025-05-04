@@ -7,6 +7,7 @@
 #include"HitBox.h"
 #include"CannonBall.h"
 #include"BoatTrailParticle.h"
+#include"Camera.h"
 
 class Player; 
 
